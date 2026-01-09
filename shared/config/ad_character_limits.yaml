@@ -1,0 +1,142 @@
+# Google Ads Character Limits - Complete Reference
+# All character limits for every Google Ads format
+# Reference: https://support.google.com/google-ads/answer/1704390
+
+# TEXT ADS
+text_ads:
+  headline_max_chars: 30
+  headline_min_chars: 22  # Technical writing: jam-pack value, avoid filler words
+  headline_optimal_range: "22-29"  # Sweet spot for maximum value density
+  description_max_chars: 90
+  description_min_chars: 75  # Technical writing: jam-pack value, avoid filler words
+  description_optimal_range: "75-85"  # Sweet spot for maximum value density
+  display_path_max_chars: 15
+
+# RESPONSIVE SEARCH ADS (RSA)
+responsive_search_ads:
+  headline_max_chars: 30
+  headline_min_chars: 22  # Technical writing: jam-pack value, avoid filler words
+  headline_optimal_range: "22-29"  # Sweet spot for maximum value density
+  description_max_chars: 90
+  description_min_chars: 75  # Technical writing: jam-pack value, avoid filler words
+  description_optimal_range: "75-85"  # Sweet spot for maximum value density
+  headlines_per_ad: 15
+  descriptions_per_ad: 5
+
+# PERFORMANCE MAX (PMAX)
+performance_max:
+  headline_max_chars: 30
+  headline_min_chars: 22  # Technical writing: jam-pack value, avoid filler words
+  headline_optimal_range: "22-29"  # Sweet spot for maximum value density
+  long_headline_max_chars: 90
+  description_max_chars: 90
+  description_min_chars: 75  # Technical writing: jam-pack value, avoid filler words
+  description_optimal_range: "75-85"  # Sweet spot for maximum value density
+  headlines_per_ad: 5
+  descriptions_per_ad: 5
+
+# CALLOUT EXTENSIONS
+callout_extensions:
+  text_max_chars: 25
+  callouts_per_campaign: 20
+
+# SITELINK EXTENSIONS
+sitelink_extensions:
+  text_max_chars: 25
+  description_max_chars: 35
+  sitelinks_per_campaign: 6
+
+# STRUCTURED SNIPPET EXTENSIONS
+structured_snippets:
+  header_max_chars: 25
+  values_max_chars: 25  # Per value
+  values_per_snippet: 10
+
+# APP EXTENSIONS
+app_extensions:
+  text_max_chars: 25
+
+# PRICE EXTENSIONS
+price_extensions:
+  header_max_chars: 25
+  description_max_chars: 25
+
+# PROMOTION EXTENSIONS
+promotion_extensions:
+  promotion_text_max_chars: 45
+
+# LOCATION EXTENSIONS
+location_extensions:
+  business_name_max_chars: 30
+  address_max_chars: 80
+
+# AFFILIATE LOCATION EXTENSIONS
+affiliate_location_extensions:
+  chain_name_max_chars: 25
+  address_max_chars: 80
+
+# LEAD FORM EXTENSIONS
+lead_form_extensions:
+  headline_max_chars: 25
+  description_max_chars: 80
+  privacy_policy_url_max_chars: 2074
+
+# HOTEL EXTENSIONS
+hotel_extensions:
+  hotel_name_max_chars: 25
+  address_max_chars: 80
+
+# IMAGE EXTENSIONS
+image_extensions:
+  aspect_ratios: ["1.91:1", "1:1", "4:5"]  # Landscape, square, portrait
+  min_resolution: "600x314"  # Landscape minimum
+  max_file_size_mb: 5120
+
+# VIDEO EXTENSIONS
+video_extensions:
+  max_duration_seconds: 30
+  max_file_size_mb: 100
+  supported_formats: ["MP4", "AVI", "MOV", "FLV", "WMV"]
+
+# BUSINESS MESSAGING EXTENSIONS
+business_messaging_extensions:
+  welcome_message_max_chars: 80
+  automated_responses_max_chars: 250
+
+# DYNAMIC SEARCH ADS
+dynamic_search_ads:
+  headline_max_chars: 30
+  description_max_chars: 80
+
+# SHOPPING ADS
+shopping_ads:
+  product_title_max_chars: 150
+  brand_max_chars: 70
+  category_max_chars: 100
+
+# DISCOVERY ADS
+discovery_ads:
+  headline_max_chars: 40
+  description_max_chars: 125
+  long_headline_max_chars: 90
+
+# GMAIL ADS
+gmail_ads:
+  subject_max_chars: 50
+  headline_max_chars: 25
+  description_max_chars: 100
+  business_name_max_chars: 20
+
+# VALIDATION RULES - Technical Writing Standards
+validation:
+  required_fields: ["headline", "description"]
+  technical_writing_standards:
+    headline_optimal_range: "22-29"  # Jam-pack value, avoid filler words
+    description_optimal_range: "75-85"  # Jam-pack value, avoid filler words
+    prohibited_filler_words: ["the", "a", "an", "or", "and", "but", "so", "very", "really", "just", "only", "that", "this", "these", "those"]
+    prohibited_punctuation: ["—", "–"]  # No em dashes
+  recommended_min_lengths:
+    headline: 22  # Technical writing minimum
+    description: 75  # Technical writing minimum
+  prohibited_characters: ["<", ">", "{", "}", "[", "]", "|", "\\", "^", "~"]
+  reserved_words: ["free", "guarantee", "warranty"]

@@ -1,0 +1,1 @@
+"""Campaign type specific module"""

@@ -1,0 +1,82 @@
+# Collab Med Spa Client Configuration
+# This file contains client-specific settings for Collab Med Spa campaign management
+
+client:
+  name: "Collab Med Spa"
+  website: "https://collabmedspa.com/"
+  phone: "To be determined"
+  industry: "Medical Spa Services"
+  account_status: "Live"
+
+services:
+  - "Facial Treatments"
+  - "Dermal Fillers"
+  - "Laser Hair Removal"
+  - "Microneedling"
+  - "Hydrafacials"
+  - "Dermaplaning"
+  - "Botox & Injectable Treatments"
+
+campaign_settings:
+  primary_goal: "lead_generation"
+  conversion_types: ["phone_calls", "form_submissions", "appointment_bookings"]
+  target_cpa: 40.00
+  target_roas: 300
+
+budget_allocation:
+  brand: 0.15          # 15%
+  facials: 0.30        # 30%
+  medspas: 0.30        # 30%
+  fillers: 0.15        # 15%
+  laser: 0.10          # 10%
+
+geographic_targeting:
+  primary_location: "Scottsdale, AZ"
+  radius_miles: 25
+  additional_cities:
+    - "Phoenix, AZ"
+    - "Mesa, AZ"
+    - "Chandler, AZ"
+    - "Tucson, AZ"
+
+performance_targets:
+  monthly_conversions: 150
+  cost_per_conversion: 40.00
+  conversion_rate: 0.04
+  return_on_ad_spend: 3.0
+
+keywords:
+  primary_search_terms:
+    - "medspa near me"
+    - "facial near me"
+    - "dermal fillers near me"
+    - "laser hair removal"
+    - "hydrafacial scottsdale"
+    - "microneedling near me"
+
+  negative_keywords:
+    - "cheap"
+    - "free"
+    - "DIY"
+    - "how to"
+    - "tutorial"
+    - "at home"
+
+assets:
+  required_images: 15
+  required_videos: 3
+  trust_badges: true
+  before_after_photos: true
+
+compliance:
+  licensed: true
+  insured: true
+  certifications: ["Medical Board Licensed", "FDA Approved"]
+  regulatory_requirements: ["medical_licensing", "insurance_compliance"]
+
+notes:
+  - "Account is live and active"
+  - "Focus on Scottsdale and Phoenix metro area"
+  - "Emphasize professional medical spa services"
+  - "Trust signals and certifications important"
+  - "Before/after content crucial for aesthetic services"

@@ -1,0 +1,199 @@
+# Google Ads Campaign Configuration - All Campaign Types
+# Comprehensive defaults for every Google Ads campaign type
+
+# =============================================================================
+# SEARCH CAMPAIGNS
+# =============================================================================
+search_campaigns:
+  default:
+    budget_daily: 89.99
+    budget_type: "Daily"
+    languages: ["en"]
+    bid_strategy: "Maximize conversions"
+    target_cpa: 25.00  # For Maximize conversions
+    target_roas: 400    # For Maximize conversion value (4x ROAS)
+    ad_schedule: "(Monday[05:00-22:00]);(Tuesday[05:00-22:00]);(Wednesday[05:00-22:00]);(Thursday[05:00-22:00]);(Friday[05:00-22:00]);(Saturday[05:00-22:00]);(Sunday[05:00-22:00])"
+    networks: ["Google search", "Search partners"]
+
+  manual_cpc:
+    bid_strategy: "Manual CPC"
+    max_cpc: 2.50
+
+  target_cpa:
+    bid_strategy: "Target CPA"
+    target_cpa: 25.00
+
+  target_roas:
+    bid_strategy: "Target ROAS"
+    target_roas: 400
+
+  maximize_clicks:
+    bid_strategy: "Maximize clicks"
+    max_cpc: 1.50
+
+# =============================================================================
+# DISPLAY CAMPAIGNS
+# =============================================================================
+display_campaigns:
+  default:
+    budget_daily: 75.00
+    budget_type: "Daily"
+    languages: ["en"]
+    bid_strategy: "Maximize conversions"
+    target_cpa: 30.00
+    ad_schedule: "(Monday[06:00-22:00]);(Tuesday[06:00-22:00]);(Wednesday[06:00-22:00]);(Thursday[06:00-22:00]);(Friday[06:00-22:00]);(Saturday[08:00-20:00]);(Sunday[08:00-20:00])"
+    networks: ["Google Display Network"]
+
+  cpm:
+    bid_strategy: "CPM"
+    max_cpm: 5.00
+
+  cpc:
+    bid_strategy: "CPC"
+    max_cpc: 1.25
+
+# =============================================================================
+# PERFORMANCE MAX CAMPAIGNS (PMAX)
+# =============================================================================
+performance_max_campaigns:
+  default:
+    budget_daily: 150.00  # Higher budget for PMAX automation
+    budget_type: "Daily"
+    languages: ["en"]
+    bid_strategy: "Maximize conversions"  # Only available strategy for PMAX
+    target_cpa: 35.00
+    ad_schedule: "(Monday[00:00-23:59]);(Tuesday[00:00-23:59]);(Wednesday[00:00-23:59]);(Thursday[00:00-23:59]);(Friday[00:00-23:59]);(Saturday[00:00-23:59]);(Sunday[00:00-23:59])"  # 24/7 for PMAX
+    networks: ["All available networks"]  # PMAX uses all networks
+
+# =============================================================================
+# SHOPPING CAMPAIGNS
+# =============================================================================
+shopping_campaigns:
+  default:
+    budget_daily: 120.00
+    budget_type: "Daily"
+    languages: ["en"]
+    bid_strategy: "Maximize conversion value"
+    target_roas: 350
+    ad_schedule: "(Monday[05:00-22:00]);(Tuesday[05:00-22:00]);(Wednesday[05:00-22:00]);(Thursday[05:00-22:00]);(Friday[05:00-22:00]);(Saturday[08:00-20:00]);(Sunday[08:00-20:00])"
+    networks: ["Google Shopping"]
+
+  manual_cpc:
+    bid_strategy: "Manual CPC"
+    max_cpc: 1.75
+
+# =============================================================================
+# VIDEO CAMPAIGNS
+# =============================================================================
+video_campaigns:
+  default:
+    budget_daily: 100.00
+    budget_type: "Daily"
+    languages: ["en"]
+    bid_strategy: "Maximize conversions"
+    target_cpa: 40.00
+    ad_schedule: "(Monday[06:00-23:00]);(Tuesday[06:00-23:00]);(Wednesday[06:00-23:00]);(Thursday[06:00-23:00]);(Friday[06:00-23:00]);(Saturday[08:00-22:00]);(Sunday[08:00-22:00])"
+    networks: ["YouTube Videos", "YouTube Search"]
+
+  cpm:
+    bid_strategy: "CPM"
+    max_cpm: 8.00
+
+  cpv:
+    bid_strategy: "CPV"
+    max_cpv: 0.01  # $0.01 per view
+
+# =============================================================================
+# APP CAMPAIGNS
+# =============================================================================
+app_campaigns:
+  default:
+    budget_daily: 85.00
+    budget_type: "Daily"
+    languages: ["en"]
+    bid_strategy: "App installs"  # Optimized for app installs
+    target_cpa: 2.50  # Lower CPA for mobile app installs
+    ad_schedule: "(Monday[00:00-23:59]);(Tuesday[00:00-23:59]);(Wednesday[00:00-23:59]);(Thursday[00:00-23:59]);(Friday[00:00-23:59]);(Saturday[00:00-23:59]);(Sunday[00:00-23:59])"  # 24/7 for app campaigns
+    networks: ["Google Play", "App Store", "Universal App Campaigns"]
+
+# =============================================================================
+# DISCOVERY CAMPAIGNS
+# =============================================================================
+discovery_campaigns:
+  default:
+    budget_daily: 65.00
+    budget_type: "Daily"
+    languages: ["en"]
+    bid_strategy: "Maximize conversions"
+    target_cpa: 28.00
+    ad_schedule: "(Monday[06:00-23:00]);(Tuesday[06:00-23:00]);(Wednesday[06:00-23:00]);(Thursday[06:00-23:00]);(Friday[06:00-23:00]);(Saturday[08:00-22:00]);(Sunday[08:00-22:00])"
+    networks: ["Discovery"]
+
+# =============================================================================
+# LOCAL CAMPAIGNS (LOCAL SERVICES ADS)
+# =============================================================================
+local_campaigns:
+  default:
+    budget_daily: 95.00
+    budget_type: "Daily"
+    languages: ["en"]
+    bid_strategy: "Local Services Leads"  # Specialized for local services
+    target_cpa: 15.00
+    ad_schedule: "(Monday[08:00-18:00]);(Tuesday[08:00-18:00]);(Wednesday[08:00-18:00]);(Thursday[08:00-18:00]);(Friday[08:00-18:00])"
+    networks: ["Local Services"]
+
+# =============================================================================
+# CAMPAIGN TYPE SELECTION LOGIC
+# =============================================================================
+campaign_type_selection:
+  # Rules for automatically selecting campaign types based on business goals
+  rules:
+    brand_awareness:
+      recommended_types: ["Display", "Video", "Discovery"]
+      primary_bid_strategy: "CPM"
+
+    lead_generation:
+      recommended_types: ["Search", "Performance Max"]
+      primary_bid_strategy: "Maximize conversions"
+
+    sales_conversion:
+      recommended_types: ["Search", "Performance Max", "Shopping"]
+      primary_bid_strategy: "Maximize conversion value"
+
+    app_promotion:
+      recommended_types: ["App", "Performance Max"]
+      primary_bid_strategy: "App installs"
+
+    local_services:
+      recommended_types: ["Local", "Search"]
+      primary_bid_strategy: "Local Services Leads"
+
+# =============================================================================
+# GLOBAL CAMPAIGN SETTINGS (Applied to all campaign types)
+# =============================================================================
+global_settings:
+  languages: ["en"]
+  start_date: "immediate"
+  end_date: null  # No end date by default
+  status: "enabled"
+  conversion_tracking: true
+  auto_tagging: true
+
+# =============================================================================
+# GEOGRAPHIC TARGETING (Applied across all campaign types)
+# =============================================================================
+geographic:
+  # United States targeting
+  national_location_id: "2840"
+  florida_radius_miles: 25
+
+  # Geographic expansion options
+  expansion:
+    include_similar_locations: false
+    include_people_searching: true
+    include_people_viewing: true
+
+  # Location bid adjustments
+  bid_adjustments:
+    florida: 20  # +20% bid adjustment for Florida
+    major_cities: 15  # +15% for major metropolitan areas

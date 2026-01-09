@@ -1,0 +1,75 @@
+# EvoRestore Client Configuration
+# This file contains client-specific settings for EvoRestore campaign management
+
+client:
+  name: "EvoRestore"
+  website: "https://evorestore.com/"
+  phone: "271-353-8876"
+  industry: "Restoration Services"
+  account_status: "Live"
+
+services:
+  - "Emergency Water Damage Restoration"
+  - "Fire & Smoke Damage Cleanup"
+  - "Mold Remediation"
+  - "Storm Damage Restoration"
+  - "Commercial Property Restoration"
+  - "Residential Restoration Services"
+
+campaign_settings:
+  primary_goal: "lead_generation"
+  conversion_types: ["phone_calls", "form_submissions", "directions"]
+  target_cpa: 40.00
+  target_roas: 300
+
+budget_allocation:
+  emergency_services: 0.35    # 35%
+  water_damage: 0.25          # 25%
+  fire_damage: 0.20           # 20%
+  mold_remediation: 0.10      # 10%
+  storm_damage: 0.10          # 10%
+
+geographic_targeting:
+  primary_location: "To be determined"
+  radius_miles: 50
+  additional_cities: []  # To be populated based on service areas
+
+performance_targets:
+  monthly_conversions: 200
+  cost_per_conversion: 35.00
+  conversion_rate: 0.035
+  return_on_ad_spend: 3.0
+
+keywords:
+  primary_search_terms:
+    - "emergency water damage restoration"
+    - "water damage restoration services"
+    - "fire damage restoration"
+    - "mold remediation services"
+    - "storm damage restoration"
+
+  negative_keywords:
+    - "cheap"
+    - "free"
+    - "DIY"
+    - "how to"
+    - "tutorial"
+
+assets:
+  required_images: 20
+  required_videos: 5
+  trust_badges: true
+  before_after_photos: true
+
+compliance:
+  licensed: true
+  insured: true
+  certifications: ["IICRC", "EPA Lead-Safe"]
+  regulatory_requirements: ["local_licensing", "insurance_compliance"]
+
+notes:
+  - "Account is live and active"
+  - "24/7 emergency positioning is critical"
+  - "Local service area dominance strategy"
+  - "Trust signals and certifications emphasized"
+  - "Before/after content crucial for conversions"

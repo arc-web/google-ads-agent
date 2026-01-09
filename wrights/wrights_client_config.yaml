@@ -1,0 +1,58 @@
+# Wrights Client Configuration
+# This file contains client-specific settings for Wrights campaign management
+
+client:
+  name: "Wrights"
+  website: "To be determined"
+  phone: "To be determined"
+  industry: "To be determined"
+  account_status: "To be determined"
+
+services:
+  - "Service 1"
+  - "Service 2"
+
+campaign_settings:
+  primary_goal: "lead_generation"
+  conversion_types: ["phone_calls", "form_submissions"]
+  target_cpa: 40.00
+  target_roas: 300
+
+budget_allocation:
+  primary_campaign: 1.0
+
+geographic_targeting:
+  primary_location: "To be determined"
+  radius_miles: 25
+  additional_cities: []
+
+performance_targets:
+  monthly_conversions: 100
+  cost_per_conversion: 40.00
+  conversion_rate: 0.03
+  return_on_ad_spend: 3.0
+
+keywords:
+  primary_search_terms:
+    - "primary keyword 1"
+    - "primary keyword 2"
+
+  negative_keywords:
+    - "cheap"
+    - "free"
+    - "DIY"
+
+assets:
+  required_images: 15
+  required_videos: 3
+  trust_badges: true
+  before_after_photos: true
+
+compliance:
+  licensed: true
+  insured: true
+  certifications: []
+  regulatory_requirements: []
+
+notes:
+  - "Add client-specific notes here"

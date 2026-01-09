@@ -1,0 +1,300 @@
+{
+  "$schema": "https://acme.example/schemas/mcp-profile-v1.json",
+  "email_response": {
+    "sections": ["greeting", "direct_answer", "supporting_data", "next_steps", "signature"],
+    "tone": "professional_friendly",
+    "include_attachments": "when_helpful",
+    "response_time_target": "4_hours"
+  },
+  "version": "1.2",
+  "last_updated": "2025-06-18",
+  
+  "agency": {
+    "name": "ACME Performance",
+    "persona": "Professional, data-driven, client-focused",
+    "communication_style": "clear, actionable, results-oriented"
+  },
+
+  "mcp": {
+    "supported_platforms": ["google_drive", "google_ads", "gmail", "airtable", "knowledge_base"],
+    "default_currency": "USD",
+    "time_zone": "America/New_York",
+    "date_format": "YYYY-MM-DD",
+    "response_language": "en-US",
+    
+    "modes": {
+      "interactive": "Direct Q&A with immediate response",
+      "email_processing": "Batch process incoming emails and generate responses",
+      "hybrid": "Handle both interactive queries and email processing"
+    },
+    
+    "guardrails": {
+      "max_sop_documents_per_query": {
+        "value": 5,
+        "type": "integer",
+        "enforced": true
+      },
+      "max_response_length": {
+        "value": 2000,
+        "type": "integer",
+        "enforced": false
+      },
+      "require_client_verification": {
+        "value": true,
+        "type": "boolean",
+        "enforced": true
+      },
+      "auto_send_confidence_threshold": {
+        "value": 0.85,
+        "type": "float",
+        "enforced": true
+      }
+    }
+  },
+
+  "platforms": {
+    "airtable": {
+      "env_var_token": "AIRTABLE_TOKEN",
+      "base_id": "${ENV:AIRTABLE_BASE_ID}",
+      "rate_limits": { "qps": 5 },
+      "tables": {
+        "clients": {
+          "table_id": "tblClients123",
+          "fields": {
+            "client_name": "Client Name",
+            "primary_email": "Primary Email", 
+            "cc_emails": "CC Emails",
+            "google_ads_account_id": "Google Ads Account ID",
+            "account_manager": "Account Manager",
+            "communication_preferences": "Communication Preferences",
+            "status": "Status",
+            "onboarding_date": "Onboarding Date"
+          }
+        },
+        "interactions": {
+          "table_id": "tblInteractions456", 
+          "fields": {
+            "client": "Client",
+            "interaction_type": "Interaction Type",
+            "date": "Date",
+            "query": "Query",
+            "response": "Response", 
+            "confidence_score": "Confidence Score",
+            "auto_sent": "Auto Sent",
+            "account_manager": "Account Manager",
+            "follow_up_needed": "Follow Up Needed"
+          }
+        },
+        "email_routing": {
+          "table_id": "tblEmailRouting789",
+          "fields": {
+            "email_address": "Email Address",
+            "client": "Client",
+            "contact_type": "Contact Type",
+            "is_primary": "Is Primary",
+            "cc_on_responses": "CC on Responses"
+          }
+        }
+      },
+      "caching": {
+        "client_data_ttl": "1h",
+        "email_routing_ttl": "24h"
+      }
+    },
+    
+    "gmail": {
+      "env_var_token": "GMAIL_TOKEN",
+      "service_account_key": "${ENV:GOOGLE_SERVICE_ACCOUNT_KEY}",
+      "rate_limits": { "qps": 5 },
+      "auto_processing": {
+        "enabled": true,
+        "check_interval_minutes": 15,
+        "filters": {
+          "sender_domains": ["@client1.com", "@client2.com"],
+          "subject_keywords": ["google ads", "campaign", "performance", "budget", "ad account"],
+          "exclude_auto_replies": true
+        }
+      },
+      "response_settings": {
+        "create_drafts": true,
+        "auto_send_high_confidence": false,
+        "include_signature": true,
+        "thread_preservation": true
+      },
+      "labels": {
+        "processed": "GOOGLE_ADS_PROCESSED",
+        "pending_review": "PENDING_REVIEW", 
+        "auto_generated": "AUTO_RESPONSE",
+        "client_query": "CLIENT_GOOGLE_ADS"
+      }
+    },
+    
+    "google_drive": {
+      "env_var_token": "GOOGLE_DRIVE_TOKEN",
+      "service_account_key": "${ENV:GOOGLE_SERVICE_ACCOUNT_KEY}",
+      "rate_limits": { "qps": 10 },
+      "search_scope": ["SOPs", "Templates", "Best Practices"],
+      "file_types": ["application/vnd.google-apps.document", "text/plain", "application/pdf"],
+      "max_file_size_mb": 10
+    },
+    
+    "google_ads": {
+      "env_var_token": "GOOGLE_ADS_TOKEN",
+      "developer_token": "${ENV:GOOGLE_DEV_TOKEN}",
+      "rate_limits": { "qps": 8 },
+      "default_date_range": "LAST_30_DAYS",
+      "max_accounts_per_query": 1,
+      "mcp_server": {
+        "use_parent_directory": true,
+        "parent_config_path": "/Users/home/aimacpro/7_tools/mcp_tools/mcp_config.json",
+        "server_name": "google-ads"
+      }
+    },
+    
+    "knowledge_base": {
+      "env_var_token": "KB_TOKEN",
+      "endpoint": "${ENV:KB_ENDPOINT}",
+      "search_index": "google_ads_procedures"
+    }
+  },
+
+  "user_roles": {
+    "client": {
+      "permissions": ["read_own_data", "ask_questions"],
+      "data_access": "account_specific_only",
+      "response_detail_level": "business_friendly"
+    },
+    "account_manager": {
+      "permissions": ["read_all_data", "access_sops", "modify_responses"],
+      "data_access": "full_client_portfolio",
+      "response_detail_level": "technical_detailed"
+    },
+    "admin": {
+      "permissions": ["full_access", "modify_sops", "system_config"],
+      "data_access": "unrestricted",
+      "response_detail_level": "full_debug"
+    }
+  },
+
+  "sop_configuration": {
+    "drive_structure": {
+      "root_folder": "Client Management SOPs",
+      "subfolders": {
+        "account_setup": "SOPs/Google Ads/Account Setup",
+        "campaign_management": "SOPs/Google Ads/Campaign Management", 
+        "optimization": "SOPs/Google Ads/Optimization",
+        "reporting": "SOPs/Google Ads/Reporting",
+        "troubleshooting": "SOPs/Google Ads/Troubleshooting",
+        "billing": "SOPs/Google Ads/Billing",
+        "communication": "Templates/Client Communication",
+        "email_templates": "Templates/Email Responses"
+      }
+    },
+    
+    "search_strategy": {
+      "primary_keywords_weight": 0.6,
+      "secondary_keywords_weight": 0.3,
+      "document_recency_weight": 0.1,
+      "fuzzy_matching": true,
+      "include_related_docs": true
+    },
+    
+    "content_processing": {
+      "extract_procedures": true,
+      "identify_best_practices": true,
+      "capture_examples": true,
+      "note_exceptions": true
+    }
+  },
+
+  "response_templates": {
+    "account_performance": {
+      "sections": ["summary", "key_metrics", "insights", "recommendations", "next_steps"],
+      "include_charts": true,
+      "comparative_analysis": "month_over_month"
+    },
+    
+    "troubleshooting": {
+      "sections": ["issue_summary", "diagnosis", "solution_steps", "prevention", "escalation"],
+      "include_screenshots": "when_helpful",
+      "follow_up_timeline": "24_hours"
+    },
+    
+    "optimization_advice": {
+      "sections": ["current_status", "opportunities", "priority_actions", "expected_impact", "timeline"],
+      "include_data_backing": true,
+      "confidence_levels": true
+    }
+  },
+
+  "ai_assistance": {
+    "model": "claude-3.5-sonnet",
+    "temperature": 0.3,
+    "max_tokens": 4000,
+    
+    "prompt_engineering": {
+      "system_context": "You are a Google Ads specialist representing ${AGENCY_NAME}. Always respond based on the agency's SOPs and maintain a professional, helpful tone.",
+      "response_guidelines": [
+        "Lead with the direct answer to the client's question",
+        "Support with relevant data when available", 
+        "Reference agency procedures without overwhelming the client",
+        "Always include actionable next steps",
+        "Maintain confidentiality of other clients' information"
+      ]
+    },
+    
+    "quality_assurance": {
+      "fact_checking": true,
+      "sop_compliance": true,
+      "tone_consistency": true,
+      "completeness_check": true
+    }
+  },
+
+  "integration_settings": {
+    "webhook_endpoints": {
+      "client_portal": "${ENV:CLIENT_PORTAL_WEBHOOK}",
+      "slack_notifications": "${ENV:SLACK_WEBHOOK}",
+      "email_system": "${ENV:EMAIL_WEBHOOK}"
+    },
+    
+    "data_sync": {
+      "google_ads_refresh_interval": "1h",
+      "sop_cache_duration": "24h",
+      "response_cache_duration": "15m"
+    },
+    
+    "monitoring": {
+      "track_response_quality": true,
+      "monitor_sop_usage": true,
+      "alert_on_missing_procedures": true,
+      "performance_metrics": ["response_time", "accuracy", "client_satisfaction"]
+    }
+  },
+
+  "logging": {
+    "store_queries": true,
+    "store_responses": true,
+    "store_sop_references": true,
+    "retention_days": 90,
+    "destination": "stackdriver",
+    "privacy_mode": "hash_pii"
+  },
+
+  "features": {
+    "multi_language_support": false,
+    "voice_input": false,
+    "automated_follow_ups": true,
+    "client_feedback_collection": true,
+    "sop_version_tracking": true,
+    "response_personalization": true
+  },
+
+  "client_customization": {
+    "account_specific_sops": true,
+    "industry_specific_advice": true,
+    "custom_kpi_tracking": true,
+    "branded_responses": false,
+    "custom_report_formats": true
+  }
+}

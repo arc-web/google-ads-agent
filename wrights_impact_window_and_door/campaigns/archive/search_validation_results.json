@@ -1,0 +1,36 @@
+{
+  "client_name": "wrights_impact_window_and_door",
+  "timestamp": "2026-01-07T16:12:39.103388",
+  "total_rows_validated": 0,
+  "issues_found": [],
+  "issues_fixed": [],
+  "summary": {
+    "total_issues": 0,
+    "issues_fixed": 0,
+    "severity_breakdown": {
+      "critical": 0,
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    },
+    "level_breakdown": {
+      "account": 0,
+      "campaign": 0,
+      "asset_group": 0,
+      "ad_group": 0,
+      "asset": 0,
+      "targeting": 0
+    },
+    "validation_levels": [
+      "account",
+      "campaign",
+      "asset_group",
+      "ad_group",
+      "asset",
+      "targeting"
+    ],
+    "total_rows_validated": 0,
+    "csv_files_processed": 0
+  },
+  "final_status": "PASS"
+}

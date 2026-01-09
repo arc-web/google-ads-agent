@@ -1,0 +1,201 @@
+{
+  "name": "Freedom Finance Solutions - National MCA Debt Relief",
+  "type": "Performance Max",
+  "budget": 150.0,
+  "budget_type": "Daily",
+  "languages": "en",
+  "bid_strategy_type": "Maximize conversions",
+  "target_cpa": 0.0,
+  "start_date": "2025-12-11",
+  "end_date": "",
+  "ad_schedule": "(Monday[08:00-20:00]);(Tuesday[08:00-20:00]);(Wednesday[08:00-20:00]);(Thursday[08:00-20:00]);(Friday[08:00-20:00]);(Saturday[09:00-18:00]);(Sunday[09:00-18:00])",
+  "networks": "Google search",
+  "campaign_status": "Enabled",
+  "target_audience": "Small business owners with MCA debt",
+  "regulatory_compliance": {
+    "ftc_tsr_compliant": true,
+    "no_upfront_fees": true,
+    "educational_focus": true,
+    "results_based_positioning": true
+  },
+  "callouts": [
+    "MCA Debt Relief Experts",
+    "Merchant Cash Advance Settlement",
+    "Business Debt Consolidation",
+    "Small Business Debt Help",
+    "MCA Debt Negotiation",
+    "Lower Monthly Payments",
+    "Keep Your Credit Intact",
+    "Free Confidential Consultation",
+    "No Upfront Fees",
+    "Debt-Free in 6-8 Months",
+    "Experienced Debt Negotiators",
+    "Trusted Business Debt Relief",
+    "MCA Settlement Specialists",
+    "Reduce Business Debt Burden",
+    "Financial Freedom Solutions"
+  ],
+  "structured_snippets": {
+    "header": "Services",
+    "values": [
+      "MCA Debt Settlement",
+      "Business Debt Consolidation",
+      "Merchant Cash Advance Relief",
+      "Commercial Debt Negotiation",
+      "Small Business Debt Help",
+      "MCA Payment Reduction",
+      "Debt Relief Consultation",
+      "Financial Restructuring",
+      "Business Debt Management",
+      "MCA Debt Resolution"
+    ]
+  },
+  "locations": [
+    "United States"
+  ],
+  "asset_groups": [
+    {
+      "name": "MCA Debt Relief - Core Awareness",
+      "headlines": [
+        "MCA Debt Relief Services",
+        "Merchant Cash Advance Settlement",
+        "Business MCA Debt Consolidation",
+        "Small Business Debt Relief Help",
+        "MCA Debt Negotiation Experts",
+        "Reduce MCA Monthly Payments",
+        "MCA Debt Settlement Company",
+        "Business Debt Relief Solutions",
+        "MCA Payment Reduction Services",
+        "Commercial Debt Settlement Help",
+        "MCA Debt Relief Specialists",
+        "Business Debt Consolidation Experts",
+        "MCA Settlement Negotiation",
+        "Lower Business Debt Payments",
+        "MCA Debt Relief Consultation"
+      ],
+      "long_headlines": [
+        "MCA Debt Relief Services for Small Business Owners Nationwide",
+        "Merchant Cash Advance Settlement Experts Free Consultation Available",
+        "Business MCA Debt Consolidation Keep Your Credit Intact",
+        "Small Business Debt Relief Help Reduce Monthly Payment Burden",
+        "MCA Debt Negotiation Services Professional Settlement Experts"
+      ],
+      "descriptions": [
+        "MCA debt relief services for business owners. Negotiate lower payments, consolidate debt, keep your credit intact. Free confidential consultation available.",
+        "Merchant cash advance settlement experts. Reduce MCA payments by up to 57%, debt-free in 6-8 months. No upfront fees, guaranteed results.",
+        "Business debt consolidation specialists. MCA debt relief solutions for small businesses. Lower payments, better terms, financial freedom.",
+        "MCA debt negotiation services. Professional settlement experts reduce your business debt burden. Free consultation, no upfront costs.",
+        "Small business MCA debt relief. Consolidate multiple MCAs, lower payments, keep operating smoothly. Expert debt settlement services."
+      ],
+      "search_themes": [
+        "MCA debt relief",
+        "merchant cash advance settlement",
+        "business MCA debt consolidation",
+        "MCA debt negotiation services",
+        "small business debt relief",
+        "MCA payment reduction",
+        "commercial debt settlement",
+        "business debt consolidation",
+        "MCA settlement experts",
+        "lower MCA payments"
+      ]
+    },
+    {
+      "name": "MCA Debt Relief - Problem Solution",
+      "headlines": [
+        "Struggling With MCA Debt?",
+        "High MCA Payments Killing Cash Flow?",
+        "Multiple MCAs Burdening Business?",
+        "MCA Debt Keeping You Up At Night?",
+        "Can't Afford MCA Payments Anymore?",
+        "MCA Debt Relief For Business Owners",
+        "Escape High MCA Interest Rates",
+        "Lower MCA Payments Fast",
+        "MCA Debt Consolidation Help",
+        "Free From MCA Debt Burden",
+        "Reduce MCA Debt Payments Now",
+        "MCA Settlement Saves Money",
+        "Business Debt Relief Experts",
+        "MCA Negotiation Specialists",
+        "End MCA Debt Stress Today"
+      ],
+      "long_headlines": [
+        "Struggling With MCA Debt? Get Professional Debt Relief Help Now",
+        "High MCA Payments Killing Your Business Cash Flow? We Can Help",
+        "Multiple MCAs Burdening Your Business? Consolidate And Save Money",
+        "MCA Debt Keeping You Up At Night? Free Confidential Consultation",
+        "Can't Afford MCA Payments Anymore? Professional Debt Settlement"
+      ],
+      "descriptions": [
+        "Struggling with high MCA payments? Our debt relief experts negotiate lower payments and better terms. Free consultation, no upfront fees required.",
+        "Multiple MCAs burdening your business? Consolidate into manageable payments, reduce costs by up to 57%. Professional debt settlement services.",
+        "MCA debt stress affecting your business? Get expert help negotiating settlements. Keep your credit intact, achieve financial freedom in 6-8 months.",
+        "High MCA interest rates crushing cash flow? Our settlement specialists reduce payments and eliminate debt burden. Free confidential consultation.",
+        "Can't afford MCA payments anymore? Professional debt relief services negotiate better terms. No upfront costs, guaranteed debt reduction."
+      ],
+      "search_themes": [
+        "struggling with MCA debt",
+        "high MCA payments",
+        "multiple MCA debt",
+        "MCA debt stress",
+        "can't afford MCA payments",
+        "MCA interest rates",
+        "MCA debt burden",
+        "MCA payment problems",
+        "business MCA debt",
+        "MCA debt help"
+      ]
+    },
+    {
+      "name": "MCA Debt Relief - Major Cities",
+      "headlines": [
+        "MCA Debt Relief New York",
+        "MCA Debt Relief Chicago",
+        "MCA Debt Relief Los Angeles",
+        "MCA Debt Relief Houston",
+        "MCA Debt Relief Phoenix",
+        "MCA Debt Relief Philadelphia",
+        "MCA Debt Relief San Antonio",
+        "MCA Debt Relief San Diego",
+        "MCA Debt Relief Dallas",
+        "MCA Debt Relief San Jose",
+        "MCA Debt Settlement New York",
+        "MCA Debt Settlement Chicago",
+        "MCA Debt Settlement Los Angeles",
+        "MCA Debt Settlement Houston",
+        "MCA Debt Settlement Phoenix"
+      ],
+      "long_headlines": [
+        "MCA Debt Relief Services New York Professional Settlement Experts",
+        "MCA Debt Relief Chicago Business Debt Consolidation Specialists",
+        "MCA Debt Relief Los Angeles Lower Payments Keep Credit Intact",
+        "MCA Debt Relief Houston Free Consultation No Upfront Fees",
+        "MCA Debt Relief Phoenix Small Business Debt Relief Experts"
+      ],
+      "descriptions": [
+        "MCA debt relief New York. Professional settlement experts reduce payments by up to 57%. Free consultation, debt-free in 6-8 months guaranteed.",
+        "MCA debt relief Chicago. Business debt consolidation services for small businesses. Lower MCA payments, better terms, financial freedom.",
+        "MCA debt relief Los Angeles. Merchant cash advance settlement specialists. Negotiate lower payments, keep your credit intact.",
+        "MCA debt relief Houston. Expert debt relief services for business owners. Free confidential consultation, no upfront costs required.",
+        "MCA debt relief Phoenix. Professional MCA debt negotiation. Reduce monthly payments, eliminate debt burden, achieve financial stability."
+      ],
+      "search_themes": [
+        "MCA debt relief New York",
+        "MCA debt relief Chicago",
+        "MCA debt relief Los Angeles",
+        "MCA debt relief Houston",
+        "MCA debt relief Phoenix",
+        "MCA debt relief Philadelphia",
+        "MCA debt relief San Antonio",
+        "MCA debt relief San Diego",
+        "MCA debt relief Dallas",
+        "MCA debt relief San Jose",
+        "MCA debt settlement New York",
+        "MCA debt settlement Chicago",
+        "MCA debt settlement Los Angeles",
+        "MCA debt settlement Houston",
+        "MCA debt settlement Phoenix"
+      ]
+    }
+  ]
+}

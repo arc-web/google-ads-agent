@@ -1,0 +1,14 @@
+Account,Campaign,Location Name,Location Type,Is Negative,Bid Modifier,Notes
+Wright's Impact Window and Door,Broward Search Campaign,Broward County, FL,County,FALSE,0.0,Primary county target
+Wright's Impact Window and Door,Broward Search Campaign,Fort Lauderdale, FL,City,FALSE,0.2,High-priority downtown area
+Wright's Impact Window and Door,Broward Search Campaign,Hollywood, FL,City,FALSE,0.15,Beach communities
+Wright's Impact Window and Door,Broward Search Campaign,Pembroke Pines, FL,City,FALSE,0.1,Family communities
+Wright's Impact Window and Door,Broward Search Campaign,Coral Springs, FL,City,FALSE,0.05,Master-planned community
+Wright's Impact Window and Door,Broward Search Campaign,Sunrise, FL,City,FALSE,0.05,Business corridor
+Wright's Impact Window and Door,Broward Search Campaign,Plantation, FL,City,FALSE,0.05,Professional community
+Wright's Impact Window and Door,Broward Search Campaign,Davie, FL,City,FALSE,0.05,Equestrian/residential
+Wright's Impact Window and Door,Broward Search Campaign,Miramar, FL,City,FALSE,0.05,Diverse community
+Wright's Impact Window and Door,Broward Search Campaign,Tamarac, FL,City,FALSE,0.05,Active adult community
+Wright's Impact Window and Door,Broward Search Campaign,North Lauderdale, FL,City,FALSE,0.05,Growing residential
+Wright's Impact Window and Door,Broward Search Campaign,Lauderhill, FL,City,FALSE,0.05,Urban residential
+Wright's Impact Window and Door,Broward Search Campaign,Oakland Park, FL,City,FALSE,0.05,Historic district

@@ -1,0 +1,45 @@
+# Google Ads Client MCP Dependencies
+
+# Core dependencies
+aiohttp>=3.8.0
+asyncio-mqtt>=0.11.0
+python-dotenv>=0.19.0
+
+# Google APIs
+google-auth>=2.0.0
+google-auth-oauthlib>=0.4.0
+google-auth-httplib2>=0.1.0
+google-api-python-client>=2.0.0
+google-ads>=20.0.0
+
+# Airtable integration
+pyairtable>=1.0.0
+
+# OpenAI integration
+openai>=1.0.0
+
+# Data processing
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Email processing
+email-validator>=1.1.0
+
+# Configuration and utilities
+pydantic>=1.10.0
+python-dateutil>=2.8.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.0.0
+
+# Documentation
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.0.0
+
+# Optional: Mermaid integration
+mermaid-cli>=10.0.0
+
+# Optional: MCP framework
+mcp>=0.1.0 

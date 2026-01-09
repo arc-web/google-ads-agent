@@ -1,0 +1,155 @@
+{
+  "name": "Freedom Finance Solutions - Florida MCA Debt Relief",
+  "type": "Performance Max",
+  "budget": 89.99,
+  "budget_type": "Daily",
+  "languages": "en",
+  "bid_strategy_type": "Maximize conversions",
+  "target_cpa": 0.0,
+  "start_date": "2025-12-11",
+  "end_date": "",
+  "ad_schedule": "(Monday[08:00-20:00]);(Tuesday[08:00-20:00]);(Wednesday[08:00-20:00]);(Thursday[08:00-20:00]);(Friday[08:00-20:00]);(Saturday[09:00-18:00]);(Sunday[09:00-18:00])",
+  "networks": "Google search",
+  "campaign_status": "Enabled",
+  "target_audience": "Florida small business owners with MCA debt",
+  "regulatory_compliance": {
+    "ftc_tsr_compliant": true,
+    "florida_state_licensed": "Pending - Requires state licensing",
+    "educational_focus": true,
+    "local_market_focus": true
+  },
+  "callouts": [
+    "Florida MCA Debt Relief",
+    "Miami Business Debt Help",
+    "Fort Lauderdale MCA Settlement",
+    "Tampa MCA Debt Consolidation",
+    "Orlando Small Business Debt",
+    "Jacksonville MCA Negotiation",
+    "West Palm Beach Debt Relief",
+    "Florida Business Debt Experts",
+    "MCA Settlement Florida",
+    "South Florida Debt Relief",
+    "Florida MCA Specialists",
+    "Business Debt Florida",
+    "MCA Help Fort Lauderdale",
+    "Florida Debt Consolidation",
+    "MCA Relief Miami"
+  ],
+  "structured_snippets": {
+    "header": "Services",
+    "values": [
+      "MCA Debt Relief Florida",
+      "Business Debt Consolidation",
+      "Merchant Cash Advance Settlement",
+      "Florida Debt Negotiation",
+      "Small Business Debt Help",
+      "MCA Payment Reduction",
+      "Commercial Debt Settlement",
+      "Florida Business Debt Relief",
+      "MCA Settlement Services",
+      "Debt Consolidation Florida"
+    ]
+  },
+  "locations": [
+    "Fort Lauderdale, FL",
+    "Miami, FL",
+    "West Palm Beach, FL",
+    "Tampa, FL",
+    "Orlando, FL",
+    "Jacksonville, FL"
+  ],
+  "asset_groups": [
+    {
+      "name": "Florida MCA Debt Relief - Local Focus",
+      "headlines": [
+        "MCA Debt Relief Fort Lauderdale",
+        "MCA Debt Relief Miami Florida",
+        "MCA Debt Relief West Palm Beach",
+        "MCA Debt Relief Tampa",
+        "MCA Debt Relief Orlando",
+        "MCA Debt Relief Jacksonville",
+        "Florida MCA Settlement Services",
+        "Florida Business Debt Consolidation",
+        "MCA Debt Help Fort Lauderdale",
+        "MCA Debt Help Miami",
+        "MCA Debt Help Tampa",
+        "MCA Debt Help Orlando",
+        "Florida MCA Debt Specialists",
+        "Florida Debt Relief Experts",
+        "MCA Settlement Fort Lauderdale"
+      ],
+      "long_headlines": [
+        "MCA Debt Relief Fort Lauderdale Professional Settlement Experts",
+        "MCA Debt Relief Miami Florida Lower Payments Keep Credit Intact",
+        "MCA Debt Relief West Palm Beach Free Consultation Available",
+        "MCA Debt Relief Tampa Small Business Debt Consolidation Services",
+        "MCA Debt Relief Orlando Expert MCA Debt Negotiation Help"
+      ],
+      "descriptions": [
+        "MCA debt relief Fort Lauderdale Florida. Professional settlement experts reduce payments by up to 57%. Free consultation, debt-free in 6-8 months.",
+        "MCA debt relief Miami Florida. Business debt consolidation specialists. Lower MCA payments, better terms, financial freedom guaranteed.",
+        "MCA debt relief West Palm Beach. Merchant cash advance settlement experts. Negotiate lower payments, keep your credit intact.",
+        "MCA debt relief Tampa Florida. Expert debt relief services for business owners. Free confidential consultation, no upfront costs.",
+        "MCA debt relief Orlando. Professional MCA debt negotiation services. Reduce monthly payments, eliminate debt burden, achieve stability."
+      ],
+      "search_themes": [
+        "MCA debt relief Fort Lauderdale",
+        "MCA debt relief Miami Florida",
+        "MCA debt relief West Palm Beach",
+        "MCA debt relief Tampa",
+        "MCA debt relief Orlando",
+        "MCA debt relief Jacksonville",
+        "Florida MCA settlement services",
+        "Florida business debt consolidation",
+        "MCA debt help Fort Lauderdale",
+        "MCA debt help Miami"
+      ]
+    },
+    {
+      "name": "South Florida MCA Debt Relief - Business Focus",
+      "headlines": [
+        "South Florida MCA Debt Relief",
+        "Miami Dade MCA Debt Help",
+        "Broward County Debt Relief",
+        "Palm Beach MCA Settlement",
+        "South Florida Business Debt",
+        "Miami Beach MCA Debt Consolidation",
+        "Fort Lauderdale Business Debt",
+        "West Palm Business MCA Help",
+        "South Florida MCA Specialists",
+        "Miami Business Debt Relief",
+        "Fort Lauderdale MCA Experts",
+        "West Palm Beach Debt Help",
+        "South Florida Debt Consolidation",
+        "Miami MCA Settlement Services",
+        "Broward MCA Debt Relief"
+      ],
+      "long_headlines": [
+        "South Florida MCA Debt Relief Services Professional Settlement Experts",
+        "Miami Dade County MCA Debt Help Lower Payments Financial Freedom",
+        "Broward County MCA Debt Relief Free Consultation No Upfront Fees",
+        "Palm Beach County MCA Settlement Small Business Debt Consolidation",
+        "South Florida Business MCA Debt Relief Expert Negotiation Services"
+      ],
+      "descriptions": [
+        "South Florida MCA debt relief services. Professional settlement experts reduce MCA payments by up to 57%. Free consultation available.",
+        "Miami Dade MCA debt help. Business debt consolidation specialists lower payments, better terms, keep credit intact.",
+        "Broward County MCA debt relief. Merchant cash advance settlement experts negotiate lower payments, eliminate debt burden.",
+        "Palm Beach MCA settlement services. Expert debt relief for small businesses. Free confidential consultation, no upfront costs.",
+        "South Florida business MCA debt relief. Professional negotiation services reduce monthly payments, achieve financial stability."
+      ],
+      "search_themes": [
+        "South Florida MCA debt relief",
+        "Miami Dade MCA debt help",
+        "Broward County debt relief",
+        "Palm Beach MCA settlement",
+        "South Florida business debt",
+        "Miami Beach MCA debt consolidation",
+        "Fort Lauderdale business debt",
+        "West Palm business MCA help",
+        "South Florida MCA specialists",
+        "Miami business debt relief"
+      ]
+    }
+  ]
+}
