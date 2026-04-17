@@ -166,47 +166,142 @@ blockquote::before { content:'\201C'; position:absolute; left:0; top:-10px; font
 <div id="slides">
 <div class="slide active" id="slide-1">
     
-    <div class="blob" style="width:486.67866091861913px;height:474.72695484659596px;background:var(--primary);top:-153.07897420804312px;right:-65.47860991550851px;opacity:0.07"></div>
-    <div class="blob" style="width:318.76889889416464px;height:340.6716485978806px;background:var(--accent);bottom:-102.05289485077463px;left:-44.61352013228972px;opacity:0.06"></div>
+    <div class="blob" style="width:406.4685921094121px;height:558.7100447034486px;background:var(--primary);top:-100.70013528170865px;right:-99.12778206191638px;opacity:0.07"></div>
+    <div class="blob" style="width:442.33426210714947px;height:318.1500487183212px;background:var(--accent);bottom:-117.00003234091716px;right:-68.00717102959491px;opacity:0.06"></div>
     <div class="slide-content">
       <div class="hero-badge">ARC Web</div>
-      <h1>Google Ads Agent<br><span class="grad">Early Stage</span></h1>
-      <div class="sub">Google Ads Campaign Management Agent - Independent Repository</div>
-      <div class="tags-row"><span class="tag">Python</span><span class="tag">Early Stage</span></div>
+      <h1>Google Ads Agent<br><span class="grad">Python</span></h1>
+      <div class="sub">Google Ads Campaign Management Agent with MCP integration and AI-generated client reporting</div>
+      <div class="tags-row"><span class="tag">Python</span><span class="tag">Open Source</span></div>
     </div>
   </div>
 
 <div class="slide" id="slide-2">
     
-    <div class="blob" style="width:519.9072932882555px;height:511.03899580082566px;background:var(--primary);top:-126.17101210711232px;right:-79.8642701367104px;opacity:0.07"></div>
-    <div class="blob" style="width:367.95899806789544px;height:312.8924165779006px;background:var(--accent);bottom:-111.36543807088229px;left:-49.0182876688327px;opacity:0.06"></div>
+    <div class="blob" style="width:501.6248710884814px;height:586.2180441099439px;background:var(--primary);top:-157.74171428895477px;right:-117.63702766936768px;opacity:0.07"></div>
+    <div class="blob" style="width:335.5073557448855px;height:373.18385319645165px;background:var(--accent);bottom:-98.65813417060622px;right:-78.98515797651436px;opacity:0.06"></div>
     <div class="slide-content">
-      <div class="eyebrow">Status</div>
-      <h2>Under <span class="grad">construction</span></h2>
+      <div class="eyebrow">The problem</div>
+      <h2>What's <span class="grad">broken</span> without this</h2>
       <div class="line"></div>
       <div class="cards">
     <div class="card">
-      <span class="card-icon">🔬</span>
-      <div class="card-title">Exploring</div>
-      <div class="card-desc">This project is in early exploration. Ideas are taking shape.</div>
+      <span class="card-icon">📢</span>
+      <div class="card-title">Campaign setup takes hours of clicks</div>
+      <div class="card-desc">Creating Performance Max and Search campaigns in the Google Ads UI requires navigating dozens of screens - the API automates budget, asset groups, and ad creation in one call.</div>
     </div>
     <div class="card">
-      <span class="card-icon">🛠️</span>
-      <div class="card-title">Building</div>
-      <div class="card-desc">Active development — the core concept is being proven out.</div>
+      <span class="card-icon">📧</span>
+      <div class="card-title">Client ad-performance emails are written manually</div>
+      <div class="card-desc">Account managers pull metrics from the dashboard, draft responses, then paste data - the agent queries the API and generates formatted client emails with live account summaries.</div>
     </div>
     <div class="card">
-      <span class="card-icon">🤝</span>
-      <div class="card-title">Open</div>
-      <div class="card-desc">Early stage and open source. Fork it, break it, improve it.</div>
+      <span class="card-icon">📋</span>
+      <div class="card-title">CSV campaign uploads fail without validation</div>
+      <div class="card-desc">Bulk campaign CSVs hit the Google Ads API with type errors and missing fields, causing silent partial imports that require manual audits to detect and fix.</div>
     </div></div>
     </div>
   </div>
 
 <div class="slide" id="slide-3">
     
-    <div class="blob" style="width:441.485999405973px;height:551.0666323768249px;background:var(--primary);top:-86.41769046404158px;left:-62.61956094894418px;opacity:0.07"></div>
-    <div class="blob" style="width:445.4944034098187px;height:319.8430685384195px;background:var(--accent);bottom:-115.29894731164455px;left:-65.2818765340391px;opacity:0.06"></div>
+    <div class="blob" style="width:476.12945942439563px;height:591.8767792555445px;background:var(--primary);top:-89.71845194481284px;right:-115.39783849726328px;opacity:0.07"></div>
+    <div class="blob" style="width:355.36766825333365px;height:425.7297534261626px;background:var(--accent);bottom:-100.02662721268533px;right:-45.66003242922231px;opacity:0.06"></div>
+    <div class="slide-content">
+      <div class="eyebrow">The difference</div>
+      <h2>Why it <span class="grad">matters</span></h2>
+      
+      <div class="compare">
+        <div class="compare-col bad">
+      <div class="compare-head"><span class="cross">✗</span> Without</div>
+      <div class="compare-item">Manual work</div><div class="compare-item">Slow iteration</div><div class="compare-item">Repeated mistakes</div>
+    </div>
+        <div class="compare-col good">
+      <div class="compare-head"><span class="check">✓</span> With this</div>
+      <div class="compare-item">MCP server integration lets Claude call campaign operations as native tools without custom glue code</div><div class="compare-item">CSV validator catches type mismatches and missing required fields before any API call is made</div><div class="compare-item">Response generator attaches live impressions, clicks, spend, and conversion data to every client email</div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+<div class="slide" id="slide-4">
+    
+    <div class="blob" style="width:526.2851206914571px;height:431.41555019320157px;background:var(--primary);top:-152.49792510369673px;right:-73.68280706242976px;opacity:0.07"></div>
+    <div class="blob" style="width:407.02803022484636px;height:435.7811526013246px;background:var(--accent);bottom:-60.56761498022565px;right:-69.98834118056436px;opacity:0.06"></div>
+    <div class="slide-content">
+      <div class="eyebrow">Under the hood</div>
+      <h2>How it <span class="grad">works</span></h2>
+      
+      <div class="flow">
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(123,47,190,0.12);border:1px solid rgba(123,47,190,0.2)">🔑</div>
+      <div class="flow-body">
+        <div class="flow-title">Authenticate via OAuth2</div>
+        <div class="flow-desc">Loads GoogleAdsClient from YAML config, resolves customer ID, and validates API access before any campaign operation begins.</div>
+        
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.2)">📊</div>
+      <div class="flow-body">
+        <div class="flow-title">Execute campaign operations</div>
+        <div class="flow-desc">Creates or updates budgets, campaigns, asset groups, and ads via the Google Ads API service - each step validated against the resource schema before submission.</div>
+        
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.2)">✉️</div>
+      <div class="flow-body">
+        <div class="flow-title">Generate client response</div>
+        <div class="flow-desc">Pulls 30-day account metrics, formats them into a professional email via the response generator, and returns a confidence-scored draft ready to send.</div>
+        
+      </div>
+    </div></div>
+    </div>
+  </div>
+
+<div class="slide" id="slide-5">
+    
+    <div class="blob" style="width:481.99278390858547px;height:508.37040819796465px;background:var(--primary);top:-147.94042807727746px;left:-71.71374301750353px;opacity:0.07"></div>
+    <div class="blob" style="width:375.3149204645347px;height:320.86457444181815px;background:var(--accent);bottom:-96.77841603688404px;right:-44.88038460665484px;opacity:0.06"></div>
+    <div class="slide-content">
+      <div class="eyebrow">What it does</div>
+      <h2>Core <span class="grad">capabilities</span></h2>
+      <div class="line"></div>
+      <div class="cards">
+    <div class="card">
+      <span class="card-icon">⚡</span>
+      <div class="card-title">Fast</div>
+      <div class="card-desc">Optimized for speed and efficiency.</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">🎯</span>
+      <div class="card-title">Reliable</div>
+      <div class="card-desc">Built to work consistently.</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔌</span>
+      <div class="card-title">Integrates</div>
+      <div class="card-desc">Works with your existing tools.</div>
+    </div></div>
+    </div>
+  </div>
+
+<div class="slide" id="slide-6">
+    
+    <div class="blob" style="width:460.17732663114646px;height:597.4702521204704px;background:var(--primary);top:-90.42234005817969px;right:-87.56991823298054px;opacity:0.07"></div>
+    <div class="blob" style="width:319.9279537592417px;height:368.80683545962285px;background:var(--accent);bottom:-66.63419218183574px;left:-40.49204174989509px;opacity:0.06"></div>
+    <div class="slide-content">
+      <blockquote>Google Ads campaigns that used to take a morning of UI work are created, validated, and confirmed in a single agent turn.</blockquote>
+      <div class="line" style="margin-top:48px"></div>
+      <div class="sub">arc-web/google-ads-agent</div>
+    </div>
+  </div>
+
+<div class="slide" id="slide-7">
+    
+    <div class="blob" style="width:579.5512523327849px;height:563.354068238864px;background:var(--primary);top:-138.24371869295507px;left:-91.5565930563144px;opacity:0.07"></div>
+    <div class="blob" style="width:420.6638225427864px;height:336.003192576248px;background:var(--accent);bottom:-86.57751923351684px;right:-63.306615798355544px;opacity:0.06"></div>
     <div class="slide-content">
       <div class="eyebrow">Codebase</div>
       <h2>Built with <span class="grad">care</span></h2>
@@ -220,12 +315,12 @@ blockquote::before { content:'\201C'; position:absolute; left:0; top:-10px; font
     <div class="card">
       <span class="card-icon">🏗️</span>
       <div class="card-title">Architecture</div>
-      <div class="card-desc">Tool</div>
+      <div class="card-desc">AI Agent</div>
     </div>
     <div class="card">
       <span class="card-icon">📦</span>
       <div class="card-title">Key deps</div>
-      <div class="card-desc">See repository</div>
+      <div class="card-desc">google-ads-googleads, openai, pyyaml</div>
     </div>
     <div class="card">
       <span class="card-icon">🔓</span>
@@ -235,21 +330,10 @@ blockquote::before { content:'\201C'; position:absolute; left:0; top:-10px; font
     </div>
   </div>
 
-<div class="slide" id="slide-4">
+<div class="slide" id="slide-8">
     
-    <div class="blob" style="width:510.0609701248602px;height:402.6186509491114px;background:var(--primary);top:-128.50530700948693px;right:-73.75917502450152px;opacity:0.07"></div>
-    <div class="blob" style="width:319.42660750213304px;height:438.52558079932965px;background:var(--accent);bottom:-66.0322940240739px;right:-58.390699516932415px;opacity:0.06"></div>
-    <div class="slide-content">
-      <blockquote>Google Ads Agent is an early-stage Arc Web project — open source and ready to extend.</blockquote>
-      <div class="line" style="margin-top:48px"></div>
-      <div class="sub">arc-web/google-ads-agent</div>
-    </div>
-  </div>
-
-<div class="slide" id="slide-5">
-    
-    <div class="blob" style="width:422.4992334154657px;height:474.605398439361px;background:var(--primary);top:-91.59640694646046px;left:-89.38719175018196px;opacity:0.07"></div>
-    <div class="blob" style="width:368.9554521926458px;height:400.1017326096157px;background:var(--accent);bottom:-104.48985375463627px;left:-75.85991346016402px;opacity:0.06"></div>
+    <div class="blob" style="width:479.1661862157031px;height:551.1707113136316px;background:var(--primary);top:-109.29426169360949px;left:-93.15410277771238px;opacity:0.07"></div>
+    <div class="blob" style="width:304.3138658586074px;height:351.1701976988683px;background:var(--accent);bottom:-118.8978243041839px;left:-65.31155096204716px;opacity:0.06"></div>
     <div class="slide-content">
       <div class="eyebrow">Built by</div>
       <h2>Mike Ensor<br><span class="grad">Arc Web</span></h2>
@@ -260,7 +344,7 @@ blockquote::before { content:'\201C'; position:absolute; left:0; top:-10px; font
 </div>
 
 <div id="nav"></div>
-<div id="counter">1 / 5</div>
+<div id="counter">1 / 8</div>
 <div id="hint">\u2190 \u2192 arrow keys &nbsp;|&nbsp; P to play &nbsp;|&nbsp; M to mute<span id="mute-dot"></span></div>
 <div id="progress-bar"></div>
 <button id="play-btn" aria-label="Play slideshow" onclick="togglePlay()">
