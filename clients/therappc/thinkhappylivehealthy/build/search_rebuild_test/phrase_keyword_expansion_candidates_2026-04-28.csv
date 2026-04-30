@@ -1,0 +1,23 @@
+ad_group,keyword,criterion_type,source_search_term,source_action,source_impressions,source_clicks,source_conversions,notes
+Psychiatry - Adult - General,psychiatric nurse practitioner,Phrase,psychiatric nurse practitioner,add_phrase,11.0,1.0,1.0,converting search-term variation
+Psychiatry - Adult - Local,psych np near me,Phrase,psych np near me,add_phrase,77.0,8.0,1.0,converting search-term variation
+Psychiatry - Children - General,child and adolescent psychiatry,Phrase,child and adolescent psychiatry,add_phrase,422.0,6.0,3.0,converting search-term variation
+Psychiatry - Children - General,child psychiatry,Phrase,child psychiatry,add_phrase,177.0,2.0,1.0,converting search-term variation
+Psychiatry - Children - Local,child psychiatry near me,Phrase,child psychiatry near me,add_phrase,103.0,3.0,1.0,converting search-term variation
+Testing - Child Psychological - General,psychological evaluation for child,Phrase,psychological evaluation for child,add_phrase,98.0,3.0,1.0,converting search-term variation
+Testing - Child Psychological - General,psychological evaluations for child,Phrase,psychological evaluation for child,add_phrase,98.0,3.0,1.0,converting search-term variation
+Therapy - ADHD - General,add treatment for adults,Phrase,add treatment for adults,add_phrase,20.0,1.0,2.0,converting search-term variation
+Therapy - ADHD - General,adhd therapist,Phrase,adhd therapist,add_phrase,84.0,6.0,2.0,converting search-term variation
+Therapy - ADHD - General,adhd therapists,Phrase,adhd therapist,add_phrase,84.0,6.0,2.0,converting search-term variation
+Therapy - ADHD - General,adhd treatment,Phrase,adhd treatment,add_phrase,408.0,36.0,0.5,converting search-term variation
+Therapy - ADHD - Local,adhd therapist for kids near me,Phrase,adhd therapist for kids near me,add_phrase,25.0,2.0,1.0,converting search-term variation
+Therapy - ADHD - Local,adhd therapist near me,Phrase,adhd therapist near me,add_phrase,275.0,22.0,2.0,converting search-term variation
+Therapy - ADHD - Local,adhd therapists for kids near me,Phrase,adhd therapist for kids near me,add_phrase,25.0,2.0,1.0,converting search-term variation
+Therapy - ADHD - Local,adhd therapists near me,Phrase,adhd therapist near me,add_phrase,275.0,22.0,2.0,converting search-term variation
+Therapy - Anxiety - General,overcoming anxiety,Phrase,overcoming anxiety,add_phrase,53.0,8.0,1.0,converting search-term variation
+Therapy - Anxiety - Local,anxiety doctors near me,Phrase,anxiety doctors near me,add_phrase,35.0,3.0,4.0,converting search-term variation
+Therapy - Children - General,child behavioral therapist,Phrase,child behavioral therapist,add_phrase,33.0,4.0,2.0,converting search-term variation
+Therapy - Children - General,child behavioral therapists,Phrase,child behavioral therapist,add_phrase,33.0,4.0,2.0,converting search-term variation
+Therapy - Children - Local,child behavioral therapist near me,Phrase,child behavioral therapist near me,add_phrase,46.0,2.0,1.0,converting search-term variation
+Therapy - Children - Local,child behavioral therapists near me,Phrase,child behavioral therapist near me,add_phrase,46.0,2.0,1.0,converting search-term variation
+Therapy - Depression - General,esketamine,Phrase,esketamine,add_phrase,59.0,5.0,2.0,converting search-term variation

@@ -1,0 +1,98 @@
+{
+  "client": "Think Happy Live Healthy",
+  "round": "round_1",
+  "date": "2026-04-28",
+  "items": [
+    {
+      "id": "R001",
+      "topic": "Insurance language",
+      "classification": ["business_fact", "compliance_or_claim", "campaign_revision", "website_gap"],
+      "severity": "high",
+      "launch_blocker": true,
+      "client_truth": "Only Anthem/CareFirst BCBS is in-network. Other carriers are handled through out-of-network superbills.",
+      "campaign_action": "Replace broad insurance claims with client-approved language.",
+      "suggested_copy": "In-network with Anthem BCBS. Superbills provided for out-of-network benefits.",
+      "engine_rule_update": "Insurance claims must use exact client-approved payer language."
+    },
+    {
+      "id": "R002",
+      "topic": "EMDR capacity",
+      "classification": ["capacity_constraint", "campaign_revision", "website_gap"],
+      "severity": "high",
+      "launch_blocker": true,
+      "client_truth": "No current clinician openings for EMDR.",
+      "campaign_action": "Remove EMDR from active copy, active keywords, and roadmap.",
+      "engine_rule_update": "Website service presence is not enough. Active ad copy requires current capacity."
+    },
+    {
+      "id": "R003",
+      "topic": "ADHD testing age limit",
+      "classification": ["business_fact", "campaign_revision", "negative_keyword_update", "website_gap"],
+      "severity": "high",
+      "launch_blocker": true,
+      "client_truth": "ADHD testing is available through age 21 only.",
+      "campaign_action": "Reposition as ADHD Testing for Children, Teens, and Young Adults. Add adult-intent negatives.",
+      "negative_examples": ["adult adhd test", "adult adhd testing", "adhd test for adults"],
+      "engine_rule_update": "Age eligibility must drive keyword generation, copy generation, and negative keyword generation."
+    },
+    {
+      "id": "R004",
+      "topic": "Parent-child services versus standalone family therapy",
+      "classification": ["business_fact", "campaign_revision", "negative_keyword_update", "website_gap"],
+      "severity": "high",
+      "launch_blocker": true,
+      "client_truth": "Parent-child therapy and family support are available around an identified child patient. Standalone family therapy is not offered.",
+      "campaign_action": "Replace family therapy language with parent-child therapy or family support language. Add family therapy negatives.",
+      "negative_examples": ["family therapy", "family counseling", "family therapist"],
+      "engine_rule_update": "Adjacent modality terms require standalone-service verification."
+    },
+    {
+      "id": "R005",
+      "topic": "Psychiatric NP referral growth target",
+      "classification": ["strategy_question", "business_priority", "budget_weighting"],
+      "severity": "medium",
+      "launch_blocker": false,
+      "client_truth": "Psychiatric NP referrals are the highest growth priority. Target is 15 to 20 referrals per week.",
+      "recommended_action": "Consider a psychiatry-focused campaign split and heavier budget weighting instead of simply adding more ad groups.",
+      "strategy_question": "Should psychiatry launch as its own highest-priority campaign on day 1?"
+    },
+    {
+      "id": "R006",
+      "topic": "Brand campaign on day 1",
+      "classification": ["strategy_question", "campaign_revision"],
+      "severity": "medium",
+      "launch_blocker": false,
+      "client_truth": "Client wants to discuss launching brand campaign immediately with modest monthly budget.",
+      "recommended_action": "Approve if budget is capped and brand reporting stays separate from nonbrand."
+    },
+    {
+      "id": "R007",
+      "topic": "Bidding, geo modifiers, and conversion tracking",
+      "classification": ["tracking_or_measurement", "strategy_question", "compliance_or_claim"],
+      "severity": "high",
+      "launch_blocker": true,
+      "client_truth": "Client needs clarity on bid strategy, geo modifiers, conversion tracking, PHI handling, GA4, and Curve Compliance.",
+      "recommended_action": "Prepare launch-readiness explanation and verify no PHI is passed to Google measurement systems.",
+      "engine_rule_update": "Bidding strategy explanations must state whether manual bid modifiers materially affect the selected strategy."
+    },
+    {
+      "id": "R008",
+      "topic": "Maryland exclusion",
+      "classification": ["strategy_question", "geo_decision", "website_gap"],
+      "severity": "medium",
+      "launch_blocker": false,
+      "client_truth": "Client believes Maryland should likely be excluded due to CPA, logistics, and telehealth limits.",
+      "recommended_action": "Do not use old CPA alone as the proof. Decide based on licensing, telehealth, commute friction, landing page support, and budget test appetite.",
+      "strategy_question": "Exclude Maryland now, or isolate it into a capped separate test with a Maryland-specific page?"
+    },
+    {
+      "id": "R009",
+      "topic": "Virginia LLC to PLLC conversion",
+      "classification": ["legal_or_verification", "launch_readiness_blocker"],
+      "severity": "high",
+      "launch_blocker": true,
+      "client_truth": "Legal entity name will change in the next month or two and may affect healthcare advertiser verification.",
+      "recommended_action": "Coordinate verification timing before launch and avoid unnecessary mid-flight verification changes."
+    }
+  ]
+}

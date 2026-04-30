@@ -1,0 +1,28 @@
+{
+  "status": "pass",
+  "rows": 470,
+  "campaigns": [
+    "ARC - Search - Adult Therapy - V1",
+    "ARC - Search - Brand - V1",
+    "ARC - Search - Psychiatry - V1",
+    "ARC - Search - Testing - V1"
+  ],
+  "ad_groups": 49,
+  "counts": {
+    "ad_group_rows": 49,
+    "keyword_rows": 295,
+    "rsa_rows": 49,
+    "location_rows": 53,
+    "bid_modifier_rows": 53,
+    "radius_rows": 4,
+    "negative_keyword_rows": 20
+  },
+  "negative_keyword_rows": 20,
+  "issues": [],
+  "source_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Services_Editor_Staging_CURRENT.csv",
+  "output_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Services_Editor_Staging_REV1.csv",
+  "revision_sources": {
+    "client_feedback": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/client_feedback_classified.json",
+    "decision_log": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/revision_decision_log.csv"
+  }
+}

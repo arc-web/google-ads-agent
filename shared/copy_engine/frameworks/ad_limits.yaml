@@ -1,0 +1,26 @@
+# Google Ads Format Limits
+# Maximum number of elements per ad format
+# Reference: https://support.google.com/google-ads/answer/1704390
+
+limits:
+  # Text & Responsive Search Ads (RSA)
+  headlines_max: 15
+  descriptions_max: 5
+
+  # Performance Max (PMAX)
+  long_headlines_max: 5
+
+  # Sitelink Extensions
+  sitelinks_max: 6
+
+  # Callout Extensions
+  callouts_max: 20
+
+  # Search Theme Assets (RSA)
+  search_themes_max: 10
+
+# Business-specific overrides (client-dependent)
+business_overrides:
+  my_expert_resume:
+    headlines_max: 12  # Reduced for brand consistency
+    search_themes_max: 8

@@ -1,0 +1,18 @@
+Location report
+All time
+Location,Campaign,Impr.,Interactions,Interaction rate,Currency code,Avg. cost,Cost,Conv. rate,Conversions,Cost / conv.
+"Maryland, United States",Psychiatry - RevKey,"32,172","1,517",4.72%,USD,7.10,10763.80,0.99%,15.00,717.59
+"Loudoun County, Virginia, United States",Psychiatry - RevKey,"5,450",243,4.46%,USD,7.35,1787.24,5.35%,13.00,137.48
+"Stafford County, Virginia, United States",Psychiatry - RevKey,"1,257",51,4.06%,USD,7.43,378.89,1.96%,1.00,378.89
+"Arlington, Virginia, United States",Psychiatry - RevKey,"2,866",148,5.16%,USD,7.18,1062.20,0.68%,1.00,1062.20
+"Prince William County, Virginia, United States",Psychiatry - RevKey,"3,240",166,5.12%,USD,7.25,1203.19,2.41%,4.00,300.80
+"Virginia, United States",Psychiatry - RevKey,"35,440","1,677",4.73%,USD,7.75,12998.14,2.33%,39.00,333.29
+"Fairfax County, Virginia, United States",Psychiatry - RevKey,"11,691",596,5.10%,USD,7.29,4343.41,2.68%,16.00,271.46
+"Washington, District of Columbia, United States",Psychiatry - RevKey,"6,292",259,4.12%,USD,7.26,1879.39,1.93%,5.00,375.88
+"Manassas, Virginia, United States",Psychiatry - RevKey,511,26,5.09%,USD,7.81,203.04,0.00%,0.00,0.00
+Total: Locations,,"98,918","4,683",4.73%,USD,7.39,34619.30,2.01%,94.00,368.29
+Total: Other locations,,"74,942","4,290",5.72%,USD,3.02,12968.49,9.44%,405.00,32.02
+Total: Account,,"5,336,954","160,082",3.00%,USD,1.03,165341.13,3.65%,"5,842.00",28.30
+Total: Smart,,"4,231,038","47,373",1.12%,USD,1.12,53019.66,7.64%,"3,619.02",14.65
+Total: Search,,"554,127","19,625",3.54%,USD,4.61,90521.77,7.29%,"1,429.98",63.30
+Total: Performance Max,,"551,789","93,084",16.87%,USD,0.23,21799.70,0.85%,793.00,27.49
