@@ -16,14 +16,16 @@ The canonical process is `Google_Ads_Agent`, documented here:
 - `docs/AI_REASONING_GATES.md`
 - `docs/CLIENT_FACING_LANGUAGE_RULES.md`
 
-Do not treat any client-specific folder as the source of truth. Client folders are examples or run artifacts only.
+Do not treat any single client-specific folder as the source of truth for global process rules.
+Client folders are active data assets and examples until the repo owner explicitly marks them for archive.
 
 ## Active Directory Rules
 
 - Active client work belongs under `clients/{agency}/{client}/`.
 - New clients must be created from `templates/client_template/`.
-- Old root-level client folders belong in `legacy_archive/root_clients/`.
-- Old planning documents that conflict with the current process belong in `legacy_archive/legacy_plans/`.
+- Existing client folders that predate the agency/client layout still belong under `clients/{client_slug}/` until they are reviewed and normalized.
+- Do not archive, purge, or label client folders as historical until the overall system is tested and the repo owner explicitly approves that status.
+- Planning documents that may conflict with the current process belong in `docs/system_review/` until they are reconciled, superseded, or explicitly retired.
 - Generated rebuilds belong in `clients/{agency}/{client}/build/{date}_account_rebuild/`.
 
 ## Rebuild Standards
@@ -110,7 +112,7 @@ A rebuild run should create:
 <claude-mem-context>
 # Memory Context
 
-# [google_ads_agent] recent context, 2026-04-30 2:29pm GMT+8
+# [google_ads_agent] recent context, 2026-04-30 5:17pm GMT+8
 
 No previous sessions found.
 </claude-mem-context>

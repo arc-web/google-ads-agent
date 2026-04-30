@@ -4,11 +4,17 @@ Date: 2026-04-28
 
 ## Rule
 
-All active client work must live under:
+New active client work should live under:
 
 `clients/{agency}/{client}/`
 
 Do not create new active client folders at the repository root.
+
+Existing client folders that predate the agency/client layout remain active under:
+
+`clients/{client_slug}/`
+
+Do not archive or purge existing client folders until the overall system has been tested, the folder has been reviewed, and the repo owner explicitly approves the archive decision.
 
 ## Create A New Client
 

@@ -47,9 +47,15 @@ Recommended:
 
 ## Client Directory
 
-All active clients live here:
+New active clients live here:
 
 `clients/{agency}/{client}/`
+
+Existing client folders that predate the agency/client layout remain active under:
+
+`clients/{client_slug}/`
+
+Keep existing client data actionable until the system is tested and the repo owner explicitly decides what, if anything, should be archived.
 
 Use the template:
 
