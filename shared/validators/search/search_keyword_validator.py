@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
-"""
-Search Keyword Validator
+"""Validate Search keyword rows for the active Google Ads Agent workflow."""
 
-Validates keyword targeting and bidding for Search campaigns.
-Ensures keywords are properly formatted and bids are within acceptable ranges.
-"""
+from __future__ import annotations
 
-from typing import Dict, List, Any, Optional
+from collections import Counter, defaultdict
 from dataclasses import dataclass
-import re
+from typing import Any
+
+
+ALLOWED_KEYWORD_TYPES = {"Phrase", "Negative Phrase"}
+DISALLOWED_KEYWORD_TYPES = {"Broad", "Exact"}
+VALID_KEYWORD_STATUSES = {"Enabled", "Paused", "Removed"}
+MAX_KEYWORD_LENGTH = 80
+MAX_POSITIVE_KEYWORDS_PER_AD_GROUP = 20_000
+MAX_NEGATIVE_KEYWORDS_PER_AD_GROUP = 5_000
 
 
 @dataclass
 class ValidationIssue:
     """Represents a validation issue found during Search keyword validation."""
+
     level: str
-    severity: str  # 'critical', 'warning', 'info'
+    severity: str
     row_number: int
     column: str
     issue_type: str
@@ -26,401 +32,285 @@ class ValidationIssue:
 
 class SearchKeywordValidator:
     """
-    Validates keyword targeting and bidding for Search campaigns.
+    Validates Search keyword rows for the current Google Ads Editor staging format.
 
-    Focuses on Search-specific keyword validation including:
-    - Keyword match type formatting
-    - CPC bid validation
-    - Keyword quality and relevance
-    - Negative keyword validation
+    Current agent rules:
+    - Keyword text stays plain in the Keyword column.
+    - Match type belongs in Criterion Type.
+    - Active positive keywords use Phrase.
+    - Campaign-level or ad-group-level negatives use Negative Phrase.
+    - Broad and Exact are not active unless the repo process changes later.
     """
 
-    def __init__(self, validation_rules: Optional[Dict[str, Any]] = None):
-        """Initialize SearchKeywordValidator with validation rules."""
-        self.validation_rules = validation_rules or self._get_default_rules()
+    def __init__(self, validation_rules: dict[str, Any] | None = None):
+        """Initialize SearchKeywordValidator with optional rule overrides."""
+        rules = validation_rules or {}
+        self.allowed_keyword_types = set(rules.get("allowed_keyword_types", ALLOWED_KEYWORD_TYPES))
+        self.disallowed_keyword_types = set(rules.get("disallowed_keyword_types", DISALLOWED_KEYWORD_TYPES))
+        self.valid_keyword_statuses = set(rules.get("valid_keyword_statuses", VALID_KEYWORD_STATUSES))
+        self.max_keyword_length = int(rules.get("max_keyword_length", MAX_KEYWORD_LENGTH))
+        self.max_positive_keywords_per_ad_group = int(
+            rules.get("max_positive_keywords_per_ad_group", MAX_POSITIVE_KEYWORDS_PER_AD_GROUP)
+        )
+        self.max_negative_keywords_per_ad_group = int(
+            rules.get("max_negative_keywords_per_ad_group", MAX_NEGATIVE_KEYWORDS_PER_AD_GROUP)
+        )
 
-        # Keyword match type patterns
-        self.match_type_patterns = {
-            'broad': re.compile(r'^[^"\[\]]+$'),  # No quotes or brackets
-            'phrase': re.compile(r'^"[^"]+"$'),    # Surrounded by quotes
-            'exact': re.compile(r'^\[[^\[\]]+\]$'), # Surrounded by brackets
-            'negative': re.compile(r'^-.*$')       # Starts with minus
-        }
+    def _issue(
+        self,
+        severity: str,
+        row_number: int,
+        column: str,
+        issue_type: str,
+        message: str,
+        suggestion: str = "",
+        auto_fixable: bool = False,
+    ) -> ValidationIssue:
+        return ValidationIssue(
+            level="keyword",
+            severity=severity,
+            row_number=row_number,
+            column=column,
+            issue_type=issue_type,
+            message=message,
+            suggestion=suggestion,
+            auto_fixable=auto_fixable,
+        )
 
-        # Valid keyword statuses
-        self.valid_keyword_statuses = ['Enabled', 'Paused', 'Removed']
+    def _ad_group_value(self, row: dict[str, Any]) -> str:
+        """Support both the active Ad Group header and older Ad group casing."""
+        return str(row.get("Ad Group") or row.get("Ad group") or "").strip()
 
-        # CPC bid ranges
-        self.min_cpc = 0.01
-        self.max_cpc = 50.00
-        self.recommended_max_cpc = 10.00
-
-        # Keyword quality thresholds
-        self.max_keyword_length = 80  # Google limit
-        self.min_keyword_length = 1
-
-    def _get_default_rules(self) -> Dict[str, Any]:
-        """Get default validation rules for Search keywords."""
-        return {
-            'keyword': {
-                'required_fields': ['Keyword', 'Criterion Type'],
-                'match_types': {
-                    'broad': {'pattern': '^[^"\\[\\]]+$', 'description': 'General term matching'},
-                    'phrase': {'pattern': '^"[^"]+"$', 'description': 'Exact phrase matching'},
-                    'exact': {'pattern': '^\\[[^\\[\\]]+\\]$', 'description': 'Exact term matching'},
-                    'negative': {'pattern': '^-.*$', 'description': 'Exclude these terms'}
-                },
-                'bid_validation': {
-                    'min_cpc': 0.01,
-                    'max_cpc': 50.00,
-                    'recommended_max': 10.00
-                },
-                'quality_checks': {
-                    'max_length': 80,
-                    'min_length': 1,
-                    'special_chars_allowed': [' ', '-', '_', '&', '+', '/', "'", '"', '[', ']']
-                }
-            }
-        }
-
-    def _identify_match_type(self, keyword: str) -> str:
-        """
-        Identify the match type of a keyword based on its formatting.
-
-        Args:
-            keyword: The keyword string
-
-        Returns:
-            Match type: 'broad', 'phrase', 'exact', 'negative', or 'unknown'
-        """
-        keyword = keyword.strip()
-
-        if self.match_type_patterns['negative'].match(keyword):
-            return 'negative'
-        elif self.match_type_patterns['exact'].match(keyword):
-            return 'exact'
-        elif self.match_type_patterns['phrase'].match(keyword):
-            return 'phrase'
-        elif self.match_type_patterns['broad'].match(keyword):
-            return 'broad'
-        else:
-            return 'unknown'
-
-    def _extract_keyword_text(self, keyword: str) -> str:
-        """
-        Extract the actual keyword text from formatted keyword.
-
-        Args:
-            keyword: Formatted keyword (e.g., "keyword phrase", [exact match])
-
-        Returns:
-            Clean keyword text
-        """
-        keyword = keyword.strip()
-
-        if keyword.startswith('[') and keyword.endswith(']'):
-            return keyword[1:-1]
-        elif keyword.startswith('"') and keyword.endswith('"'):
-            return keyword[1:-1]
-        elif keyword.startswith('-'):
-            return keyword[1:]
-        else:
-            return keyword
-
-    def validate_keyword_row(self, row: Dict[str, Any], row_number: int) -> List[ValidationIssue]:
+    def validate_keyword_row(self, row: dict[str, Any], row_number: int) -> list[ValidationIssue]:
         """
         Validate a single keyword row for Search campaign compliance.
 
         Args:
-            row: Dictionary representing a CSV row
-            row_number: Row number in the CSV (for error reporting)
+            row: Dictionary representing a CSV row.
+            row_number: Row number in the CSV for error reporting.
 
         Returns:
-            List of validation issues found
+            List of validation issues found.
         """
-        issues = []
+        issues: list[ValidationIssue] = []
 
-        # Validate Keyword field
-        keyword = row.get('Keyword', '').strip()
+        keyword = str(row.get("Keyword", "") or "").strip()
+        criterion_type = str(row.get("Criterion Type", "") or "").strip()
+        campaign = str(row.get("Campaign", "") or "").strip()
+        ad_group = self._ad_group_value(row)
+
         if not keyword:
-            issues.append(ValidationIssue(
-                level='keyword',
-                severity='critical',
-                row_number=row_number,
-                column='Keyword',
-                issue_type='missing_keyword',
-                message='Keyword is required',
-                suggestion='Provide a keyword to target'
-            ))
-            return issues  # Can't validate further without keyword
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Keyword",
+                    "missing_keyword",
+                    "Keyword is required.",
+                    "Provide plain keyword text.",
+                )
+            )
+            return issues
 
-        # Validate keyword length
-        keyword_text = self._extract_keyword_text(keyword)
-        if len(keyword_text) < self.min_keyword_length:
-            issues.append(ValidationIssue(
-                level='keyword',
-                severity='critical',
-                row_number=row_number,
-                column='Keyword',
-                issue_type='keyword_too_short',
-                message=f'Keyword "{keyword_text}" is too short (minimum {self.min_keyword_length} character)',
-                suggestion='Use more specific keywords'
-            ))
-        elif len(keyword_text) > self.max_keyword_length:
-            issues.append(ValidationIssue(
-                level='keyword',
-                severity='critical',
-                row_number=row_number,
-                column='Keyword',
-                issue_type='keyword_too_long',
-                message=f'Keyword "{keyword_text}" is {len(keyword_text)} characters (maximum {self.max_keyword_length})',
-                suggestion='Shorten keyword to fit Google limit'
-            ))
-
-        # Validate match type formatting
-        match_type = self._identify_match_type(keyword)
-        if match_type == 'unknown':
-            issues.append(ValidationIssue(
-                level='keyword',
-                severity='critical',
-                row_number=row_number,
-                column='Keyword',
-                issue_type='invalid_match_type_format',
-                message=f'Keyword "{keyword}" has invalid match type formatting',
-                suggestion='Use: broad (keyword), phrase ("keyword phrase"), exact ([keyword]), negative (-keyword)'
-            ))
-
-        # Validate Criterion Type field
-        criterion_type = row.get('Criterion Type', '').strip()
-        expected_criterion_types = ['Keyword', 'Negative keyword']
+        if not campaign:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Campaign",
+                    "missing_campaign",
+                    "Keyword row is missing Campaign.",
+                    "Populate Campaign on every keyword row.",
+                )
+            )
 
         if not criterion_type:
-            issues.append(ValidationIssue(
-                level='keyword',
-                severity='critical',
-                row_number=row_number,
-                column='Criterion Type',
-                issue_type='missing_criterion_type',
-                message='Criterion Type is required',
-                suggestion='Set to "Keyword" for targeting or "Negative keyword" for exclusion'
-            ))
-        elif criterion_type not in expected_criterion_types:
-            issues.append(ValidationIssue(
-                level='keyword',
-                severity='critical',
-                row_number=row_number,
-                column='Criterion Type',
-                issue_type='invalid_criterion_type',
-                message=f'Criterion Type "{criterion_type}" is not valid',
-                suggestion=f'Use "Keyword" or "Negative keyword"'
-            ))
-        else:
-            # Check consistency between keyword formatting and criterion type
-            if criterion_type == 'Negative keyword' and not keyword.startswith('-'):
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='critical',
-                    row_number=row_number,
-                    column='Keyword',
-                    issue_type='negative_keyword_format_mismatch',
-                    message='Negative keyword should start with "-"',
-                    suggestion=f'Format as: -{keyword_text}'
-                ))
-            elif criterion_type == 'Keyword' and keyword.startswith('-'):
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='critical',
-                    row_number=row_number,
-                    column='Keyword',
-                    issue_type='positive_keyword_format_mismatch',
-                    message='Positive keyword should not start with "-"',
-                    suggestion=f'Remove "-" prefix: {keyword_text}'
-                ))
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Criterion Type",
+                    "missing_criterion_type",
+                    "Criterion Type is required.",
+                    'Use "Phrase" or "Negative Phrase".',
+                )
+            )
+        elif criterion_type in self.disallowed_keyword_types:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Criterion Type",
+                    "disallowed_match_type",
+                    "Broad and exact keyword match types are not active in the current workflow.",
+                    'Use "Phrase" unless the repo process is deliberately changed.',
+                )
+            )
+        elif criterion_type not in self.allowed_keyword_types:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Criterion Type",
+                    "unsupported_criterion_type",
+                    f'Criterion Type "{criterion_type}" is not supported by the current workflow.',
+                    f"Use one of: {', '.join(sorted(self.allowed_keyword_types))}.",
+                )
+            )
 
-        # Validate keyword status
-        keyword_status = row.get('Keyword status', '').strip()
+        if criterion_type != "Negative Phrase" and not ad_group:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Ad Group",
+                    "missing_ad_group",
+                    "Positive keyword row is missing Ad Group.",
+                    "Populate Ad Group for every positive keyword row.",
+                )
+            )
+
+        if keyword.startswith('"') or keyword.endswith('"') or keyword.startswith("[") or keyword.endswith("]"):
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Keyword",
+                    "plain_keyword_text",
+                    "Keyword must be plain text. Match type belongs in Criterion Type.",
+                    "Remove quotes or brackets from Keyword and set Criterion Type instead.",
+                    auto_fixable=True,
+                )
+            )
+
+        if keyword.startswith("-"):
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Keyword",
+                    "negative_keyword_format",
+                    "Negative keyword rows should use Criterion Type instead of a leading minus.",
+                    'Remove the leading minus and set Criterion Type to "Negative Phrase".',
+                    auto_fixable=True,
+                )
+            )
+
+        if len(keyword) > self.max_keyword_length:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Keyword",
+                    "keyword_too_long",
+                    f'Keyword "{keyword}" is {len(keyword)} characters. Maximum is {self.max_keyword_length}.',
+                    "Shorten keyword text before importing to Google Ads Editor.",
+                )
+            )
+
+        keyword_status = str(row.get("Keyword status") or row.get("Status") or "").strip()
         if keyword_status and keyword_status not in self.valid_keyword_statuses:
-            issues.append(ValidationIssue(
-                level='keyword',
-                severity='warning',
-                row_number=row_number,
-                column='Keyword status',
-                issue_type='invalid_keyword_status',
-                message=f'Keyword status "{keyword_status}" is not standard',
-                suggestion=f'Use one of: {", ".join(self.valid_keyword_statuses)}'
-            ))
-
-        # Validate CPC bid
-        cpc_bid_str = row.get('CPC bid', '').strip()
-        if cpc_bid_str:
-            try:
-                cpc_bid = float(cpc_bid_str.replace('$', '').replace(',', ''))
-
-                if cpc_bid < self.min_cpc:
-                    issues.append(ValidationIssue(
-                        level='keyword',
-                        severity='critical',
-                        row_number=row_number,
-                        column='CPC bid',
-                        issue_type='cpc_too_low',
-                        message=f'CPC bid ${cpc_bid:.2f} is below minimum ${self.min_cpc:.2f}',
-                        suggestion=f'Increase bid to at least ${self.min_cpc:.2f}'
-                    ))
-                elif cpc_bid > self.max_cpc:
-                    issues.append(ValidationIssue(
-                        level='keyword',
-                        severity='critical',
-                        row_number=row_number,
-                        column='CPC bid',
-                        issue_type='cpc_too_high',
-                        message=f'CPC bid ${cpc_bid:.2f} exceeds maximum ${self.max_cpc:.2f}',
-                        suggestion=f'Reduce bid to ${self.max_cpc:.2f} or less'
-                    ))
-                elif cpc_bid > self.recommended_max_cpc:
-                    issues.append(ValidationIssue(
-                        level='keyword',
-                        severity='warning',
-                        row_number=row_number,
-                        column='CPC bid',
-                        issue_type='cpc_highly_recommended',
-                        message=f'CPC bid ${cpc_bid:.2f} is above recommended maximum ${self.recommended_max_cpc:.2f}',
-                        suggestion='Consider lowering bid for better ROI'
-                    ))
-
-            except ValueError:
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='critical',
-                    row_number=row_number,
-                    column='CPC bid',
-                    issue_type='invalid_cpc_format',
-                    message=f'Invalid CPC bid format: "{cpc_bid_str}"',
-                    suggestion='Use numeric format (e.g., 2.50 or $2.50)'
-                ))
-
-        # Check for keyword quality issues
-        if keyword_text:
-            # Check for excessive special characters
-            special_chars = re.findall(r'[^a-zA-Z0-9\s\-_&+/\']', keyword_text)
-            if len(special_chars) > 2:
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='warning',
-                    row_number=row_number,
-                    column='Keyword',
-                    issue_type='excessive_special_chars',
-                    message=f'Keyword contains many special characters: "{keyword_text}"',
-                    suggestion='Simplify keyword to improve quality score'
-                ))
-
-            # Check for very short words (potential low quality)
-            words = keyword_text.split()
-            if len(words) > 0 and any(len(word) < 3 for word in words if len(word) > 0):
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='info',
-                    row_number=row_number,
-                    column='Keyword',
-                    issue_type='short_words',
-                    message=f'Keyword contains very short words: "{keyword_text}"',
-                    suggestion='Consider using more specific, longer keywords'
-                ))
+            issues.append(
+                self._issue(
+                    "warning",
+                    row_number,
+                    "Status",
+                    "invalid_keyword_status",
+                    f'Keyword status "{keyword_status}" is not standard.',
+                    f"Use one of: {', '.join(sorted(self.valid_keyword_statuses))}.",
+                )
+            )
 
         return issues
 
-    def validate_keyword_data(self, keyword_rows: List[Dict[str, Any]]) -> List[ValidationIssue]:
+    def validate_keyword_data(self, keyword_rows: list[dict[str, Any]]) -> list[ValidationIssue]:
         """
         Validate keyword-level data across multiple rows.
 
         Args:
-            keyword_rows: List of keyword row dictionaries
+            keyword_rows: List of keyword row dictionaries.
 
         Returns:
-            List of validation issues found
+            List of validation issues found.
         """
-        issues = []
+        issues: list[ValidationIssue] = []
 
         if not keyword_rows:
             return issues
 
-        # Validate each keyword row
-        for i, row in enumerate(keyword_rows):
-            row_issues = self.validate_keyword_row(row, i + 2)  # +2 because row 1 is headers
-            issues.extend(row_issues)
+        keywords_by_adgroup: dict[str, dict[str, list[str]]] = defaultdict(
+            lambda: {"positive": [], "negative": []}
+        )
+        keyword_counts: Counter[str] = Counter()
 
-        # Cross-keyword validation
-        keywords_by_adgroup = {}
-        keyword_counts = {'broad': 0, 'phrase': 0, 'exact': 0, 'negative': 0}
+        for index, row in enumerate(keyword_rows, start=2):
+            issues.extend(self.validate_keyword_row(row, index))
 
-        for row in keyword_rows:
-            adgroup = row.get('Ad group', 'unknown')
-            keyword = row.get('Keyword', '').strip()
-            criterion_type = row.get('Criterion Type', '').strip()
+            keyword = str(row.get("Keyword", "") or "").strip()
+            if not keyword:
+                continue
 
-            if adgroup not in keywords_by_adgroup:
-                keywords_by_adgroup[adgroup] = {'positive': [], 'negative': []}
+            criterion_type = str(row.get("Criterion Type", "") or "").strip()
+            ad_group = self._ad_group_value(row) or "(campaign-level negative)"
 
-            if criterion_type == 'Negative keyword':
-                keywords_by_adgroup[adgroup]['negative'].append(keyword)
+            if criterion_type == "Negative Phrase":
+                keywords_by_adgroup[ad_group]["negative"].append(keyword)
             else:
-                keywords_by_adgroup[adgroup]['positive'].append(keyword)
+                keywords_by_adgroup[ad_group]["positive"].append(keyword)
 
-            # Count match types
-            match_type = self._identify_match_type(keyword)
-            if match_type in keyword_counts:
-                keyword_counts[match_type] += 1
+            if criterion_type:
+                keyword_counts[criterion_type] += 1
 
-        # Validate ad group keyword distribution
-        for adgroup, keywords in keywords_by_adgroup.items():
-            positive_count = len(keywords['positive'])
-            negative_count = len(keywords['negative'])
+        for ad_group, keywords in sorted(keywords_by_adgroup.items()):
+            positive_count = len(keywords["positive"])
+            negative_count = len(keywords["negative"])
 
-            if positive_count == 0:
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='critical',
-                    row_number=0,
-                    column='Keyword',
-                    issue_type='no_positive_keywords',
-                    message=f'Ad group "{adgroup}" has no positive keywords to target',
-                    suggestion='Add positive keywords to enable targeting'
-                ))
+            if ad_group != "(campaign-level negative)" and positive_count == 0:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        0,
+                        "Keyword",
+                        "no_positive_keywords",
+                        f'Ad group "{ad_group}" has no positive keywords to target.',
+                        "Add phrase keywords before activating the ad group.",
+                    )
+                )
 
-            if positive_count > 20000:  # Google limit per ad group
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='warning',
-                    row_number=0,
-                    column='Keyword',
-                    issue_type='too_many_keywords',
-                    message=f'Ad group "{adgroup}" has {positive_count} keywords (Google limit: 20,000)',
-                    suggestion='Consider splitting into multiple ad groups'
-                ))
+            if positive_count > self.max_positive_keywords_per_ad_group:
+                issues.append(
+                    self._issue(
+                        "warning",
+                        0,
+                        "Keyword",
+                        "too_many_keywords",
+                        f'Ad group "{ad_group}" has {positive_count} positive keywords.',
+                        "Split oversized keyword sets into tighter ad groups.",
+                    )
+                )
 
-            if negative_count > 5000:  # Google limit per ad group
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='warning',
-                    row_number=0,
-                    column='Keyword',
-                    issue_type='too_many_negative_keywords',
-                    message=f'Ad group "{adgroup}" has {negative_count} negative keywords (Google limit: 5,000)',
-                    suggestion='Review and consolidate negative keywords'
-                ))
+            if negative_count > self.max_negative_keywords_per_ad_group:
+                issues.append(
+                    self._issue(
+                        "warning",
+                        0,
+                        "Keyword",
+                        "too_many_negative_keywords",
+                        f'Ad group "{ad_group}" has {negative_count} negative keywords.',
+                        "Review and consolidate negative keywords.",
+                    )
+                )
 
-        # Validate match type distribution (recommendations)
-        total_keywords = sum(keyword_counts.values())
-        if total_keywords > 0:
-            exact_percentage = (keyword_counts['exact'] / total_keywords) * 100
-            if exact_percentage < 20:
-                issues.append(ValidationIssue(
-                    level='keyword',
-                    severity='info',
-                    row_number=0,
-                    column='Keyword',
-                    issue_type='low_exact_match_usage',
-                    message='.1f',
-                    suggestion='Consider adding more exact match keywords for better control'
-                ))
+        if keyword_counts and keyword_counts["Phrase"] == 0:
+            issues.append(
+                self._issue(
+                    "critical",
+                    0,
+                    "Criterion Type",
+                    "no_phrase_keywords",
+                    "No active phrase keyword rows were found.",
+                    'Add positive keyword rows with Criterion Type "Phrase".',
+                )
+            )
 
         return issues
