@@ -218,6 +218,36 @@ Reusable lesson:
 Earlier checks to add to future loops:
 
 - search for auto-correction methods before deciding a script is safe
+
+## CSV Validation Authority Loop
+
+Cleanup target:
+
+- `shared/comprehensive_csv_validator.py`
+- `shared/run_csv_validation.py`
+
+Outcome:
+
+- replaced the old mixed Search and PMAX comprehensive validator with a compatibility facade
+- made the facade delegate to `shared.validators.MasterValidator`
+- kept pass and fail authority centralized on `shared/rebuild/staging_validator.py`
+- preserved the older module and CLI names for compatibility
+- rejected `--fix`, `auto_fix=True`, and `--mark-final` instead of mutating CSVs or workflow state
+- removed client-specific examples and old local path assumptions from the active runner
+- added synthetic tests proving exact match still fails through the active staging validator
+- added synthetic tests proving legacy auto-fix paths leave source CSV bytes unchanged
+
+Reusable lesson:
+
+- old validator entry points should be treated as compatibility surfaces, not independent rule engines
+- validation can read, report, and fail, but it should not rewrite source staging artifacts
+- stage changes, workflow feedback files, and campaign-builder feedback are separate workflow decisions, not validator authority
+
+Earlier checks to add to future loops:
+
+- search for `auto_fix`, `--fix`, and writer calls before trusting old validation scripts
+- check CLI help examples for one-client names and old root path assumptions
+- require wrappers to expose the active validator report so failures can be traced to the current staging contract
 - check output encoding before preserving old save methods
 - check whether a generic-looking exporter is quietly activating PMAX or API behavior
 - preserve old import names only when the active behavior is explicit and tested
