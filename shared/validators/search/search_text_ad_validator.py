@@ -1,21 +1,32 @@
 #!/usr/bin/env python3
-"""
-Search Text Ad Validator
+"""Validate Search responsive search ad rows for the active workflow."""
 
-Validates text ad content and format for Search campaigns.
-Ensures headlines and descriptions meet Google Ads requirements.
-"""
+from __future__ import annotations
 
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
 import re
+from collections import Counter
+from dataclasses import dataclass
+from typing import Any
+
+
+HEADLINE_LIMIT = 30
+DESCRIPTION_LIMIT = 90
+PATH_LIMIT = 15
+REQUIRED_RSA_HEADLINES = [f"Headline {index}" for index in range(1, 16)]
+REQUIRED_RSA_DESCRIPTIONS = [f"Description {index}" for index in range(1, 5)]
+VALID_AD_TYPES = {"Responsive search ad"}
+VALID_STATUSES = {"Enabled", "Paused", "Removed"}
+INVALID_TEXT_CHARS = {"\t", "\n", "\r"}
+EXCESSIVE_PUNCTUATION = re.compile(r"[!?]{3,}|[.]{4,}|[,]{3,}")
+REPEATED_WORDS = re.compile(r"\b(\w+)\s+\1\b", re.IGNORECASE)
 
 
 @dataclass
 class ValidationIssue:
-    """Represents a validation issue found during Search text ad validation."""
+    """Represents a validation issue found during Search ad validation."""
+
     level: str
-    severity: str  # 'critical', 'warning', 'info'
+    severity: str
     row_number: int
     column: str
     issue_type: str
@@ -26,407 +37,334 @@ class ValidationIssue:
 
 class SearchTextAdValidator:
     """
-    Validates text ad content and format for Search campaigns.
+    Validates active Search Responsive Search Ad rows.
 
-    Focuses on Search-specific text ad validation including:
-    - Headline character limits (25-30 characters each)
-    - Description character limits (70-90 characters each)
-    - Display path validation
-    - Ad text policy compliance
-    - Formatting and special character restrictions
+    This validator enforces generic Google Ads Editor staging structure only. It
+    does not judge account strategy, vertical claims, tone, or service choices.
     """
 
-    def __init__(self, validation_rules: Optional[Dict[str, Any]] = None):
-        """Initialize SearchTextAdValidator with validation rules."""
-        self.validation_rules = validation_rules or self._get_default_rules()
+    def __init__(self, validation_rules: dict[str, Any] | None = None):
+        rules = validation_rules or {}
+        self.headline_limit = int(rules.get("headline_limit", HEADLINE_LIMIT))
+        self.description_limit = int(rules.get("description_limit", DESCRIPTION_LIMIT))
+        self.path_limit = int(rules.get("path_limit", PATH_LIMIT))
+        self.required_headlines = list(rules.get("required_headlines", REQUIRED_RSA_HEADLINES))
+        self.required_descriptions = list(rules.get("required_descriptions", REQUIRED_RSA_DESCRIPTIONS))
+        self.valid_ad_types = set(rules.get("valid_ad_types", VALID_AD_TYPES))
+        self.valid_statuses = set(rules.get("valid_statuses", VALID_STATUSES))
 
-        # Headline validation limits
-        self.headline_limits = {
-            'min_length': 25,
-            'max_length': 30,
-            'max_headlines': 3
-        }
+    def _issue(
+        self,
+        severity: str,
+        row_number: int,
+        column: str,
+        issue_type: str,
+        message: str,
+        suggestion: str = "",
+    ) -> ValidationIssue:
+        return ValidationIssue(
+            level="text_ad",
+            severity=severity,
+            row_number=row_number,
+            column=column,
+            issue_type=issue_type,
+            message=message,
+            suggestion=suggestion,
+        )
 
-        # Description validation limits
-        self.description_limits = {
-            'min_length': 70,
-            'max_length': 90,
-            'max_descriptions': 2
-        }
+    def _value(self, row: dict[str, Any], *headers: str) -> str:
+        for header in headers:
+            value = row.get(header)
+            if value is not None and str(value).strip():
+                return str(value).strip()
+        return ""
 
-        # Display path limits
-        self.display_path_limits = {
-            'max_length': 15,
-            'max_paths': 2
-        }
+    def _text_quality_issues(self, text: str, column: str, row_number: int) -> list[ValidationIssue]:
+        issues: list[ValidationIssue] = []
 
-        # Invalid characters and patterns
-        self.invalid_chars = ['|', '\t', '\n', '\r']
-        self.excessive_punctuation = re.compile(r'[!?]{3,}|[.]{4,}|[,]{3,}')
-        self.repeated_words = re.compile(r'\b(\w+)\s+\1\b', re.IGNORECASE)
+        for character in INVALID_TEXT_CHARS:
+            if character in text:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        column,
+                        "invalid_text_character",
+                        f"{column} contains a tab or line-break character.",
+                        "Remove tabs and line breaks before importing.",
+                    )
+                )
 
-        # Policy violation patterns
-        self.policy_violations = [
-            re.compile(r'\b(?:free|cheap|discount)\b.*\b(?:trial|sample)\b', re.IGNORECASE),
-            re.compile(r'\bguarantee\b.*\b(?:100%|full)\b', re.IGNORECASE),
-            re.compile(r'\b(?:click here|visit|go to)\b', re.IGNORECASE),
-            re.compile(r'\b(?:best|top|leading|#1)\b.*\b(?:rated|reviewed)\b', re.IGNORECASE),
-        ]
+        if EXCESSIVE_PUNCTUATION.search(text):
+            issues.append(
+                self._issue(
+                    "warning",
+                    row_number,
+                    column,
+                    "excessive_punctuation",
+                    f"{column} contains excessive punctuation.",
+                    "Use normal punctuation in ad copy.",
+                )
+            )
 
-        # Valid ad types and statuses
-        self.valid_ad_types = ['Text ad', 'Responsive search ad', 'Expanded text ad']
-        self.valid_ad_statuses = ['Enabled', 'Paused', 'Removed']
-
-    def _get_default_rules(self) -> Dict[str, Any]:
-        """Get default validation rules for Search text ads."""
-        return {
-            'text_ad': {
-                'headlines': {
-                    'min_length': 25,
-                    'max_length': 30,
-                    'max_count': 3
-                },
-                'descriptions': {
-                    'min_length': 70,
-                    'max_length': 90,
-                    'max_count': 2
-                },
-                'display_paths': {
-                    'max_length': 15,
-                    'max_count': 2
-                },
-                'policy_checks': {
-                    'prohibited_phrases': [
-                        'free trial', '100% guarantee', 'click here',
-                        '#1 rated', 'best rated'
-                    ]
-                }
-            }
-        }
-
-    def _count_characters(self, text: str) -> int:
-        """
-        Count characters in text, accounting for special characters.
-
-        Args:
-            text: Text to count
-
-        Returns:
-            Character count
-        """
-        return len(text.strip())
-
-    def _validate_text_quality(self, text: str, field_name: str) -> List[str]:
-        """
-        Validate text quality and return list of issues.
-
-        Args:
-            text: Text to validate
-            field_name: Name of the field for error messages
-
-        Returns:
-            List of quality issue messages
-        """
-        issues = []
-
-        # Check for invalid characters
-        for char in self.invalid_chars:
-            if char in text:
-                issues.append(f"Contains invalid character '{char}'")
-
-        # Check for excessive punctuation
-        if self.excessive_punctuation.search(text):
-            issues.append("Contains excessive punctuation")
-
-        # Check for repeated words
-        if self.repeated_words.search(text):
-            issues.append("Contains repeated words")
-
-        # Check for ALL CAPS (more than 3 consecutive caps)
-        all_caps_words = re.findall(r'\b[A-Z]{4,}\b', text)
-        if all_caps_words:
-            issues.append(f"Contains ALL CAPS words: {', '.join(all_caps_words[:3])}")
-
-        # Check for policy violations
-        for pattern in self.policy_violations:
-            if pattern.search(text):
-                issues.append("May violate Google Ads policies (prohibited phrases)")
+        if REPEATED_WORDS.search(text):
+            issues.append(
+                self._issue(
+                    "warning",
+                    row_number,
+                    column,
+                    "repeated_words",
+                    f"{column} contains repeated words.",
+                    "Remove repeated words unless intentional.",
+                )
+            )
 
         return issues
 
-    def validate_text_ad_row(self, row: Dict[str, Any], row_number: int) -> List[ValidationIssue]:
+    def validate_text_ad_row(self, row: dict[str, Any], row_number: int) -> list[ValidationIssue]:
         """
-        Validate a single text ad row for Search campaign compliance.
+        Validate a single Search RSA row.
 
         Args:
-            row: Dictionary representing a CSV row
-            row_number: Row number in the CSV (for error reporting)
+            row: Dictionary representing a CSV row.
+            row_number: Row number in the CSV for error reporting.
 
         Returns:
-            List of validation issues found
+            List of validation issues found.
         """
-        issues = []
+        issues: list[ValidationIssue] = []
 
-        # Validate headlines (required)
-        headlines = []
-        for i in range(1, self.headline_limits['max_headlines'] + 1):
-            headline_key = f'Headline {i}'
-            headline = row.get(headline_key, '').strip()
-            if headline:
-                headlines.append((headline_key, headline))
+        campaign = self._value(row, "Campaign")
+        ad_group = self._value(row, "Ad Group", "Ad group")
+        ad_type = self._value(row, "Ad type", "Ad Type")
+        final_url = self._value(row, "Final URL")
+        status = self._value(row, "Status", "Ad status", "Ad Status")
 
-        if not headlines:
-            issues.append(ValidationIssue(
-                level='text_ad',
-                severity='critical',
-                row_number=row_number,
-                column='Headline 1',
-                issue_type='no_headlines',
-                message='At least one headline is required for text ads',
-                suggestion='Add Headline 1 (25-30 characters recommended)'
-            ))
-        else:
-            # Validate each headline
-            for headline_key, headline in headlines:
-                char_count = self._count_characters(headline)
+        if not campaign:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Campaign",
+                    "missing_campaign",
+                    "RSA row is missing Campaign.",
+                    "Populate Campaign on every RSA row.",
+                )
+            )
 
-                # Check length
-                if char_count < self.headline_limits['min_length']:
-                    issues.append(ValidationIssue(
-                        level='text_ad',
-                        severity='critical',
-                        row_number=row_number,
-                        column=headline_key,
-                        issue_type='headline_too_short',
-                        message=f'{headline_key} is {char_count} characters (minimum {self.headline_limits["min_length"]})',
-                        suggestion=f'Expand headline to at least {self.headline_limits["min_length"]} characters'
-                    ))
-                elif char_count > self.headline_limits['max_length']:
-                    issues.append(ValidationIssue(
-                        level='text_ad',
-                        severity='critical',
-                        row_number=row_number,
-                        column=headline_key,
-                        issue_type='headline_too_long',
-                        message=f'{headline_key} is {char_count} characters (maximum {self.headline_limits["max_length"]})',
-                        suggestion=f'Shorten headline to {self.headline_limits["max_length"]} characters or less'
-                    ))
+        if not ad_group:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Ad Group",
+                    "missing_ad_group",
+                    "RSA row is missing Ad Group.",
+                    "Populate Ad Group on every RSA row.",
+                )
+            )
 
-                # Check text quality
-                quality_issues = self._validate_text_quality(headline, headline_key)
-                for issue in quality_issues:
-                    severity = 'critical' if 'policy' in issue.lower() else 'warning'
-                    issues.append(ValidationIssue(
-                        level='text_ad',
-                        severity=severity,
-                        row_number=row_number,
-                        column=headline_key,
-                        issue_type='headline_quality_issue',
-                        message=f'{headline_key}: {issue}',
-                        suggestion='Review and fix text quality issues'
-                    ))
+        if not ad_type:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Ad type",
+                    "missing_ad_type",
+                    "RSA row is missing Ad type.",
+                    'Set Ad type to "Responsive search ad".',
+                )
+            )
+        elif ad_type not in self.valid_ad_types:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Ad type",
+                    "invalid_ad_type",
+                    f'Ad type "{ad_type}" is not active in the current workflow.',
+                    'Use "Responsive search ad".',
+                )
+            )
 
-        # Validate descriptions (required)
-        descriptions = []
-        for i in range(1, self.description_limits['max_descriptions'] + 1):
-            desc_key = f'Description {i}'
-            description = row.get(desc_key, '').strip()
-            if description:
-                descriptions.append((desc_key, description))
+        if not final_url:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Final URL",
+                    "missing_final_url",
+                    "RSA row is missing Final URL.",
+                    "Populate a reviewable landing page URL.",
+                )
+            )
+        elif not final_url.startswith(("http://", "https://")):
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Final URL",
+                    "invalid_final_url",
+                    f'Final URL "{final_url}" must start with http:// or https://.',
+                    "Use an absolute URL.",
+                )
+            )
 
-        if not descriptions:
-            issues.append(ValidationIssue(
-                level='text_ad',
-                severity='critical',
-                row_number=row_number,
-                column='Description 1',
-                issue_type='no_descriptions',
-                message='At least one description is required for text ads',
-                suggestion='Add Description 1 (70-90 characters recommended)'
-            ))
-        else:
-            # Validate each description
-            for desc_key, description in descriptions:
-                char_count = self._count_characters(description)
+        if status and status not in self.valid_statuses:
+            issues.append(
+                self._issue(
+                    "warning",
+                    row_number,
+                    "Status",
+                    "invalid_ad_status",
+                    f'Ad status "{status}" is not standard.',
+                    f"Use one of: {', '.join(sorted(self.valid_statuses))}.",
+                )
+            )
 
-                # Check length
-                if char_count < self.description_limits['min_length']:
-                    issues.append(ValidationIssue(
-                        level='text_ad',
-                        severity='critical',
-                        row_number=row_number,
-                        column=desc_key,
-                        issue_type='description_too_short',
-                        message=f'{desc_key} is {char_count} characters (minimum {self.description_limits["min_length"]})',
-                        suggestion=f'Expand description to at least {self.description_limits["min_length"]} characters'
-                    ))
-                elif char_count > self.description_limits['max_length']:
-                    issues.append(ValidationIssue(
-                        level='text_ad',
-                        severity='critical',
-                        row_number=row_number,
-                        column=desc_key,
-                        issue_type='description_too_long',
-                        message=f'{desc_key} is {char_count} characters (maximum {self.description_limits["max_length"]})',
-                        suggestion=f'Shorten description to {self.description_limits["max_length"]} characters or less'
-                    ))
-
-                # Check text quality
-                quality_issues = self._validate_text_quality(description, desc_key)
-                for issue in quality_issues:
-                    severity = 'critical' if 'policy' in issue.lower() else 'warning'
-                    issues.append(ValidationIssue(
-                        level='text_ad',
-                        severity=severity,
-                        row_number=row_number,
-                        column=desc_key,
-                        issue_type='description_quality_issue',
-                        message=f'{desc_key}: {issue}',
-                        suggestion='Review and fix text quality issues'
-                    ))
-
-        # Validate display paths (optional but recommended)
-        display_paths = []
-        for i in range(1, self.display_path_limits['max_paths'] + 1):
-            path_key = f'Display path {i}'
-            path = row.get(path_key, '').strip()
-            if path:
-                display_paths.append((path_key, path))
-
-        for path_key, path in display_paths:
-            char_count = self._count_characters(path)
-
-            if char_count > self.display_path_limits['max_length']:
-                issues.append(ValidationIssue(
-                    level='text_ad',
-                    severity='critical',
-                    row_number=row_number,
-                    column=path_key,
-                    issue_type='display_path_too_long',
-                    message=f'{path_key} is {char_count} characters (maximum {self.display_path_limits["max_length"]})',
-                    suggestion=f'Shorten display path to {self.display_path_limits["max_length"]} characters or less'
-                ))
-
-            # Check for invalid characters in display path
-            if any(char in path for char in ['/', '\\', '?', '#', '&']):
-                issues.append(ValidationIssue(
-                    level='text_ad',
-                    severity='critical',
-                    row_number=row_number,
-                    column=path_key,
-                    issue_type='invalid_display_path_chars',
-                    message=f'{path_key} contains invalid characters',
-                    suggestion='Use only letters, numbers, and hyphens in display paths'
-                ))
-
-        # Validate ad type
-        ad_type = row.get('Ad type', '').strip()
-        if ad_type and ad_type not in self.valid_ad_types:
-            issues.append(ValidationIssue(
-                level='text_ad',
-                severity='warning',
-                row_number=row_number,
-                column='Ad type',
-                issue_type='invalid_ad_type',
-                message=f'Ad type "{ad_type}" is not standard for Search campaigns',
-                suggestion=f'Use one of: {", ".join(self.valid_ad_types)}'
-            ))
-
-        # Validate ad status
-        ad_status = row.get('Ad status', '').strip()
-        if ad_status and ad_status not in self.valid_ad_statuses:
-            issues.append(ValidationIssue(
-                level='text_ad',
-                severity='warning',
-                row_number=row_number,
-                column='Ad status',
-                issue_type='invalid_ad_status',
-                message=f'Ad status "{ad_status}" is not standard',
-                suggestion=f'Use one of: {", ".join(self.valid_ad_statuses)}'
-            ))
+        issues.extend(self._validate_headlines(row, row_number))
+        issues.extend(self._validate_descriptions(row, row_number))
+        issues.extend(self._validate_paths(row, row_number))
 
         return issues
 
-    def validate_text_ad_data(self, text_ad_rows: List[Dict[str, Any]]) -> List[ValidationIssue]:
+    def _validate_headlines(self, row: dict[str, Any], row_number: int) -> list[ValidationIssue]:
+        issues: list[ValidationIssue] = []
+
+        for headline in self.required_headlines:
+            text = self._value(row, headline)
+            if not text:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        headline,
+                        "rsa_headline_required",
+                        f"RSA row is missing {headline}.",
+                        "Provide 15 headlines when possible.",
+                    )
+                )
+                continue
+
+            if len(text) > self.headline_limit:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        headline,
+                        "headline_too_long",
+                        f"{headline} is {len(text)} characters. Maximum is {self.headline_limit}.",
+                        f"Shorten {headline} to {self.headline_limit} characters or fewer.",
+                    )
+                )
+
+            issues.extend(self._text_quality_issues(text, headline, row_number))
+
+        return issues
+
+    def _validate_descriptions(self, row: dict[str, Any], row_number: int) -> list[ValidationIssue]:
+        issues: list[ValidationIssue] = []
+
+        for description in self.required_descriptions:
+            text = self._value(row, description)
+            if not text:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        description,
+                        "rsa_description_required",
+                        f"RSA row is missing {description}.",
+                        "Provide 4 descriptions when possible.",
+                    )
+                )
+                continue
+
+            if len(text) > self.description_limit:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        description,
+                        "description_too_long",
+                        f"{description} is {len(text)} characters. Maximum is {self.description_limit}.",
+                        f"Shorten {description} to {self.description_limit} characters or fewer.",
+                    )
+                )
+
+            issues.extend(self._text_quality_issues(text, description, row_number))
+
+        return issues
+
+    def _validate_paths(self, row: dict[str, Any], row_number: int) -> list[ValidationIssue]:
+        issues: list[ValidationIssue] = []
+
+        for path_column in ("Path 1", "Path 2", "Display path 1", "Display path 2"):
+            path = self._value(row, path_column)
+            if not path:
+                continue
+
+            if len(path) > self.path_limit:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        path_column,
+                        "path_too_long",
+                        f"{path_column} is {len(path)} characters. Maximum is {self.path_limit}.",
+                        f"Shorten {path_column} to {self.path_limit} characters or fewer.",
+                    )
+                )
+
+            if any(character in path for character in ("/", "\\", "?", "#", "&")):
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        path_column,
+                        "invalid_path_chars",
+                        f"{path_column} contains invalid path characters.",
+                        "Use letters, numbers, spaces, or hyphens.",
+                    )
+                )
+
+        return issues
+
+    def validate_text_ad_data(self, text_ad_rows: list[dict[str, Any]]) -> list[ValidationIssue]:
         """
         Validate text ad-level data across multiple rows.
 
         Args:
-            text_ad_rows: List of text ad row dictionaries
+            text_ad_rows: List of text ad row dictionaries.
 
         Returns:
-            List of validation issues found
+            List of validation issues found.
         """
-        issues = []
+        issues: list[ValidationIssue] = []
 
         if not text_ad_rows:
             return issues
 
-        # Validate each text ad row
-        for i, row in enumerate(text_ad_rows):
-            row_issues = self.validate_text_ad_row(row, i + 2)  # +2 because row 1 is headers
-            issues.extend(row_issues)
+        headline_counter: Counter[str] = Counter()
 
-        # Cross-ad validation
-        ad_counts_by_adgroup = {}
+        for index, row in enumerate(text_ad_rows, start=2):
+            issues.extend(self.validate_text_ad_row(row, index))
+            for headline in self.required_headlines:
+                text = self._value(row, headline)
+                if text:
+                    headline_counter[text] += 1
 
-        for row in text_ad_rows:
-            adgroup = row.get('Ad group', 'unknown')
-            campaign = row.get('Campaign', 'unknown')
-
-            key = f"{campaign}|{adgroup}"
-            if key not in ad_counts_by_adgroup:
-                ad_counts_by_adgroup[key] = 0
-            ad_counts_by_adgroup[key] += 1
-
-        # Check for optimal ad distribution
-        for adgroup_key, ad_count in ad_counts_by_adgroup.items():
-            campaign, adgroup = adgroup_key.split('|', 1)
-
-            if ad_count < 2:
-                issues.append(ValidationIssue(
-                    level='text_ad',
-                    severity='info',
-                    row_number=0,
-                    column='Ad group',
-                    issue_type='few_ads_per_adgroup',
-                    message=f'Ad group "{adgroup}" in campaign "{campaign}" has only {ad_count} ads',
-                    suggestion='Consider adding more ad variations for better testing and optimization'
-                ))
-            elif ad_count > 50:
-                issues.append(ValidationIssue(
-                    level='text_ad',
-                    severity='info',
-                    row_number=0,
-                    column='Ad group',
-                    issue_type='many_ads_per_adgroup',
-                    message=f'Ad group "{adgroup}" in campaign "{campaign}" has {ad_count} ads',
-                    suggestion='Consider consolidating similar ads to improve management'
-                ))
-
-        # Check for headline uniqueness
-        all_headlines = []
-        for row in text_ad_rows:
-            for i in range(1, 4):  # Headlines 1-3
-                headline = row.get(f'Headline {i}', '').strip()
-                if headline:
-                    all_headlines.append(headline)
-
-        # Look for duplicate headlines
-        headline_counts = {}
-        for headline in all_headlines:
-            headline_counts[headline] = headline_counts.get(headline, 0) + 1
-
-        duplicates = [h for h, count in headline_counts.items() if count > 1]
+        duplicates = sorted(headline for headline, count in headline_counter.items() if count > 1)
         if duplicates:
-            issues.append(ValidationIssue(
-                level='text_ad',
-                severity='info',
-                row_number=0,
-                column='Headline 1',
-                issue_type='duplicate_headlines',
-                message=f'Found {len(duplicates)} duplicate headlines across ads',
-                suggestion='Use unique headlines to maximize reach and testing'
-            ))
+            issues.append(
+                self._issue(
+                    "info",
+                    0,
+                    "Headline",
+                    "duplicate_headlines",
+                    f"Found {len(duplicates)} duplicate RSA headlines across rows.",
+                    "Use distinct headline assets when possible.",
+                )
+            )
 
         return issues
