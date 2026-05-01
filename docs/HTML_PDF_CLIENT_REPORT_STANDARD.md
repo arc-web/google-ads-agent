@@ -29,12 +29,24 @@ For a revision review:
 - `Client_Rebuild_Review_R1.html`
 - `Client_Rebuild_Review_R1.pdf`
 
+For a new campaign review with no inherited ad account:
+
+- `Client_New_Campaign_Review.html`
+- `Client_New_Campaign_Review.pdf`
+
 The revision review should replace the prior review for client approval. It should keep clear lineage:
 
 - What the inherited account started with.
 - What `Advertising Report Card` rebuilt.
 - What changed after client feedback.
 - What still needs approval before launch.
+
+The new campaign review should not imply there was an inherited account. It should show:
+
+- What the website and intake sources support.
+- What new campaign structure was built.
+- Which claims, services, geos, and budgets need approval.
+- What passed validation before Google Ads Editor review.
 
 ## Non-Canonical Outputs
 
@@ -58,6 +70,22 @@ python3 presentations/tools/build_review_doc.py \
 ```
 
 The builder wraps the Chrome headless export flags that produced the accepted review PDF.
+
+For a new campaign report, use:
+
+```bash
+python3 presentations/tools/build_new_campaign_report.py \
+  --client "Client Name" \
+  --date "Month D, YYYY" \
+  --staging-csv clients/{agency}/{client}/build/{date}_initial_search_build/Google_Ads_Editor_Staging_CURRENT.csv \
+  --website-scan-json clients/{agency}/{client}/build/{date}_initial_search_build/website_scan.json \
+  --service-catalog-json clients/{agency}/{client}/build/{date}_initial_search_build/service_catalog.json \
+  --geo-strategy-json clients/{agency}/{client}/build/{date}_initial_search_build/geo_strategy.json \
+  --source-attribution-json clients/{agency}/{client}/build/{date}_initial_search_build/source_attribution.json \
+  --output-html clients/{agency}/{client}/build/{date}_initial_search_build/Client_New_Campaign_Review.html \
+  --output-pdf clients/{agency}/{client}/build/{date}_initial_search_build/Client_New_Campaign_Review.pdf \
+  --visual-audit-dir clients/{agency}/{client}/build/{date}_initial_search_build/new_campaign_visual_audit
+```
 
 ## Page Geometry
 

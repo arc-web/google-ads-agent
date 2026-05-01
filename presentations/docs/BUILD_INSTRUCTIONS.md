@@ -70,6 +70,22 @@ python3 presentations/tools/build_revision_review.py \
   --visual-audit-dir clients/therappc/thinkhappylivehealthy/build/2026-04-28_account_rebuild/revision_visual_audit
 ```
 
+Build a client-facing new campaign review when there is no inherited ad account:
+
+```bash
+python3 presentations/tools/build_new_campaign_report.py \
+  --client "Mindful Mental Health Counseling" \
+  --date "May 2, 2026" \
+  --staging-csv clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Google_Ads_Editor_Staging_CURRENT.csv \
+  --website-scan-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/website_scan.json \
+  --service-catalog-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/service_catalog.json \
+  --geo-strategy-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/geo_strategy.json \
+  --source-attribution-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/source_attribution.json \
+  --output-html clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Client_New_Campaign_Review.html \
+  --output-pdf clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Client_New_Campaign_Review.pdf \
+  --visual-audit-dir clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/new_campaign_visual_audit
+```
+
 Run static HTML audit:
 
 ```bash
@@ -93,6 +109,7 @@ python3 presentations/tools/pdf_visual_audit.py \
 - Keep generated outputs in the client build folder.
 - Keep presentation build instructions in `presentations/`.
 - Do not use DOCX, PPTX, or Markdown as the client-facing rebuild review source.
+- Use a new campaign review, not a rebuild review, when there is no inherited Google Ads account evidence.
 - Do not use em dashes in client-facing reports.
 - Do not include draft QA language in client-facing reports.
 - Run both static and rendered audits before sending a PDF.

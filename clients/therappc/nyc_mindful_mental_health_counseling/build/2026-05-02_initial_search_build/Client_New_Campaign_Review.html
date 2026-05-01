@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mindful Mental Health Counseling New Campaign Review</title>
+  <style>
+@page { size: Letter; margin: 0; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #eee9df;
+  color: #211f1d;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.pdf-page {
+  width: 8.5in;
+  min-height: 11in;
+  padding: 0.54in;
+  background: #f8f4eb;
+  position: relative;
+  overflow: hidden;
+}
+.pdf-page + .pdf-page { break-before: page; }
+.section-header {
+  border-left: 7px solid #185c62;
+  padding: 16px 20px;
+  background: #ebe2d3;
+  margin-bottom: 24px;
+}
+.section-header .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6b5c4b;
+  font-weight: 800;
+}
+.section-header h1 {
+  margin: 8px 0 0;
+  font-size: 34px;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+.section-header p {
+  margin: 10px 0 0;
+  max-width: 660px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #4b4037;
+}
+.subsection-header {
+  margin: 16px 0 14px;
+  padding: 10px 14px;
+  border-left: 4px solid #c8753f;
+  background: #fffaf1;
+  font-weight: 800;
+  color: #3d342b;
+}
+.continuation-header {
+  margin: 16px 0 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #766858;
+  font-weight: 800;
+}
+.cover {
+  background: linear-gradient(135deg, #f8f4eb 0%, #f3eadc 58%, #e5f0ee 100%);
+}
+.brand-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 92px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #5e5144;
+  font-weight: 800;
+}
+.cover-title {
+  max-width: 720px;
+}
+.cover-title .label {
+  color: #185c62;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+.cover-title h1 {
+  margin: 16px 0 18px;
+  font-size: 54px;
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+.cover-title p {
+  margin: 0;
+  max-width: 620px;
+  font-size: 20px;
+  line-height: 1.35;
+  color: #40362f;
+}
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 50px;
+}
+.metric {
+  padding: 16px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid #dfd2bf;
+}
+.metric strong {
+  display: block;
+  font-size: 28px;
+  color: #185c62;
+}
+.metric span {
+  font-size: 12px;
+  color: #6f6256;
+  font-weight: 700;
+}
+.card-grid,
+.two-col,
+.approval-grid,
+.ad-grid {
+  display: grid;
+  gap: 14px;
+}
+.card-grid { grid-template-columns: repeat(2, 1fr); }
+.two-col { grid-template-columns: 1fr 1fr; }
+.approval-grid { grid-template-columns: repeat(2, 1fr); }
+.ad-grid { grid-template-columns: 1fr; }
+.insight-card,
+.approval-card,
+.ad-card,
+.source-card {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 15px;
+}
+.insight-card h3,
+.approval-card h3,
+.ad-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.insight-card p,
+.approval-card p,
+.source-card p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #4c4238;
+}
+.badge {
+  display: inline-block;
+  padding: 5px 8px;
+  margin: 4px 5px 0 0;
+  background: #e5f0ee;
+  color: #185c62;
+  font-size: 11px;
+  font-weight: 800;
+}
+.ad-preview {
+  border-left: 4px solid #2f6f76;
+  background: #fff;
+  padding: 12px;
+  margin: 10px 0 12px;
+}
+.ad-preview .sponsored {
+  font-size: 11px;
+  color: #6e6257;
+  font-weight: 700;
+}
+.ad-preview .url {
+  font-size: 12px;
+  color: #247b4d;
+  margin-top: 4px;
+}
+.ad-preview .headline {
+  color: #1a0dab;
+  font-size: 18px;
+  line-height: 1.2;
+  margin-top: 5px;
+}
+.ad-preview .desc {
+  color: #3f3f3f;
+  font-size: 12px;
+  line-height: 1.35;
+  margin-top: 5px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+td, th {
+  border-bottom: 1px solid #e2d7c6;
+  padding: 6px 5px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  color: #6b5c4b;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.42;
+}
+.footnote {
+  position: absolute;
+  left: 0.54in;
+  right: 0.54in;
+  bottom: 0.34in;
+  font-size: 10px;
+  color: #7c6d5c;
+}
+</style>
+</head>
+<body>
+  
+<section class="section pdf-page cover">
+  <div class="section-header" style="display:none"></div>
+  <div class="subsection-header" style="display:none">Report start</div>
+  <div class="brand-row"><span>Advertising Report Card</span><span>May 2, 2026</span></div>
+  <div class="cover-title">
+    <div class="label">New Campaign Review</div>
+    <h1>Mindful Mental Health Counseling</h1>
+    <p>A client-ready proposal for a new Google Ads Search campaign, built from website evidence and staged for Google Ads Editor review.</p>
+  </div>
+  <div class="metric-row">
+    <div class="metric"><strong>1</strong><span>Search campaign</span></div>
+    <div class="metric"><strong>8</strong><span>ad groups</span></div>
+    <div class="metric"><strong>56</strong><span>phrase keywords</span></div>
+    <div class="metric"><strong>8</strong><span>responsive ads</span></div>
+  </div>
+  <div class="footnote">Campaign: ARC - Search - Anxiety Therapy - V1. Status: paused staging file for Google Ads Editor review.</div>
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Strategy</div>
+    <h1>A Controlled New Search Campaign</h1>
+    <p>This is a new-campaign proposal, not a rebuild comparison. The report shows what is ready, what is source-backed, and what needs approval before launch.</p>
+  </div>
+  
+<div class="subsection-header">What we are proposing</div>
+<div class="card-grid">
+  <div class="insight-card">
+    <h3>Search-first launch</h3>
+    <p>The campaign is built for people already searching for therapy support, not broad awareness. All keywords use phrase match for cleaner early data.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Website-backed services</h3>
+    <p>The launch focuses on services visible on the site: Anxiety Therapy, Individual Therapy, Group Therapy, CBT Therapy, DBT Therapy, OCD Therapy, Depression Therapy, Social Anxiety Therapy.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Controlled network setting</h3>
+    <p>Search partners are off. The staged campaign uses Google search only.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Launch review status</h3>
+    <p>The CSV validates cleanly, but remains paused until budget, service priority, and client approval decisions are confirmed.</p>
+  </div>
+</div>
+<div class="subsection-header">Audience and service area</div>
+<div class="two-col">
+  <div class="source-card">
+    <p><strong>Audience from source material:</strong> adolescents, young adults in their 20s and 30s, adults for group therapy</p>
+    <p style="margin-top:8px;"><strong>Positioning:</strong> online therapy for anxiety and related concerns</p>
+  </div>
+  <div class="source-card">
+    <p><strong>Targeting:</strong> New York, United States, New Jersey, United States</p>
+    <p style="margin-top:8px;"><strong>Targeting method:</strong> Location of presence</p>
+  </div>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Structure</div>
+    <h1>What The Campaign Contains</h1>
+    <p>The structure is intentionally compact so the first launch can validate service demand before expanding into separate state or specialty campaigns.</p>
+  </div>
+  
+<div class="subsection-header">Campaign architecture</div>
+<div class="two-col">
+  <div class="insight-card">
+    <h3>Build shape</h3>
+    <p>8 ad groups organize service intent, modality intent, and social anxiety demand into one compact Search launch.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Keyword control</h3>
+    <p>56 phrase keywords and 10 negative phrase keywords are staged. Broad and exact match are not active.</p>
+  </div>
+</div>
+<div class="subsection-header">Ad groups staged for review</div>
+<table>
+  <tr><th>Ad group</th><th>Phrase keywords</th><th>Status</th></tr>
+  <tr><td>Anxiety Therapy - Core</td><td>7</td><td>Paused</td></tr><tr><td>Individual Therapy - Young Adults</td><td>7</td><td>Paused</td></tr><tr><td>Group Therapy - NYC</td><td>7</td><td>Paused</td></tr><tr><td>CBT Therapy - Skills</td><td>7</td><td>Paused</td></tr><tr><td>DBT Therapy - Skills</td><td>7</td><td>Paused</td></tr><tr><td>OCD Therapy - Support</td><td>7</td><td>Paused</td></tr><tr><td>Depression Therapy - Support</td><td>7</td><td>Paused</td></tr><tr><td>Social Anxiety - Support</td><td>7</td><td>Paused</td></tr>
+</table>
+<div class="continuation-header">Campaign detail continues with representative ad previews</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Examples The Client Can Review</h1>
+    <p>Each responsive search ad has 15 headlines and 4 descriptions in the staging file. These examples show the tone and claims used across the build.</p>
+  </div>
+  
+<div class="subsection-header">Representative ad copy</div>
+<div class="ad-grid">
+<div class="ad-card">
+  <h3>Anxiety Therapy - Core</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">nycmindfulmentalhealthcounseling.com/Anxiety/Therapy</div>
+    <div class="headline">NYC Anxiety Therapy Online | NJ Anxiety Therapy Online | Anxiety Therapy For Adults</div>
+    <div class="desc">Online anxiety therapy for young adults in New York and New Jersey.</div>
+  </div>
+  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>NYC Anxiety Therapy Online</td><td>26</td></tr><tr><td>2</td><td>NJ Anxiety Therapy Online</td><td>25</td></tr><tr><td>3</td><td>Anxiety Therapy For Adults</td><td>26</td></tr><tr><td>4</td><td>Mindful Anxiety Counseling</td><td>26</td></tr><tr><td>5</td><td>CBT And Mindfulness Support</td><td>27</td></tr><tr><td>6</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>7</td><td>Practical Anxiety Skills NY</td><td>27</td></tr><tr><td>8</td><td>Online Therapy In NY And NJ</td><td>27</td></tr></table>
+</div>
+
+<div class="ad-card">
+  <h3>Individual Therapy - Young Adults</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">nycmindfulmentalhealthcounseling.com/individual-therapy-nyc/Individual/Therapy</div>
+    <div class="headline">Individual Therapy Online | Therapy For Young Adults NY | NYC Young Adult Therapy Care</div>
+    <div class="desc">Online individual therapy for young adults navigating anxiety and related concerns.</div>
+  </div>
+  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Individual Therapy Online</td><td>25</td></tr><tr><td>2</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>3</td><td>NYC Young Adult Therapy Care</td><td>28</td></tr><tr><td>4</td><td>Online Therapy In NY And NJ</td><td>27</td></tr><tr><td>5</td><td>Mindful Therapy Support NY</td><td>26</td></tr><tr><td>6</td><td>CBT Skills For Daily Life</td><td>25</td></tr><tr><td>7</td><td>Support For Life Transitions</td><td>28</td></tr><tr><td>8</td><td>Private Online Therapy Care</td><td>27</td></tr></table>
+</div>
+
+<div class="ad-card">
+  <h3>Group Therapy - NYC</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">nycmindfulmentalhealthcounseling.com/group-therapy-nyc/Group/Therapy</div>
+    <div class="headline">Online Group Therapy NYC Care | Skills Based Group Therapy | Social Anxiety Group Care</div>
+    <div class="desc">Online group therapy options for adults seeking skills and support.</div>
+  </div>
+  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Online Group Therapy NYC Care</td><td>29</td></tr><tr><td>2</td><td>Skills Based Group Therapy</td><td>26</td></tr><tr><td>3</td><td>Social Anxiety Group Care</td><td>25</td></tr><tr><td>4</td><td>CBT Group Skills Support NY</td><td>27</td></tr><tr><td>5</td><td>Group Therapy For Adults NYC</td><td>28</td></tr><tr><td>6</td><td>Connect With Supportive Peers</td><td>29</td></tr><tr><td>7</td><td>Guided Online Therapy Groups</td><td>28</td></tr><tr><td>8</td><td>Therapy Groups For Anxiety</td><td>26</td></tr></table>
+</div>
+
+<div class="ad-card">
+  <h3>CBT Therapy - Skills</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">nycmindfulmentalhealthcounseling.com/cbt/CBT/Therapy</div>
+    <div class="headline">Online CBT Therapy Support | CBT Skills For Anxiety Care | Cognitive Behavioral Therapy</div>
+    <div class="desc">CBT-informed online therapy for anxiety and related concerns in NY and NJ.</div>
+  </div>
+  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Online CBT Therapy Support</td><td>26</td></tr><tr><td>2</td><td>CBT Skills For Anxiety Care</td><td>27</td></tr><tr><td>3</td><td>Cognitive Behavioral Therapy</td><td>28</td></tr><tr><td>4</td><td>CBT Therapy Care In NY NJ</td><td>25</td></tr><tr><td>5</td><td>Practical CBT Tools Online</td><td>26</td></tr><tr><td>6</td><td>Therapy For Thought Patterns</td><td>28</td></tr><tr><td>7</td><td>Mindfulness Informed CBT Care</td><td>29</td></tr><tr><td>8</td><td>CBT Support For Young Adults</td><td>28</td></tr></table>
+</div>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Approval</div>
+    <h1>What Needs Client Confirmation</h1>
+    <p>The campaign is valid as a staging file. These are the business decisions to confirm before launch.</p>
+  </div>
+  
+<div class="subsection-header">Approval checklist</div>
+<div class="approval-grid"><div class="approval-card"><h3>confirm current capacity by service</h3><p>Confirm this before importing or launching the campaign.</p></div><div class="approval-card"><h3>confirm whether adolescent-focused search should be active</h3><p>Confirm this before importing or launching the campaign.</p></div><div class="approval-card"><h3>confirm whether New York and New Jersey should share one campaign or split by state</h3><p>Confirm this before importing or launching the campaign.</p></div><div class="approval-card"><h3>confirm client-approved budget</h3><p>Confirm this before importing or launching the campaign.</p></div><div class="approval-card"><h3>confirm whether group therapy is currently enrolling or waitlist only</h3><p>Confirm this before importing or launching the campaign.</p></div></div>
+<div class="subsection-header">Source trail</div>
+<div class="source-card"><p><strong>https://nycmindfulmentalhealthcounseling.com/</strong><br>anxiety focus, online therapy for adolescents and young adults in New York and New Jersey, services and modalities, founder and licensing language</p><p><strong>https://nycmindfulmentalhealthcounseling.com/contact/</strong><br>request appointment call to action, out-of-network insurance and superbill language, phone number</p><p><strong>https://nycmindfulmentalhealthcounseling.com/group-therapy-nyc/</strong><br>group therapy process, online sessions only, group session pricing, NY and NJ license/service eligibility</p><p><strong>https://nycmindfulmentalhealthcounseling.com/cbt/</strong><br>CBT positioning and online therapy service area</p><p><strong>https://nycmindfulmentalhealthcounseling.com/dbt/</strong><br>DBT positioning and skills-based copy</p></div>
+
+</section>
+
+</body>
+</html>
