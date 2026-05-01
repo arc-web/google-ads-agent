@@ -590,3 +590,31 @@ Earlier checks to add to future loops:
 - scan generator scripts for one-client examples before activating them
 - block old shell runners that produce stale artifacts
 - require active builders to produce validator-passing staging files in tests
+
+## Presentation Report Path Review Loop
+
+Cleanup target:
+
+- `presentations/`
+- `shared/presentation/`
+
+Outcome:
+
+- confirmed `presentations/` is the human-facing report operating surface
+- confirmed `presentations/tools/` contains the commands operators should run
+- confirmed `shared/presentation/` remains active implementation and compatibility code
+- kept generated report artifacts in client build folders
+- deferred deeper presentation-engine refactors until campaign-build dry runs are stable
+- added tests proving wrappers delegate into `shared.presentation` while docs keep operators pointed at `presentations/`
+
+Reusable lesson:
+
+- wrapper code is acceptable when it makes the operator path clearer and preserves old imports
+- report rendering validates client communication, not campaign staging correctness
+- presentation cleanup should not block Search staging dry-run testing unless the one-shot output contract is being tested
+
+Earlier checks to add to future loops:
+
+- test wrapper imports rather than only reading command docs
+- confirm generated report outputs stay in client build folders
+- keep presentation docs in the operator surface and shared implementation docs in the implementation surface
