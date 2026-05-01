@@ -221,3 +221,31 @@ Earlier checks to add to future loops:
 - check output encoding before preserving old save methods
 - check whether a generic-looking exporter is quietly activating PMAX or API behavior
 - preserve old import names only when the active behavior is explicit and tested
+
+## Shared GADS Search Support Tools Loop
+
+Third behavior cleanup:
+
+- `shared/gads/tools/search_staging_support.py`
+
+Outcome:
+
+- added a small active helper for Search-safe support logic
+- kept older keyword, ad group, extension, and planning tools salvage-only
+- added phrase-only keyword plans
+- added negative phrase plans without leading-minus notation
+- added ad group plans that feed `GoogleAdsEditorExporter`
+- added synthetic tests proving helper output validates through the active staging path
+
+Reusable lesson:
+
+- when a folder contains many stale tools, create one narrow active support surface instead of trying to clean every old script at once
+- use old tools as a source of ideas, not as active behavior, until each assumption is tested
+- make active helpers compose with the current generator and exporter so every new helper inherits the same validator contract
+
+Earlier checks to add to future loops:
+
+- inventory old tools for examples that teach useful concepts but contain inactive match types
+- avoid importing legacy tools from the new active helper
+- prove new support helpers can feed the active exporter and staging validator
+- leave bulky salvage tools untouched until their behavior has a specific migration target
