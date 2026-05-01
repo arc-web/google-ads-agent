@@ -157,7 +157,7 @@ First-pass lessons:
 - classify the folder by role before rewriting code
 - keep PMAX and API/MCP tooling salvage-only until explicitly activated
 - make package imports safe before deeper analysis so optional dependencies do not block local tests
-- treat old Search generators with Wright-specific copy, Exact/Broad defaults, and 3-headline/2-description output as stale drafts until rewritten against the active staging validator
+- treat old Search generators with one-account copy, Exact/Broad defaults, and 3-headline/2-description output as stale drafts until rewritten against the active staging validator
 
 Current role review:
 
@@ -307,3 +307,54 @@ Earlier checks to add to future loops:
 - look for generators that can write files even when their workflow is not active
 - keep import compatibility but block output when activation is not approved
 - test that inactive workflow modules cannot leak into active Search staging
+
+## Shared GADS Business Logic Loop
+
+Sixth behavior cleanup:
+
+- `shared/gads/core/business_logic/client_onboarding_workflow.py`
+- `shared/gads/core/business_logic/README.md`
+
+Outcome:
+
+- documented the business-logic folder as active exporter plus salvage modules
+- removed automatic account-shaped campaign generation from shared onboarding
+- retired the old resume-campaign generation hook with a clear inactive message
+- added tests proving onboarding no longer contains the account-shaped generator path
+
+Reusable lesson:
+
+- business-specific workflows should not run from shared onboarding
+- shared onboarding should collect facts and mark campaign generation for manual review
+- campaign generation belongs in the active staging workflow after client facts are reviewed
+
+Earlier checks to add to future loops:
+
+- search for business-specific names and service categories before promoting shared modules
+- search for subprocess-based generator calls inside onboarding or automation modules
+- treat asset, optimization, reporting, and policy modules as salvage until each gets its own active contract
+- prefer explicit inactive hooks over hidden side effects
+
+## Shared GADS Pass Summary
+
+Completed loops:
+
+- Search CSV generator
+- Google Ads Editor exporter
+- Search support tools
+- API/MCP salvage quarantine
+- PMAX salvage guard
+- Business-logic salvage boundaries
+
+Current active shared/gads surfaces:
+
+- `shared/gads/core/search_campaigns/search_csv_generator.py`
+- `shared/gads/core/business_logic/google_ads_editor_exporter.py`
+- `shared/gads/tools/search_staging_support.py`
+
+Current inactive salvage surfaces:
+
+- old Search support tools
+- API/MCP service and integrations
+- PMAX generator
+- business-logic modules other than the active exporter
