@@ -1,381 +1,260 @@
-"""
-Search Campaign Validator
+#!/usr/bin/env python3
+"""Validate Search campaign rows for the active Google Ads Agent workflow."""
 
-Validates Search campaign CSVs with proper structure for Ad Groups.
-Search campaigns are fundamentally different from PMAX campaigns.
+from __future__ import annotations
 
-Key Differences from PMAX Validation:
-- Validates Ad Groups (not Asset Groups)
-- Checks for Search network only
-- Validates keyword match types
-- Checks text ad structure
-- No audience signals or asset validation
-"""
-
-from typing import Dict, List, Any, Optional
-from enum import Enum
-import re
+from dataclasses import dataclass
+from typing import Any
 
 
-class ValidationLevel(Enum):
-    CAMPAIGN = "campaign"
-    AD_GROUP = "ad_group"
-    KEYWORD = "keyword"
-    AD = "ad"
+SEARCH_NETWORK_VALUES = {"Google search", "Search"}
+OFF_VALUES = {"Off", "Disabled", "No", "False", "0"}
+VALID_CAMPAIGN_STATUSES = {"Enabled", "Paused", "Removed"}
 
 
-class IssueSeverity(Enum):
-    CRITICAL = "critical"
-    ERROR = "error"
-    WARNING = "warning"
-    INFO = "info"
-
-
+@dataclass
 class ValidationIssue:
-    def __init__(self, level: ValidationLevel, severity: IssueSeverity,
-                 client_name: str, csv_file: str, row_number: int, column: str,
-                 issue_type: str, message: str, auto_fixable: bool = False,
-                 fix_value: Any = None):
-        self.level = level
-        self.severity = severity
-        self.client_name = client_name
-        self.csv_file = csv_file
-        self.row_number = row_number
-        self.column = column
-        self.issue_type = issue_type
-        self.message = message
-        self.auto_fixable = auto_fixable
-        self.fix_value = fix_value
+    """Represents a validation issue found during Search campaign validation."""
+
+    level: str
+    severity: str
+    row_number: int
+    column: str
+    issue_type: str
+    message: str
+    suggestion: str = ""
+    auto_fixable: bool = False
 
 
 class SearchCampaignValidator:
     """
-    Validates Search campaign CSVs.
+    Validates campaign-level Search rows without client-specific assumptions.
 
-    Search campaigns use:
-    - Ad Groups (not Asset Groups)
-    - Keywords with match types
-    - Text ads
-    - Search network only
+    This is a legacy wrapper kept for older imports. It follows the same active
+    staging rules used by the rebuild validator: Search campaigns, Search
+    network, positive budgets, broad match off, and EU political ads populated.
     """
 
-    def __init__(self):
-        self.issues: List[ValidationIssue] = []
+    def __init__(self, validation_rules: dict[str, Any] | None = None):
+        rules = validation_rules or {}
+        self.search_network_values = set(rules.get("search_network_values", SEARCH_NETWORK_VALUES))
+        self.off_values = set(rules.get("off_values", OFF_VALUES))
+        self.valid_campaign_statuses = set(rules.get("valid_campaign_statuses", VALID_CAMPAIGN_STATUSES))
 
-    def validate_search_campaign_row(self, client_name: str, csv_path: str,
-                                   row: Dict[str, str], row_num: int):
-        """Validate a Search campaign row"""
-        campaign_type = row.get("Campaign Type", "").strip()
+    def _issue(
+        self,
+        severity: str,
+        row_number: int,
+        column: str,
+        issue_type: str,
+        message: str,
+        suggestion: str = "",
+    ) -> ValidationIssue:
+        return ValidationIssue(
+            level="campaign",
+            severity=severity,
+            row_number=row_number,
+            column=column,
+            issue_type=issue_type,
+            message=message,
+            suggestion=suggestion,
+        )
 
-        if campaign_type != "Search":
-            return  # Skip non-Search campaigns
+    def _value(self, row: dict[str, Any], *headers: str) -> str:
+        for header in headers:
+            value = row.get(header)
+            if value is not None and str(value).strip():
+                return str(value).strip()
+        return ""
 
-        # Validate Search network settings
-        self._validate_search_network_settings(client_name, csv_path, row, row_num)
+    def validate_campaign_row(self, row: dict[str, Any], row_number: int) -> list[ValidationIssue]:
+        """Validate a single Search campaign row."""
+        issues: list[ValidationIssue] = []
 
-        # Validate bid strategy
-        self._validate_search_bid_strategy(client_name, csv_path, row, row_num)
+        campaign = self._value(row, "Campaign")
+        campaign_type = self._value(row, "Campaign Type", "Campaign type")
+        networks = self._value(row, "Networks")
+        budget = self._value(row, "Budget")
+        budget_type = self._value(row, "Budget type", "Budget Type")
+        eu_political_ads = self._value(row, "EU political ads", "EU Political Ads")
+        broad_match = self._value(row, "Broad match keywords", "Broad Match Keywords")
+        status = self._value(row, "Status", "Campaign status", "Campaign Status")
 
-    def validate_search_ad_group_row(self, client_name: str, csv_path: str,
-                                   row: Dict[str, str], row_num: int):
-        """Validate a Search Ad Group row"""
-        ad_group = row.get("Ad Group", "").strip()
+        if not campaign:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Campaign",
+                    "missing_campaign",
+                    "Campaign row is missing Campaign.",
+                    "Populate Campaign on every campaign row.",
+                )
+            )
 
-        if not ad_group:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Ad Group",
-                issue_type="missing_ad_group",
-                message="Search campaigns require Ad Groups",
-                auto_fixable=False
-            ))
-            return
+        if campaign_type and campaign_type != "Search":
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Campaign Type",
+                    "unsupported_campaign_type",
+                    f'Campaign Type "{campaign_type}" is not supported by this Search validator.',
+                    'Use "Search" for Search campaign staging rows.',
+                )
+            )
 
-        # Validate Ad Group naming (no Asset Group confusion)
-        if "asset" in ad_group.lower():
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Ad Group",
-                issue_type="invalid_ad_group_name",
-                message="Ad Groups should not contain 'asset' - that's for PMAX campaigns",
-                auto_fixable=False
-            ))
+        if not networks:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Networks",
+                    "missing_networks",
+                    "Search campaign row is missing Networks.",
+                    'Use "Google search" or "Search".',
+                )
+            )
+        elif networks not in self.search_network_values:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Networks",
+                    "search_network",
+                    f'Networks "{networks}" is not supported for the active Search workflow.',
+                    f"Use one of: {', '.join(sorted(self.search_network_values))}.",
+                )
+            )
 
-        # Validate bid strategy for Ad Group
-        self._validate_ad_group_bid_strategy(client_name, csv_path, row, row_num)
-
-        # VALIDATE KEYWORD IN AD GROUP ROW (Google Ads Editor spec)
-        keyword = row.get("Keyword", "").strip()
-        criterion_type = row.get("Criterion Type", "").strip()
-        final_url = row.get("Final URL", "").strip()
-
-        if not keyword:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Keyword",
-                issue_type="missing_keyword_in_ad_group",
-                message="Ad Group rows must include keywords in the 'Keyword' column",
-                auto_fixable=False
-            ))
+        if not budget:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Budget",
+                    "missing_budget",
+                    "Search campaign row is missing Budget.",
+                    "Populate a positive daily budget before staging.",
+                )
+            )
         else:
-            # Validate keyword format
-            if len(keyword.split()) < 2:
-                self.issues.append(ValidationIssue(
-                    level=ValidationLevel.AD_GROUP,
-                    severity=IssueSeverity.WARNING,
-                    client_name=client_name,
-                    csv_file=csv_path,
-                    row_number=row_num,
-                    column="Keyword",
-                    issue_type="short_keyword",
-                    message=f"Keyword '{keyword}' is very short - consider longer, more specific keywords",
-                    auto_fixable=False
-                ))
+            try:
+                if float(budget.replace("$", "").replace(",", "")) <= 0:
+                    issues.append(
+                        self._issue(
+                            "critical",
+                            row_number,
+                            "Budget",
+                            "budget_positive",
+                            "Campaign budget must be greater than zero.",
+                            "Use a positive numeric budget.",
+                        )
+                    )
+            except ValueError:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        "Budget",
+                        "budget_numeric",
+                        f'Campaign budget "{budget}" is not numeric.',
+                        "Use numeric format such as 25.00.",
+                    )
+                )
 
-        # Validate Criterion Type
-        valid_match_types = ["Exact", "Phrase", "Broad"]
-        if criterion_type and criterion_type not in valid_match_types:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Criterion Type",
-                issue_type="invalid_criterion_type",
-                message=f"Invalid Criterion Type '{criterion_type}'. Must be one of: {', '.join(valid_match_types)}",
-                auto_fixable=True,
-                fix_value="Exact"
-            ))
+        if budget_type and budget_type != "Daily":
+            issues.append(
+                self._issue(
+                    "warning",
+                    row_number,
+                    "Budget type",
+                    "non_daily_budget",
+                    f'Budget type "{budget_type}" is not the expected daily staging format.',
+                    'Use "Daily" unless the build intentionally uses another budget type.',
+                )
+            )
 
-        # Validate Final URL
-        if not final_url:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Final URL",
-                issue_type="missing_final_url",
-                message="Final URL is required for keywords in Ad Group rows",
-                auto_fixable=False
-            ))
-        elif not final_url.startswith(('http://', 'https://')):
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Final URL",
-                issue_type="invalid_final_url",
-                message=f"Final URL must start with http:// or https://, got: {final_url}",
-                auto_fixable=True,
-                fix_value=f"https://{final_url}"
-            ))
+        if not eu_political_ads:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "EU political ads",
+                    "eu_political_ads_required",
+                    "Campaign row must populate EU political ads.",
+                    "Set the Google Ads Editor EU political ads value before import.",
+                )
+            )
 
-    def validate_search_keyword_row(self, client_name: str, csv_path: str,
-                                  row: Dict[str, str], row_num: int):
-        """
-        Validate a Search keyword row
+        if broad_match and broad_match not in self.off_values:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Broad match keywords",
+                    "broad_match_off",
+                    "Broad match keywords must be off for the current phrase-only workflow.",
+                    f"Use one of: {', '.join(sorted(self.off_values))}.",
+                )
+            )
 
-        NOTE: In corrected Google Ads Editor format, keywords are in Ad Group rows,
-        not separate keyword rows. This method now detects obsolete separate keyword rows.
-        """
-        ad_group = row.get("Ad Group", "").strip()
-        status = row.get("Status", "").strip()
-        keyword = row.get("Keyword", "").strip()
+        if status and status not in self.valid_campaign_statuses:
+            issues.append(
+                self._issue(
+                    "warning",
+                    row_number,
+                    "Status",
+                    "invalid_campaign_status",
+                    f'Campaign status "{status}" is not standard.',
+                    f"Use one of: {', '.join(sorted(self.valid_campaign_statuses))}.",
+                )
+            )
 
-        # Check for old-style separate keyword rows (obsolete)
-        if status == "Enabled" and not ad_group and keyword:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.KEYWORD,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Status",
-                issue_type="obsolete_keyword_format",
-                message="Separate keyword rows are obsolete. Keywords must be in Ad Group rows per Google Ads Editor spec.",
-                auto_fixable=False
-            ))
-        # If this has an Ad Group and keyword, it's likely a duplicate validation (already checked in ad group validation)
-        elif ad_group and keyword:
-            # Keywords are validated in validate_search_ad_group_row, so just log this is expected
-            pass
-        # If this is a keyword row without proper structure, flag it
-        elif not ad_group and keyword:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.KEYWORD,
-                severity=IssueSeverity.WARNING,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Ad Group",
-                issue_type="keyword_without_ad_group",
-                message="Keyword row missing Ad Group - keywords should be in Ad Group rows",
-                auto_fixable=False
-            ))
+        return issues
 
-    def validate_search_ad_row(self, client_name: str, csv_path: str,
-                             row: Dict[str, str], row_num: int):
-        """Validate a Search text ad row"""
-        headline_1 = row.get("Headline 1", "").strip()
-        description_1 = row.get("Description 1", "").strip()
-        final_url = row.get("Final URL", "").strip()
+    def validate_campaign_data(self, campaign_rows: list[dict[str, Any]]) -> list[ValidationIssue]:
+        """Validate campaign-level data across multiple rows."""
+        issues: list[ValidationIssue] = []
+        seen_campaigns: set[str] = set()
 
-        # Validate required ad components
-        if not headline_1:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Headline 1",
-                issue_type="missing_headline",
-                message="Headline 1 is required for Search ads",
-                auto_fixable=False
-            ))
+        for index, row in enumerate(campaign_rows, start=2):
+            issues.extend(self.validate_campaign_row(row, index))
+            campaign = self._value(row, "Campaign")
+            if not campaign:
+                continue
+            if campaign in seen_campaigns:
+                issues.append(
+                    self._issue(
+                        "warning",
+                        index,
+                        "Campaign",
+                        "duplicate_campaign_row",
+                        f'Duplicate campaign row for "{campaign}".',
+                        "Keep one campaign settings row per campaign unless the duplicate is intentional.",
+                    )
+                )
+            else:
+                seen_campaigns.add(campaign)
 
-        if not description_1:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Description 1",
-                issue_type="missing_description",
-                message="Description 1 is required for Search ads",
-                auto_fixable=False
-            ))
+        return issues
 
-        if not final_url:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Final URL",
-                issue_type="missing_final_url",
-                message="Final URL is required for Search ads",
-                auto_fixable=False
-            ))
+    def validate_search_campaign_row(
+        self, client_name: str, csv_path: str, row: dict[str, Any], row_num: int
+    ) -> None:
+        """Legacy mutating API retained for old callers."""
+        if not hasattr(self, "issues"):
+            self.issues = []
+        self.issues.extend(self.validate_campaign_row(row, row_num))
 
-    def _validate_search_network_settings(self, client_name: str, csv_path: str,
-                                        row: Dict[str, str], row_num: int):
-        """Validate Search network settings"""
-        networks = row.get("Networks", "").strip()
-        search_partners = row.get("Search Partners", "").strip()
-        display_network = row.get("Display Network", "").strip()
-
-        # Must be Search network only
-        if networks != "Search":
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.CAMPAIGN,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Networks",
-                issue_type="invalid_network",
-                message="Search campaigns must use 'Search' network only",
-                auto_fixable=True,
-                fix_value="Search"
-            ))
-
-        # Search Partners must be disabled
-        if search_partners != "Disabled":
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.CAMPAIGN,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Search Partners",
-                issue_type="search_partners_enabled",
-                message="Search Partners must be Disabled for Search campaigns",
-                auto_fixable=True,
-                fix_value="Disabled"
-            ))
-
-        # Display Network must be disabled
-        if display_network != "Disabled":
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.CAMPAIGN,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Display Network",
-                issue_type="display_network_enabled",
-                message="Display Network must be Disabled for Search campaigns",
-                auto_fixable=True,
-                fix_value="Disabled"
-            ))
-
-    def _validate_search_bid_strategy(self, client_name: str, csv_path: str,
-                                    row: Dict[str, str], row_num: int):
-        """Validate Search campaign bid strategy"""
-        bid_strategy = row.get("Campaign Bid Strategy Type", "").strip()
-
-        valid_strategies = ["Manual CPC", "Target CPA", "Maximize Conversions", "Maximize Clicks"]
-
-        if bid_strategy not in valid_strategies:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.CAMPAIGN,
-                severity=IssueSeverity.WARNING,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Campaign Bid Strategy Type",
-                issue_type="invalid_bid_strategy",
-                message=f"Search campaign bid strategy should be one of: {', '.join(valid_strategies)}",
-                auto_fixable=False
-            ))
-
-    def _validate_ad_group_bid_strategy(self, client_name: str, csv_path: str,
-                                      row: Dict[str, str], row_num: int):
-        """Validate Ad Group bid strategy"""
-        bid_strategy = row.get("Ad Group Bid Strategy Type", "").strip()
-
-        valid_strategies = ["Manual CPC", "Target CPA", "Maximize Conversions", "Maximize Clicks"]
-
-        if bid_strategy and bid_strategy not in valid_strategies:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.AD_GROUP,
-                severity=IssueSeverity.WARNING,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Ad Group Bid Strategy Type",
-                issue_type="invalid_ad_group_bid_strategy",
-                message=f"Ad Group bid strategy should be one of: {', '.join(valid_strategies)}",
-                auto_fixable=False
-            ))
-
-    def get_validation_report(self) -> Dict[str, Any]:
-        """Get validation report"""
+    def get_validation_report(self) -> dict[str, Any]:
+        """Return issues collected through the legacy mutating API."""
+        issues = list(getattr(self, "issues", []))
         return {
-            "total_issues": len(self.issues),
-            "critical": len([i for i in self.issues if i.severity == IssueSeverity.CRITICAL]),
-            "errors": len([i for i in self.issues if i.severity == IssueSeverity.ERROR]),
-            "warnings": len([i for i in self.issues if i.severity == IssueSeverity.WARNING]),
-            "info": len([i for i in self.issues if i.severity == IssueSeverity.INFO]),
-            "issues": [vars(issue) for issue in self.issues]
+            "total_issues": len(issues),
+            "critical": len([issue for issue in issues if issue.severity == "critical"]),
+            "errors": len([issue for issue in issues if issue.severity == "error"]),
+            "warnings": len([issue for issue in issues if issue.severity == "warning"]),
+            "info": len([issue for issue in issues if issue.severity == "info"]),
+            "issues": [issue.__dict__ for issue in issues],
         }
