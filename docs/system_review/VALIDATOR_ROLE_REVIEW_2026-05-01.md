@@ -326,3 +326,44 @@ The folder still contains useful patterns. The correct cleanup path is:
 2. test against real client builds
 3. document what was absorbed
 4. only then decide what old validator files are obsolete
+
+## Active Validator Added
+
+The first active replacement path now exists here:
+
+- `shared/rebuild/staging_validator.py`
+
+Purpose:
+
+- validate current Google Ads Editor staging CSVs
+- support real staging encodings, including UTF-16
+- enforce phrase-only Search rules
+- reject broad and exact match unless the system is intentionally changed later
+- require plain keyword text in `Keyword`
+- require match type in `Criterion Type`
+- validate RSA headline and description counts and character limits
+- validate campaign-level requirements such as populated `EU political ads`
+- preserve campaign-level `Negative Phrase` rows as valid even when they do not have an ad group
+
+Command:
+
+```bash
+python3 shared/rebuild/staging_validator.py \
+  --csv clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Services_Editor_Staging_REV1.csv
+```
+
+Result:
+
+- status: `pass`
+- encoding detected: `utf-16`
+- rows: 470
+- campaigns: 4
+- ad groups: 49
+- phrase keyword rows: 295
+- negative phrase rows: 20
+- responsive search ad rows: 49
+- location rows: 49
+- radius rows: 4
+- issues: 0
+
+This does not make the old `shared/validators/` folder obsolete. It starts the safer path: move validated ideas into active rebuild tooling, test them against real client artifacts, then later decide what older files are duplicated or stale.

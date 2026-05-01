@@ -115,6 +115,13 @@ python3 shared/rebuild/provider_token_validator.py \
   --file clients/{agency}/{client}/build/{date}_account_rebuild/Google_Ads_Editor_Staging_CURRENT.csv
 ```
 
+Google Ads Editor staging validation helper:
+
+```bash
+python3 shared/rebuild/staging_validator.py \
+  --csv clients/{agency}/{client}/build/{date}_account_rebuild/Google_Ads_Editor_Staging_CURRENT.csv
+```
+
 ## Pipeline
 
 ### 0. Ingest Client Onboarding
