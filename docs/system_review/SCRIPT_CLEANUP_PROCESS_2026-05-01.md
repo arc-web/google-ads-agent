@@ -278,6 +278,34 @@ Earlier checks to add to future loops:
 - search scripts for `mkdir`, `curl`, `pip install`, `chmod`, `open(`, `write_text`, `shutil`, and SQL update statements
 - run inactive scripts with their old mutation flags and assert they exit nonzero without creating files
 - remove generated cache files from the touched script area as part of the same safety pass
+
+## Workflow Instruction Alignment Loop
+
+Cleanup target:
+
+- `shared/google_ads_workflow.py`
+- `shared/MASTER_AI_AGENT_INSTRUCTIONS.md`
+
+Outcome:
+
+- kept the legacy workflow entry point inactive
+- made the wrapper point directly to the current scaffold and staging validation commands
+- documented active contracts for campaign building, staging generation, export, validation, and reports
+- made Search-first, phrase-only, Google Ads Editor staging, API-off boundaries explicit
+- added human review stops for live mutation, PMAX activation, client data movement, match-type policy changes, and shared-code promotion
+- added tests proving the legacy workflow wrapper and master instructions keep these contracts visible
+
+Reusable lesson:
+
+- instruction files need tests when they are part of the operating contract
+- compatibility wrappers should say what to use now, not just say they are deprecated
+- old master instruction files should defer to `AGENTS.md` and the canonical process while still blocking stale behavior
+
+Earlier checks to add to future loops:
+
+- scan instruction files for stale active verbs around API upload, PMAX, broad match, exact match, and auto-fix
+- require old entry points to name the current command that replaced them
+- test the visible operator message from disabled compatibility wrappers
 - check output encoding before preserving old save methods
 - check whether a generic-looking exporter is quietly activating PMAX or API behavior
 - preserve old import names only when the active behavior is explicit and tested
