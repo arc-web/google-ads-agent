@@ -248,15 +248,45 @@ What stayed out of scope:
 - no asset generation
 - no API upload
 
+## Business Logic Salvage Boundaries Completed
+
+Business-logic modules have been classified and one clear shared-code defect was removed.
+
+What changed:
+
+- added `shared/gads/core/business_logic/README.md`
+- documented `google_ads_editor_exporter.py` as the only active business-logic module in this folder
+- documented remaining business-logic modules as salvage until individually promoted
+- removed automatic account-shaped campaign generation from onboarding
+- retired the old resume-campaign generation hook with a clear inactive message
+- added tests proving onboarding no longer contains account-shaped campaign generation
+
+What stayed salvage-only:
+
+- asset generation
+- asset rules
+- client audit and compliance
+- client auth and isolation
+- client context
+- optimization
+- reporting
+- industry modifiers
+- policy checks
+- price assets
+
+Reason:
+
+- these modules contain useful ideas, but they still need focused review before becoming workflow authority
+- shared business logic must not auto-create client campaigns before the active staging process has reviewed client facts
+
 ## Next Recommended Cleanup Batch
 
-Continue with business-logic modules.
+The planned `shared/gads/` pass is complete.
 
-Goal:
+Recommended next repo loop:
 
-- inspect `shared/gads/core/business_logic/client_*`, compliance, reporting, optimization, onboarding, and asset generation modules
-- preserve useful ideas
-- remove one-account assumptions from shared code
-- keep business-specific examples in docs or fixtures only when needed
+- re-run a fresh inventory of `shared/gads/`
+- decide whether to continue salvage promotion module-by-module or move to another subsystem
+- keep using one PR per behavior group
 
-Do not activate live API, PMAX, or client-specific shared defaults in the business-logic PR.
+Do not activate live API, PMAX, or client-specific shared defaults without a new explicit activation plan.

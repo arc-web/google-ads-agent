@@ -316,22 +316,11 @@ class ClientOnboardingWorkflow:
         config.cc_emails = onboarding_data.cc_emails
         config.industry = onboarding_data.industry
 
-        # Generate MyExpertResume campaigns for resume clients
-        # Check if this is a resume business (by name or industry)
-        is_resume_business = (
-            "resume" in onboarding_data.client_name.lower() or
-            "cv" in onboarding_data.client_name.lower() or
-            onboarding_data.industry == IndustryType.B2B_SERVICES
+        config.custom_fields["campaign_generation_status"] = "manual_review_required"
+        config.custom_fields["campaign_generation_note"] = (
+            "Shared onboarding does not auto-generate client campaigns. "
+            "Use the active Google Ads Editor staging workflow after client facts are reviewed."
         )
-
-        if is_resume_business:
-            # Automatically generate MyExpertResume campaign suite for resume clients
-            try:
-                await self._generate_resume_campaigns(client_id, config)
-                logger.info(f"Generated MyExpertResume campaign suite for client {client_id}")
-            except Exception as e:
-                logger.warning(f"Failed to generate campaigns for client {client_id}: {e}")
-                # Don't fail onboarding if campaign generation fails
 
         # Set up initial KPIs based on goals
         if onboarding_data.primary_goal == "conversions":
@@ -447,51 +436,12 @@ class ClientOnboardingWorkflow:
         return True
 
     async def _generate_resume_campaigns(self, client_id: str, config: ClientSpecificConfig):
-        """Generate MyExpertResume campaign suite for resume services clients"""
-        # Import the existing working campaign generation system
-        import subprocess
-        import os
-        from pathlib import Path
-
-        # Path to the existing campaign generation tool
-        campaign_tool_path = Path(__file__).parent.parent.parent / "tools" / "campaign" / "campaign_plan.py"
-
-        if not campaign_tool_path.exists():
-            raise FileNotFoundError(f"Campaign generation tool not found: {campaign_tool_path}")
-
-        # Run the existing campaign generation script
-        # This will generate the CSV files in the campaigns directory
-        try:
-            result = subprocess.run(
-                ["python3", str(campaign_tool_path)],
-                cwd=campaign_tool_path.parent,
-                capture_output=True,
-                text=True,
-                timeout=300  # 5 minute timeout
-            )
-
-            if result.returncode != 0:
-                raise RuntimeError(f"Campaign generation failed: {result.stderr}")
-
-            logger.info(f"Campaign generation completed for client {client_id}")
-            logger.debug(f"Campaign generation output: {result.stdout}")
-
-            # Store campaign generation info in client config
-            config.custom_fields["campaigns_generated"] = True
-            config.custom_fields["campaign_generation_date"] = datetime.now().isoformat()
-            config.custom_fields["generated_campaigns"] = [
-                "MyExpertResume National Executive",
-                "MyExpertResume Florida Executive"
-            ]
-
-            # Save the updated config
-            self.context_manager.save_client_config(config)
-
-        except subprocess.TimeoutExpired:
-            raise RuntimeError("Campaign generation timed out")
-        except Exception as e:
-            logger.error(f"Error generating campaigns for client {client_id}: {e}")
-            raise
+        """Retired compatibility hook for old account-shaped onboarding generation."""
+        del client_id, config
+        raise RuntimeError(
+            "Automatic onboarding campaign generation is inactive. "
+            "Build client campaigns through the active Google Ads Editor staging workflow."
+        )
 
     async def _handle_integration_setup(self, client_id: str, integration_data: Dict[str, Any]) -> bool:
         """Handle integration configuration"""
