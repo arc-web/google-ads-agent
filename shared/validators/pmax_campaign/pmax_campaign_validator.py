@@ -1,20 +1,13 @@
 """
-PMAX Campaign Validator
+PMAX campaign salvage validator.
 
-Validates PMAX campaign CSVs with proper structure for Asset Groups.
-PMAX campaigns are fundamentally different from Search campaigns.
-
-Key Differences from Search Validation:
-- Validates Asset Groups (not Ad Groups)
-- Checks for multi-network campaigns (Search, Display, YouTube)
-- Validates audience signals and assets
-- Checks search themes (not keywords)
-- Validates responsive search ads
+The active Google Ads Agent rebuild flow is Search-first. This module keeps
+PMAX validation available for explicit PMAX rows without making PMAX active for
+Search workflows.
 """
 
-from typing import Dict, List, Any, Optional
 from enum import Enum
-import re
+from typing import Any, Dict, List, Optional
 
 
 class ValidationLevel(Enum):
@@ -32,13 +25,23 @@ class IssueSeverity(Enum):
 
 
 class ValidationIssue:
-    def __init__(self, level: ValidationLevel, severity: IssueSeverity,
-                 client_name: str, csv_file: str, row_number: int, column: str,
-                 issue_type: str, message: str, auto_fixable: bool = False,
-                 fix_value: Any = None):
-        self.level = level
-        self.severity = severity
-        self.client_name = client_name
+    """Simple serializable validation issue."""
+
+    def __init__(
+        self,
+        level: ValidationLevel,
+        severity: IssueSeverity,
+        csv_file: str,
+        row_number: int,
+        column: str,
+        issue_type: str,
+        message: str,
+        auto_fixable: bool = False,
+        fix_value: Any = None,
+        context: Optional[Dict[str, Any]] = None,
+    ):
+        self.level = level.value
+        self.severity = severity.value
         self.csv_file = csv_file
         self.row_number = row_number
         self.column = column
@@ -46,297 +49,258 @@ class ValidationIssue:
         self.message = message
         self.auto_fixable = auto_fixable
         self.fix_value = fix_value
+        self.context = context or {}
 
 
 class PMAXCampaignValidator:
     """
-    Validates PMAX campaign CSVs.
+    Validates explicit PMAX rows only.
 
-    PMAX campaigns use:
-    - Asset Groups (not Ad Groups)
-    - Search themes (not keywords)
-    - Multi-network (Search, Display, YouTube)
-    - Audience signals
-    - Responsive search ads
+    Existing callers may still pass a context value as the first argument. The
+    value is accepted for compatibility and intentionally not stored on issues.
     """
+
+    VALID_CAMPAIGN_BID_STRATEGIES = {
+        "Maximize Conversion Value",
+        "Target ROAS",
+        "Target CPA",
+    }
+    VALID_ASSET_TYPES = {"TEXT", "IMAGE", "VIDEO", "YOUTUBE_VIDEO", "MEDIA_BUNDLE"}
 
     def __init__(self):
         self.issues: List[ValidationIssue] = []
 
-    def validate_pmax_campaign_row(self, client_name: str, csv_path: str,
-                                 row: Dict[str, str], row_num: int):
-        """Validate a PMAX campaign row"""
-        campaign_type = row.get("Campaign Type", "").strip()
-
-        if campaign_type != "Performance Max":
-            return  # Skip non-PMAX campaigns
-
-        # Validate PMAX network settings
-        self._validate_pmax_network_settings(client_name, csv_path, row, row_num)
-
-        # Validate PMAX-specific settings
-        self._validate_pmax_settings(client_name, csv_path, row, row_num)
-
-        # Validate bid strategy
-        self._validate_pmax_bid_strategy(client_name, csv_path, row, row_num)
-
-    def validate_pmax_asset_group_row(self, client_name: str, csv_path: str,
-                                    row: Dict[str, str], row_num: int):
-        """Validate a PMAX Asset Group row"""
-        asset_group = row.get("Asset Group", "").strip()
-
-        if not asset_group:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.ASSET_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Asset Group",
-                issue_type="missing_asset_group",
-                message="PMAX campaigns require Asset Groups",
-                auto_fixable=False
-            ))
+    def validate_pmax_campaign_row(
+        self,
+        legacy_context: str,
+        csv_path: str,
+        row: Dict[str, str],
+        row_num: int,
+    ) -> None:
+        """Validate a row only when it is explicitly Performance Max."""
+        del legacy_context
+        if not self._is_pmax_row(row):
             return
 
-        # Validate Asset Group naming (no Ad Group confusion)
+        self._validate_pmax_settings(csv_path, row, row_num)
+        self._validate_pmax_bid_strategy(csv_path, row, row_num)
+
+    def validate_pmax_asset_group_row(
+        self,
+        legacy_context: str,
+        csv_path: str,
+        row: Dict[str, str],
+        row_num: int,
+    ) -> None:
+        """Validate PMAX asset group fields on explicit PMAX or asset rows."""
+        del legacy_context
+        if not self._is_pmax_or_asset_group_row(row):
+            return
+
+        asset_group = row.get("Asset Group", "").strip()
+        if not asset_group:
+            self._add_issue(
+                ValidationLevel.ASSET_GROUP,
+                IssueSeverity.ERROR,
+                csv_path,
+                row_num,
+                "Asset Group",
+                "missing_asset_group",
+                "Explicit PMAX asset rows require Asset Group",
+            )
+            return
+
         if "ad group" in asset_group.lower() or "ad_group" in asset_group.lower():
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.ASSET_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Asset Group",
-                issue_type="invalid_asset_group_name",
-                message="Asset Groups should not contain 'ad group' - that's for Search campaigns",
-                auto_fixable=False
-            ))
+            self._add_issue(
+                ValidationLevel.ASSET_GROUP,
+                IssueSeverity.WARNING,
+                csv_path,
+                row_num,
+                "Asset Group",
+                "asset_group_mentions_ad_group",
+                "Asset Group name appears to reference an Ad Group",
+            )
 
-        # Validate required Asset Group fields
-        final_url = row.get("Final URL", "").strip()
-        if not final_url:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.ASSET_GROUP,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Final URL",
-                issue_type="missing_final_url",
-                message="Asset Groups require a Final URL",
-                auto_fixable=False
-            ))
+        if not row.get("Final URL", "").strip():
+            self._add_issue(
+                ValidationLevel.ASSET_GROUP,
+                IssueSeverity.ERROR,
+                csv_path,
+                row_num,
+                "Final URL",
+                "missing_final_url",
+                "Asset Groups require a Final URL",
+            )
 
-        # Validate bid strategy for Asset Group
-        self._validate_asset_group_bid_strategy(client_name, csv_path, row, row_num)
-
-    def validate_pmax_asset_row(self, client_name: str, csv_path: str,
-                              row: Dict[str, str], row_num: int):
-        """Validate a PMAX asset row"""
+    def validate_pmax_asset_row(
+        self,
+        legacy_context: str,
+        csv_path: str,
+        row: Dict[str, str],
+        row_num: int,
+    ) -> None:
+        """Validate PMAX asset rows when Asset or Asset Type is present."""
+        del legacy_context
         asset_type = row.get("Asset Type", "").strip()
         asset = row.get("Asset", "").strip()
+        if not asset_type and not asset:
+            return
 
         if not asset:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.ASSET,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Asset",
-                issue_type="missing_asset",
-                message="PMAX assets require a name/identifier",
-                auto_fixable=False
-            ))
-            return
+            self._add_issue(
+                ValidationLevel.ASSET,
+                IssueSeverity.ERROR,
+                csv_path,
+                row_num,
+                "Asset",
+                "missing_asset",
+                "Asset rows require an Asset value",
+            )
 
-        # Validate asset type
-        valid_asset_types = ["TEXT", "IMAGE", "VIDEO", "YOUTUBE_VIDEO", "MEDIA_BUNDLE"]
-        if asset_type not in valid_asset_types:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.ASSET,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Asset Type",
-                issue_type="invalid_asset_type",
-                message=f"Asset type must be one of: {', '.join(valid_asset_types)}",
-                auto_fixable=False
-            ))
+        if asset_type and asset_type not in self.VALID_ASSET_TYPES:
+            self._add_issue(
+                ValidationLevel.ASSET,
+                IssueSeverity.ERROR,
+                csv_path,
+                row_num,
+                "Asset Type",
+                "invalid_asset_type",
+                f"Asset Type must be one of: {', '.join(sorted(self.VALID_ASSET_TYPES))}",
+            )
 
-        # Validate asset content based on type
-        self._validate_asset_content(client_name, csv_path, row, row_num, asset_type)
+        self._validate_asset_content(csv_path, row, row_num, asset_type)
 
-    def validate_pmax_search_theme_row(self, client_name: str, csv_path: str,
-                                     row: Dict[str, str], row_num: int):
-        """Validate a PMAX search theme row"""
+    def validate_pmax_search_theme_row(
+        self,
+        legacy_context: str,
+        csv_path: str,
+        row: Dict[str, str],
+        row_num: int,
+    ) -> None:
+        """Validate PMAX search theme rows when Search Theme exists."""
+        del legacy_context
         search_theme = row.get("Search Theme", "").strip()
-
         if not search_theme:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.SEARCH_THEME,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Search Theme",
-                issue_type="missing_search_theme",
-                message="Search themes are required for PMAX campaigns",
-                auto_fixable=False
-            ))
             return
 
-        # Validate search theme format (should be descriptive phrases)
         if len(search_theme.split()) < 2:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.SEARCH_THEME,
-                severity=IssueSeverity.WARNING,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Search Theme",
-                issue_type="search_theme_too_short",
-                message="Search themes should be descriptive phrases (2+ words)",
-                auto_fixable=False
-            ))
+            self._add_issue(
+                ValidationLevel.SEARCH_THEME,
+                IssueSeverity.WARNING,
+                csv_path,
+                row_num,
+                "Search Theme",
+                "search_theme_too_short",
+                "Search themes are usually descriptive phrases",
+            )
 
-    def _validate_pmax_network_settings(self, client_name: str, csv_path: str,
-                                      row: Dict[str, str], row_num: int):
-        """Validate PMAX network settings"""
-        networks = row.get("Networks", "").strip()
-
-        # PMAX should include multiple networks
-        expected_networks = ["Search", "Display", "YouTube"]
-        if not all(network in networks for network in expected_networks):
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.CAMPAIGN,
-                severity=IssueSeverity.WARNING,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Networks",
-                issue_type="incomplete_networks",
-                message=f"PMAX campaigns should include: {', '.join(expected_networks)}",
-                auto_fixable=False
-            ))
-
-    def _validate_pmax_settings(self, client_name: str, csv_path: str,
-                              row: Dict[str, str], row_num: int):
-        """Validate PMAX-specific settings"""
+    def _validate_pmax_settings(self, csv_path: str, row: Dict[str, str], row_num: int) -> None:
         eu_political = row.get("EU political ads", "").strip()
+        if not eu_political:
+            self._add_issue(
+                ValidationLevel.CAMPAIGN,
+                IssueSeverity.ERROR,
+                csv_path,
+                row_num,
+                "EU political ads",
+                "missing_eu_political_ads",
+                "Performance Max rows should populate EU political ads",
+            )
+
         brand_guidelines = row.get("Brand guidelines", "").strip()
+        if brand_guidelines and brand_guidelines not in {"Enabled", "Disabled"}:
+            self._add_issue(
+                ValidationLevel.CAMPAIGN,
+                IssueSeverity.WARNING,
+                csv_path,
+                row_num,
+                "Brand guidelines",
+                "unexpected_brand_guidelines_value",
+                "Brand guidelines should be Enabled or Disabled when provided",
+            )
 
-        # EU political ads should be set appropriately
-        if eu_political != "Doesn't have EU political ads":
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.CAMPAIGN,
-                severity=IssueSeverity.WARNING,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="EU political ads",
-                issue_type="eu_political_not_set",
-                message="EU political ads should be set to 'Doesn't have EU political ads'",
-                auto_fixable=True,
-                fix_value="Doesn't have EU political ads"
-            ))
-
-        # Brand guidelines should be disabled
-        if brand_guidelines != "Disabled":
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.CAMPAIGN,
-                severity=IssueSeverity.ERROR,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Brand guidelines",
-                issue_type="brand_guidelines_not_disabled",
-                message="Brand guidelines must be Disabled for PMAX campaigns",
-                auto_fixable=True,
-                fix_value="Disabled"
-            ))
-
-    def _validate_pmax_bid_strategy(self, client_name: str, csv_path: str,
-                                  row: Dict[str, str], row_num: int):
-        """Validate PMAX campaign bid strategy"""
+    def _validate_pmax_bid_strategy(self, csv_path: str, row: Dict[str, str], row_num: int) -> None:
         bid_strategy = row.get("Campaign Bid Strategy Type", "").strip()
+        if not bid_strategy:
+            return
 
-        valid_strategies = ["Maximize Conversion Value", "Target ROAS", "Target CPA", "Manual CPC"]
+        if bid_strategy not in self.VALID_CAMPAIGN_BID_STRATEGIES:
+            self._add_issue(
+                ValidationLevel.CAMPAIGN,
+                IssueSeverity.WARNING,
+                csv_path,
+                row_num,
+                "Campaign Bid Strategy Type",
+                "unexpected_bid_strategy",
+                f"PMAX bid strategy should be one of: {', '.join(sorted(self.VALID_CAMPAIGN_BID_STRATEGIES))}",
+            )
 
-        if bid_strategy not in valid_strategies:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.CAMPAIGN,
-                severity=IssueSeverity.WARNING,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Campaign Bid Strategy Type",
-                issue_type="invalid_bid_strategy",
-                message=f"PMAX campaign bid strategy should be one of: {', '.join(valid_strategies)}",
-                auto_fixable=False
-            ))
+    def _validate_asset_content(
+        self,
+        csv_path: str,
+        row: Dict[str, str],
+        row_num: int,
+        asset_type: str,
+    ) -> None:
+        if asset_type == "TEXT" and not row.get("Text Asset", "").strip():
+            self._add_issue(
+                ValidationLevel.ASSET,
+                IssueSeverity.ERROR,
+                csv_path,
+                row_num,
+                "Text Asset",
+                "missing_text_asset",
+                "TEXT assets require Text Asset content",
+            )
 
-    def _validate_asset_group_bid_strategy(self, client_name: str, csv_path: str,
-                                         row: Dict[str, str], row_num: int):
-        """Validate Asset Group bid strategy"""
-        bid_strategy = row.get("Asset Group Bid Strategy Type", "").strip()
+        if asset_type == "IMAGE" and not row.get("Image", "").strip():
+            self._add_issue(
+                ValidationLevel.ASSET,
+                IssueSeverity.ERROR,
+                csv_path,
+                row_num,
+                "Image",
+                "missing_image_asset",
+                "IMAGE assets require Image content",
+            )
 
-        valid_strategies = ["Maximize Conversion Value", "Target ROAS", "Target CPA", "Manual CPC"]
+    def _is_pmax_row(self, row: Dict[str, str]) -> bool:
+        return row.get("Campaign Type", "").strip().lower() == "performance max"
 
-        if bid_strategy and bid_strategy not in valid_strategies:
-            self.issues.append(ValidationIssue(
-                level=ValidationLevel.ASSET_GROUP,
-                severity=IssueSeverity.WARNING,
-                client_name=client_name,
-                csv_file=csv_path,
-                row_number=row_num,
-                column="Asset Group Bid Strategy Type",
-                issue_type="invalid_asset_group_bid_strategy",
-                message=f"Asset Group bid strategy should be one of: {', '.join(valid_strategies)}",
-                auto_fixable=False
-            ))
+    def _is_pmax_or_asset_group_row(self, row: Dict[str, str]) -> bool:
+        return self._is_pmax_row(row) or bool(row.get("Asset Group", "").strip())
 
-    def _validate_asset_content(self, client_name: str, csv_path: str,
-                              row: Dict[str, str], row_num: int, asset_type: str):
-        """Validate asset content based on type"""
-        if asset_type == "TEXT":
-            text_asset = row.get("Text Asset", "").strip()
-            if not text_asset:
-                self.issues.append(ValidationIssue(
-                    level=ValidationLevel.ASSET,
-                    severity=IssueSeverity.ERROR,
-                    client_name=client_name,
-                    csv_file=csv_path,
-                    row_number=row_num,
-                    column="Text Asset",
-                    issue_type="missing_text_asset",
-                    message="TEXT assets require Text Asset content",
-                    auto_fixable=False
-                ))
-        elif asset_type == "IMAGE":
-            image = row.get("Image", "").strip()
-            if not image:
-                self.issues.append(ValidationIssue(
-                    level=ValidationLevel.ASSET,
-                    severity=IssueSeverity.ERROR,
-                    client_name=client_name,
-                    csv_file=csv_path,
-                    row_number=row_num,
-                    column="Image",
-                    issue_type="missing_image_asset",
-                    message="IMAGE assets require Image URL",
-                    auto_fixable=False
-                ))
+    def _add_issue(
+        self,
+        level: ValidationLevel,
+        severity: IssueSeverity,
+        csv_path: str,
+        row_num: int,
+        column: str,
+        issue_type: str,
+        message: str,
+        auto_fixable: bool = False,
+        fix_value: Any = None,
+    ) -> None:
+        self.issues.append(ValidationIssue(
+            level=level,
+            severity=severity,
+            csv_file=csv_path,
+            row_number=row_num,
+            column=column,
+            issue_type=issue_type,
+            message=message,
+            auto_fixable=auto_fixable,
+            fix_value=fix_value,
+        ))
 
     def get_validation_report(self) -> Dict[str, Any]:
-        """Get validation report"""
+        """Get a serializable validation report."""
         return {
             "total_issues": len(self.issues),
-            "critical": len([i for i in self.issues if i.severity == IssueSeverity.CRITICAL]),
-            "errors": len([i for i in self.issues if i.severity == IssueSeverity.ERROR]),
-            "warnings": len([i for i in self.issues if i.severity == IssueSeverity.WARNING]),
-            "info": len([i for i in self.issues if i.severity == IssueSeverity.INFO]),
-            "issues": [vars(issue) for issue in self.issues]
+            "critical": len([i for i in self.issues if i.severity == IssueSeverity.CRITICAL.value]),
+            "errors": len([i for i in self.issues if i.severity == IssueSeverity.ERROR.value]),
+            "warnings": len([i for i in self.issues if i.severity == IssueSeverity.WARNING.value]),
+            "info": len([i for i in self.issues if i.severity == IssueSeverity.INFO.value]),
+            "issues": [issue.__dict__ for issue in self.issues],
         }

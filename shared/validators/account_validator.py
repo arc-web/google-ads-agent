@@ -1,193 +1,120 @@
 #!/usr/bin/env python3
-"""
-Account-level CSV Validator
+"""Generic account-level checks for active Google Ads Editor staging files."""
 
-Validates account-level settings and CSV structure.
-"""
+from __future__ import annotations
 
-import logging
-from typing import Dict, List, Any, Optional
-from pathlib import Path
 import csv
 import io
+from typing import Any
 
-logger = logging.getLogger(__name__)
+from shared.rebuild.staging_validator import REQUIRED_HEADERS, REQUIRED_RSA_DESCRIPTIONS, REQUIRED_RSA_HEADLINES
 
 
 class AccountValidator:
-    """Validates account-level settings and CSV structure"""
+    """Validate file-level structure without assuming a client directory layout."""
 
-    def __init__(self):
-        # EXACT OFFICIAL GOOGLE ADS EDITOR REQUIRED HEADERS
-        # Must match official specification exactly - no assumptions
-        self.required_headers = [
-            'Campaign', 'Campaign type', 'Networks', 'Budget', 'Budget type',  # FIXED: Campaign type (exact case)
-            'Status',  # ADDED: Core required column
-            'Ad group', 'Criterion Type',  # Core ad group and keyword columns
-            'Headline 1', 'Headline 2', 'Headline 3', 'Description 1', 'Description 2',  # Core ad columns
-            'Location', 'Location id', 'Location type'  # ADDED: Core location columns
-        ]
+    def __init__(self) -> None:
+        self.required_headers = list(REQUIRED_HEADERS)
+        for header in REQUIRED_RSA_HEADLINES + REQUIRED_RSA_DESCRIPTIONS:
+            if header not in self.required_headers:
+                self.required_headers.append(header)
 
-        self.valid_campaign_types = [
-            'Search', 'Performance Max', 'Display Network only', 'Shopping', 'Video'
-        ]
+        self.valid_campaign_types = {"Search", "Performance Max", "Display Network only", "Shopping", "Video"}
+        self.valid_budget_types = {"Daily", "Monthly"}
 
-        self.valid_budget_types = ['Daily', 'Monthly']
-        self.valid_networks = ['Google search', 'Search Partners', 'Display Network']
+    def validate_csv_structure(self, csv_path: str, csv_content: str) -> list[dict[str, Any]]:
+        """Validate active Google Ads Editor staging headers."""
+        del csv_path
+        issues: list[dict[str, Any]] = []
 
-    def validate_csv_structure(self, csv_path: str, csv_content: str) -> List[Dict[str, Any]]:
-        """Validate CSV structure and headers"""
-        issues = []
-
-        # Check for UTF-8 BOM
-        if not csv_content.startswith('\ufeff'):
-            issues.append({
-                'level': 'account',
-                'severity': 'warning',
-                'row_number': 0,
-                'column': '',
-                'issue_type': 'encoding',
-                'message': 'CSV file missing UTF-8 BOM - may cause Excel compatibility issues',
-                'suggestion': 'Add UTF-8 BOM to CSV file',
-                'auto_fixable': True
-            })
-
-        # CRITICAL: Check that row 1 contains headers, not comments/metadata
-        lines = csv_content.split('\n')
-        if lines and lines[0].strip().startswith(('#', '//', '/*')):
-            issues.append({
-                'level': 'account',
-                'severity': 'critical',
-                'row_number': 0,
-                'column': '',
-                'issue_type': 'invalid_csv_structure',
-                'message': 'CSV row 1 contains comments/metadata instead of headers - this violates CSV format standards',
-                'suggestion': 'Row 1 MUST contain CSV headers only. Move comments to separate files or filename.',
-                'auto_fixable': False
-            })
-
-        # Parse CSV to validate headers
-        # NOTE: CSV content should NEVER contain stage comments in data rows
-        # Stage information is stored in filenames and metadata files only
-        csv_io = io.StringIO(csv_content)
         try:
-            reader = csv.DictReader(csv_io, delimiter='\t')
-            headers = reader.fieldnames or []
+            reader = csv.DictReader(io.StringIO(csv_content), delimiter="\t")
+            headers = list(reader.fieldnames or [])
+        except Exception as exc:
+            return [self._issue("critical", 0, "", "structure_error", f"Failed to read CSV structure: {exc}")]
 
-            # Check required headers
-            missing_headers = set(self.required_headers) - set(headers)
-            if missing_headers:
-                issues.append({
-                    'level': 'account',
-                    'severity': 'critical',
-                    'row_number': 0,
-                    'column': '',
-                    'issue_type': 'missing_headers',
-                    'message': f'Missing required headers: {missing_headers}',
-                    'auto_fixable': False
-                })
+        if not headers:
+            return [self._issue("critical", 0, "", "missing_headers", "CSV has no header row.")]
 
-            # Check for empty headers
-            empty_headers = [i for i, h in enumerate(headers) if not h or h.strip() == '']
-            if empty_headers:
-                issues.append({
-                    'level': 'account',
-                    'severity': 'error',
-                    'row_number': 0,
-                    'column': f'Column {empty_headers[0] + 1}',
-                    'issue_type': 'empty_headers',
-                    'message': f'Found empty column headers at positions: {empty_headers}',
-                    'auto_fixable': False
-                })
+        empty_headers = [index + 1 for index, header in enumerate(headers) if not (header or "").strip()]
+        if empty_headers:
+            issues.append(
+                self._issue(
+                    "error",
+                    0,
+                    f"Column {empty_headers[0]}",
+                    "empty_headers",
+                    f"CSV has empty headers at positions: {empty_headers}",
+                )
+            )
 
-        except Exception as e:
-            issues.append({
-                'level': 'account',
-                'severity': 'critical',
-                'row_number': 0,
-                'column': '',
-                'issue_type': 'structure_error',
-                'message': f'Failed to validate CSV structure: {e}',
-                'auto_fixable': False
-            })
+        missing_headers = [header for header in self.required_headers if header not in headers]
+        if missing_headers:
+            issues.append(
+                self._issue(
+                    "critical",
+                    0,
+                    "",
+                    "missing_headers",
+                    f"Missing active staging headers: {missing_headers}",
+                )
+            )
 
         return issues
 
-    def validate_account_settings(self, csv_path: str, csv_content: str) -> List[Dict[str, Any]]:
-        """Validate account-level settings in CSV rows"""
-        issues = []
+    def validate_account_settings(self, csv_path: str, csv_content: str) -> list[dict[str, Any]]:
+        """Validate row-level account fields common to active staging files."""
+        del csv_path
+        issues: list[dict[str, Any]] = []
 
         try:
-            csv_io = io.StringIO(csv_content)
-            reader = csv.DictReader(csv_io, delimiter='\t')
+            reader = csv.DictReader(io.StringIO(csv_content), delimiter="\t")
+            for row_num, row in enumerate(reader, start=2):
+                if not any((value or "").strip() for value in row.values()):
+                    continue
 
-            for row_num, row in enumerate(reader, 2):  # Start from 2 (header is 1)
-                # Validate campaign name
-                campaign_name = row.get("Campaign", "").strip()
-                if not campaign_name:
-                    issues.append({
-                        'level': 'account',
-                        'severity': 'critical',
-                        'row_number': row_num,
-                        'column': 'Campaign',
-                        'issue_type': 'missing_campaign_name',
-                        'message': 'Campaign name is required',
-                        'auto_fixable': False
-                    })
+                campaign = row.get("Campaign", "").strip()
+                if not campaign:
+                    issues.append(
+                        self._issue("critical", row_num, "Campaign", "missing_campaign_name", "Row is missing Campaign.")
+                    )
 
-                # Validate campaign type
                 campaign_type = row.get("Campaign Type", "").strip()
                 if campaign_type and campaign_type not in self.valid_campaign_types:
-                    issues.append({
-                        'level': 'account',
-                        'severity': 'error',
-                        'row_number': row_num,
-                        'column': 'Campaign Type',
-                        'issue_type': 'invalid_campaign_type',
-                        'message': f'Invalid campaign type "{campaign_type}". Valid types: {self.valid_campaign_types}',
-                        'auto_fixable': False
-                    })
+                    issues.append(
+                        self._issue(
+                            "error",
+                            row_num,
+                            "Campaign Type",
+                            "invalid_campaign_type",
+                            f"Unsupported Campaign Type: {campaign_type}",
+                        )
+                    )
 
-                # Validate budget type
                 budget_type = row.get("Budget type", "").strip()
                 if budget_type and budget_type not in self.valid_budget_types:
-                    issues.append({
-                        'level': 'account',
-                        'severity': 'error',
-                        'row_number': row_num,
-                        'column': 'Budget type',
-                        'issue_type': 'invalid_budget_type',
-                        'message': f'Invalid budget type "{budget_type}". Valid types: {self.valid_budget_types}',
-                        'auto_fixable': True,
-                        'original_value': budget_type,
-                        'fixed_value': 'Daily'  # Default to Daily
-                    })
-
-                # Validate networks
-                networks = row.get("Networks", "").strip()
-                if networks:
-                    network_list = [n.strip() for n in networks.split(';')]
-                    invalid_networks = set(network_list) - set(self.valid_networks)
-                    if invalid_networks:
-                        issues.append({
-                            'level': 'account',
-                            'severity': 'error',
-                            'row_number': row_num,
-                            'column': 'Networks',
-                            'issue_type': 'invalid_networks',
-                            'message': f'Invalid networks: {invalid_networks}. Valid networks: {self.valid_networks}',
-                            'auto_fixable': False
-                        })
-
-        except Exception as e:
-            issues.append({
-                'level': 'account',
-                'severity': 'critical',
-                'row_number': 0,
-                'column': '',
-                'issue_type': 'validation_error',
-                'message': f'Failed to validate account settings: {e}',
-                'auto_fixable': False
-            })
+                    issues.append(
+                        self._issue(
+                            "error",
+                            row_num,
+                            "Budget type",
+                            "invalid_budget_type",
+                            f"Unsupported Budget type: {budget_type}",
+                        )
+                    )
+        except Exception as exc:
+            issues.append(self._issue("critical", 0, "", "validation_error", f"Failed account validation: {exc}"))
 
         return issues
+
+    @staticmethod
+    def _issue(severity: str, row: int, column: str, issue_type: str, message: str) -> dict[str, Any]:
+        return {
+            "level": "account",
+            "severity": severity,
+            "row_number": row,
+            "column": column,
+            "issue_type": issue_type,
+            "message": message,
+            "auto_fixable": False,
+        }
