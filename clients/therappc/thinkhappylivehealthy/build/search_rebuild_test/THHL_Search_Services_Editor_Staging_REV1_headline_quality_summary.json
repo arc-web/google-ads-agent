@@ -1,0 +1,324 @@
+{
+  "status": "fail",
+  "total_failures": 443,
+  "unique_failed_headlines": 63,
+  "rule": "headline_minimum_value",
+  "minimum_chars": 25,
+  "examples": [
+    {
+      "headline": "Northern Virginia Care",
+      "chars": 22,
+      "count": 46
+    },
+    {
+      "headline": "Anthem/CareFirst BCBS",
+      "chars": 21,
+      "count": 39
+    },
+    {
+      "headline": "Ashburn Care",
+      "chars": 12,
+      "count": 39
+    },
+    {
+      "headline": "Appointments Available",
+      "chars": 22,
+      "count": 39
+    },
+    {
+      "headline": "Book Therapy Appointment",
+      "chars": 24,
+      "count": 24
+    },
+    {
+      "headline": "Support That Fits Life",
+      "chars": 22,
+      "count": 24
+    },
+    {
+      "headline": "Mental Health Support",
+      "chars": 21,
+      "count": 22
+    },
+    {
+      "headline": "Support For IEP Planning",
+      "chars": 24,
+      "count": 18
+    },
+    {
+      "headline": "Local Appointments Open",
+      "chars": 23,
+      "count": 13
+    },
+    {
+      "headline": "Care Near You Today",
+      "chars": 19,
+      "count": 13
+    },
+    {
+      "headline": "Think Happy Live Healthy",
+      "chars": 24,
+      "count": 11
+    },
+    {
+      "headline": "Psych NP Appointments",
+      "chars": 21,
+      "count": 7
+    },
+    {
+      "headline": "Medication Mgmt Support",
+      "chars": 23,
+      "count": 6
+    },
+    {
+      "headline": "Ashburn Psychiatry Care",
+      "chars": 23,
+      "count": 6
+    },
+    {
+      "headline": "Accepting New Patients",
+      "chars": 22,
+      "count": 6
+    },
+    {
+      "headline": "In-Person Psychiatry",
+      "chars": 20,
+      "count": 6
+    },
+    {
+      "headline": "Care Planning Support",
+      "chars": 21,
+      "count": 6
+    },
+    {
+      "headline": "Book Psychiatry Consult",
+      "chars": 23,
+      "count": 6
+    },
+    {
+      "headline": "Telehealth Available",
+      "chars": 20,
+      "count": 6
+    },
+    {
+      "headline": "Ashburn & Falls Church",
+      "chars": 22,
+      "count": 4
+    },
+    {
+      "headline": "Child Psychiatry Ashburn",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "Adult Psychiatry Ashburn",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "Anxiety Therapy Near You",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "Anxiety Therapy Help",
+      "chars": 20,
+      "count": 3
+    },
+    {
+      "headline": "Anxiety Counseling",
+      "chars": 18,
+      "count": 3
+    },
+    {
+      "headline": "ADHD Therapist Near You",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "ADHD Therapy Near You",
+      "chars": 21,
+      "count": 3
+    },
+    {
+      "headline": "Depression Therapy Help",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "LGBTQ Therapist Near You",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "LGBTQIA Therapy Help",
+      "chars": 20,
+      "count": 3
+    },
+    {
+      "headline": "Stress Therapy Near You",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "Stress Therapy Help",
+      "chars": 19,
+      "count": 3
+    },
+    {
+      "headline": "Grief Therapist Near You",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "Grief Therapy Help",
+      "chars": 18,
+      "count": 3
+    },
+    {
+      "headline": "Grief Support Counseling",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "Trauma Therapy Near You",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "Trauma Therapy Help",
+      "chars": 19,
+      "count": 3
+    },
+    {
+      "headline": "Child Psych Assessment",
+      "chars": 22,
+      "count": 3
+    },
+    {
+      "headline": "Learning Evaluation Help",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "Gifted Testing Near You",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "Schedule Gifted Testing",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "Gifted Testing Help",
+      "chars": 19,
+      "count": 3
+    },
+    {
+      "headline": "Young Adult ADHD Testing",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "ADHD Evaluation for Kids",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "ADHD Assessment Near You",
+      "chars": 24,
+      "count": 3
+    },
+    {
+      "headline": "Kindergarten Assessment",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "Autism Testing Near You",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "Schedule Autism Testing",
+      "chars": 23,
+      "count": 3
+    },
+    {
+      "headline": "Autism Testing Help",
+      "chars": 19,
+      "count": 3
+    },
+    {
+      "headline": "Book Your Assessment",
+      "chars": 20,
+      "count": 2
+    },
+    {
+      "headline": "Anxiety Therapy Ashburn",
+      "chars": 23,
+      "count": 1
+    },
+    {
+      "headline": "ADHD Therapy Ashburn",
+      "chars": 20,
+      "count": 1
+    },
+    {
+      "headline": "LGBTQIA+ Therapy Ashburn",
+      "chars": 24,
+      "count": 1
+    },
+    {
+      "headline": "Stress Therapy Ashburn",
+      "chars": 22,
+      "count": 1
+    },
+    {
+      "headline": "Trauma Therapy Ashburn",
+      "chars": 22,
+      "count": 1
+    },
+    {
+      "headline": "Gifted Testing Ashburn",
+      "chars": 22,
+      "count": 1
+    },
+    {
+      "headline": "Autism Testing Ashburn",
+      "chars": 22,
+      "count": 1
+    },
+    {
+      "headline": "Official Practice Site",
+      "chars": 22,
+      "count": 1
+    },
+    {
+      "headline": "Testing Appointments",
+      "chars": 20,
+      "count": 1
+    },
+    {
+      "headline": "Licensed Clinicians",
+      "chars": 19,
+      "count": 1
+    },
+    {
+      "headline": "Care For Families",
+      "chars": 17,
+      "count": 1
+    },
+    {
+      "headline": "Book Your Appointment",
+      "chars": 21,
+      "count": 1
+    },
+    {
+      "headline": "Testing Through Age 21",
+      "chars": 22,
+      "count": 1
+    }
+  ]
+}

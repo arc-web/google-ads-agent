@@ -14,21 +14,21 @@ from shared.tools.campaign.campaign_plan import CampaignPlanInactive, create_cam
 
 def _headlines() -> list[str]:
     return [
-        "Service Help Today",
-        "Local Team Ready",
-        "Book A Consultation",
-        "Clear Pricing Info",
-        "Trusted Local Help",
-        "Fast Scheduling",
-        "Helpful Answers",
-        "Expert Service",
-        "Plan Your Next Step",
-        "Simple Online Booking",
-        "Focused Support",
-        "Quality Care Team",
-        "Request Details",
-        "Speak With A Team",
-        "Start With A Call",
+        "Get Clear Service Support",
+        "Book A Service Consult Today",
+        "Local Service Team Ready Now",
+        "Compare Your Service Options",
+        "Plan Your Next Service Step",
+        "Trusted Service Guidance Now",
+        "Fast Scheduling Support Today",
+        "Helpful Service Answers Today",
+        "Expert Service Support Team",
+        "Simple Online Service Booking",
+        "Focused Support For Goals",
+        "Quality Care Team Support",
+        "Request Service Details Today",
+        "Speak With A Service Team",
+        "Start With A Service Call",
     ]
 
 
@@ -83,6 +83,20 @@ def test_search_campaign_builder_exports_only_search_safe_shape():
     assert campaign_data["ad_groups"][0]["keywords"][0]["criterion_type"] == "Phrase"
     assert len(campaign_data["ad_groups"][0]["rsa"]["headlines"]) == 15
     assert len(campaign_data["ad_groups"][0]["rsa"]["descriptions"]) == 4
+
+
+def test_search_campaign_builder_rejects_search_partners():
+    campaign = _campaign()
+    bad_campaign = SearchCampaignBuild(
+        name=campaign.name,
+        budget=campaign.budget,
+        ad_groups=campaign.ad_groups,
+        locations=campaign.locations,
+        networks="Google search;Search Partners",
+    )
+
+    with pytest.raises(ValueError, match="Search partners are disabled"):
+        to_exporter_campaign(bad_campaign)
 
 
 @pytest.mark.parametrize("keyword", ["Broad", "Exact", '"service consultation"', "[service consultation]"])

@@ -111,6 +111,8 @@ def _to_exporter_ad_group(ad_group: SearchAdGroupBuild) -> dict[str, Any]:
 def _validate_campaign(campaign: SearchCampaignBuild) -> None:
     if not campaign.name.strip():
         raise ValueError("Campaign name is required.")
+    if campaign.networks != "Google search":
+        raise ValueError("Search partners are disabled. Active Search builds use Google search only.")
     if campaign.budget <= 0:
         raise ValueError("Campaign budget must be greater than zero.")
     if not campaign.ad_groups:

@@ -18,7 +18,7 @@ def rsa_row(**overrides):
         "Status": "Enabled",
     }
     for index in range(1, 16):
-        row[f"Headline {index}"] = f"Testing Care {index}"
+        row[f"Headline {index}"] = f"Focused Testing Support {index}"
     for index in range(1, 5):
         row[f"Description {index}"] = f"Schedule focused testing support with a care team {index}."
     row.update(overrides)
@@ -64,6 +64,15 @@ def test_rejects_headline_and_description_over_limits():
     assert {"headline_too_long", "description_too_long"} <= issue_types(issues)
 
 
+def test_rejects_short_low_value_headline():
+    issues = SearchTextAdValidator().validate_text_ad_row(
+        rsa_row(**{"Headline 1": "Ashburn Care"}),
+        2,
+    )
+
+    assert "headline_minimum_value" in issue_types(issues)
+
+
 def test_rejects_invalid_final_url_and_path_characters():
     issues = SearchTextAdValidator().validate_text_ad_row(
         rsa_row(
@@ -81,8 +90,8 @@ def test_rejects_invalid_final_url_and_path_characters():
 def test_batch_validation_flags_duplicate_headlines():
     issues = SearchTextAdValidator().validate_text_ad_data(
         [
-            rsa_row(**{"Headline 1": "Testing Care One"}),
-            rsa_row(**{"Headline 1": "Testing Care One"}),
+            rsa_row(**{"Headline 1": "Focused Testing Support One"}),
+            rsa_row(**{"Headline 1": "Focused Testing Support One"}),
         ]
     )
 

@@ -71,7 +71,7 @@ def _write_staging_csv(path: Path, criterion_type: str = "Phrase") -> None:
         }
     )
     for index, headline in enumerate(REQUIRED_RSA_HEADLINES, start=1):
-        rsa[headline] = f"Therapy Care {index}"
+        rsa[headline] = f"Focused Therapy Support {index}"
     for index, description in enumerate(REQUIRED_RSA_DESCRIPTIONS, start=1):
         rsa[description] = f"Schedule therapy care with a local team today. Option {index}"
     rows.append(rsa)

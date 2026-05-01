@@ -33,7 +33,7 @@ def test_google_ads_editor_exporter_exports_search_staging_that_validates(tmp_pa
     keyword_row = next(row for row in rows if row["Keyword"])
     rsa_row = next(row for row in rows if row["Ad type"] == "Responsive search ad")
     assert keyword_row["Criterion Type"] == "Phrase"
-    assert rsa_row["Headline 15"] == "Start With A Call"
+    assert rsa_row["Headline 15"] == "Start With A Service Call"
 
 
 def test_google_ads_editor_exporter_convenience_function_writes_utf16(tmp_path):

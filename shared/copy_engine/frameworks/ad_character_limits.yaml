@@ -13,7 +13,7 @@ text_ads:
 # RESPONSIVE SEARCH ADS (RSA)
 responsive_search_ads:
   headline_max_chars: 30
-  headline_min_chars: 23  # Recommended minimum
+  headline_min_chars: 25  # Required minimum for current quality rules
   description_max_chars: 90  # Google hard limit is 90 (not 80)
   description_min_chars: 70  # Recommended minimum
   headlines_per_ad: 15

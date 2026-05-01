@@ -99,7 +99,7 @@ def rsa_row(**overrides: str) -> dict[str, str]:
         },
     )
     for index in range(1, 16):
-        row[f"Headline {index}"] = f"Testing Care {index}"
+        row[f"Headline {index}"] = f"Focused Testing Support {index}"
     for index in range(1, 5):
         row[f"Description {index}"] = f"Schedule testing support with a focused care team {index}."
     row.update(overrides)
@@ -184,6 +184,26 @@ def test_broad_match_campaign_setting_must_be_off(tmp_path: Path) -> None:
 
     assert report["status"] == "fail"
     assert "broad_match_off" in issue_rules(report)
+
+
+def test_search_partners_network_setting_fails(tmp_path: Path) -> None:
+    csv_path = tmp_path / "staging.csv"
+    write_tsv(csv_path, [campaign_row(Networks="Google search;Search Partners"), keyword_row()])
+
+    report = validate_file(csv_path)
+
+    assert report["status"] == "fail"
+    assert "search_partners_disabled" in issue_rules(report)
+
+
+def test_short_low_value_rsa_headline_fails(tmp_path: Path) -> None:
+    csv_path = tmp_path / "staging.csv"
+    write_tsv(csv_path, [campaign_row(), keyword_row(), rsa_row(**{"Headline 1": "Ashburn Care"}), location_row()])
+
+    report = validate_file(csv_path)
+
+    assert report["status"] == "fail"
+    assert "headline_minimum_value" in issue_rules(report)
 
 
 def test_missing_location_id_is_warning_not_failure(tmp_path: Path) -> None:

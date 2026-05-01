@@ -308,9 +308,11 @@ Headline system:
 
 Headline gates:
 
+- 25 to 30 characters whenever possible.
 - Max 30 characters.
 - No one-word headlines.
 - No bare labels like `Psychiatry`, `Therapy`, `Service`, or equivalent generic category names.
+- No short vague labels like `Ashburn Care`, `Anxiety Counseling`, or other low-value filler.
 - No broken truncation.
 - No duplicate ideas.
 - No unsupported claims.
@@ -400,6 +402,7 @@ Brand and source attribution rules:
 Hard rules - copy violations:
 
 - Headlines must be at or under 30 characters at generation time. Any over-limit asset is a blocker, not a flag.
+- Headlines under 25 characters fail quality review unless a human explicitly approves a rare exception.
 - Descriptions must be at or under 90 characters at generation time.
 - All violations are caught and replaced before this stage runs.
 
@@ -441,11 +444,13 @@ Hard validations:
 - Campaign row present.
 - EU political ads field populated.
 - No broad match.
+- No Search partners. Search campaigns must use `Google search` only.
 - Phrase keywords only.
 - No missing final URLs.
 - 15 RSA headlines when possible.
 - 4 RSA descriptions when possible.
 - Headline max 30 characters.
+- Headline minimum 25 characters unless a human approves a rare exception.
 - Description max 90 characters.
 - Path fields max 15 characters.
 - No one-word headlines.

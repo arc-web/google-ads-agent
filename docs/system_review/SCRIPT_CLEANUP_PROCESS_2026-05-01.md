@@ -705,3 +705,34 @@ Earlier checks to add to future loops:
 - compare current staging evidence against the one-shot output contract before declaring a client fully packaged
 - detect stale human review files when they describe older output counts or campaign names
 - preserve client-specific filenames until canonical aliases are intentionally created in a new package folder
+
+## Search Partner And Headline Quality Rule Loop
+
+Cleanup target:
+
+- active staging validator
+- active Search staging generator
+- active Search campaign builder
+- copy engine headline evaluator
+- THLH REV1 headline audit
+
+Outcome:
+
+- made Search partners fail validation
+- made active Search generation reject any network value other than `Google search`
+- added a hard RSA headline quality rule for headlines under 25 characters
+- updated copy evaluation so short low-value headlines are unclean
+- documented that `Ashburn Care`, `Anxiety Counseling`, and similar labels fail
+- generated a THLH REV1 headline quality audit showing 443 failed headline placements and 63 unique failed headlines
+
+Reusable lesson:
+
+- structurally valid staging can still be blocked by poor ad copy
+- distribution settings belong in hard validation, not human memory
+- headline quality should be tested before packaging a client build as ready
+
+Earlier checks to add to future loops:
+
+- scan generated RSA headlines for minimum character use before creating a final review package
+- treat Search partner settings as a blocker even if the rest of the campaign validates
+- create a concrete headline failure list before rewriting copy

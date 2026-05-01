@@ -10,6 +10,7 @@ from typing import Any
 
 
 HEADLINE_LIMIT = 30
+HEADLINE_MINIMUM = 25
 DESCRIPTION_LIMIT = 90
 PATH_LIMIT = 15
 REQUIRED_RSA_HEADLINES = [f"Headline {index}" for index in range(1, 16)]
@@ -46,6 +47,7 @@ class SearchTextAdValidator:
     def __init__(self, validation_rules: dict[str, Any] | None = None):
         rules = validation_rules or {}
         self.headline_limit = int(rules.get("headline_limit", HEADLINE_LIMIT))
+        self.headline_minimum = int(rules.get("headline_minimum", HEADLINE_MINIMUM))
         self.description_limit = int(rules.get("description_limit", DESCRIPTION_LIMIT))
         self.path_limit = int(rules.get("path_limit", PATH_LIMIT))
         self.required_headlines = list(rules.get("required_headlines", REQUIRED_RSA_HEADLINES))
@@ -255,6 +257,17 @@ class SearchTextAdValidator:
                         "headline_too_long",
                         f"{headline} is {len(text)} characters. Maximum is {self.headline_limit}.",
                         f"Shorten {headline} to {self.headline_limit} characters or fewer.",
+                    )
+                )
+            elif len(text) < self.headline_minimum:
+                issues.append(
+                    self._issue(
+                        "critical",
+                        row_number,
+                        headline,
+                        "headline_minimum_value",
+                        f"{headline} is {len(text)} characters. Minimum is {self.headline_minimum} for current quality rules.",
+                        f"Rewrite {headline} with concrete value, specificity, action, proof, or a clear next step.",
                     )
                 )
 

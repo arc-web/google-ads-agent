@@ -41,6 +41,7 @@ SEARCH_STAGING_COLUMNS = [
 ]
 
 ALLOWED_CRITERION_TYPES = {"Phrase", "Negative Phrase"}
+SEARCH_NETWORK_VALUE = "Google search"
 
 
 class SearchCSVGenerator:
@@ -60,7 +61,7 @@ class SearchCSVGenerator:
         budget: float | str,
         *,
         status: str = "Paused",
-        networks: str = "Google search",
+        networks: str = SEARCH_NETWORK_VALUE,
         budget_type: str = "Daily",
         eu_political_ads: str = "No",
         broad_match_keywords: str = "Off",
@@ -72,7 +73,7 @@ class SearchCSVGenerator:
             {
                 "Campaign": campaign,
                 "Campaign Type": "Search",
-                "Networks": networks,
+                "Networks": self._search_network(networks),
                 "Budget": budget_value,
                 "Budget type": budget_type,
                 "EU political ads": eu_political_ads,
@@ -94,7 +95,7 @@ class SearchCSVGenerator:
             str(campaign),
             data.get("budget", "1.00"),
             status=str(data.get("status", "Paused")),
-            networks=str(data.get("networks", "Google search")),
+            networks=str(data.get("networks", SEARCH_NETWORK_VALUE)),
             budget_type=str(data.get("budget_type", "Daily")),
             eu_political_ads=str(data.get("eu_political_ads", "No")),
             broad_match_keywords=str(data.get("broad_match_keywords", "Off")),
@@ -279,6 +280,11 @@ class SearchCSVGenerator:
     def _validate_criterion_type(self, criterion_type: str) -> None:
         if criterion_type not in ALLOWED_CRITERION_TYPES:
             raise ValueError("SearchCSVGenerator only supports Phrase and Negative Phrase criterion types.")
+
+    def _search_network(self, networks: str) -> str:
+        if networks.strip() != SEARCH_NETWORK_VALUE:
+            raise ValueError("Search partners are disabled. Active Search staging uses Google search only.")
+        return SEARCH_NETWORK_VALUE
 
     def _plain_keyword(self, keyword: str) -> str:
         plain = keyword.strip()

@@ -47,6 +47,7 @@ class CharViolation:
     actual_chars: int
     limit: int
     asset_type: str     # e.g. "headline", "description"
+    reason: str = "max"
 
 
 @dataclass
@@ -188,6 +189,7 @@ def _load_char_limits(yaml_path: str) -> dict[str, int]:
     limits: dict[str, int] = {
         # Sensible defaults if YAML is missing
         "headline":                 30,
+        "headline_min":             25,
         "description":              80,
         "sitelink_text":            25,
         "sitelink_description":     35,
@@ -203,6 +205,8 @@ def _load_char_limits(yaml_path: str) -> dict[str, int]:
         rsa = data.get("responsive_search_ads", {})
         if rsa.get("headline_max_chars"):
             limits["headline"] = rsa["headline_max_chars"]
+        if rsa.get("headline_min_chars"):
+            limits["headline_min"] = rsa["headline_min_chars"]
         if rsa.get("description_max_chars"):
             limits["description"] = rsa["description_max_chars"]
 
@@ -256,6 +260,7 @@ class CopyEvaluator:
         self._check_policy(text, report)
         self._check_word_swaps(text, report)
         self._check_char_limit(text, "headline", report)
+        self._check_min_char_quality(text, "headline", report)
         return report
 
     def evaluate_description(self, text: str) -> EvalReport:
@@ -397,6 +402,25 @@ class CopyEvaluator:
                     actual_chars=actual,
                     limit=limit,
                     asset_type=asset_type,
+                    reason="max",
+                )
+            )
+
+    def _check_min_char_quality(
+        self, text: str, asset_type: str, report: EvalReport
+    ) -> None:
+        minimum = self._char_limits.get(f"{asset_type}_min")
+        if minimum is None:
+            return
+        actual = len(text)
+        if actual < minimum:
+            report.char_violations.append(
+                CharViolation(
+                    text=text,
+                    actual_chars=actual,
+                    limit=minimum,
+                    asset_type=asset_type,
+                    reason="min_value",
                 )
             )
 

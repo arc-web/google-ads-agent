@@ -98,7 +98,7 @@ def rsa_row(**overrides: str) -> dict[str, str]:
         },
     )
     for index in range(1, 16):
-        row[f"Headline {index}"] = f"Example Support {index}"
+        row[f"Headline {index}"] = f"Focused Example Support {index}"
     for index in range(1, 5):
         row[f"Description {index}"] = f"Schedule example support with a focused service team {index}."
     row.update(overrides)

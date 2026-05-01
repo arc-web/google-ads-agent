@@ -13,14 +13,17 @@ REV1 = THLH_BUILD / "THHL_Search_Services_Editor_Staging_REV1.csv"
 DOC = REPO_ROOT / "docs/system_review/THLH_BUILD_READINESS_2026-05-01.md"
 
 
-def test_thlh_rev1_staging_is_current_validator_clean() -> None:
+def test_thlh_rev1_staging_is_now_blocked_by_headline_quality() -> None:
     master = MasterValidator().validate_csv_file(str(REV1))
     search = SearchMasterValidator().validate_csv_file(str(REV1))
 
-    assert master["final_status"] == "PASS"
-    assert master["validation_report"]["total_issues"] == 0
-    assert search["success"] is True
-    assert search["validation_report"]["total_issues"] == 0
+    assert master["final_status"] == "FAIL"
+    assert master["validation_report"]["total_issues"] == 443
+    assert search["success"] is False
+    assert search["validation_report"]["total_issues"] == 443
+    assert {
+        issue["issue_type"] for issue in master["validation_report"]["issues"]
+    } == {"headline_minimum_value"}
 
 
 def test_thlh_rev1_staging_shape_matches_readiness_doc() -> None:
@@ -47,7 +50,8 @@ def test_thlh_readiness_doc_separates_staging_clean_from_one_shot_package() -> N
     for phrase in [
         "THLH is the active first client",
         "not a live-launch approval",
-        "one-shot output contract is not fully packaged yet",
+        "RSA headline quality must be repaired before the one-shot output contract is packaged",
+        "failed headline count: 443",
         "older `human_review.md` describes an earlier broad service build",
         "current REV1 review authority is `THHL_Search_Services_Editor_Staging_REV1_review.md`",
         "Keep API upload off",

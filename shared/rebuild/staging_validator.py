@@ -14,6 +14,7 @@ from typing import Any
 
 ENCODINGS = ("utf-16", "utf-8-sig", "utf-8", "latin-1")
 HEADLINE_LIMIT = 30
+HEADLINE_MINIMUM = 25
 DESCRIPTION_LIMIT = 90
 PATH_LIMIT = 15
 
@@ -39,7 +40,7 @@ REQUIRED_RSA_HEADLINES = [f"Headline {index}" for index in range(1, 16)]
 REQUIRED_RSA_DESCRIPTIONS = [f"Description {index}" for index in range(1, 5)]
 ALLOWED_KEYWORD_TYPES = {"Phrase", "Negative Phrase"}
 DISALLOWED_KEYWORD_TYPES = {"Broad", "Exact"}
-SEARCH_NETWORK_VALUES = {"Google search", "Search"}
+SEARCH_NETWORK_VALUE = "Google search"
 OFF_VALUES = {"Off", "Disabled", "No", "False", "0"}
 
 
@@ -143,15 +144,15 @@ def validate_campaign_row(row: dict[str, str], row_number: int, issues: list[Val
         return
 
     networks = row.get("Networks", "").strip()
-    if networks and networks not in SEARCH_NETWORK_VALUES:
+    if networks != SEARCH_NETWORK_VALUE:
         add_issue(
             issues,
             "error",
-            "Search campaign row uses an unsupported network value.",
+            "Search campaign row must use Google search only. Search partners are disabled 100 percent of the time.",
             row=row_number,
             column="Networks",
             value=networks,
-            rule="search_network",
+            rule="search_partners_disabled",
         )
 
     budget = row.get("Budget", "").strip()
@@ -319,6 +320,16 @@ def validate_rsa_row(row: dict[str, str], row_number: int, issues: list[Validati
             add_issue(issues, "error", f"RSA row is missing {headline}.", row=row_number, column=headline, rule="rsa_headline_required")
         elif len(value) > HEADLINE_LIMIT:
             add_issue(issues, "error", f"{headline} exceeds {HEADLINE_LIMIT} characters.", row=row_number, column=headline, value=value, rule="headline_length")
+        elif len(value) < HEADLINE_MINIMUM:
+            add_issue(
+                issues,
+                "error",
+                f"{headline} is too short for current RSA quality rules. Use at least {HEADLINE_MINIMUM} characters with concrete value.",
+                row=row_number,
+                column=headline,
+                value=value,
+                rule="headline_minimum_value",
+            )
 
     for description in REQUIRED_RSA_DESCRIPTIONS:
         value = row.get(description, "").strip()
