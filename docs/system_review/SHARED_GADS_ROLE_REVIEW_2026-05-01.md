@@ -46,9 +46,26 @@ Compatibility decision:
 - the old client-shaped `generate_campaign(...)` entry point now fails clearly instead of generating unsafe account-specific output
 - older callers can still import `SearchCSVGenerator`, but must use the generic row-building methods
 
-### Salvage For Search Editor Workflow
+### Active Generic Search Exporter
 
 - `shared/gads/core/business_logic/google_ads_editor_exporter.py`
+
+Role:
+
+- compatibility import path for older exporter references
+- active only for Search staging output
+- delegates row generation to `SearchCSVGenerator`
+- writes UTF-16 tab-separated files through `save_csv(...)`
+- validates exported files through `shared/rebuild/staging_validator.py`
+
+Compatibility decision:
+
+- Search export stays active when callers pass generic campaign, ad group, keyword, RSA, and location data
+- PMAX, Display, Shopping, Video, and Discovery export fail clearly until those workflows are explicitly activated
+- old content auto-correction behavior was removed because the current process should validate output, not silently rewrite source decisions
+
+### Salvage For Search Editor Workflow
+
 - keyword, ad group, and extension tools under `shared/gads/tools/`
 
 Useful ideas:
@@ -126,14 +143,34 @@ What stayed out of scope:
 - no client-data deletion
 - no business-specific campaign strategy moved into shared code
 
+## Google Ads Editor Exporter Cleanup Completed
+
+`shared/gads/core/business_logic/google_ads_editor_exporter.py` has been narrowed from a universal auto-correcting exporter into a Search-only staging exporter.
+
+What changed:
+
+- removed PMAX activation from the active exporter path
+- removed silent text auto-correction during export
+- removed UTF-8 BOM output in favor of UTF-16 tab-separated staging files
+- preserved old import names for compatibility
+- added validator-backed export and validation methods
+- added synthetic tests proving Search output validates and PMAX remains inactive
+
+What stayed out of scope:
+
+- no API upload
+- no PMAX generation
+- no extension activation
+- no client-specific campaign strategy moved into shared code
+
 ## Next Recommended Cleanup Batch
 
-Continue with `shared/gads/core/business_logic/google_ads_editor_exporter.py`.
+Continue with Search support tools under `shared/gads/tools/`.
 
 Goal:
 
-- decide whether it becomes a generic active exporter or stays salvage-only
-- remove unsafe auto-correction behavior unless the output is validated by `shared/rebuild/staging_validator.py`
-- preserve useful Google Ads Editor export concepts without creating a second staging authority
+- classify keyword, ad group, ad extension, campaign planning, and reference tools as active helper, reference-only, salvage, or delete-later
+- rewrite only reusable Search-safe pieces into active staging helpers
+- keep PMAX, API upload, Broad, and Exact behavior inactive unless a later phase explicitly activates them
 
 Do not edit PMAX or API tools in the same PR.
