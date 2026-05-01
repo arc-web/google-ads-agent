@@ -1,0 +1,444 @@
+row,column,headline,chars,rule,message
+12,Headline 1,Child Psychiatry Ashburn,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 2,Psych NP Appointments,21,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 3,Medication Mgmt Support,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 4,Ashburn Psychiatry Care,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 5,Accepting New Patients,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 6,In-Person Psychiatry,20,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 11,Care Planning Support,21,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 13,Think Happy Live Healthy,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 14,Book Psychiatry Consult,23,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+12,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 1,Child Psychiatry Ashburn,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 2,Psych NP Appointments,21,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 3,Medication Mgmt Support,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 4,Ashburn Psychiatry Care,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 5,Accepting New Patients,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 6,In-Person Psychiatry,20,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 11,Care Planning Support,21,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 13,Think Happy Live Healthy,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 14,Book Psychiatry Consult,23,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+20,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 1,Child Psychiatry Ashburn,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 2,Psych NP Appointments,21,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 3,Medication Mgmt Support,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 4,Ashburn Psychiatry Care,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 5,Accepting New Patients,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 6,In-Person Psychiatry,20,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 11,Care Planning Support,21,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 13,Think Happy Live Healthy,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 14,Book Psychiatry Consult,23,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+28,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 1,Adult Psychiatry Ashburn,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 2,Psych NP Appointments,21,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 3,Medication Mgmt Support,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 4,Ashburn Psychiatry Care,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 5,Accepting New Patients,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 6,In-Person Psychiatry,20,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 11,Care Planning Support,21,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 13,Think Happy Live Healthy,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 14,Book Psychiatry Consult,23,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+38,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 1,Adult Psychiatry Ashburn,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 2,Psych NP Appointments,21,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 3,Medication Mgmt Support,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 4,Ashburn Psychiatry Care,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 5,Accepting New Patients,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 6,In-Person Psychiatry,20,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 11,Care Planning Support,21,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 13,Think Happy Live Healthy,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 14,Book Psychiatry Consult,23,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+48,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 1,Adult Psychiatry Ashburn,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 2,Psych NP Appointments,21,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 3,Medication Mgmt Support,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 4,Ashburn Psychiatry Care,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 5,Accepting New Patients,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 6,In-Person Psychiatry,20,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 11,Care Planning Support,21,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 13,Think Happy Live Healthy,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 14,Book Psychiatry Consult,23,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+58,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 3,Anxiety Therapy Near You,24,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 5,Anxiety Therapy Help,20,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 8,Anxiety Counseling,18,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 9,Northern Virginia Care,22,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 11,Book Therapy Appointment,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 12,Support That Fits Life,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 14,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+66,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 3,Anxiety Therapy Near You,24,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 5,Anxiety Therapy Help,20,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 8,Anxiety Counseling,18,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 9,Book Therapy Appointment,24,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 11,Northern Virginia Care,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 12,Local Appointments Open,23,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 13,Support That Fits Life,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+74,Headline 15,Care Near You Today,19,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 4,Anxiety Therapy Near You,24,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 5,Anxiety Therapy Ashburn,23,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 7,Anxiety Therapy Help,20,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 10,Anxiety Counseling,18,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 11,Ashburn Care,12,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 12,Book Therapy Appointment,24,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 13,Northern Virginia Care,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 14,Support That Fits Life,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+86,Headline 15,Appointments Available,22,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 2,ADHD Therapist Near You,23,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 4,ADHD Therapy Near You,21,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 7,Northern Virginia Care,22,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 8,Ashburn Care,12,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 9,Book Therapy Appointment,24,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 10,Support That Fits Life,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 11,Appointments Available,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 12,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 13,Mental Health Support,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 14,Telehealth Available,20,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+96,Headline 15,Think Happy Live Healthy,24,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 2,ADHD Therapist Near You,23,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 4,ADHD Therapy Near You,21,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 7,Book Therapy Appointment,24,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 8,Ashburn Care,12,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 9,Northern Virginia Care,22,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 10,Local Appointments Open,23,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 11,Support That Fits Life,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 13,Care Near You Today,19,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 14,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+106,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 3,ADHD Therapist Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 5,ADHD Therapy Near You,21,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 6,ADHD Therapy Ashburn,20,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 10,Book Therapy Appointment,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 11,Northern Virginia Care,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 12,Support That Fits Life,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 14,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+120,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 5,Depression Therapy Help,23,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 10,Book Therapy Appointment,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 11,Support That Fits Life,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 13,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 14,Mental Health Support,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+127,Headline 15,Telehealth Available,20,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 5,Depression Therapy Help,23,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 8,Book Therapy Appointment,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 11,Local Appointments Open,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 12,Support That Fits Life,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 14,Care Near You Today,19,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+134,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+146,Headline 7,Depression Therapy Help,23,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+146,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+146,Headline 11,Book Therapy Appointment,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+146,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+146,Headline 13,Support That Fits Life,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+146,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+146,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 1,LGBTQ Therapist Near You,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 5,LGBTQIA Therapy Help,20,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 10,Book Therapy Appointment,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 11,Support That Fits Life,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 13,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 14,Mental Health Support,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+152,Headline 15,Telehealth Available,20,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 1,LGBTQ Therapist Near You,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 5,LGBTQIA Therapy Help,20,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 8,Book Therapy Appointment,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 11,Local Appointments Open,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 12,Support That Fits Life,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 14,Care Near You Today,19,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+158,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 1,LGBTQ Therapist Near You,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 6,LGBTQIA Therapy Help,20,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 7,LGBTQIA+ Therapy Ashburn,24,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 11,Book Therapy Appointment,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 13,Support That Fits Life,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+168,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 3,Stress Therapy Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 6,Stress Therapy Help,19,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 10,Book Therapy Appointment,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 11,Support That Fits Life,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 13,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 14,Mental Health Support,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+173,Headline 15,Telehealth Available,20,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 3,Stress Therapy Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 6,Stress Therapy Help,19,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 8,Book Therapy Appointment,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 11,Local Appointments Open,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 12,Support That Fits Life,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 14,Care Near You Today,19,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+178,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 4,Stress Therapy Near You,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 5,Stress Therapy Ashburn,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 8,Stress Therapy Help,19,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 11,Book Therapy Appointment,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 13,Support That Fits Life,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+186,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 2,Grief Therapist Near You,24,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 7,Grief Therapy Help,18,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 8,Grief Support Counseling,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 9,Northern Virginia Care,22,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 11,Book Therapy Appointment,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 12,Support That Fits Life,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 14,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+192,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 2,Grief Therapist Near You,24,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 7,Grief Therapy Help,18,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 8,Grief Support Counseling,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 9,Book Therapy Appointment,24,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 11,Northern Virginia Care,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 12,Local Appointments Open,23,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 13,Support That Fits Life,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+198,Headline 15,Care Near You Today,19,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+208,Headline 2,Grief Therapist Near You,24,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+208,Headline 9,Grief Therapy Help,18,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+208,Headline 10,Grief Support Counseling,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+208,Headline 11,Ashburn Care,12,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+208,Headline 12,Book Therapy Appointment,24,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+208,Headline 13,Northern Virginia Care,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+208,Headline 14,Support That Fits Life,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+208,Headline 15,Appointments Available,22,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 3,Trauma Therapy Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 6,Trauma Therapy Help,19,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 10,Book Therapy Appointment,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 11,Support That Fits Life,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 13,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 14,Mental Health Support,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+213,Headline 15,Telehealth Available,20,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 3,Trauma Therapy Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 6,Trauma Therapy Help,19,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 8,Book Therapy Appointment,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 11,Local Appointments Open,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 12,Support That Fits Life,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 14,Care Near You Today,19,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+218,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 4,Trauma Therapy Near You,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 5,Trauma Therapy Ashburn,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 8,Trauma Therapy Help,19,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 11,Book Therapy Appointment,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 13,Support That Fits Life,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+226,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+232,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+232,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+232,Headline 10,Book Therapy Appointment,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+232,Headline 11,Support That Fits Life,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+232,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+232,Headline 13,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+232,Headline 14,Mental Health Support,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+232,Headline 15,Telehealth Available,20,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+238,Headline 8,Book Therapy Appointment,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+238,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+238,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+238,Headline 11,Local Appointments Open,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+238,Headline 12,Support That Fits Life,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+238,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+238,Headline 14,Care Near You Today,19,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+238,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+248,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+248,Headline 11,Book Therapy Appointment,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+248,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+248,Headline 13,Support That Fits Life,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+248,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+248,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+256,Headline 6,Northern Virginia Care,22,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+256,Headline 7,Ashburn Care,12,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+256,Headline 8,Support For IEP Planning,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+256,Headline 11,Child Psych Assessment,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+256,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+256,Headline 14,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+256,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+263,Headline 6,Support For IEP Planning,24,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+263,Headline 7,Ashburn Care,12,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+263,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+263,Headline 10,Local Appointments Open,23,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+263,Headline 12,Child Psych Assessment,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+263,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+263,Headline 14,Care Near You Today,19,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+275,Headline 8,Ashburn Care,12,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+275,Headline 9,Support For IEP Planning,24,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+275,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+275,Headline 13,Child Psych Assessment,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+275,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+282,Headline 4,Learning Evaluation Help,24,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+282,Headline 9,Northern Virginia Care,22,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+282,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+282,Headline 11,Support For IEP Planning,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+282,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+282,Headline 14,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+282,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+289,Headline 4,Learning Evaluation Help,24,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+289,Headline 9,Support For IEP Planning,24,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+289,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+289,Headline 11,Northern Virginia Care,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+289,Headline 12,Local Appointments Open,23,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+289,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+289,Headline 14,Care Near You Today,19,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+301,Headline 6,Learning Evaluation Help,24,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+301,Headline 11,Ashburn Care,12,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+301,Headline 12,Support For IEP Planning,24,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+301,Headline 13,Northern Virginia Care,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+301,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 3,Gifted Testing Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 4,Schedule Gifted Testing,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 5,Gifted Testing Help,19,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 10,Support For IEP Planning,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 11,Appointments Available,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 13,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 14,Mental Health Support,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+306,Headline 15,Book Your Assessment,20,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 3,Gifted Testing Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 4,Schedule Gifted Testing,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 5,Gifted Testing Help,19,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 8,Support For IEP Planning,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 11,Local Appointments Open,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 13,Care Near You Today,19,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+311,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 4,Gifted Testing Near You,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 5,Gifted Testing Ashburn,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 6,Schedule Gifted Testing,23,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 7,Gifted Testing Help,19,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 11,Support For IEP Planning,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+319,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+327,Headline 3,Young Adult ADHD Testing,24,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+327,Headline 4,ADHD Evaluation for Kids,24,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+327,Headline 6,Ashburn & Falls Church,22,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+327,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+327,Headline 11,Support For IEP Planning,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+327,Headline 13,ADHD Assessment Near You,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+327,Headline 15,Think Happy Live Healthy,24,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+335,Headline 3,Young Adult ADHD Testing,24,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+335,Headline 4,ADHD Evaluation for Kids,24,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+335,Headline 6,Ashburn & Falls Church,22,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+335,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+335,Headline 11,Support For IEP Planning,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+335,Headline 13,ADHD Assessment Near You,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+335,Headline 15,Think Happy Live Healthy,24,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+349,Headline 3,Young Adult ADHD Testing,24,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+349,Headline 4,ADHD Evaluation for Kids,24,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+349,Headline 6,Ashburn & Falls Church,22,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+349,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+349,Headline 11,Support For IEP Planning,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+349,Headline 13,ADHD Assessment Near You,24,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+349,Headline 15,Think Happy Live Healthy,24,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+354,Headline 6,Northern Virginia Care,22,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+354,Headline 7,Ashburn Care,12,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+354,Headline 8,Support For IEP Planning,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+354,Headline 11,Kindergarten Assessment,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+354,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+354,Headline 14,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+354,Headline 15,Mental Health Support,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+359,Headline 6,Support For IEP Planning,24,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+359,Headline 7,Ashburn Care,12,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+359,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+359,Headline 11,Kindergarten Assessment,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+359,Headline 12,Local Appointments Open,23,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+359,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+359,Headline 14,Care Near You Today,19,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+367,Headline 8,Ashburn Care,12,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+367,Headline 9,Support For IEP Planning,24,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+367,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+367,Headline 13,Kindergarten Assessment,23,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+367,Headline 14,Appointments Available,22,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 3,Autism Testing Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 4,Schedule Autism Testing,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 5,Autism Testing Help,19,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 8,Northern Virginia Care,22,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 10,Support For IEP Planning,24,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 11,Appointments Available,22,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 13,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 14,Mental Health Support,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+373,Headline 15,Book Your Assessment,20,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 3,Autism Testing Near You,23,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 4,Schedule Autism Testing,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 5,Autism Testing Help,19,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 8,Support For IEP Planning,24,headline_minimum_value,Headline 8 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 9,Ashburn Care,12,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 10,Northern Virginia Care,22,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 11,Local Appointments Open,23,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 12,Appointments Available,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 13,Care Near You Today,19,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+379,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 4,Autism Testing Near You,23,headline_minimum_value,Headline 4 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 5,Autism Testing Ashburn,22,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 6,Schedule Autism Testing,23,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 7,Autism Testing Help,19,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 10,Ashburn Care,12,headline_minimum_value,Headline 10 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 11,Support For IEP Planning,24,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 12,Northern Virginia Care,22,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 13,Appointments Available,22,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+389,Headline 15,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 1,Think Happy Live Healthy,24,headline_minimum_value,Headline 1 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 2,Official Practice Site,22,headline_minimum_value,Headline 2 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 3,Ashburn & Falls Church,22,headline_minimum_value,Headline 3 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 5,Testing Appointments,20,headline_minimum_value,Headline 5 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 6,Mental Health Support,21,headline_minimum_value,Headline 6 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 7,Northern Virginia Care,22,headline_minimum_value,Headline 7 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 9,Anthem/CareFirst BCBS,21,headline_minimum_value,Headline 9 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 11,Licensed Clinicians,19,headline_minimum_value,Headline 11 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 12,Care For Families,17,headline_minimum_value,Headline 12 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 13,Book Your Appointment,21,headline_minimum_value,Headline 13 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 14,Psych NP Appointments,21,headline_minimum_value,Headline 14 is too short for current RSA quality rules. Use at least 25 characters with concrete value.
+451,Headline 15,Testing Through Age 21,22,headline_minimum_value,Headline 15 is too short for current RSA quality rules. Use at least 25 characters with concrete value.

@@ -9,21 +9,21 @@ from shared.gads.core.search_campaigns.search_csv_generator import SearchCSVGene
 
 def _headlines() -> list[str]:
     return [
-        "Service Help Today",
-        "Local Team Ready",
-        "Book A Consultation",
-        "Clear Pricing Info",
-        "Trusted Local Help",
-        "Fast Scheduling",
-        "Helpful Answers",
-        "Expert Service",
-        "Plan Your Next Step",
-        "Simple Online Booking",
-        "Focused Support",
-        "Quality Care Team",
-        "Request Details",
-        "Speak With A Team",
-        "Start With A Call",
+        "Get Clear Service Support",
+        "Book A Service Consult Today",
+        "Local Service Team Ready Now",
+        "Compare Your Service Options",
+        "Plan Your Next Service Step",
+        "Trusted Service Guidance Now",
+        "Fast Scheduling Support Today",
+        "Helpful Service Answers Today",
+        "Expert Service Support Team",
+        "Simple Online Service Booking",
+        "Focused Support For Goals",
+        "Quality Care Team Support",
+        "Request Service Details Today",
+        "Speak With A Service Team",
+        "Start With A Service Call",
     ]
 
 
@@ -78,8 +78,19 @@ def test_search_csv_generator_writes_active_utf16_tsv_that_validates(tmp_path):
     assert rows[2]["Criterion Type"] == "Phrase"
     assert rows[2]["Keyword"] == "service consultation"
     assert rows[3]["Ad type"] == "Responsive search ad"
-    assert rows[3]["Headline 15"] == "Start With A Call"
+    assert rows[3]["Headline 15"] == "Start With A Service Call"
     assert rows[3]["Description 4"].startswith("Plan the right service")
+
+
+def test_search_csv_generator_rejects_search_partners():
+    generator = SearchCSVGenerator()
+
+    with pytest.raises(ValueError, match="Search partners are disabled"):
+        generator.add_campaign(
+            "ARC - Search - Services - V1",
+            "125.00",
+            networks="Google search;Search Partners",
+        )
 
 
 @pytest.mark.parametrize("criterion_type", ["Broad", "Exact"])

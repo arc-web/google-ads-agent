@@ -19,6 +19,7 @@ from copy_engine.models import OpenRouterClient
 # ---------------------------------------------------------------------------
 
 CHAR_LIMIT = 30
+CHAR_MIN = 25
 MIN_HEADLINES = 8
 MAX_HEADLINES = 15
 
@@ -391,7 +392,7 @@ You MUST produce headlines labeled with these exact mix_type values:
 | cta          | 1         | [Action verb] + [Offer] |
 
 ## Hard Rules - Every headline MUST comply
-1. Max 30 characters (including spaces). Count carefully before writing.
+1. Use 25 to 30 characters (including spaces). Count carefully before writing.
 2. No exclamation marks (!) anywhere.
 3. No ALL CAPS words (3+ uppercase letters) unless they are recognized acronyms
    like ADHD, PTSD, EMDR, OCD, CBT, DBT, IOP, PHP.
@@ -519,9 +520,12 @@ Return only the gap headlines as a JSON array."""
                 f"'{text}' exceeds {CHAR_LIMIT} chars ({len(text)} chars)"
             )
 
-        # Min length sanity
-        if len(text) < 3:
-            violations.append(f"'{text}' is too short to be a headline")
+        # Min value density
+        if len(text) < CHAR_MIN:
+            violations.append(
+                f"'{text}' is too short for current headline quality rules "
+                f"({len(text)} chars, minimum {CHAR_MIN})"
+            )
 
         # Exclamation mark
         if "!" in text:

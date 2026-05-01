@@ -38,6 +38,7 @@ Client folders are active data assets and examples until the repo owner explicit
 - Website scans are a first-class source of truth for what prospects can verify before they convert.
 - Account and analytics data are a first-class source of truth only when the prior structure produced clean evidence.
 - Search campaign rebuilds use phrase match only by default.
+- Search campaign rebuilds must use Google search only. Do not use Search partners. Disable Search partners 100 percent of the time.
 - Do not use broad match.
 - Do not use exact match unless the user explicitly requests a controlled later test.
 - Keywords must use Google Ads Editor format: plain keyword text in `Keyword`, with `Criterion Type` set to `Phrase`.
@@ -46,6 +47,8 @@ Client folders are active data assets and examples until the repo owner explicit
 - City ad groups must include all approved target city modifiers, not just one city.
 - RSA ads need 15 headlines and 4 descriptions when possible.
 - Headlines must be useful ad copy, not one-word labels or bare service names.
+- RSA headlines must be 25 to 30 characters whenever possible. Short vague headlines like `Ashburn Care` or `Anxiety Counseling` fail quality review.
+- Headlines must use the available character space for value, specificity, action, proof, or clear next steps. Do not use ominous or generic labels.
 - Copy must be service-specific, value-driven, and compliant with the client industry.
 - Every generated build must include validation output and a human review file.
 - Client-facing reports must be designed in HTML first and exported to PDF with Chrome headless.
@@ -115,7 +118,7 @@ A rebuild run should create:
 <claude-mem-context>
 # Memory Context
 
-# [google_ads_agent] recent context, 2026-05-01 4:23pm GMT+8
+# [google_ads_agent] recent context, 2026-05-01 8:55pm GMT+8
 
 No previous sessions found.
 </claude-mem-context>
