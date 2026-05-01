@@ -367,3 +367,29 @@ Result:
 - issues: 0
 
 This does not make the old `shared/validators/` folder obsolete. It starts the safer path: move validated ideas into active rebuild tooling, test them against real client artifacts, then later decide what older files are duplicated or stale.
+
+## Active Validator Tests Added
+
+Focused tests now exist here:
+
+- `tests/test_staging_validator.py`
+
+Protected behavior:
+
+- UTF-16 Google Ads Editor staging files can be read.
+- Phrase keyword rows pass when `Keyword` is plain text and `Criterion Type` is `Phrase`.
+- Campaign-level `Negative Phrase` rows pass without an ad group.
+- Broad and exact match keyword rows fail.
+- Quoted keyword text fails because match type belongs in `Criterion Type`.
+- Campaign-level broad match setting must remain off.
+- Missing `Location ID` is a warning, not a failure, because the process prefers IDs when available.
+
+Test command:
+
+```bash
+python3 -m pytest tests/test_staging_validator.py -q
+```
+
+Result:
+
+- 6 passed
