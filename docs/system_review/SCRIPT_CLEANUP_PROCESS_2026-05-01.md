@@ -387,3 +387,31 @@ Earlier checks to add to future loops:
 - scan configs for non-active campaign type recommendations
 - test loader defaults rather than only reading YAML by eye
 - keep salvage access explicit so non-active configs cannot be loaded accidentally
+
+## Shared Campaign Tools Search Builder Loop
+
+Next subsystem after `shared/config/`:
+
+- `shared/tools/campaign/`
+
+Outcome:
+
+- added `shared/tools/campaign/search_campaign_builder.py` as the active campaign-build helper
+- made the active helper produce Search-only staging data
+- required phrase keywords, 15 RSA headlines, and 4 descriptions
+- routed output through `GoogleAdsEditorExporter` and the active staging validator
+- retired `campaign_plan.py` and `run_campaign_plan.sh` as inactive compatibility paths
+- documented older campaign tools as salvage-only until individually migrated
+- added tests proving the active builder validates and stale keyword shapes are rejected
+
+Reusable lesson:
+
+- generation tools need active wrappers before old client-shaped scripts are mined for useful ideas
+- executable legacy scripts should fail clearly rather than generate stale PMAX or client-specific artifacts
+- campaign generation should validate immediately after writing staging output
+
+Earlier checks to add to future loops:
+
+- scan generator scripts for one-client examples before activating them
+- block old shell runners that produce stale artifacts
+- require active builders to produce validator-passing staging files in tests
