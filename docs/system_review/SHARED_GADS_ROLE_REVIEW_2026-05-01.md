@@ -28,15 +28,31 @@ Role:
 - useful reference material for Google Ads concepts
 - not a pass/fail authority for generated rebuilds
 
-### Salvage For Search Editor Workflow
+### Active Generic Search Staging Helper
 
 - `shared/gads/core/search_campaigns/search_csv_generator.py`
+
+Role:
+
+- generic helper for building Google Ads Editor Search staging TSVs
+- writes active `Ad Group` and `Criterion Type` casing
+- writes UTF-16 tab-separated output
+- uses phrase-only keyword rows and negative phrase rows
+- requires 15 RSA headlines and 4 RSA descriptions before writing ad rows
+- validates written output with `shared/rebuild/staging_validator.py`
+
+Compatibility decision:
+
+- the old client-shaped `generate_campaign(...)` entry point now fails clearly instead of generating unsafe account-specific output
+- older callers can still import `SearchCSVGenerator`, but must use the generic row-building methods
+
+### Salvage For Search Editor Workflow
+
 - `shared/gads/core/business_logic/google_ads_editor_exporter.py`
 - keyword, ad group, and extension tools under `shared/gads/tools/`
 
 Useful ideas:
 
-- CSV generation structure
 - keyword and ad group organization
 - extension planning
 - Google Ads Editor export concepts
@@ -46,7 +62,6 @@ Do not activate yet because current findings show:
 - old `Ad group` and `Criterion type` casing
 - Exact and Broad match defaults
 - old 3-headline and 2-description ad assumptions
-- one-client Wright Impact Windows copy and URL logic
 - UTF-8-only writer paths in places where active artifacts are UTF-16 tab-separated files
 
 ### Salvage Only Until A PMAX Phase
@@ -92,14 +107,33 @@ The package imports were made salvage-safe:
 
 This does not activate the old generators. It only makes the folder safe to inspect and test as salvage material.
 
+## Search CSV Generator Cleanup Completed
+
+`shared/gads/core/search_campaigns/search_csv_generator.py` has been rewritten from stale account-shaped salvage into a generic active staging helper.
+
+What changed:
+
+- removed old one-account copy, URL, geography, and keyword logic
+- removed Broad and Exact output behavior from shared generation
+- switched output to active Google Ads Editor staging columns
+- added strict RSA asset requirements before ad rows are emitted
+- added `write_and_validate(...)` so the generator proves its output through the active staging validator
+
+What stayed out of scope:
+
+- no API upload
+- no PMAX activation
+- no client-data deletion
+- no business-specific campaign strategy moved into shared code
+
 ## Next Recommended Cleanup Batch
 
-Start with `shared/gads/core/search_campaigns/search_csv_generator.py`.
+Continue with `shared/gads/core/business_logic/google_ads_editor_exporter.py`.
 
 Goal:
 
-- convert it from Wright-specific, Exact/Broad, old text-ad output into either:
-  - a compatibility wrapper that clearly points to the active staging workflow, or
-  - a generic Search CSV generator that writes active Google Ads Editor staging format and passes `shared/rebuild/staging_validator.py`
+- decide whether it becomes a generic active exporter or stays salvage-only
+- remove unsafe auto-correction behavior unless the output is validated by `shared/rebuild/staging_validator.py`
+- preserve useful Google Ads Editor export concepts without creating a second staging authority
 
 Do not edit PMAX or API tools in the same PR.

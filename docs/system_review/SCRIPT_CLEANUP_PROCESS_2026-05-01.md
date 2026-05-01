@@ -162,3 +162,33 @@ First-pass lessons:
 Current role review:
 
 - `docs/system_review/SHARED_GADS_ROLE_REVIEW_2026-05-01.md`
+
+## Shared GADS Search Generator Loop
+
+First behavior cleanup:
+
+- `shared/gads/core/search_campaigns/search_csv_generator.py`
+
+Outcome:
+
+- converted stale client-shaped generator code into a generic Search staging helper
+- kept the import path and class name stable for compatibility
+- retired the old `generate_campaign(...)` account-shaped path with a clear error
+- made the helper write UTF-16 tab-separated output
+- made the helper validate through `shared/rebuild/staging_validator.py`
+- added synthetic tests with no client fixture dependency
+
+Reusable lesson:
+
+- when an old shared script contains business-specific strategy, do not try to generalize the strategy by guessing
+- preserve useful mechanics, remove account-specific assumptions, and require callers to pass client facts explicitly
+- if old behavior cannot be made safe without strategic choices, keep a compatibility surface that fails clearly instead of silently generating bad staging output
+
+Earlier checks to add to future loops:
+
+- scan target files for one-account names before editing
+- scan for old Google Ads Editor column casing
+- scan for Broad or Exact output paths
+- scan for old 3-headline and 2-description ad output
+- verify that any writer uses the active UTF-16 tab-separated artifact format
+- confirm that the script delegates pass/fail authority to the active staging validator
