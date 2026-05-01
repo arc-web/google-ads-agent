@@ -5,9 +5,9 @@
 limits:
   # Text & Responsive Search Ads (RSA)
   headlines_max: 15
-  descriptions_max: 5
+  descriptions_max: 4
 
-  # Performance Max (PMAX)
+  # Performance Max reference only. PMAX is not active in the current workflow.
   long_headlines_max: 5
 
   # Sitelink Extensions
@@ -19,8 +19,5 @@ limits:
   # Search Theme Assets (RSA)
   search_themes_max: 10
 
-# Business-specific overrides (client-dependent)
-business_overrides:
-  my_expert_resume:
-    headlines_max: 12  # Reduced for brand consistency
-    search_themes_max: 8
+# Business-specific overrides belong under clients/{agency}/{client}/.
+business_overrides: {}

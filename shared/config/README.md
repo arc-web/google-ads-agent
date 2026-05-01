@@ -1,98 +1,59 @@
-# Configuration Directory
+# Shared Configuration
 
-This directory contains all configuration files and settings for the Google Ads agent, providing structured, validated configuration management across the platform.
+This folder contains generic configuration for the active Google Ads Agent workflow.
 
-## Directory Relationships
+## Active Role
 
-### Parent Dependencies
-- **Agent Layer**: `../` (google_ads_agent)
-  - Provides runtime environment and execution context
-  - Consumes configuration for business logic and API operations
+The active workflow is Search-first Google Ads Editor staging.
 
-### Child Components
-- **`google_ads_config_loader.py`**: Main configuration loading and validation engine
-  - Loads and validates all YAML configuration files
-  - Provides type-safe configuration access to other components
-  - Implements configuration caching and hot-reloading
+Active configuration:
 
-- **`business_config.yaml`**: Client-specific business rules and brand guidelines
-  - Defines prohibited keywords and required terms
-  - Specifies content quality standards and compliance requirements
-  - Contains brand voice and tone guidelines
+- `campaign_defaults.yaml`
+- `business_config.yaml`
+- `ad_limits.yaml`
+- `ad_character_limits.yaml`
+- `google_ads_config_loader.py`
 
-- **`campaign_defaults.yaml`**: Campaign structure and bidding defaults
-  - Defines default settings for all campaign types (Search, Display, PMAX, etc.)
-  - Specifies bid strategies and budget recommendations
-  - Contains geographic targeting and ad scheduling defaults
+The active config defaults must support:
 
-- **`ad_limits.yaml`**: Google Ads format limitations reference
-  - Documents character limits for headlines, descriptions, paths
-  - Defines format-specific constraints and requirements
-  - Used for validation during ad creation
+- Search campaigns
+- phrase-only keyword staging
+- `Broad match keywords: Off`
+- 15 RSA headlines
+- 4 RSA descriptions
+- UTF-16 tab-separated staging output
+- manual human review before account changes
 
-- **`ad_character_limits.yaml`**: Complete character limits and validation rules
-  - Comprehensive reference for all Google Ads format limits
-  - Includes validation rules and prohibited characters
-  - Supports automated ad content validation
+## Inactive Reference
 
-- **`core_agent_traits.yaml`**: Agent behavior and knowledge base
-  - Defines absolute prohibitions (never provide timelines)
-  - Specifies business type identification rules
-  - Contains quality assurance checklists
+PMAX, Display, Shopping, Video, App, Discovery, Local Services, API upload, and account mutation are not active defaults.
 
-### Sibling Relationships
-- **`gads/core/`**: Consumes configuration for API operations and business logic
-- **`apps/`**: Uses configuration for app-specific behavior and workflows
-- **`tools/`**: References configuration for tool parameters and validation
+If a config mentions those areas, it is reference-only until a focused activation loop adds tests and updates the active process docs.
 
-### Configuration Flow Relationships
-1. **Loading**: `google_ads_config_loader.py` loads and validates all YAML files
-2. **Distribution**: Provides configuration to `../gads/core/` for business logic
-3. **Application**: Supplies settings to `../apps/` for workflow execution
-4. **Validation**: Used by `../tools/` for content and parameter validation
+## Client Facts
 
-### Cross-Agent Dependencies
-- **Shared Validation**: `../../shared/` may reference common validation rules
-- **Client-Specific**: `../../../clients/my_expert_resume/` uses client-specific overrides
-- **Platform Standards**: Aligns with platform-wide configuration patterns
+Client names, services, brand terms, target audiences, business type, compliance facts, and campaign strategy belong under:
 
-## File Dependencies
-- **Python Runtime**: Requires Python for `google_ads_config_loader.py` execution
-- **YAML Parser**: Uses PyYAML for configuration file parsing
-- **Path Resolution**: Depends on relative path resolution from agent root
-
-## Usage
-
-```python
-from config.google_ads_config_loader import ConfigLoader
-
-loader = ConfigLoader()
-
-# Load campaign configuration
-campaign_config = loader.load_campaign_config("search", "maximize_conversions")
-
-# Load business rules
-business_config = loader.load_business_config()
-
-# Load ad limits
-limits = loader.load_ad_limits()
+```text
+clients/{agency}/{client}/
 ```
 
-## Configuration Hierarchy
-1. **Platform Defaults**: Base settings for all Google Ads operations
-2. **Campaign Specific**: Type and bid strategy specific overrides
-3. **Client Specific**: Business rule and brand customizations
-4. **Runtime Overrides**: Environment-specific modifications
+Do not put one client or one industry as the shared default.
 
-## Validation Rules
-- All configurations validated against JSON schemas
-- Type checking and range validation implemented
-- Cross-reference validation between related settings
-- Hot-reloading supported for development
+## Loader Contract
 
-## Links
-- **Parent Agent**: `../README.md` (agent documentation)
-- **Consumer - Core Logic**: `../gads/core/` (uses configuration)
-- **Consumer - Apps**: `../apps/` (workflow configuration)
-- **Consumer - Tools**: `../tools/` (validation and parameters)
-- **Client Overrides**: `../../../clients/my_expert_resume/config/` (client-specific settings)
+By default, `ConfigLoader` returns active Search config only. It raises for inactive campaign types unless initialized with:
+
+```python
+ConfigLoader(allow_inactive_campaign_types=True)
+```
+
+That flag is for salvage review only. It does not activate non-Search workflows.
+
+## Validation Contract
+
+Generated staging artifacts must still pass:
+
+```bash
+python3 shared/rebuild/staging_validator.py --csv PATH_TO_STAGING_CSV
+```

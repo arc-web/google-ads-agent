@@ -1,57 +1,60 @@
-# Business Configuration
-# Client-specific business settings and brand guidelines
+# Generic Business Configuration
+# Client-specific business facts belong under clients/{agency}/{client}/.
 
 business:
-  # Client Information
-  name: "My Expert Resume"
-  industry: "Professional Services"
-  target_audience: "Job Seekers"
+  name: "Generic Client"
+  industry: "To be defined from client onboarding"
+  target_audience: "To be defined from client onboarding"
 
-  # Brand Guidelines
   brand_guidelines:
-    enabled: true  # ALWAYS enforce brand compliance
-    tone: "Professional, Authoritative, Helpful"
-    prohibited_terms: ["cheap", "free", "guarantee", "warranty", "lowest price", "best price", "discount", "sale", "bargain"]
-    required_terms: ["expert", "professional", "certified", "specialized", "experienced"]
-    never_use_terms: ["buy", "cheap", "free"]  # Replace with "get quotes", "learn more", "professional services"
+    enabled: false
+    tone: "Clear, factual, client-specific"
+    prohibited_terms: []
+    required_terms: []
+    never_use_terms: []
 
-  # Content Standards - MAXIMUM Quality Only
   content_standards:
-    min_quality_score: 10  # ALWAYS 10/10 - never accept less
     require_proofreading: true
     allow_emojis: false
     allow_exclamation_points: false
     enforce_perfect_grammar: true
     require_factual_accuracy: true
 
-  # Compliance Requirements
   compliance:
-    gdpr_compliant: true
-    ccpa_compliant: true
-    industry_regulations: ["FTC Advertising Guidelines"]
+    gdpr_compliant: false
+    ccpa_compliant: false
+    industry_regulations: []
 
-  # Service Offerings
-  services:
-    - "Resume Writing"
-    - "CV Writing"
-    - "LinkedIn Optimization"
-    - "Career Coaching"
-    - "Interview Preparation"
+  services: []
 
-  # Business Type Classification (CRITICAL - Never Assume)
   business_type_classification:
     online_business:
-      indicators: ["online services", "digital platform", "remote consultations", "virtual appointments", "online courses", "SaaS", "web-based"]
+      indicators:
+        - "online services"
+        - "digital platform"
+        - "remote consultations"
+        - "virtual appointments"
       keyword_rules:
-        must_include: ["online"]
-        never_include: ["near me", "local", "in-person", "physical location"]
-        acceptable_alternatives: ["virtual", "remote", "digital", "cloud-based"]
+        must_include: []
+        never_include: []
+        acceptable_alternatives:
+          - "virtual"
+          - "remote"
+          - "online"
 
     physical_business:
-      indicators: ["brick-and-mortar", "local customers", "in-person services", "retail store", "office location", "service area"]
+      indicators:
+        - "brick-and-mortar"
+        - "local customers"
+        - "in-person services"
+        - "retail store"
+        - "office location"
+        - "service area"
       keyword_rules:
-        must_include: ["near me", "local", "in your area"]
-        never_include: ["online", "virtual", "remote"]
-        acceptable_alternatives: ["in-person", "visit us", "local service"]
+        must_include: []
+        never_include: []
+        acceptable_alternatives:
+          - "in-person"
+          - "local service"
 
-    verification_required: true  # ALWAYS confirm business type before campaign creation
+    verification_required: true
