@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
-"""
-Search Ad Group Validator
+"""Validate Search ad group rows for the active Google Ads Agent workflow."""
 
-Validates ad group-level settings specific to Search campaigns.
-Ensures ad groups are properly configured for Search network targeting.
-"""
+from __future__ import annotations
 
-from typing import Dict, List, Any, Optional
+from collections import defaultdict
 from dataclasses import dataclass
-import re
+from typing import Any
+
+
+VALID_STATUSES = {"Enabled", "Paused", "Removed"}
+MAX_AD_GROUP_NAME_LENGTH = 255
+MAX_LABELS = 10
+MIN_CPC = 0.01
+MAX_CPC = 50.00
 
 
 @dataclass
 class ValidationIssue:
     """Represents a validation issue found during Search ad group validation."""
+
     level: str
-    severity: str  # 'critical', 'warning', 'info'
+    severity: str
     row_number: int
     column: str
     issue_type: str
@@ -26,276 +31,210 @@ class ValidationIssue:
 
 class SearchAdGroupValidator:
     """
-    Validates ad group-level settings for Search campaigns.
+    Validates Search ad group rows without account-specific assumptions.
 
-    Focuses on Search-specific ad group configuration including:
-    - Ad group status validation
-    - Targeting method verification
-    - Ad group-level bid strategy settings
-    - Ad group organization and labeling
+    This validator checks structural safety for the current Google Ads Editor
+    staging format. It does not force a minimum number of ad groups, naming
+    style, industry language, or one-account campaign architecture.
     """
 
-    def __init__(self, validation_rules: Optional[Dict[str, Any]] = None):
-        """Initialize SearchAdGroupValidator with validation rules."""
-        self.validation_rules = validation_rules or self._get_default_rules()
+    def __init__(self, validation_rules: dict[str, Any] | None = None):
+        rules = validation_rules or {}
+        self.valid_statuses = set(rules.get("valid_statuses", VALID_STATUSES))
+        self.max_ad_group_name_length = int(rules.get("max_ad_group_name_length", MAX_AD_GROUP_NAME_LENGTH))
+        self.max_labels = int(rules.get("max_labels", MAX_LABELS))
+        self.min_cpc = float(rules.get("min_cpc", MIN_CPC))
+        self.max_cpc = float(rules.get("max_cpc", MAX_CPC))
 
-        # Valid ad group statuses
-        self.valid_statuses = ['Enabled', 'Paused', 'Removed']
+    def _issue(
+        self,
+        severity: str,
+        row_number: int,
+        column: str,
+        issue_type: str,
+        message: str,
+        suggestion: str = "",
+    ) -> ValidationIssue:
+        return ValidationIssue(
+            level="adgroup",
+            severity=severity,
+            row_number=row_number,
+            column=column,
+            issue_type=issue_type,
+            message=message,
+            suggestion=suggestion,
+        )
 
-        # Valid targeting methods for Search campaigns
-        self.valid_targeting_methods = [
-            'Manual CPC', 'Target CPA', 'Maximize conversions',
-            'Target ROAS', 'Enhanced CPC'
-        ]
+    def _value(self, row: dict[str, Any], *headers: str) -> str:
+        for header in headers:
+            value = row.get(header)
+            if value is not None and str(value).strip():
+                return str(value).strip()
+        return ""
 
-        # Ad group naming best practices
-        self.max_adgroup_name_length = 30
-        self.adgroup_name_pattern = re.compile(r'^[a-zA-Z0-9\s\-_]+$')
-
-    def _get_default_rules(self) -> Dict[str, Any]:
-        """Get default validation rules for Search ad groups."""
-        return {
-            'adgroup': {
-                'required_fields': ['Ad group', 'Ad group status'],
-                'valid_statuses': ['Enabled', 'Paused', 'Removed'],
-                'naming': {
-                    'max_length': 30,
-                    'allowed_chars': 'letters, numbers, spaces, hyphens, underscores'
-                },
-                'targeting_method_validation': {
-                    'allowed_methods': [
-                        'Manual CPC', 'Target CPA', 'Maximize conversions',
-                        'Target ROAS', 'Enhanced CPC'
-                    ]
-                }
-            }
-        }
-
-    def validate_adgroup_row(self, row: Dict[str, Any], row_number: int) -> List[ValidationIssue]:
+    def validate_adgroup_row(self, row: dict[str, Any], row_number: int) -> list[ValidationIssue]:
         """
         Validate a single ad group row for Search campaign compliance.
 
         Args:
-            row: Dictionary representing a CSV row
-            row_number: Row number in the CSV (for error reporting)
+            row: Dictionary representing a CSV row.
+            row_number: Row number in the CSV for error reporting.
 
         Returns:
-            List of validation issues found
+            List of validation issues found.
         """
-        issues = []
+        issues: list[ValidationIssue] = []
 
-        # Validate ad group name
-        adgroup_name = row.get('Ad group', '').strip()
-        if not adgroup_name:
-            issues.append(ValidationIssue(
-                level='adgroup',
-                severity='critical',
-                row_number=row_number,
-                column='Ad group',
-                issue_type='missing_adgroup_name',
-                message='Ad group name is required',
-                suggestion='Provide a descriptive ad group name (e.g., "Plumbing Services Broward")'
-            ))
-        else:
-            # Check name length
-            if len(adgroup_name) > self.max_adgroup_name_length:
-                issues.append(ValidationIssue(
-                    level='adgroup',
-                    severity='warning',
-                    row_number=row_number,
-                    column='Ad group',
-                    issue_type='adgroup_name_too_long',
-                    message=f'Ad group name "{adgroup_name}" is {len(adgroup_name)} characters (max {self.max_adgroup_name_length})',
-                    suggestion='Shorten ad group name to fit within limit'
-                ))
+        campaign = self._value(row, "Campaign")
+        ad_group = self._value(row, "Ad Group", "Ad group")
+        status = self._value(row, "Status", "Ad group status", "Ad Group status")
 
-            # Check for invalid characters
-            if not self.adgroup_name_pattern.match(adgroup_name):
-                issues.append(ValidationIssue(
-                    level='adgroup',
-                    severity='warning',
-                    row_number=row_number,
-                    column='Ad group',
-                    issue_type='invalid_adgroup_name_chars',
-                    message=f'Ad group name contains invalid characters: "{adgroup_name}"',
-                    suggestion='Use only letters, numbers, spaces, hyphens, and underscores'
-                ))
+        if not campaign:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Campaign",
+                    "missing_campaign",
+                    "Ad group row is missing Campaign.",
+                    "Populate Campaign on every ad group row.",
+                )
+            )
 
-        # Validate ad group status
-        adgroup_status = row.get('Ad group status', '').strip()
-        if not adgroup_status:
-            issues.append(ValidationIssue(
-                level='adgroup',
-                severity='warning',
-                row_number=row_number,
-                column='Ad group status',
-                issue_type='missing_adgroup_status',
-                message='Ad group status is not specified',
-                suggestion='Set to "Enabled" for active ad groups'
-            ))
-        elif adgroup_status not in self.valid_statuses:
-            issues.append(ValidationIssue(
-                level='adgroup',
-                severity='warning',
-                row_number=row_number,
-                column='Ad group status',
-                issue_type='invalid_adgroup_status',
-                message=f'Ad group status "{adgroup_status}" is not standard',
-                suggestion=f'Use one of: {", ".join(self.valid_statuses)}'
-            ))
+        if not ad_group:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Ad Group",
+                    "missing_adgroup_name",
+                    "Ad group name is required.",
+                    "Populate Ad Group on every ad group row.",
+                )
+            )
+        elif len(ad_group) > self.max_ad_group_name_length:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Ad Group",
+                    "adgroup_name_too_long",
+                    f'Ad group name "{ad_group}" is {len(ad_group)} characters.',
+                    f"Shorten ad group name to {self.max_ad_group_name_length} characters or fewer.",
+                )
+            )
 
-        # Validate targeting method (if specified)
-        targeting_method = row.get('Targeting method', '').strip()
-        if targeting_method and targeting_method not in self.valid_targeting_methods:
-            issues.append(ValidationIssue(
-                level='adgroup',
-                severity='info',
-                row_number=row_number,
-                column='Targeting method',
-                issue_type='non_standard_targeting_method',
-                message=f'Targeting method "{targeting_method}" is not in standard list',
-                suggestion=f'Consider: {", ".join(self.valid_targeting_methods[:3])}'
-            ))
+        if status and status not in self.valid_statuses:
+            issues.append(
+                self._issue(
+                    "warning",
+                    row_number,
+                    "Status",
+                    "invalid_adgroup_status",
+                    f'Ad group status "{status}" is not standard.',
+                    f"Use one of: {', '.join(sorted(self.valid_statuses))}.",
+                )
+            )
 
-        # Validate ad group bid strategy settings (if specified)
-        adgroup_bid_strategy = row.get('Ad group bid strategy', '').strip()
-        if adgroup_bid_strategy:
-            # This should typically inherit from campaign, but if specified, validate it
-            valid_adgroup_strategies = ['Manual CPC', 'Target CPA', 'Maximize conversions']
-            if adgroup_bid_strategy not in valid_adgroup_strategies:
-                issues.append(ValidationIssue(
-                    level='adgroup',
-                    severity='warning',
-                    row_number=row_number,
-                    column='Ad group bid strategy',
-                    issue_type='invalid_adgroup_bid_strategy',
-                    message=f'Ad group bid strategy "{adgroup_bid_strategy}" may not be optimal',
-                    suggestion=f'Consider inheriting from campaign or use: {", ".join(valid_adgroup_strategies)}'
-                ))
+        max_cpc = self._value(row, "Ad group max CPC", "Max CPC", "CPC bid")
+        if max_cpc:
+            issues.extend(self._validate_cpc(max_cpc, row_number))
 
-        # Validate ad group max CPC (if specified)
-        max_cpc_str = row.get('Ad group max CPC', '').strip()
-        if max_cpc_str:
-            try:
-                max_cpc = float(max_cpc_str.replace('$', '').replace(',', ''))
-                if max_cpc < 0.01:
-                    issues.append(ValidationIssue(
-                        level='adgroup',
-                        severity='critical',
-                        row_number=row_number,
-                        column='Ad group max CPC',
-                        issue_type='cpc_too_low',
-                        message=f'Max CPC ${max_cpc:.2f} is below minimum $0.01',
-                        suggestion='Increase Max CPC to at least $0.01'
-                    ))
-                elif max_cpc > 50.00:
-                    issues.append(ValidationIssue(
-                        level='adgroup',
-                        severity='warning',
-                        row_number=row_number,
-                        column='Ad group max CPC',
-                        issue_type='cpc_too_high',
-                        message=f'Max CPC ${max_cpc:.2f} is very high',
-                        suggestion='Consider reducing Max CPC for better control'
-                    ))
-            except ValueError:
-                issues.append(ValidationIssue(
-                    level='adgroup',
-                    severity='critical',
-                    row_number=row_number,
-                    column='Ad group max CPC',
-                    issue_type='invalid_cpc_format',
-                    message=f'Invalid Max CPC format: "{max_cpc_str}"',
-                    suggestion='Use numeric format (e.g., 2.50 or $2.50)'
-                ))
-
-        # Validate labels (if specified)
-        labels = row.get('Ad group labels', '').strip()
+        labels = self._value(row, "Ad group labels", "Labels")
         if labels:
-            # Check for label format (comma-separated)
-            if ',' in labels:
-                label_list = [label.strip() for label in labels.split(',')]
-                if len(label_list) > 10:
-                    issues.append(ValidationIssue(
-                        level='adgroup',
-                        severity='info',
-                        row_number=row_number,
-                        column='Ad group labels',
-                        issue_type='too_many_labels',
-                        message=f'Ad group has {len(label_list)} labels (recommended max: 10)',
-                        suggestion='Consider reducing number of labels for better organization'
-                    ))
+            label_list = [label.strip() for label in labels.split(",") if label.strip()]
+            if len(label_list) > self.max_labels:
+                issues.append(
+                    self._issue(
+                        "info",
+                        row_number,
+                        "Labels",
+                        "too_many_labels",
+                        f"Ad group has {len(label_list)} labels.",
+                        f"Keep labels to {self.max_labels} or fewer when possible.",
+                    )
+                )
 
         return issues
 
-    def validate_adgroup_data(self, adgroup_rows: List[Dict[str, Any]]) -> List[ValidationIssue]:
+    def _validate_cpc(self, cpc_text: str, row_number: int) -> list[ValidationIssue]:
+        issues: list[ValidationIssue] = []
+        try:
+            cpc = float(cpc_text.replace("$", "").replace(",", ""))
+        except ValueError:
+            return [
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Max CPC",
+                    "invalid_cpc_format",
+                    f'Invalid Max CPC format: "{cpc_text}".',
+                    "Use numeric format such as 2.50 or $2.50.",
+                )
+            ]
+
+        if cpc < self.min_cpc:
+            issues.append(
+                self._issue(
+                    "critical",
+                    row_number,
+                    "Max CPC",
+                    "cpc_too_low",
+                    f"Max CPC ${cpc:.2f} is below minimum ${self.min_cpc:.2f}.",
+                    f"Increase Max CPC to at least ${self.min_cpc:.2f}.",
+                )
+            )
+        elif cpc > self.max_cpc:
+            issues.append(
+                self._issue(
+                    "warning",
+                    row_number,
+                    "Max CPC",
+                    "cpc_too_high",
+                    f"Max CPC ${cpc:.2f} is above ${self.max_cpc:.2f}.",
+                    "Review the bid before importing.",
+                )
+            )
+
+        return issues
+
+    def validate_adgroup_data(self, adgroup_rows: list[dict[str, Any]]) -> list[ValidationIssue]:
         """
         Validate ad group-level data across multiple rows.
 
         Args:
-            adgroup_rows: List of ad group row dictionaries
+            adgroup_rows: List of ad group row dictionaries.
 
         Returns:
-            List of validation issues found
+            List of validation issues found.
         """
-        issues = []
+        issues: list[ValidationIssue] = []
 
         if not adgroup_rows:
             return issues
 
-        # Validate each ad group row
-        for i, row in enumerate(adgroup_rows):
-            row_issues = self.validate_adgroup_row(row, i + 2)  # +2 because row 1 is headers
-            issues.extend(row_issues)
+        campaign_adgroups: dict[str, set[str]] = defaultdict(set)
 
-        # Cross-adgroup validation
-        adgroup_names = set()
-        campaign_adgroups = {}
+        for index, row in enumerate(adgroup_rows, start=2):
+            issues.extend(self.validate_adgroup_row(row, index))
 
-        for row in adgroup_rows:
-            adgroup_name = row.get('Ad group', '').strip()
-            campaign_name = row.get('Campaign', '').strip()
+            campaign = self._value(row, "Campaign") or "(missing campaign)"
+            ad_group = self._value(row, "Ad Group", "Ad group")
+            if not ad_group:
+                continue
 
-            if adgroup_name:
-                # Check for duplicate ad group names within same campaign
-                campaign_key = campaign_name or 'default'
-                if campaign_key not in campaign_adgroups:
-                    campaign_adgroups[campaign_key] = set()
-
-                if adgroup_name in campaign_adgroups[campaign_key]:
-                    issues.append(ValidationIssue(
-                        level='adgroup',
-                        severity='warning',
-                        row_number=0,  # Multiple rows
-                        column='Ad group',
-                        issue_type='duplicate_adgroup_name',
-                        message=f'Duplicate ad group name "{adgroup_name}" in campaign "{campaign_name}"',
-                        suggestion='Use unique ad group names within each campaign'
-                    ))
-                else:
-                    campaign_adgroups[campaign_key].add(adgroup_name)
-
-        # Check for optimal ad group structure
-        for campaign, adgroups in campaign_adgroups.items():
-            if len(adgroups) < 3:
-                issues.append(ValidationIssue(
-                    level='adgroup',
-                    severity='info',
-                    row_number=0,
-                    column='Ad group',
-                    issue_type='few_adgroups',
-                    message=f'Campaign "{campaign}" has only {len(adgroups)} ad groups',
-                    suggestion='Consider creating more ad groups for better organization and targeting'
-                ))
-            elif len(adgroups) > 50:
-                issues.append(ValidationIssue(
-                    level='adgroup',
-                    severity='info',
-                    row_number=0,
-                    column='Ad group',
-                    issue_type='many_adgroups',
-                    message=f'Campaign "{campaign}" has {len(adgroups)} ad groups',
-                    suggestion='Consider consolidating some ad groups for easier management'
-                ))
+            if ad_group in campaign_adgroups[campaign]:
+                issues.append(
+                    self._issue(
+                        "warning",
+                        index,
+                        "Ad Group",
+                        "duplicate_adgroup_name",
+                        f'Duplicate ad group name "{ad_group}" in campaign "{campaign}".',
+                        "Use unique ad group names within each campaign.",
+                    )
+                )
+            else:
+                campaign_adgroups[campaign].add(ad_group)
 
         return issues
