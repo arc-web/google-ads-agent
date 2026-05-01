@@ -19,6 +19,7 @@ from __future__ import annotations
 import datetime
 import html
 import os
+from pathlib import Path
 from copy_engine.editor.grader import GradeReport
 from copy_engine.editor.evaluator import EvalReport
 from copy_engine.context import ClientContext
@@ -244,10 +245,9 @@ class HITLReporter:
     for opening the file - no os.system() calls here.
     """
 
-    def __init__(
-        self, base_path: str = "/Users/home/ai/agents/ppc/google_ads_agent"
-    ) -> None:
-        self.base_path = base_path
+    def __init__(self, base_path: str | None = None) -> None:
+        repo_root = Path(__file__).resolve().parents[3]
+        self.base_path = os.fspath(Path(base_path).resolve() if base_path else repo_root)
 
     # ------------------------------------------------------------------
     # Public

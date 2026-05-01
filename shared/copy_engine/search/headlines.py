@@ -268,7 +268,7 @@ class HeadlineGenerator:
     # Public API
     # ------------------------------------------------------------------
 
-    def generate(self, ctx: AdGroupContext, count: int = 12) -> list[Headline]:
+    def generate(self, ctx: AdGroupContext, count: int = MAX_HEADLINES) -> list[Headline]:
         """
         Generate and validate headlines for the given ad group context.
 

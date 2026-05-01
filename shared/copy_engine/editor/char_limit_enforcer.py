@@ -3,11 +3,8 @@ char_limit_enforcer.py
 
 Hard char-limit enforcer for Google Ads RSA assets.
 
-Lesson (see hitl_doc_design_postmortem_2026-04-28.md, item 12):
-The first THHL build shipped 6 over-limit assets to the client review
-document. Headlines were flagged red rather than fixed at the source.
-A client should never see a flagged violation - generators must enforce
-the cap before any asset reaches a downstream stage.
+A client should never see a flagged character-limit violation. Generators must
+enforce the cap before any asset reaches a downstream stage.
 
 Use this module's `enforce` functions in any RSA generator. They raise
 CharLimitError on violation. Catch and rewrite, or fail the build.

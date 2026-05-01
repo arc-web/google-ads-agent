@@ -10,13 +10,13 @@ from typing import Optional
 
 @dataclass
 class AdGroupContext:
-    name: str                          # e.g. "ADHD Testing"
+    name: str                          # ad group name
     service: str                       # primary service being advertised
-    geo: list[str]                     # e.g. ["Ashburn VA", "Falls Church VA"]
+    geo: list[str]                     # target location modifiers
     USPs: list[str]                    # unique selling points
     top_keywords: list[str]            # target keywords for this ad group
     landing_url: str                   # final URL
-    industry: str                      # e.g. "healthcare", "mental_health"
+    industry: str                      # industry or compliance profile
     insurance_accepted: list[str] = field(default_factory=list)
     practice_name: str = ""
     additional_context: str = ""       # free-form extra info
@@ -24,12 +24,12 @@ class AdGroupContext:
 
 @dataclass
 class ClientContext:
-    agency: str                        # e.g. "therappc"
-    client: str                        # e.g. "thinkhappylivehealthy"
+    agency: str                        # agency slug
+    client: str                        # client slug
     practice_name: str
     services: list[str]
     geo: list[str]
     USPs: list[str]
     insurance_accepted: list[str] = field(default_factory=list)
-    practice_type: str = ""            # e.g. "mental_health", "medical"
+    practice_type: str = ""            # industry-specific practice type
     website_url: str = ""

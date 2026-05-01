@@ -306,6 +306,38 @@ Earlier checks to add to future loops:
 - scan instruction files for stale active verbs around API upload, PMAX, broad match, exact match, and auto-fix
 - require old entry points to name the current command that replaced them
 - test the visible operator message from disabled compatibility wrappers
+
+## Copy Engine Search RSA Contract Loop
+
+Cleanup target:
+
+- `shared/copy_engine/context.py`
+- `shared/copy_engine/editor/char_limit_enforcer.py`
+- `shared/copy_engine/editor/reporter.py`
+- `shared/copy_engine/search/headlines.py`
+- `shared/copy_engine/orchestrator.py`
+
+Outcome:
+
+- removed client-specific defaults and comments from touched shared copy-engine paths
+- made reporter output default to the repo root discovered from the module path instead of a local machine path
+- made the orchestrator accept an injected copy client for offline tests
+- changed Search headline generation to target 15 RSA headlines by default
+- made generate mode request 15 headlines and 4 descriptions explicitly
+- changed the build plan fallback from 12 headlines to the active 15 headline contract
+- added an offline fake-client test proving copy generation can satisfy 15 headlines, 4 descriptions, and hard character limits
+
+Reusable lesson:
+
+- copy generation tests should not call external model providers
+- shared copy paths can use client facts, but they must receive those facts as inputs
+- report output paths should be repo-local or caller-provided, not hard-coded to one local machine
+
+Earlier checks to add to future loops:
+
+- scan copy code for one-client examples, local machine paths, and old 12-headline defaults
+- test asset-count contracts with fake LLM clients before touching real client data
+- keep model/provider credentials outside active unit tests
 - check output encoding before preserving old save methods
 - check whether a generic-looking exporter is quietly activating PMAX or API behavior
 - preserve old import names only when the active behavior is explicit and tested
