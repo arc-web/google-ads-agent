@@ -618,3 +618,32 @@ Earlier checks to add to future loops:
 - test wrapper imports rather than only reading command docs
 - confirm generated report outputs stay in client build folders
 - keep presentation docs in the operator surface and shared implementation docs in the implementation surface
+
+## Repo Noise Cleanup Loop
+
+Cleanup target:
+
+- `.DS_Store`
+- `__pycache__/`
+- `*.pyc`
+- `.pytest_cache`
+
+Outcome:
+
+- confirmed generated machine-noise ignore rules exist
+- confirmed no generated cache or OS noise files are tracked by Git
+- removed local generated cache files from the working copy
+- left unrelated credential ignore changes unstaged
+- added a guard test proving generated noise stays untracked
+
+Reusable lesson:
+
+- generated cache cleanup is useful for local clarity, but it should not become a feature commit unless it changes repo policy or removes tracked noise
+- ignore rules should cover machine output, not human-authored docs or client memory
+- local credential ignore edits should be reviewed separately from repo-noise cleanup
+
+Earlier checks to add to future loops:
+
+- check tracked noise with `git ls-files` before deleting anything
+- remove generated noise only after confirming it is untracked or intentionally ignored
+- do not stage credential files or credential ignore-policy changes inside unrelated cleanup batches
