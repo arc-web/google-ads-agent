@@ -1,0 +1,68 @@
+{
+  "csv_file": "clients/therappc/thinkhappylivehealthy/build/dry_run_account_build_2026-05-01/Google_Ads_Editor_Staging_DRY_RUN.csv",
+  "success": true,
+  "error": null,
+  "validation_report": {
+    "csv_file": "clients/therappc/thinkhappylivehealthy/build/dry_run_account_build_2026-05-01/Google_Ads_Editor_Staging_DRY_RUN.csv",
+    "timestamp": "2026-05-01T19:21:10.560262",
+    "total_issues": 0,
+    "issues_fixed": 0,
+    "severity_breakdown": {
+      "critical": 0,
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    },
+    "level_breakdown": {},
+    "final_status": "PASS",
+    "issues": [],
+    "fixes_applied": [],
+    "active_staging": {
+      "status": "pass",
+      "source_csv": "clients/therappc/thinkhappylivehealthy/build/dry_run_account_build_2026-05-01/Google_Ads_Editor_Staging_DRY_RUN.csv",
+      "encoding": "utf-16",
+      "rows": 11,
+      "headers": 42,
+      "campaigns": [
+        "ARC - Search - Services - V1"
+      ],
+      "ad_groups": 2,
+      "counts": {
+        "campaign_rows": 1,
+        "location_rows": 2,
+        "ad_group_rows": 2,
+        "keyword_rows": 4,
+        "rsa_rows": 2
+      },
+      "keyword_criterion_types": {
+        "Phrase": 4
+      },
+      "issue_counts": {},
+      "issues": []
+    }
+  },
+  "final_status": "PASS",
+  "active_staging_report": {
+    "status": "pass",
+    "source_csv": "clients/therappc/thinkhappylivehealthy/build/dry_run_account_build_2026-05-01/Google_Ads_Editor_Staging_DRY_RUN.csv",
+    "encoding": "utf-16",
+    "rows": 11,
+    "headers": 42,
+    "campaigns": [
+      "ARC - Search - Services - V1"
+    ],
+    "ad_groups": 2,
+    "counts": {
+      "campaign_rows": 1,
+      "location_rows": 2,
+      "ad_group_rows": 2,
+      "keyword_rows": 4,
+      "rsa_rows": 2
+    },
+    "keyword_criterion_types": {
+      "Phrase": 4
+    },
+    "issue_counts": {},
+    "issues": []
+  }
+}

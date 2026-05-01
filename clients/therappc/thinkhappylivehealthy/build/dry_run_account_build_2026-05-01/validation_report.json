@@ -1,0 +1,23 @@
+{
+  "status": "pass",
+  "source_csv": "clients/therappc/thinkhappylivehealthy/build/dry_run_account_build_2026-05-01/Google_Ads_Editor_Staging_DRY_RUN.csv",
+  "encoding": "utf-16",
+  "rows": 11,
+  "headers": 42,
+  "campaigns": [
+    "ARC - Search - Services - V1"
+  ],
+  "ad_groups": 2,
+  "counts": {
+    "campaign_rows": 1,
+    "location_rows": 2,
+    "ad_group_rows": 2,
+    "keyword_rows": 4,
+    "rsa_rows": 2
+  },
+  "keyword_criterion_types": {
+    "Phrase": 4
+  },
+  "issue_counts": {},
+  "issues": []
+}

@@ -1,0 +1,17 @@
+{
+  "csv_file": "clients/therappc/thinkhappylivehealthy/build/dry_run_account_build_2026-05-01/Google_Ads_Editor_Staging_DRY_RUN.csv",
+  "success": true,
+  "error": null,
+  "validation_report": {
+    "csv_file": "clients/therappc/thinkhappylivehealthy/build/dry_run_account_build_2026-05-01/Google_Ads_Editor_Staging_DRY_RUN.csv",
+    "total_issues": 0,
+    "critical_issues": 0,
+    "warning_issues": 0,
+    "info_issues": 0,
+    "issues_by_level": {},
+    "validation_time": "0.00s",
+    "success": true,
+    "issues": []
+  },
+  "campaign_type": "Search"
+}
