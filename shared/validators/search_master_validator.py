@@ -1,338 +1,139 @@
 #!/usr/bin/env python3
-"""
-Search Campaign Master Validator
+"""Legacy top-level Search master validator facade."""
 
-Integrates Search campaign validation into the main validation system.
-"""
+from __future__ import annotations
 
-import logging
-from typing import Dict, List, Any, Optional
+import json
 from pathlib import Path
-import csv
-import io
+from typing import Any
 
-# Import existing master validator
-from .master_validator import MasterValidator
-# Import search validators
-from .search import SearchValidator
-
-logger = logging.getLogger(__name__)
+from .search.search_master_validator import SearchMasterValidator as ActiveSearchMasterValidator
 
 
-class SearchMasterValidator(MasterValidator):
+class SearchMasterValidator:
     """
-    Extended master validator with Search campaign specialization.
+    Compatibility facade for the active Search master validator.
 
-    Inherits all functionality from MasterValidator and adds
-    Search-specific validation capabilities.
+    The old top-level validator inherited from a missing PMAX-era master class
+    and attempted auto-fixes that defaulted to Exact. This facade keeps the old
+    public entry points while delegating Search validation to the active staged
+    workflow under shared.validators.search.search_master_validator.
     """
 
-    def __init__(self, base_path: str = "google_ads_agent"):
-        super().__init__()
+    def __init__(self, base_path: str = "google_ads_agent", validation_rules: dict[str, Any] | None = None):
         self.base_path = Path(base_path)
-        self.search_validator = SearchValidator()
+        self.active_validator = ActiveSearchMasterValidator(validation_rules)
 
-    def validate_search_campaign_csv(self, csv_path: str, auto_fix: bool = False) -> Dict[str, Any]:
-        """
-        Validate a Search campaign CSV with specialized Search validation.
-
-        Args:
-            csv_path: Path to the CSV file
-            auto_fix: Whether to auto-fix issues where possible
-
-        Returns:
-            Comprehensive validation report
-        """
-        logger.info(f"Starting Search campaign validation of: {csv_path}")
-
-        # Read CSV content
-        try:
-            with open(csv_path, 'r', encoding='utf-8-sig') as f:
-                csv_content = f.read()
-        except Exception as e:
+    def validate_search_campaign_csv(self, csv_path: str, auto_fix: bool = False) -> dict[str, Any]:
+        """Validate a Search staging CSV with the active validator."""
+        if auto_fix:
             return {
-                'csv_file': csv_path,
-                'success': False,
-                'error': f'Failed to read CSV file: {e}',
-                'validation_report': None
+                "csv_file": csv_path,
+                "success": False,
+                "error": "Auto-fix is disabled for active Search staging validation.",
+                "validation_report": None,
+                "campaign_type": "Search",
             }
 
-        # Check if this is actually a Search campaign
-        is_search_campaign = self._is_search_campaign_csv(csv_content)
+        report = self.active_validator.validate_csv_file(csv_path)
+        return {
+            "csv_file": csv_path,
+            "success": report.success,
+            "error": None,
+            "validation_report": self._report_dict(report),
+            "campaign_type": "Search",
+        }
 
-        if not is_search_campaign:
-            # Fall back to regular validation
-            logger.info("CSV is not a Search campaign, using standard validation")
-            return self.validate_csv_file(csv_path, auto_fix)
+    def validate_csv_file(self, csv_path: str, auto_fix: bool = False) -> dict[str, Any]:
+        """Legacy alias for validate_search_campaign_csv."""
+        return self.validate_search_campaign_csv(csv_path, auto_fix)
 
-        # Perform Search-specific validation
-        search_issues = self.search_validator.validate_search_csv(csv_path, csv_content)
-
-        # Also run standard validation for account/campaign level issues
-        standard_result = self.validate_csv_file(csv_path, False)  # Don't auto-fix yet
-        standard_issues = standard_result['validation_report']['issues']
-
-        # Combine issues, prioritizing Search-specific ones
-        all_issues = search_issues + standard_issues
-
-        # Remove duplicates (same issue from both validators)
-        unique_issues = self._deduplicate_issues(all_issues)
-
-        # Apply auto-fixes if requested
+    def validate_client_directory(self, client_dir: str, auto_fix: bool = False) -> dict[str, Any]:
+        """Validate CSV/TSV files below a client directory without changing them."""
         if auto_fix:
-            csv_content, fixed_issues = self._apply_search_auto_fixes(csv_content, unique_issues)
-            if fixed_issues:
-                # Save fixed version
-                self._save_fixed_csv(csv_path, csv_content, fixed_issues)
+            return {
+                "client_dir": client_dir,
+                "success": False,
+                "error": "Auto-fix is disabled for active Search staging validation.",
+                "files": [],
+            }
 
-        # Generate comprehensive report
-        report = self._generate_search_validation_report(csv_path, unique_issues, fixed_issues if auto_fix else [])
-
+        root = Path(client_dir)
+        files = sorted(
+            path
+            for pattern in ("*.csv", "*.tsv")
+            for path in root.rglob(pattern)
+            if path.is_file()
+        )
+        results = [self.validate_search_campaign_csv(str(path), auto_fix=False) for path in files]
         return {
-            'csv_file': csv_path,
-            'success': True,
-            'error': None,
-            'validation_report': report,
-            'campaign_type': 'Search'
+            "client_dir": client_dir,
+            "success": all(result.get("success") for result in results),
+            "error": None,
+            "files": results,
         }
 
-    def _is_search_campaign_csv(self, csv_content: str) -> bool:
-        """Determine if CSV contains Search campaigns"""
-        try:
-            csv_io = io.StringIO(csv_content)
-            reader = csv.DictReader(csv_io, delimiter='\t')
+    def get_detailed_issues(self) -> list[dict[str, Any]]:
+        """Expose detailed issues from the active validator."""
+        return self.active_validator.get_detailed_issues()
 
-            for row in reader:
-                campaign_type = row.get("Campaign Type", "").strip()
-                if campaign_type == "Search":
-                    return True
+    def print_summary_report(self, result: dict[str, Any]) -> None:
+        """Print a short legacy-compatible summary."""
+        report = result.get("validation_report") or {}
+        print(f"Search validation: {'PASS' if result.get('success') else 'FAIL'}")
+        if result.get("error"):
+            print(result["error"])
+        elif report:
+            print(f"Total issues: {report.get('total_issues', 0)}")
 
-                # Also check for Search-specific columns
-                if any(col for col in row.keys() if 'keyword' in col.lower() or 'criterion' in col.lower()):
-                    return True
+    def save_report(self, result: dict[str, Any], output_path: str) -> None:
+        """Save a JSON validation report."""
+        Path(output_path).write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
 
-            return False
-
-        except Exception:
-            return False
-
-    def _deduplicate_issues(self, issues: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Remove duplicate issues from combined validation"""
-        seen = set()
-        unique_issues = []
-
-        for issue in issues:
-            # Create a unique key based on level, row, column, and issue type
-            key = (
-                issue['level'],
-                issue['row_number'],
-                issue['column'],
-                issue['issue_type']
-            )
-
-            if key not in seen:
-                seen.add(key)
-                unique_issues.append(issue)
-
-        return unique_issues
-
-    def _apply_search_auto_fixes(self, csv_content: str, issues: List[Dict[str, Any]]) -> tuple[str, List[Dict[str, Any]]]:
-        """Apply Search-specific auto-fixes"""
-        fixed_issues = []
-
-        # First apply standard auto-fixes
-        csv_content, standard_fixed = self._apply_auto_fixes_to_csv(csv_content, issues)
-
-        # Then apply Search-specific fixes
-        lines = csv_content.split('\n')
-        if len(lines) < 2:
-            return csv_content, standard_fixed
-
-        # Parse header
-        header_line = lines[0]
-        headers = header_line.split('\t')
-        col_indices = {header: i for i, header in enumerate(headers)}
-
-        # Apply Search-specific fixes
-        for issue in issues:
-            if issue.get('auto_fixable', False) and issue.get('fixed_value') is not None:
-                row_num = issue['row_number']
-                column = issue['column']
-
-                if row_num < len(lines) and column in col_indices:
-                    fields = lines[row_num - 1].split('\t')
-                    col_idx = col_indices[column]
-
-                    if col_idx < len(fields):
-                        # Apply Search-specific logic
-                        if column == 'Criterion Type' and not fields[col_idx].strip():
-                            fields[col_idx] = 'Exact'  # Default Search match type
-                            fixed_issues.append(issue)
-                        elif issue['issue_type'] == 'headline_all_caps':
-                            # Title case for headlines
-                            fields[col_idx] = fields[col_idx].capitalize()
-                            fixed_issues.append(issue)
-                        else:
-                            # Apply standard fix
-                            fields[col_idx] = str(issue['fixed_value'])
-                            fixed_issues.append(issue)
-
-                        lines[row_num - 1] = '\t'.join(fields)
-
-        return '\n'.join(lines), fixed_issues
-
-    def _save_fixed_csv(self, csv_path: str, csv_content: str, fixed_issues: List[Dict[str, Any]]):
-        """Save fixed CSV with backup"""
-        backup_path = f"{csv_path}.backup"
-        try:
-            # Create backup
-            with open(backup_path, 'w', encoding='utf-8-sig') as f:
-                with open(csv_path, 'r', encoding='utf-8-sig') as orig:
-                    f.write(orig.read())
-
-            # Save fixed version
-            with open(csv_path, 'w', encoding='utf-8-sig') as f:
-                f.write(csv_content)
-
-            logger.info(f"Applied {len(fixed_issues)} Search-specific fixes and created backup: {backup_path}")
-
-        except Exception as e:
-            logger.error(f"Failed to apply Search fixes: {e}")
-
-    def _generate_search_validation_report(self, csv_path: str, issues: List[Dict[str, Any]],
-                                        fixed_issues: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Generate Search-specific validation report"""
-
-        # Count issues by severity and level
-        severity_counts = {'critical': 0, 'error': 0, 'warning': 0, 'info': 0}
-        level_counts = {
-            'account': 0, 'campaign': 0, 'asset_group': 0, 'asset': 0, 'targeting': 0,
-            'search_campaign': 0, 'ad_group': 0, 'keyword': 0, 'text_ad': 0
-        }
-
-        for issue in issues:
-            severity_counts[issue['severity']] += 1
-            level_counts[issue['level']] += 1
-
-        # Determine final status
-        if severity_counts['critical'] > 0 or severity_counts['error'] > 0:
-            final_status = 'FAIL'
-        elif fixed_issues:
-            final_status = 'PASS_WITH_FIXES'
-        else:
-            final_status = 'PASS'
-
-        # Search-specific recommendations
-        recommendations = []
-        if level_counts['keyword'] > 0:
-            recommendations.append("Review keyword match types and targeting strategy")
-        if level_counts['text_ad'] > 0:
-            recommendations.append("Optimize text ad length and content for better performance")
-        if level_counts['ad_group'] > 0:
-            recommendations.append("Consider ad group structure and keyword organization")
-
+    def _report_dict(self, report: Any) -> dict[str, Any]:
         return {
-            'csv_file': csv_path,
-            'timestamp': self._get_timestamp(),
-            'campaign_type': 'Search',
-            'total_issues': len(issues),
-            'issues_fixed': len(fixed_issues),
-            'severity_breakdown': severity_counts,
-            'level_breakdown': level_counts,
-            'final_status': final_status,
-            'issues': issues,
-            'fixes_applied': fixed_issues,
-            'search_recommendations': recommendations,
-            'quality_metrics': self._calculate_search_quality_metrics(issues)
+            "csv_file": report.csv_file,
+            "total_issues": report.total_issues,
+            "critical_issues": report.critical_issues,
+            "warning_issues": report.warning_issues,
+            "info_issues": report.info_issues,
+            "issues_by_level": report.issues_by_level,
+            "validation_time": report.validation_time,
+            "success": report.success,
+            "issues": self.active_validator.get_detailed_issues(),
         }
 
-    def _calculate_search_quality_metrics(self, issues: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Calculate Search campaign quality metrics"""
-        total_issues = len(issues)
 
-        # Calculate quality score (inverse of issues, normalized)
-        quality_score = max(0, 100 - (total_issues * 5))
-        quality_score = min(100, quality_score)
-
-        # Determine quality rating
-        if quality_score >= 80:
-            rating = 'Excellent'
-        elif quality_score >= 60:
-            rating = 'Good'
-        elif quality_score >= 40:
-            rating = 'Fair'
-        else:
-            rating = 'Poor'
-
-        return {
-            'quality_score': quality_score,
-            'quality_rating': rating,
-            'issues_per_100_rows': total_issues,  # Simplified metric
-            'search_readiness': 'Ready' if quality_score >= 60 else 'Needs Work'
-        }
-
-    def _get_timestamp(self):
-        """Get current timestamp"""
-        from datetime import datetime
-        return datetime.now().isoformat()
+def validate_search_campaign_file(csv_path: str, auto_fix: bool = False) -> dict[str, Any]:
+    """Validate a single Search campaign staging file."""
+    return SearchMasterValidator().validate_search_campaign_csv(csv_path, auto_fix)
 
 
-def validate_search_campaign_file(csv_path: str, auto_fix: bool = False) -> Dict[str, Any]:
-    """
-    Convenience function to validate a single Search campaign CSV.
-
-    Args:
-        csv_path: Path to the CSV file
-        auto_fix: Whether to auto-fix issues
-
-    Returns:
-        Validation report
-    """
-    validator = SearchMasterValidator()
-    return validator.validate_search_campaign_csv(csv_path, auto_fix)
+def validate_search_client_directory(client_dir: str, auto_fix: bool = False) -> dict[str, Any]:
+    """Validate all Search campaign staging files in a client directory."""
+    return SearchMasterValidator().validate_client_directory(client_dir, auto_fix)
 
 
-def validate_search_client_directory(client_dir: str, auto_fix: bool = False) -> Dict[str, Any]:
-    """
-    Validate all Search campaign CSVs in a client directory.
-
-    Args:
-        client_dir: Client directory path
-        auto_fix: Whether to auto-fix issues
-
-    Returns:
-        Client-level validation report
-    """
-    validator = SearchMasterValidator()
-    return validator.validate_client_directory(client_dir, auto_fix)
-
-
-# CLI integration
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Search Campaign CSV Validator')
-    parser.add_argument('--csv', help='Path to Search campaign CSV file')
-    parser.add_argument('--client', help='Client directory containing Search CSVs')
-    parser.add_argument('--fix', action='store_true', help='Auto-fix issues where possible')
-    parser.add_argument('--output', help='Output JSON report file')
-
+    parser = argparse.ArgumentParser(description="Search Campaign CSV Validator")
+    parser.add_argument("--csv", help="Path to Search campaign CSV file")
+    parser.add_argument("--client", help="Client directory containing Search CSVs")
+    parser.add_argument("--output", help="Output JSON report file")
+    parser.add_argument("--fix", action="store_true", help="Rejected. Auto-fix is disabled.")
     args = parser.parse_args()
 
     validator = SearchMasterValidator()
-
     if args.csv:
-        result = validator.validate_search_campaign_csv(args.csv, args.fix)
-        validator.print_summary_report(result)
-
-        if args.output:
-            validator.save_report(result, args.output)
-
+        validation_result = validator.validate_search_campaign_csv(args.csv, args.fix)
     elif args.client:
-        result = validator.validate_client_directory(args.client, args.fix)
-        validator.print_summary_report(result)
-
-        if args.output:
-            validator.save_report(result, args.output)
+        validation_result = validator.validate_client_directory(args.client, args.fix)
     else:
         parser.print_help()
+        raise SystemExit(2)
+
+    validator.print_summary_report(validation_result)
+    if args.output:
+        validator.save_report(validation_result, args.output)
+    raise SystemExit(0 if validation_result.get("success") else 1)
