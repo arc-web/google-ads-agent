@@ -12,12 +12,18 @@ from __future__ import annotations
 
 import csv
 import json
+import sys
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[5]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from shared.rebuild.staging_validator import validate_file
+
 CLIENT_DIR = ROOT / "clients" / "therappc" / "thinkhappylivehealthy"
 BUILD_DIR = CLIENT_DIR / "build" / "search_rebuild_test"
 
@@ -281,6 +287,21 @@ def write_human_review(report: dict[str, Any], spec: dict[str, Any]) -> None:
     HUMAN_REVIEW.write_text("\n".join(lines), encoding="utf-8")
 
 
+def attach_staging_validation(report: dict[str, Any], output_csv: Path) -> dict[str, Any]:
+    staging_report = validate_file(output_csv)
+    report["staging_validator"] = staging_report
+    if staging_report["status"] != "pass":
+        report["status"] = "fail"
+        for issue in staging_report["issues"]:
+            report["issues"].append({
+                "severity": issue["severity"],
+                "row": issue.get("row", ""),
+                "column": issue.get("column", ""),
+                "message": f"Staging validator: {issue['message']}",
+            })
+    return report
+
+
 def main() -> None:
     manual_headers, manual_rows, manual_encoding = read_tsv(MANUAL_CAMPAIGN)
     export_headers, _export_rows, export_encoding = read_tsv(CURRENT_EXPORT)
@@ -295,6 +316,7 @@ def main() -> None:
     write_tsv(OUTPUT_CSV, headers, output_rows)
 
     report = validate_rows(headers, output_rows, manual_count=len(manual_rows))
+    report = attach_staging_validation(report, OUTPUT_CSV)
     report["sources"] = {
         "manual_campaign": str(MANUAL_CAMPAIGN),
         "manual_encoding": manual_encoding,

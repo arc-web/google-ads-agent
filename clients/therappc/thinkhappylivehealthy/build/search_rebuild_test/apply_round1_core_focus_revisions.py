@@ -5,11 +5,18 @@ from __future__ import annotations
 
 import csv
 import json
+import sys
 from collections import Counter
 from pathlib import Path
 
 
-BUILD_DIR = Path("/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test")
+ROOT = Path(__file__).resolve().parents[5]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from shared.rebuild.staging_validator import validate_file
+
+BUILD_DIR = ROOT / "clients" / "therappc" / "thinkhappylivehealthy" / "build" / "search_rebuild_test"
 INPUT_CSV = BUILD_DIR / "THHL_Search_Services_Editor_Staging_CURRENT.csv"
 OUTPUT_CSV = BUILD_DIR / "THHL_Search_Services_Editor_Staging_REV1.csv"
 VALIDATION_JSON = BUILD_DIR / "THHL_Search_Services_Editor_Staging_REV1_validation.json"
@@ -578,11 +585,29 @@ def write_review(report: dict[str, object]) -> None:
     REVIEW_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def attach_staging_validation(report: dict[str, object], output_csv: Path) -> dict[str, object]:
+    staging_report = validate_file(output_csv)
+    report["staging_validator"] = staging_report
+    if staging_report["status"] != "pass":
+        report["status"] = "fail"
+        issues = report.setdefault("issues", [])
+        if isinstance(issues, list):
+            for issue in staging_report["issues"]:
+                issues.append({
+                    "severity": issue["severity"],
+                    "row": issue.get("row", ""),
+                    "column": issue.get("column", ""),
+                    "message": f"Staging validator: {issue['message']}",
+                })
+    return report
+
+
 def main() -> None:
     headers, rows = read_rows(INPUT_CSV)
     rev1 = build_rev1(headers, rows)
     write_rows(OUTPUT_CSV, headers, rev1)
     report = validate(rev1)
+    report = attach_staging_validation(report, OUTPUT_CSV)
     VALIDATION_JSON.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     write_review(report)
     print(json.dumps(report, indent=2))

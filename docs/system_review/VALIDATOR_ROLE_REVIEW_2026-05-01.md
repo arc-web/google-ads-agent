@@ -427,3 +427,40 @@ Note:
 
 - the local Python environment still prints a `requests` dependency warning before pytest warning filters fully apply
 - the warning is not caused by the staging validator tests
+
+## THLH Scripts Wired To Active Validator
+
+The active staging validator is now called by:
+
+- `clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/apply_round1_core_focus_revisions.py`
+- `clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/rebuild_thhl_search_campaign.py`
+
+Revision script result:
+
+```bash
+python3 clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/apply_round1_core_focus_revisions.py
+```
+
+- status: `pass`
+- shared staging validator status: `pass`
+- output: `THHL_Search_Services_Editor_Staging_REV1.csv`
+- validation JSON now includes a `staging_validator` section
+
+Older rebuild script result:
+
+```bash
+python3 clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/rebuild_thhl_search_campaign.py
+```
+
+- status: `fail`
+- shared staging validator status: `fail`
+- output: `THHL_Search_Rebuild_Test_2026-04-28.csv`
+- validation report: `validation_report.json`
+- human review: `human_review.md`
+
+Interpretation:
+
+- the newer REV1 path is aligned with the current staging contract
+- the older rebuild test script is now correctly blocked by the active validator
+- the older output still contains stale draft issues such as missing `Location ID`, missing RSA assets, and exact match keywords
+- this confirms the validator wiring is doing useful work rather than silently accepting stale draft output
