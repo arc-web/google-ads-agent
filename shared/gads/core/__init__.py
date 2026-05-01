@@ -1,27 +1,46 @@
-"""
-Google Ads Agent Core Module
+"""Google Ads Agent core salvage package.
 
-Provides systematic Google Ads campaign management through API integration.
+Importing this package must stay lightweight. API clients and optional Google
+Ads dependencies are loaded by the modules that need them, not by package import.
 """
-
-from .google_ads_api_service import GoogleAdsAPIService
-from .models import (
-    GoogleAdsAccount, AccountAccessCheck, CampaignBudget,
-    Campaign, CampaignCreationLog, AssetGroup, Asset,
-    AdGroup, Keyword, Ad, SystematicExecution
-)
 
 __all__ = [
-    'GoogleAdsAPIService',
-    'GoogleAdsAccount',
-    'AccountAccessCheck',
-    'CampaignBudget',
-    'Campaign',
-    'CampaignCreationLog',
-    'AssetGroup',
-    'Asset',
-    'AdGroup',
-    'Keyword',
-    'Ad',
-    'SystematicExecution'
+    "GoogleAdsAPIService",
+    "GoogleAdsAccount",
+    "AccountAccessCheck",
+    "CampaignBudget",
+    "Campaign",
+    "CampaignCreationLog",
+    "AssetGroup",
+    "Asset",
+    "AdGroup",
+    "Keyword",
+    "Ad",
+    "SystematicExecution",
 ]
+
+
+def __getattr__(name: str):
+    if name == "GoogleAdsAPIService":
+        from .google_ads_api_service import GoogleAdsAPIService
+
+        return GoogleAdsAPIService
+
+    if name in {
+        "GoogleAdsAccount",
+        "AccountAccessCheck",
+        "CampaignBudget",
+        "Campaign",
+        "CampaignCreationLog",
+        "AssetGroup",
+        "Asset",
+        "AdGroup",
+        "Keyword",
+        "Ad",
+        "SystematicExecution",
+    }:
+        from . import models
+
+        return getattr(models, name)
+
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
