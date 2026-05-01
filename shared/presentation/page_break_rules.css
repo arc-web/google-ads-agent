@@ -1,0 +1,131 @@
+/* =============================================================
+   page_break_rules.css
+   Canonical page-break ruleset for client-facing review documents.
+   Import (or copy verbatim) into every Chrome-headless PDF build.
+
+   Lessons baked in (see hitl_doc_design_postmortem_2026-04-28.md):
+   - Grid/flex containers must NEVER have break-inside: avoid.
+     Causes the entire grid to defer when it cannot fit on the
+     remaining page space, leaving an orphaned title and blank gap.
+   - Tall card containers (>~300px) must NEVER have break-inside: avoid.
+     Same deferral bug. Examples: .card, .ag-review-block.
+   - Section intros must live INSIDE .section-header, never as
+     orphan <p> after the title. Orphans render alone before a blank.
+   - .section-header must have break-after: avoid so the header
+     glues to the content that follows.
+   - Top-level sections do not force page breaks by default. Natural
+     flow produces denser reports and avoids short half-empty pages.
+   - Subsections with substantial or variable content use
+     .subsection-header, not a bare text heading. A subsection may
+     naturally start a new PDF page, so it needs enough visual mass
+     to look intentional.
+   - When a module continues on a later PDF page, repeat a compact
+     .continuation-header only when continuation content follows it.
+     Never use a continuation header as a standalone forced page opener.
+   - tr must have break-inside: avoid - rows splitting mid-row is
+     the most common visual bug and the cheapest to prevent.
+   - Leaf cards (insight, strategy, problem, ag-chip, violation,
+     roadmap-item, copy-table, geo-table, intent-table, tax-table,
+     checklist li, ag-review-header, ba-col, discussion-card) get
+     break-inside: avoid - they are short enough to never overflow
+     a page.
+   ============================================================= */
+
+/* Top-level sections flow naturally unless measured chunking overrides them. */
+.section + .section {
+    margin-top: 44px;
+}
+
+/* Table rows never split mid-row */
+tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+/* Leaf elements stay intact - SHORT cards only */
+.insight-card,
+.strategy-card,
+.problem-card,
+.ba-col,
+.ag-review-header,
+.ag-chip,
+.violation-block,
+.roadmap-item,
+.tax-table,
+.intent-table,
+.geo-table,
+.copy-table,
+.checklist li,
+.discussion-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+/* Headings glue to the content below */
+.section-subtitle,
+.subsection-header,
+.subsection-title,
+.continuation-header,
+.section-title,
+.copy-section-title,
+h3, h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+/* Section header block (label + title + intro) glues to content below */
+.section-header {
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+.subsection-header {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+.continuation-header {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+/* Print-only adjustments */
+@media print {
+    .toc-bar { display: none; }
+}
+
+/* =============================================================
+   FORBIDDEN RULES - DO NOT ADD THESE.
+   They are documented here so future authors know not to add them.
+
+   .insight-grid, .strategy-grid, .problem-grid, .roadmap, .ag-grid,
+   .before-after, .ag-review-cols, .discussion-grid {
+       break-inside: avoid;  ← BLANK PAGE BUG
+   }
+
+   .card, .ag-review-block {
+       break-inside: avoid;  ← BLANK PAGE BUG (tall containers)
+   }
+
+   .ag-review-block {
+       break-before: page;  ← BLANK PAGE BUG (one small module per page)
+   }
+
+   .continuation-header.force-page {
+       break-before: page;  ← BLANK PAGE BUG (empty continued pages)
+   }
+
+   .section + .section {
+       break-before: page;  ← LOW DENSITY BUG (short sections float alone)
+   }
+
+   .section > p {
+       /* Intro paragraphs as direct section children orphan
+          when the following grid defers. Put intros INSIDE
+          .section-header instead. */
+   }
+   ============================================================= */

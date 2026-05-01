@@ -1,0 +1,86 @@
+{
+  "client": "ThinkHappyLiveHealthy",
+  "campaign": "ARC - Search - Services - V1",
+  "targeting_method": "Location of presence",
+  "exclusion_method": "Location of presence",
+  "policy_notes": [
+    "Mental health and healthcare copy must not imply knowledge of a user's sensitive condition.",
+    "Demographic rows are included for staging and review, with no demographic exclusions in this test.",
+    "Bid modifiers are initial review values and should be confirmed by a human before upload."
+  ],
+  "geo_layers": [
+    {
+      "tier": "tier_1_core",
+      "bid_modifier": "20",
+      "review_status": "needs_human_review",
+      "locations": [
+        "Falls Church, Virginia, United States",
+        "Ashburn, Virginia, United States",
+        "Loudoun County, Virginia, United States",
+        "Fairfax County, Virginia, United States"
+      ]
+    },
+    {
+      "tier": "tier_2_adjacent",
+      "bid_modifier": "10",
+      "review_status": "needs_human_review",
+      "locations": [
+        "Leesburg, Virginia, United States",
+        "Sterling, Virginia, United States",
+        "Dulles, Virginia, United States",
+        "Reston, Virginia, United States",
+        "Vienna, Virginia, United States",
+        "Herndon, Virginia, United States",
+        "McLean, Virginia, United States",
+        "Arlington, Virginia, United States",
+        "Arlington County, Virginia, United States",
+        "Prince William County, Virginia, United States"
+      ]
+    },
+    {
+      "tier": "tier_3_regional",
+      "bid_modifier": "",
+      "review_status": "needs_human_review",
+      "locations": [
+        "Virginia, United States",
+        "Maryland, United States",
+        "Washington, District of Columbia, United States"
+      ]
+    }
+  ],
+  "radius_targets": [
+    {
+      "source": "existing_export",
+      "location": "(15mi:38.964776:-77.521702)",
+      "radius": "15.0",
+      "unit": "mi",
+      "bid_modifier": "10",
+      "review_status": "needs_human_review"
+    }
+  ],
+  "demographics": {
+    "age": [
+      { "value": "18-24", "bid_modifier": "", "review_status": "observe" },
+      { "value": "25-34", "bid_modifier": "10", "review_status": "needs_human_review" },
+      { "value": "35-44", "bid_modifier": "10", "review_status": "needs_human_review" },
+      { "value": "45-54", "bid_modifier": "10", "review_status": "needs_human_review" },
+      { "value": "55-64", "bid_modifier": "", "review_status": "observe" },
+      { "value": "65-up", "bid_modifier": "", "review_status": "observe" },
+      { "value": "Unknown", "bid_modifier": "", "review_status": "observe" }
+    ],
+    "gender": [
+      { "value": "Female", "bid_modifier": "", "review_status": "observe" },
+      { "value": "Male", "bid_modifier": "", "review_status": "observe" },
+      { "value": "Unknown", "bid_modifier": "", "review_status": "observe" }
+    ],
+    "household_income": [
+      { "value": "Top 10%", "bid_modifier": "", "review_status": "observe" },
+      { "value": "11-20%", "bid_modifier": "", "review_status": "observe" },
+      { "value": "21-30%", "bid_modifier": "", "review_status": "observe" },
+      { "value": "31-40%", "bid_modifier": "", "review_status": "observe" },
+      { "value": "41-50%", "bid_modifier": "", "review_status": "observe" },
+      { "value": "Lower 50%", "bid_modifier": "", "review_status": "observe" },
+      { "value": "Unknown", "bid_modifier": "", "review_status": "observe" }
+    ]
+  }
+}

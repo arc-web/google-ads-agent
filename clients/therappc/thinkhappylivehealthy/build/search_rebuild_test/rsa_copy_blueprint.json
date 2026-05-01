@@ -1,0 +1,119 @@
+{
+  "client": "ThinkHappyLiveHealthy",
+  "campaign": "ARC - Search - Services - V1",
+  "rsa_format": {
+    "headline_count": 15,
+    "headline_max_chars": 30,
+    "description_count": 4,
+    "description_max_chars": 90,
+    "path_1_max_chars": 15,
+    "path_2_max_chars": 15
+  },
+  "asset_mix": {
+    "headlines": [
+      { "slot": 1, "role": "primary_keyword", "scope": "ad_group_specific", "required": true },
+      { "slot": 2, "role": "service_variant", "scope": "ad_group_specific", "required": true },
+      { "slot": 3, "role": "intent_layer", "scope": "ad_group_specific", "required": true },
+      { "slot": 4, "role": "audience", "scope": "ad_group_specific", "required": true },
+      { "slot": 5, "role": "landing_page_match", "scope": "ad_group_specific", "required": true },
+      { "slot": 6, "role": "city_or_state", "scope": "geo_layer", "required": true },
+      { "slot": 7, "role": "near_me_or_access", "scope": "geo_layer", "required": true },
+      { "slot": 8, "role": "location_pair", "scope": "account_shared", "required": true },
+      { "slot": 9, "role": "care_quality", "scope": "account_shared", "required": true },
+      { "slot": 10, "role": "appointment_cta", "scope": "account_shared", "required": true },
+      { "slot": 11, "role": "consultation_cta", "scope": "account_shared", "required": false },
+      { "slot": 12, "role": "telehealth_or_in_person", "scope": "account_shared", "required": false },
+      { "slot": 13, "role": "insurance_or_access", "scope": "account_shared", "required": false },
+      { "slot": 14, "role": "differentiator", "scope": "service_specific", "required": false },
+      { "slot": 15, "role": "backup_keyword", "scope": "ad_group_specific", "required": false }
+    ],
+    "descriptions": [
+      { "slot": 1, "role": "service_fit", "scope": "ad_group_specific", "required": true },
+      { "slot": 2, "role": "care_process", "scope": "service_specific", "required": true },
+      { "slot": 3, "role": "location_access", "scope": "geo_layer", "required": true },
+      { "slot": 4, "role": "cta_and_qualifier", "scope": "account_shared", "required": true }
+    ],
+    "paths": [
+      { "field": "Path 1", "role": "service", "scope": "service_specific" },
+      { "field": "Path 2", "role": "intent_or_geo", "scope": "intent_layer" }
+    ]
+  },
+  "shared_headline_bank": [
+    "Ashburn & Falls Church",
+    "Book Your Appointment",
+    "Therapy In Northern VA",
+    "Testing In Northern VA",
+    "Psychiatry In Northern VA",
+    "Telehealth Available",
+    "In-Person And Online",
+    "Personalized Mental Care",
+    "Licensed Clinicians",
+    "Support For Families",
+    "Care For Kids & Adults",
+    "Start With A Consult"
+  ],
+  "shared_description_bank": [
+    "Appointments in Ashburn and Falls Church with telehealth options available.",
+    "Connect with a licensed clinician matched to your needs and goals.",
+    "Get supportive care with clear next steps and a personalized plan.",
+    "Book an appointment with Think Happy Live Healthy today."
+  ],
+  "intent_layer_rules": {
+    "General": {
+      "keyword_modifier": "",
+      "path_2": "Care",
+      "headline_examples": ["Personalized Care", "Support That Fits"]
+    },
+    "Local": {
+      "keyword_modifier": "near me",
+      "path_2": "Near-Me",
+      "headline_examples": ["Care Near You", "Local Support"]
+    },
+    "City": {
+      "keyword_modifier": "ashburn",
+      "path_2": "Ashburn",
+      "headline_examples": ["Ashburn Care", "Falls Church Care"]
+    },
+    "State": {
+      "keyword_modifier": "virginia",
+      "path_2": "Virginia",
+      "headline_examples": ["Virginia Care", "VA Therapy"]
+    }
+  },
+  "landing_page_map": {
+    "Psychiatry": "https://www.thinkhappylivehealthy.com/psychiatry",
+    "Therapy - ADHD": "https://www.thinkhappylivehealthy.com/adhd-therapy",
+    "Therapy - EMDR": "https://www.thinkhappylivehealthy.com/emdr-therapy",
+    "Therapy - Trauma": "https://www.thinkhappylivehealthy.com/emdr-therapy",
+    "Testing - Child Psychological": "https://www.thinkhappylivehealthy.com/comprehensive-psychological-testing",
+    "Testing - Psychoeducational": "https://www.thinkhappylivehealthy.com/psychoeducational-evaluations",
+    "Testing - Kindergarten Readiness": "https://www.thinkhappylivehealthy.com/kindergarten-readiness",
+    "Parent Child Services": "https://www.thinkhappylivehealthy.com/parent-child"
+  },
+  "path_rules": {
+    "service_path_examples": {
+      "Psychiatry": "Psychiatry",
+      "Therapy": "Therapy",
+      "Testing": "Testing",
+      "Parent Child Services": "Parent-Child",
+      "EMDR": "EMDR",
+      "ADHD": "ADHD",
+      "Autism": "Autism",
+      "Anxiety": "Anxiety"
+    },
+    "fallback_path_1": "Care",
+    "fallback_path_2": "Appointments"
+  },
+  "quality_gates": [
+    "All headlines must be 30 characters or fewer.",
+    "All descriptions must be 90 characters or fewer.",
+    "Path 1 and Path 2 must each be 15 characters or fewer.",
+    "Each RSA must include at least 5 ad-group-specific headlines.",
+    "Each RSA must include at least 3 reusable account-shared headlines.",
+    "Each RSA must include at least 2 geo or intent-layer headlines.",
+    "Each RSA must include exactly 4 descriptions.",
+    "Each RSA must map to a landing page relevant to the service.",
+    "No copy should imply knowledge of a user's sensitive health condition.",
+    "No broad-match keywords are generated by this copy system."
+  ]
+}

@@ -78,7 +78,7 @@ class SearchKeywordValidator:
                 'quality_checks': {
                     'max_length': 80,
                     'min_length': 1,
-                    'special_chars_allowed': [' ', '-', '_', '&', '+', '/', '\\'', '"', '[', ']']
+                    'special_chars_allowed': [' ', '-', '_', '&', '+', '/', "'", '"', '[', ']']
                 }
             }
         }

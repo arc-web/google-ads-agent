@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "headers": 203,
+  "rows": 327,
+  "counts": {
+    "ad_group_rows": 96,
+    "keyword_rows": 116,
+    "rsa_rows": 96,
+    "location_rows": 18,
+    "bid_modifier_rows": 15,
+    "radius_rows": 1
+  },
+  "issues": [],
+  "output_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Services_Editor_Staging_phrase_only_2026-04-28.csv",
+  "sources": {
+    "taxonomy": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/service_ad_group_taxonomy_2026-04-28.csv",
+    "blueprint": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/rsa_copy_blueprint.json",
+    "targeting_spec": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/targeting_spec.json",
+    "keyword_expansion": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/phrase_keyword_expansion_candidates_2026-04-28.csv",
+    "headers_source": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/campaigns/ThinkHappyLiveHealthy_export_2026-04-27.csv"
+  }
+}

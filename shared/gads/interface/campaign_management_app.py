@@ -570,7 +570,8 @@ def render_ad_group_phase():
                     ad_data
                 )
 
-                st.success("✅ Complete ad setup created!"                st.markdown(f"""
+                st.success("Complete ad setup created!")
+                st.markdown(f"""
                 - **Ad Group**: {ad_group_result['ad_group_id']}
                 - **Keywords**: {keywords_result['keywords_created']} added
                 - **Ad**: {ad_result['ad_id']} created

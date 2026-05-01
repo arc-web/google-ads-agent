@@ -1,0 +1,1114 @@
+{
+  "status": "fail",
+  "scanned_files": 133,
+  "scan_roots": [
+    "shared",
+    "presentations/tools"
+  ],
+  "blocked_patterns": [
+    "thinkhappylivehealthy",
+    "think happy live healthy",
+    "thhl",
+    "therappc",
+    "wright",
+    "myexpertresume",
+    "my expert resume",
+    "my_expert_resume",
+    "/users/home/",
+    "arc - search -"
+  ],
+  "findings": [
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 164,
+      "pattern": "wright",
+      "text": "'brand_terms': ['wright\\'s impact', 'wright\\'s window', 'wright\\'s door', 'wrights impact']"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 524,
+      "pattern": "wright",
+      "text": "# Validate county campaign structure (Wright's specific)"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 525,
+      "pattern": "wright",
+      "text": "if \"broward\" in campaign_name.lower() and \"wrights\" in campaign_name.lower():"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 906,
+      "pattern": "wright",
+      "text": "if client_name == \"wrights_impact_window_and_door\":"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 1003,
+      "pattern": "wright",
+      "text": "if client_name == \"wrights_impact_window_and_door\":"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 1168,
+      "pattern": "wright",
+      "text": "# Comprehensive ad copy validation (Wright's Impact specific)"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 1169,
+      "pattern": "wright",
+      "text": "if client_name == \"wrights_impact_window_and_door\" and headlines:"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 1279,
+      "pattern": "wright",
+      "text": "\"\"\"Validate Wright's Impact ad copy best practices\"\"\""
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 1335,
+      "pattern": "wright",
+      "text": "suggestion=\"Add headlines with 'Wright's Impact', 'Wright's Window & Door', etc.\","
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 1369,
+      "pattern": "wright",
+      "text": "# Validate client requirements inclusion (Wright's Impact specific)"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 1370,
+      "pattern": "wright",
+      "text": "if client_name == \"wrights_impact_window_and_door\":"
+    },
+    {
+      "file": "shared/comprehensive_csv_validator.py",
+      "line": 1375,
+      "pattern": "wright",
+      "text": "\"\"\"Validate that Wright's Impact client requirements are included in ad copy\"\"\""
+    },
+    {
+      "file": "shared/copy_engine/context.py",
+      "line": 27,
+      "pattern": "therappc",
+      "text": "agency: str                        # e.g. \"therappc\""
+    },
+    {
+      "file": "shared/copy_engine/context.py",
+      "line": 28,
+      "pattern": "thinkhappylivehealthy",
+      "text": "client: str                        # e.g. \"thinkhappylivehealthy\""
+    },
+    {
+      "file": "shared/copy_engine/editor/char_limit_enforcer.py",
+      "line": 7,
+      "pattern": "thhl",
+      "text": "The first THHL build shipped 6 over-limit assets to the client review"
+    },
+    {
+      "file": "shared/copy_engine/editor/reporter.py",
+      "line": 248,
+      "pattern": "/users/home/",
+      "text": "self, base_path: str = \"/Users/home/ai/agents/ppc/google_ads_agent\""
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 12,
+      "pattern": "thinkhappylivehealthy",
+      "text": "python -m copy_engine.orchestrator --mode sweep   --csv /path/to/export.tsv --client thinkhappylivehealthy"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 13,
+      "pattern": "thinkhappylivehealthy",
+      "text": "python -m copy_engine.orchestrator --mode generate --client thinkhappylivehealthy --client-dir /path/to/client"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 59,
+      "pattern": "therappc",
+      "text": "agency:     Agency slug (e.g. \"therappc\")."
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 60,
+      "pattern": "thinkhappylivehealthy",
+      "text": "client:     Client slug (e.g. \"thinkhappylivehealthy\")."
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 72,
+      "pattern": "/users/home/",
+      "text": "base_path: str = \"/Users/home/ai/agents/ppc/google_ads_agent\","
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 549,
+      "pattern": "thhl",
+      "text": "# Sweep - audit THHL's existing CSV"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 552,
+      "pattern": "thinkhappylivehealthy",
+      "text": "--csv /Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/exports/ads.tsv \\\\"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 552,
+      "pattern": "therappc",
+      "text": "--csv /Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/exports/ads.tsv \\\\"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 552,
+      "pattern": "/users/home/",
+      "text": "--csv /Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/exports/ads.tsv \\\\"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 553,
+      "pattern": "thinkhappylivehealthy",
+      "text": "--client thinkhappylivehealthy"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 558,
+      "pattern": "thinkhappylivehealthy",
+      "text": "--client thinkhappylivehealthy \\\\"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 559,
+      "pattern": "thinkhappylivehealthy",
+      "text": "--client-dir /Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 559,
+      "pattern": "therappc",
+      "text": "--client-dir /Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 559,
+      "pattern": "/users/home/",
+      "text": "--client-dir /Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy"
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 580,
+      "pattern": "therappc",
+      "text": "default=\"therappc\","
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 581,
+      "pattern": "therappc",
+      "text": "help=\"Agency slug (default: therappc)\","
+    },
+    {
+      "file": "shared/copy_engine/orchestrator.py",
+      "line": 586,
+      "pattern": "thinkhappylivehealthy",
+      "text": "help=\"Client slug (e.g. thinkhappylivehealthy)\","
+    },
+    {
+      "file": "shared/gads/core/business_logic/client_onboarding_workflow.py",
+      "line": 319,
+      "pattern": "myexpertresume",
+      "text": "# Generate MyExpertResume campaigns for resume clients"
+    },
+    {
+      "file": "shared/gads/core/business_logic/client_onboarding_workflow.py",
+      "line": 328,
+      "pattern": "myexpertresume",
+      "text": "# Automatically generate MyExpertResume campaign suite for resume clients"
+    },
+    {
+      "file": "shared/gads/core/business_logic/client_onboarding_workflow.py",
+      "line": 331,
+      "pattern": "myexpertresume",
+      "text": "logger.info(f\"Generated MyExpertResume campaign suite for client {client_id}\")"
+    },
+    {
+      "file": "shared/gads/core/business_logic/client_onboarding_workflow.py",
+      "line": 450,
+      "pattern": "myexpertresume",
+      "text": "\"\"\"Generate MyExpertResume campaign suite for resume services clients\"\"\""
+    },
+    {
+      "file": "shared/gads/core/business_logic/client_onboarding_workflow.py",
+      "line": 483,
+      "pattern": "myexpertresume",
+      "text": "\"MyExpertResume National Executive\","
+    },
+    {
+      "file": "shared/gads/core/business_logic/client_onboarding_workflow.py",
+      "line": 484,
+      "pattern": "myexpertresume",
+      "text": "\"MyExpertResume Florida Executive\""
+    },
+    {
+      "file": "shared/gads/core/business_logic/google_ads_editor_exporter.py",
+      "line": 1262,
+      "pattern": "my expert resume",
+      "text": "\"business_name\": \"My Expert Resume\","
+    },
+    {
+      "file": "shared/gads/core/business_logic/google_ads_editor_exporter.py",
+      "line": 1263,
+      "pattern": "myexpertresume",
+      "text": "\"final_url\": \"https://myexpertresume.com/\","
+    },
+    {
+      "file": "shared/gads/core/google_ads_api_service.py",
+      "line": 73,
+      "pattern": "/users/home/",
+      "text": "parent_dir = \"/Users/home/aimacpro/4_agents/platform_agents\""
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 185,
+      "pattern": "wright",
+      "text": "client_name: Client name (e.g., 'wrights')"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 200,
+      "pattern": "wright",
+      "text": "'labels': f'{county.title()} County|High Priority|Wright Impact Windows',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 259,
+      "pattern": "wright",
+      "text": "Generate business-specific keywords based on Wright Impact Windows strategy."
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 264,
+      "pattern": "wright",
+      "text": "client_name: Client name (wrights)"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 272,
+      "pattern": "wright",
+      "text": "'wrights impact windows',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 273,
+      "pattern": "wright",
+      "text": "'wright impact window and door',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 274,
+      "pattern": "wright",
+      "text": "'wrights hurricane windows',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 275,
+      "pattern": "wright",
+      "text": "'wrights energy efficient windows'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 278,
+      "pattern": "wright",
+      "text": "'wrights impact doors',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 279,
+      "pattern": "wright",
+      "text": "'wright impact door installation',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 280,
+      "pattern": "wright",
+      "text": "'wrights storm doors',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 281,
+      "pattern": "wright",
+      "text": "'wrights hurricane doors'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 284,
+      "pattern": "wright",
+      "text": "'wrights hurricane protection',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 285,
+      "pattern": "wright",
+      "text": "'wright hurricane windows and doors',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 286,
+      "pattern": "wright",
+      "text": "'wrights storm protection florida',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 287,
+      "pattern": "wright",
+      "text": "'wrights impact protection'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 290,
+      "pattern": "wright",
+      "text": "'wrights energy efficient windows',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 291,
+      "pattern": "wright",
+      "text": "'wright energy saving windows',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 292,
+      "pattern": "wright",
+      "text": "'wrights florida energy windows',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 293,
+      "pattern": "wright",
+      "text": "'wrights pace financing windows'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 296,
+      "pattern": "wright",
+      "text": "'wrights commercial impact windows',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 297,
+      "pattern": "wright",
+      "text": "'wright commercial doors florida',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 298,
+      "pattern": "wright",
+      "text": "'wrights condo impact windows',"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 299,
+      "pattern": "wright",
+      "text": "'wright commercial window solutions'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 307,
+      "pattern": "wright",
+      "text": "keywords = service_keywords.get(service_abbrev, [f'wrights {service_abbrev}'])"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 311,
+      "pattern": "wright",
+      "text": "return f'wrights impact windows {city_display.lower()}'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 313,
+      "pattern": "wright",
+      "text": "return f'wrights impact doors {city_display.lower()}'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 315,
+      "pattern": "wright",
+      "text": "return f'wrights hurricane protection {city_display.lower()}'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 317,
+      "pattern": "wright",
+      "text": "return f'wrights energy windows {city_display.lower()}'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 319,
+      "pattern": "wright",
+      "text": "return f'wrights commercial windows {city_display.lower()}'"
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 323,
+      "pattern": "wright",
+      "text": "Generate proper business URLs based on Wright Impact Windows website structure."
+    },
+    {
+      "file": "shared/gads/core/search_campaigns/search_csv_generator.py",
+      "line": 334,
+      "pattern": "wright",
+      "text": "base_url = 'https://wrightsimpactwindowanddoor.com'"
+    },
+    {
+      "file": "shared/gads/tools/ad_extensions_examples.py",
+      "line": 38,
+      "pattern": "my expert resume",
+      "text": "\"name\": \"My Expert Resume\","
+    },
+    {
+      "file": "shared/gads/tools/ad_extensions_examples.py",
+      "line": 39,
+      "pattern": "myexpertresume",
+      "text": "\"website\": \"https://myexpertresume.com\","
+    },
+    {
+      "file": "shared/gads/tools/ad_extensions_examples.py",
+      "line": 202,
+      "pattern": "myexpertresume",
+      "text": "\"name\": \"MyExpertResume Professional Services\","
+    },
+    {
+      "file": "shared/gads/tools/ad_extensions_examples.py",
+      "line": 205,
+      "pattern": "my expert resume",
+      "text": "\"brand_business_name\": \"My Expert Resume\","
+    },
+    {
+      "file": "shared/gads/tools/ad_extensions_examples.py",
+      "line": 206,
+      "pattern": "myexpertresume",
+      "text": "\"website\": \"https://myexpertresume.com\","
+    },
+    {
+      "file": "shared/gads/tools/ad_group_examples.py",
+      "line": 169,
+      "pattern": "myexpertresume",
+      "text": "\"name\": \"MyExpertResume Executive Campaign\","
+    },
+    {
+      "file": "shared/gads/tools/ad_group_examples.py",
+      "line": 175,
+      "pattern": "my expert resume",
+      "text": "\"brand_business_name\": \"My Expert Resume\","
+    },
+    {
+      "file": "shared/presentation/__init__.py",
+      "line": 18,
+      "pattern": "thinkhappylivehealthy",
+      "text": "- clients/therappc/thinkhappylivehealthy/docs/hitl_doc_design_postmortem_2026-04-28.md"
+    },
+    {
+      "file": "shared/presentation/__init__.py",
+      "line": 18,
+      "pattern": "therappc",
+      "text": "- clients/therappc/thinkhappylivehealthy/docs/hitl_doc_design_postmortem_2026-04-28.md"
+    },
+    {
+      "file": "shared/presentation/build_fixed_campaign_review.py",
+      "line": 204,
+      "pattern": "think happy live healthy",
+      "text": "<h1>Think Happy Live Healthy</h1>"
+    },
+    {
+      "file": "shared/presentation/build_fixed_campaign_review.py",
+      "line": 210,
+      "pattern": "arc - search -",
+      "text": "<span><strong>Campaign</strong> ARC - Search - Services - V1</span>"
+    },
+    {
+      "file": "shared/presentation/build_fixed_campaign_review.py",
+      "line": 237,
+      "pattern": "think happy live healthy",
+      "text": "<title>Google Ads Campaign Review - Think Happy Live Healthy - Fixed Page</title>"
+    },
+    {
+      "file": "shared/presentation/build_review_doc.py",
+      "line": 15,
+      "pattern": "thinkhappylivehealthy",
+      "text": "--html clients/therappc/thinkhappylivehealthy/build/2026-04-28_account_rebuild/campaign_review_2026-04-28.html \\\\"
+    },
+    {
+      "file": "shared/presentation/build_review_doc.py",
+      "line": 15,
+      "pattern": "therappc",
+      "text": "--html clients/therappc/thinkhappylivehealthy/build/2026-04-28_account_rebuild/campaign_review_2026-04-28.html \\\\"
+    },
+    {
+      "file": "shared/presentation/build_review_doc.py",
+      "line": 16,
+      "pattern": "thinkhappylivehealthy",
+      "text": "--pdf  clients/therappc/thinkhappylivehealthy/build/2026-04-28_account_rebuild/campaign_review_2026-04-28.pdf \\\\"
+    },
+    {
+      "file": "shared/presentation/build_review_doc.py",
+      "line": 16,
+      "pattern": "therappc",
+      "text": "--pdf  clients/therappc/thinkhappylivehealthy/build/2026-04-28_account_rebuild/campaign_review_2026-04-28.pdf \\\\"
+    },
+    {
+      "file": "shared/presentation/build_revision_review.py",
+      "line": 175,
+      "pattern": "think happy live healthy",
+      "text": "\"Brand - Think Happy Live Healthy - General\","
+    },
+    {
+      "file": "shared/presentation/build_revision_review.py",
+      "line": 513,
+      "pattern": "arc - search -",
+      "text": "campaign = validation.get(\"sources\", {}).get(\"campaign\") or targeting.get(\"campaign\") or \"ARC - Search - Services - V1\""
+    },
+    {
+      "file": "shared/run_csv_validation.py",
+      "line": 54,
+      "pattern": "wright",
+      "text": "python run_csv_validation.py --client wrights_impact_window_and_door"
+    },
+    {
+      "file": "shared/run_csv_validation.py",
+      "line": 69,
+      "pattern": "wright",
+      "text": "python run_csv_validation.py --monitor-new wrights_impact_window_and_door"
+    },
+    {
+      "file": "shared/run_csv_validation.py",
+      "line": 72,
+      "pattern": "wright",
+      "text": "python run_csv_validation.py --csv google_ads_agent/wrights_impact_window_and_door/campaigns/new_campaigns/campaign.csv"
+    },
+    {
+      "file": "shared/run_csv_validation.py",
+      "line": 75,
+      "pattern": "wright",
+      "text": "python run_csv_validation.py --workflow-status wrights_impact_window_and_door"
+    },
+    {
+      "file": "shared/tools/campaign/analyze_original_campaign.py",
+      "line": 21,
+      "pattern": "myexpertresume",
+      "text": "with open('MyExpertResume.com+ARC PMAX+23_Asset groups+2025-12-05.csv', 'r', encoding='utf-8', errors='ignore') as f:"
+    },
+    {
+      "file": "shared/tools/campaign/analyze_original_campaign.py",
+      "line": 81,
+      "pattern": "my expert resume",
+      "text": "print(\"   \u2022 Business: My Expert Resume (Resume writing & career coaching)\")"
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 5,
+      "pattern": "myexpertresume",
+      "text": "Based on the original MyExpertResume.com Performance Max campaign analysis."
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 44,
+      "pattern": "myexpertresume",
+      "text": "Create national MyExpertResume executive campaign (no regional keywords)."
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 51,
+      "pattern": "myexpertresume",
+      "text": "\"name\": \"MyExpertResume National Executive\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 66,
+      "pattern": "my expert resume",
+      "text": "\"brand_business_name\": \"My Expert Resume\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 69,
+      "pattern": "myexpertresume",
+      "text": "\"custom_parameters\": '{\"_campaignname\":\"MyExpertResume+National+Executive\"}',"
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 91,
+      "pattern": "myexpertresume",
+      "text": "\"MyExpertResume for Leaders\""
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 270,
+      "pattern": "myexpertresume",
+      "text": "Create Florida regional MyExpertResume campaign (Florida keywords only)."
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 276,
+      "pattern": "myexpertresume",
+      "text": "\"name\": \"MyExpertResume Florida Executive\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 291,
+      "pattern": "my expert resume",
+      "text": "\"brand_business_name\": \"My Expert Resume\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 294,
+      "pattern": "myexpertresume",
+      "text": "\"custom_parameters\": '{\"_campaignname\":\"MyExpertResume+Florida+Executive\"}',"
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 482,
+      "pattern": "myexpertresume",
+      "text": "Create a comprehensive campaign plan based on the original MyExpertResume structure"
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 485,
+      "pattern": "myexpertresume",
+      "text": "print(\"\ud83c\udfaf CAMPAIGN PLANNING: MyExpertResume.com TEST Campaign - Executive Resume Only\")"
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 527,
+      "pattern": "myexpertresume",
+      "text": "\"MyExpertResume Trusted Nationwide\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 545,
+      "pattern": "my expert resume",
+      "text": "\"business_name\": \"My Expert Resume\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 547,
+      "pattern": "myexpertresume",
+      "text": "\"final_url\": \"https://myexpertresume.com/executive-resume/\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 558,
+      "pattern": "myexpertresume",
+      "text": "\"url\": \"https://myexpertresume.com/executive-resume/\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 564,
+      "pattern": "myexpertresume",
+      "text": "\"url\": \"https://myexpertresume.com/\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 570,
+      "pattern": "myexpertresume",
+      "text": "\"url\": \"https://myexpertresume.com/career-coaching/\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 576,
+      "pattern": "myexpertresume",
+      "text": "\"url\": \"https://myexpertresume.com/guarantee/\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 582,
+      "pattern": "myexpertresume",
+      "text": "\"url\": \"https://myexpertresume.com/linkedin-profiles/\","
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 846,
+      "pattern": "myexpertresume",
+      "text": "print(\"   \u2713 Campaign structure matches original MyExpertResume.com setup\")"
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 907,
+      "pattern": "myexpertresume",
+      "text": "output_filename = f\"myexpertresume_{campaign_type}_campaign.csv\""
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 936,
+      "pattern": "myexpertresume",
+      "text": "print(\"\ud83c\udfaf CAMPAIGN PLANNING: Complete MyExpertResume Campaign Suite\")"
+    },
+    {
+      "file": "shared/tools/campaign/campaign_plan.py",
+      "line": 1005,
+      "pattern": "myexpertresume",
+      "text": "output_filename = \"myexpertresume_complete_campaign_suite.csv\""
+    },
+    {
+      "file": "shared/tools/campaign/pmax/pmax_theme_generator.py",
+      "line": 3,
+      "pattern": "myexpertresume",
+      "text": "Search Themes Generator for MyExpertResume PMAX Campaigns"
+    },
+    {
+      "file": "shared/tools/campaign/pmax/pmax_theme_generator.py",
+      "line": 258,
+      "pattern": "myexpertresume",
+      "text": "print(\"\ud83c\udfaf SEARCH THEMES GENERATOR - MyExpertResume\")"
+    },
+    {
+      "file": "shared/tools/campaign/rsa_campaign_generator.py",
+      "line": 116,
+      "pattern": "myexpertresume",
+      "text": "MyExpertResume.com - Executive Resume Writing Services"
+    },
+    {
+      "file": "shared/tools/campaign/search_themes_generator.py",
+      "line": 3,
+      "pattern": "myexpertresume",
+      "text": "Search Themes Generator for MyExpertResume PMAX Campaigns"
+    },
+    {
+      "file": "shared/tools/campaign/search_themes_generator.py",
+      "line": 258,
+      "pattern": "myexpertresume",
+      "text": "print(\"\ud83c\udfaf SEARCH THEMES GENERATOR - MyExpertResume\")"
+    },
+    {
+      "file": "shared/tools/campaign/sitelink_generator.py",
+      "line": 107,
+      "pattern": "myexpertresume",
+      "text": "MyExpertResume.com executive resume services"
+    },
+    {
+      "file": "shared/tools/campaign/website_content_analyzer.py",
+      "line": 3,
+      "pattern": "myexpertresume",
+      "text": "Website Content Analyzer for MyExpertResume.com"
+    },
+    {
+      "file": "shared/tools/campaign/website_content_analyzer.py",
+      "line": 25,
+      "pattern": "myexpertresume",
+      "text": "def __init__(self, base_url: str = \"https://myexpertresume.com\"):"
+    },
+    {
+      "file": "shared/tools/campaign/website_content_analyzer.py",
+      "line": 310,
+      "pattern": "myexpertresume",
+      "text": "parser = argparse.ArgumentParser(description='Analyze MyExpertResume website for ad copy strategy')"
+    },
+    {
+      "file": "shared/tools/campaign/website_content_analyzer.py",
+      "line": 311,
+      "pattern": "myexpertresume",
+      "text": "parser.add_argument('--url', default='https://myexpertresume.com',"
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 12,
+      "pattern": "myexpertresume",
+      "text": "python website_scanner.py https://myexpertresume.com/"
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 68,
+      "pattern": "myexpertresume",
+      "text": "# Based on the website content provided, these are the actual URLs from myexpertresume.com"
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 70,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 71,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/what-we-do/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 72,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/resume-services/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 73,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/curriculum-vitae/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 74,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/executive-resume/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 75,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/federal-resume/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 76,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/it-resume/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 77,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/management-resume/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 78,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/medical-device-resume/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 79,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/military-resume/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 80,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/pharmaceutical-resume/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 81,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/pricing-and-packaging/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 82,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/resume-services-guarantee/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 83,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/south-florida-resumes/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 84,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/student-resume/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 85,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/linkedin-profiles/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 86,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/career-coaching/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 87,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/testimonials/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 88,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/about-us/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 89,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/blog/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 90,
+      "pattern": "myexpertresume",
+      "text": "\"https://myexpertresume.com/contact/\","
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 92,
+      "pattern": "myexpertresume",
+      "text": "\"https://www.myexpertresume.com\""
+    },
+    {
+      "file": "shared/tools/website/website_scanner.py",
+      "line": 191,
+      "pattern": "myexpertresume",
+      "text": "print(\"Example: python website_scanner.py https://myexpertresume.com/\")"
+    },
+    {
+      "file": "shared/validators/csv_stage_manager.py",
+      "line": 247,
+      "pattern": "wright",
+      "text": "suggestions.append(\"Include Wright's brand names in headlines\")"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 6,
+      "pattern": "wright",
+      "text": "Includes Wright's Impact Window & Door specific ad copy requirements."
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 39,
+      "pattern": "wright",
+      "text": "# Wright's Impact Window & Door specific requirements"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 40,
+      "pattern": "wright",
+      "text": "self.wrights_brand_patterns = ["
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 41,
+      "pattern": "wright",
+      "text": "r\"Wright'?s\\s+Impact\\s+Windows?\","
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 42,
+      "pattern": "wright",
+      "text": "r\"Wright'?s\\s+Impact\\s+Doors?\","
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 43,
+      "pattern": "wright",
+      "text": "r\"Wright'?s\\s+Window\\s+&\\s+Door\","
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 44,
+      "pattern": "wright",
+      "text": "r\"Wright'?s\\s+Impact\\s+Specialists\","
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 45,
+      "pattern": "wright",
+      "text": "r\"Wright'?s\\s+Florida\\s+Protection\","
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 46,
+      "pattern": "wright",
+      "text": "r\"Wright'?s\\s+Lifetime\\s+Guarantee\""
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 49,
+      "pattern": "wright",
+      "text": "# Required headline categories for Wright's"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 60,
+      "pattern": "wright",
+      "text": "'patterns': self.wrights_brand_patterns,"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 61,
+      "pattern": "wright",
+      "text": "'examples': ['Wright\\'s Impact Windows', 'Wright\\'s Window & Door']"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 85,
+      "pattern": "wright",
+      "text": "# Required value impact messaging for Wright's"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 109,
+      "pattern": "wright",
+      "text": "# Trust signals required for Wright's"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 122,
+      "pattern": "wright",
+      "text": "r'\\b(?:best|worst|top|leading|#1)\\b',  # Unsubstantiated claims (except Wright's #1 positioning)"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 146,
+      "pattern": "wright",
+      "text": "# Check for Wright's specific content requirements"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 147,
+      "pattern": "wright",
+      "text": "wrights_issues = self._validate_wrights_content_requirements(row, row_num)"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 148,
+      "pattern": "wright",
+      "text": "issues.extend(wrights_issues)"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 386,
+      "pattern": "wright",
+      "text": "def _validate_wrights_content_requirements(self, row: Dict[str, str], row_num: int) -> List[Dict[str, Any]]:"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 387,
+      "pattern": "wright",
+      "text": "\"\"\"Validate Wright's Impact Window & Door specific content requirements\"\"\""
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 565,
+      "pattern": "wright",
+      "text": "# Check for policy violations (skip #1 claims for Wright's positioning)"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 567,
+      "pattern": "wright",
+      "text": "# Skip the #1/best/top pattern since Wright's requires #1 positioning"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 693,
+      "pattern": "wright",
+      "text": "'max_score': 12,  # Updated for Wright's specific requirements"
+    },
+    {
+      "file": "shared/validators/search/text_ad_validator.py",
+      "line": 700,
+      "pattern": "wright",
+      "text": "'wrights_compliance': 'Good' if category_compliance >= 3 and value_messaging_score >= 2 else 'Needs Work'"
+    }
+  ]
+}

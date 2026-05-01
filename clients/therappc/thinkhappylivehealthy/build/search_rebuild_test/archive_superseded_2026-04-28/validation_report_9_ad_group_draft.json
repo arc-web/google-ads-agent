@@ -1,0 +1,90 @@
+{
+  "status": "pass",
+  "source_manual_rows": 149,
+  "output_rows": 184,
+  "headers": 202,
+  "counts": {
+    "campaign_rows_with_name": 184,
+    "ad_group_rows": 9,
+    "rsa_rows": 9,
+    "keyword_rows": 130,
+    "location_rows": 17,
+    "bid_modifier_rows": 18,
+    "radius_rows": 1,
+    "age_rows": 7,
+    "gender_rows": 3,
+    "household_income_rows": 7
+  },
+  "unique_ad_groups": [
+    "ADHD Testing",
+    "Adult Therapy",
+    "Autism Testing",
+    "Child Psychological Testing",
+    "Gifted Testing",
+    "Kindergarten Readiness Testing",
+    "Parent Child Services",
+    "Psychiatry",
+    "Psychoeducational Evaluations"
+  ],
+  "unique_keyword_count": 104,
+  "issues": [],
+  "sources": {
+    "manual_campaign": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/campaigns/THHL_Search_Campaign_2026-04-28.csv",
+    "manual_encoding": "utf-16",
+    "current_export": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/campaigns/ThinkHappyLiveHealthy_export_2026-04-27.csv",
+    "current_export_encoding": "utf-16",
+    "targeting_spec": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/targeting_spec.json",
+    "copy_overrides": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/copy_overrides.json",
+    "output_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Rebuild_Test_2026-04-28.csv"
+  },
+  "copy_overrides": [
+    {
+      "ad_group": "Psychiatry",
+      "field": "Headline 9",
+      "from": "Skilled Psych Nurse Practitioners",
+      "to": "Psych Nurse Practitioners",
+      "reason": "Fit the 30 character RSA headline limit.",
+      "matches": "1"
+    },
+    {
+      "ad_group": "Child Psychological Testing",
+      "field": "Headline 4",
+      "from": "Comprehensive Child Assessments",
+      "to": "Child Psych Assessments",
+      "reason": "Fit the 30 character RSA headline limit.",
+      "matches": "1"
+    },
+    {
+      "ad_group": "Psychoeducational Evaluations",
+      "field": "Description 1",
+      "from": "K-12 psychoeducational evaluations for learning disabilities, IEP planning & school support.",
+      "to": "K-12 evaluations for learning, IEP planning, and school support from licensed clinicians.",
+      "reason": "Fit the 90 character RSA description limit.",
+      "matches": "1"
+    },
+    {
+      "ad_group": "Gifted Testing",
+      "field": "Headline 6",
+      "from": "Northern Virginia Gifted Testing",
+      "to": "NOVA Gifted Testing",
+      "reason": "Fit the 30 character RSA headline limit.",
+      "matches": "1"
+    },
+    {
+      "ad_group": "Kindergarten Readiness Testing",
+      "field": "Headline 4",
+      "from": "Kindergarten Assessment Near You",
+      "to": "Kindergarten Readiness Test",
+      "reason": "Fit the 30 character RSA headline limit.",
+      "matches": "1"
+    },
+    {
+      "ad_group": "Autism Testing",
+      "field": "Description 1",
+      "from": "Autism spectrum evaluations for children & adults in Northern Virginia. Licensed evaluators.",
+      "to": "Autism evaluations for children and adults in Northern Virginia with licensed evaluators.",
+      "reason": "Fit the 90 character RSA description limit.",
+      "matches": "1"
+    }
+  ]
+}

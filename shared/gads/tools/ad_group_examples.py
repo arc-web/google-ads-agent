@@ -259,8 +259,8 @@ def demonstrate_performance_analysis():
     print(f"Active Ad Groups: {dashboard['summary']['active_ad_groups']}")
     print(f"Total Keywords: {dashboard['summary']['total_keywords']}")
 
-    print("
-Performance Metrics:"    perf = dashboard['performance_summary']
+    print("\nPerformance Metrics:")
+    perf = dashboard['performance_summary']
     print(f"  Total Impressions: {perf['total_impressions']:,}")
     print(f"  Total Clicks: {perf['total_clicks']:,}")
     print(f"  Total Cost: ${perf['total_cost']:,.2f}")
@@ -268,16 +268,16 @@ Performance Metrics:"    perf = dashboard['performance_summary']
     print(f"  Average CTR: {perf['average_ctr']}%")
     print(f"  Average CPA: ${perf['average_cpa']:.2f}")
 
-    print("
-Top Performers:"    for ag in dashboard['top_performers']:
+    print("\nTop Performers:")
+    for ag in dashboard['top_performers']:
         print(f"  🏆 {ag['name']}: {ag['conversions']} conversions @ ${ag['cpa']:.2f} CPA")
 
-    print("
-Underperformers:"    for ag in dashboard['underperformers']:
+    print("\nUnderperformers:")
+    for ag in dashboard['underperformers']:
         print(f"  📉 {ag['name']}: {ag['conversions']} conversions @ ${ag['cpa']:.2f} CPA")
 
-    print("
-Insights:"    for insight in dashboard['insights']:
+    print("\nInsights:")
+    for insight in dashboard['insights']:
         print(f"  💡 {insight}")
 
 def demonstrate_best_practices():
@@ -320,8 +320,8 @@ def demonstrate_template_usage():
     # Create ad group from local services template
     local_ad_group = ag_system.create_ad_group_from_template("local_services")
 
-    print("
-Local Services Ad Group from Template:"    print(f"Name: {local_ad_group['name']}")
+    print("\nLocal Services Ad Group from Template:")
+    print(f"Name: {local_ad_group['name']}")
     print(f"Type: {local_ad_group['type']}")
     print(f"Target Audience: {local_ad_group.get('target_audience', 'N/A')}")
 

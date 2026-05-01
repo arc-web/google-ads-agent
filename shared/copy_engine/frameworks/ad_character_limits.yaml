@@ -1,0 +1,129 @@
+# Google Ads Character Limits - Complete Reference
+# All character limits for every Google Ads format
+# Reference: https://support.google.com/google-ads/answer/1704390
+
+# TEXT ADS
+text_ads:
+  headline_max_chars: 30
+  headline_min_chars: 25  # Recommended minimum for quality
+  description_max_chars: 80
+  description_min_chars: 70  # Recommended minimum for quality
+  display_path_max_chars: 15
+
+# RESPONSIVE SEARCH ADS (RSA)
+responsive_search_ads:
+  headline_max_chars: 30
+  headline_min_chars: 23  # Recommended minimum
+  description_max_chars: 90  # Google hard limit is 90 (not 80)
+  description_min_chars: 70  # Recommended minimum
+  headlines_per_ad: 15
+  descriptions_per_ad: 4  # Google supports 4 descriptions per RSA
+
+# PERFORMANCE MAX (PMAX)
+performance_max:
+  headline_max_chars: 30
+  long_headline_max_chars: 90
+  description_max_chars: 80
+  headlines_per_ad: 5
+  descriptions_per_ad: 5
+
+# CALLOUT EXTENSIONS
+callout_extensions:
+  text_max_chars: 25
+  callouts_per_campaign: 20
+
+# SITELINK EXTENSIONS
+sitelink_extensions:
+  text_max_chars: 25
+  description_max_chars: 35
+  sitelinks_per_campaign: 6
+
+# STRUCTURED SNIPPET EXTENSIONS
+structured_snippets:
+  header_max_chars: 25
+  values_max_chars: 25  # Per value
+  values_per_snippet: 10
+
+# APP EXTENSIONS
+app_extensions:
+  text_max_chars: 25
+
+# PRICE EXTENSIONS
+price_extensions:
+  header_max_chars: 25
+  description_max_chars: 25
+
+# PROMOTION EXTENSIONS
+promotion_extensions:
+  promotion_text_max_chars: 45
+
+# LOCATION EXTENSIONS
+location_extensions:
+  business_name_max_chars: 30
+  address_max_chars: 80
+
+# AFFILIATE LOCATION EXTENSIONS
+affiliate_location_extensions:
+  chain_name_max_chars: 25
+  address_max_chars: 80
+
+# LEAD FORM EXTENSIONS
+lead_form_extensions:
+  headline_max_chars: 25
+  description_max_chars: 80
+  privacy_policy_url_max_chars: 2074
+
+# HOTEL EXTENSIONS
+hotel_extensions:
+  hotel_name_max_chars: 25
+  address_max_chars: 80
+
+# IMAGE EXTENSIONS
+image_extensions:
+  aspect_ratios: ["1.91:1", "1:1", "4:5"]  # Landscape, square, portrait
+  min_resolution: "600x314"  # Landscape minimum
+  max_file_size_mb: 5120
+
+# VIDEO EXTENSIONS
+video_extensions:
+  max_duration_seconds: 30
+  max_file_size_mb: 100
+  supported_formats: ["MP4", "AVI", "MOV", "FLV", "WMV"]
+
+# BUSINESS MESSAGING EXTENSIONS
+business_messaging_extensions:
+  welcome_message_max_chars: 80
+  automated_responses_max_chars: 250
+
+# DYNAMIC SEARCH ADS
+dynamic_search_ads:
+  headline_max_chars: 30
+  description_max_chars: 80
+
+# SHOPPING ADS
+shopping_ads:
+  product_title_max_chars: 150
+  brand_max_chars: 70
+  category_max_chars: 100
+
+# DISCOVERY ADS
+discovery_ads:
+  headline_max_chars: 40
+  description_max_chars: 125
+  long_headline_max_chars: 90
+
+# GMAIL ADS
+gmail_ads:
+  subject_max_chars: 50
+  headline_max_chars: 25
+  description_max_chars: 100
+  business_name_max_chars: 20
+
+# VALIDATION RULES
+validation:
+  required_fields: ["headline", "description"]
+  recommended_min_lengths:
+    headline: 25
+    description: 70
+  prohibited_characters: ["<", ">", "{", "}", "[", "]", "|", "\\", "^", "~"]
+  reserved_words: ["free", "guarantee", "warranty"]

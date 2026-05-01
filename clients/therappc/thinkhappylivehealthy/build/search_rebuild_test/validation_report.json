@@ -1,0 +1,32 @@
+{
+  "status": "pass",
+  "source_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Rebuild_Test_2026-04-28.csv",
+  "encoding": "utf-16",
+  "rows": 1750,
+  "headers": 203,
+  "campaigns": [
+    "ARC - Search - Services - V1"
+  ],
+  "ad_groups": 96,
+  "counts": {
+    "campaign_rows": 1,
+    "ad_group_rows": 96,
+    "keyword_rows": 1539,
+    "rsa_rows": 96,
+    "location_rows": 17,
+    "bid_modifier_rows": 15,
+    "radius_rows": 1
+  },
+  "keyword_criterion_types": {
+    "Phrase": 1539
+  },
+  "issue_counts": {},
+  "issues": [],
+  "output_rows": 1750,
+  "compatibility_note": "rebuild_thhl_search_campaign.py is an older entry point. It now delegates to generate_services_search_editor_csv.py so legacy commands produce current-format staging output.",
+  "sources": {
+    "current_generator": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/generate_services_search_editor_csv.py",
+    "current_generator_output": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Services_Editor_Staging_CURRENT.csv",
+    "output_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Rebuild_Test_2026-04-28.csv"
+  }
+}

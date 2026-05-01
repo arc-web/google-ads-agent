@@ -1,0 +1,44 @@
+[
+  {
+    "ad_group": "Psychiatry",
+    "field": "Headline 9",
+    "from": "Skilled Psych Nurse Practitioners",
+    "to": "Psych Nurse Practitioners",
+    "reason": "Fit the 30 character RSA headline limit."
+  },
+  {
+    "ad_group": "Child Psychological Testing",
+    "field": "Headline 4",
+    "from": "Comprehensive Child Assessments",
+    "to": "Child Psych Assessments",
+    "reason": "Fit the 30 character RSA headline limit."
+  },
+  {
+    "ad_group": "Psychoeducational Evaluations",
+    "field": "Description 1",
+    "from": "K-12 psychoeducational evaluations for learning disabilities, IEP planning & school support.",
+    "to": "K-12 evaluations for learning, IEP planning, and school support from licensed clinicians.",
+    "reason": "Fit the 90 character RSA description limit."
+  },
+  {
+    "ad_group": "Gifted Testing",
+    "field": "Headline 6",
+    "from": "Northern Virginia Gifted Testing",
+    "to": "NOVA Gifted Testing",
+    "reason": "Fit the 30 character RSA headline limit."
+  },
+  {
+    "ad_group": "Kindergarten Readiness Testing",
+    "field": "Headline 4",
+    "from": "Kindergarten Assessment Near You",
+    "to": "Kindergarten Readiness Test",
+    "reason": "Fit the 30 character RSA headline limit."
+  },
+  {
+    "ad_group": "Autism Testing",
+    "field": "Description 1",
+    "from": "Autism spectrum evaluations for children & adults in Northern Virginia. Licensed evaluators.",
+    "to": "Autism evaluations for children and adults in Northern Virginia with licensed evaluators.",
+    "reason": "Fit the 90 character RSA description limit."
+  }
+]

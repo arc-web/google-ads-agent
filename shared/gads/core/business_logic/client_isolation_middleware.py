@@ -196,7 +196,7 @@ class ClientIsolationMiddleware:
 
             # Ensure proper cleanup on error
             if operation_id and client_context:
-                client_context.end_operation(operation_id, success=False, str(e))
+                client_context.end_operation(operation_id, success=False, error=str(e))
 
             yield MiddlewareResponse(
                 success=False,

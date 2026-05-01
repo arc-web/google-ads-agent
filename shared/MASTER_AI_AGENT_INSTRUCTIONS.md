@@ -1,72 +1,40 @@
-# 🤖 MASTER AI AGENT INSTRUCTIONS - GOOGLE AGENTS
+# Google_Ads_Agent Master Instructions
 
-## ABSOLUTE PROHIBITIONS - NEVER DO THESE
+This file is retained for compatibility with older scripts and docs. It no longer supersedes the repository process in `AGENTS.md`.
 
-### Timeline Enforcement (CRITICAL)
+## Canonical Process
 
-**This is the master instruction for all Google Agents and supersedes all other guidelines.**
+For Google Ads account rebuild work, follow the one-shot Google Ads Editor staging workflow:
 
-```yaml
-absolute_prohibitions:
-  never_provide_timelines: true
-  never_estimate_deadlines: true
-  never_guess_completion_times: true
-  never_suggest_timeframes: true
-  never_use_phrases_like:
-    - "estimated: X hours"
-    - "X-Y weeks"
-    - "X months"
-    - "timeline"
-    - "deadline"
-    - "completion time"
-    - "time estimate"
+- `docs/GOOGLE_ADS_AGENT_PROCESS.md`
+- `docs/CLIENT_DIRECTORY_SCAFFOLDING.md`
 
-  prohibition_reasoning:
-    - Timelines are ALWAYS wrong and misleading
-    - User gets angry when timelines are provided
-    - Estimates create false expectations
-    - Better to focus on what can be done now vs when
-    - Prioritization is more valuable than scheduling
+That workflow is the source of truth for audit, website scan, strategy, keyword expansion, RSA copy generation, targeting, validation, and human review. Client-specific folders are not process authorities.
 
-  allowed_responses:
-    - "This can be addressed"
-    - "Let's tackle this systematically"
-    - "I'll work on this now"
-    - "Priority: High/Medium/Low"
-    - "Complexity: High/Medium/Low"
-    - "I can start working on this immediately"
-```
+## Non-Negotiable Rebuild Rules
 
-## AI Agent Planning Guidelines
+- Google Ads Editor is the staging layer.
+- Generated CSVs must be reviewed by a human before posting.
+- Search rebuild keywords are phrase match only by default.
+- Do not generate broad match.
+- Do not generate exact match unless explicitly requested for a controlled test.
+- Use plain keyword text with `Criterion Type` set to `Phrase`.
+- Populate `EU political ads` on campaign rows.
+- Use `Location ID` for location targets when available.
+- Generate useful RSA copy, not one-word or bare-label headlines.
+- Keep validation reports and human review files with every build.
 
-### Planning Creation Instructions
-- Use `todo_write` tool for structured task management
-- Focus on priority levels, not timeframes
-- Emphasize immediate, chronological execution
-- Never provide scheduling or deadline estimates
+## Communication Rules
 
-### Response Standards
-- Replace timeline suggestions with priority indicators
-- Focus on complexity assessment over time estimation
-- Prioritize current actionable items
-- Use systematic, step-by-step approaches
+- Never use em dashes.
+- Always link to sources.
+- When discussing platform requirements, cite Google documentation or the local process document.
 
-## Enforcement Level
+## Reference Sources
 
-**This instruction applies to ALL Google Agents:**
-- Google Ads Agent
-- Google Cloud Agent
-- YouTube Agent
-- Google Analytics Agent (when implemented)
-- Google Drive Agent (when implemented)
-- Google People Agent (when implemented)
-- Gmail Agent (when implemented)
-- All future Google platform agents
-
-## Validation
-
-All Google agents must reference this master instruction file and comply with these absolute prohibitions. Any violation of timeline enforcement will be considered a critical error.
-
-## Reference
-
-This instruction is derived from the Google Ads agent core traits configuration and elevated to master instruction level for the entire Google agents ecosystem.
+- Google Ads Editor CSV import: https://support.google.com/google-ads/editor/answer/30564?hl=en
+- Google Ads Editor CSV columns: https://support.google.com/google-ads/editor/answer/57747?hl=en
+- Google Ads Editor location import: https://support.google.com/google-ads/editor/answer/30573?hl=en
+- Google responsive search ads: https://support.google.com/google-ads/answer/7684791?hl=en-EN
+- Google geo targets: https://developers.google.com/google-ads/api/data/geotargets
+- Google Ads EU political advertising status: https://developers.google.com/google-ads/api/reference/rpc/v21/EuPoliticalAdvertisingStatusEnum.EuPoliticalAdvertisingStatus
