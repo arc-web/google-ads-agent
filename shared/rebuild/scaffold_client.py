@@ -33,10 +33,23 @@ def replace_placeholders(path: Path, replacements: dict[str, str]) -> None:
     path.write_text(text, encoding="utf-8")
 
 
-def scaffold_client(agency: str, client: str, display_name: str | None, website: str | None) -> Path:
+def materialize_template_filenames(target: Path) -> None:
+    """Rename copied *_template files to their active client filenames."""
+    for path in sorted(target.rglob("*_template.*")):
+        active_name = path.name.replace("_template", "", 1)
+        path.rename(path.with_name(active_name))
+
+
+def scaffold_client(
+    agency: str,
+    client: str,
+    display_name: str | None,
+    website: str | None,
+    clients_dir: Path = CLIENTS_DIR,
+) -> Path:
     agency_slug = slug(agency)
     client_slug = slug(client)
-    target = CLIENTS_DIR / agency_slug / client_slug
+    target = clients_dir / agency_slug / client_slug
 
     if target.exists():
         raise FileExistsError(f"Client directory already exists: {target}")
@@ -54,6 +67,8 @@ def scaffold_client(agency: str, client: str, display_name: str | None, website:
 
     for path in target.rglob("*"):
         replace_placeholders(path, replacements)
+
+    materialize_template_filenames(target)
 
     return target
 

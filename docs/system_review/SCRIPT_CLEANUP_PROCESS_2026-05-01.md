@@ -338,6 +338,34 @@ Earlier checks to add to future loops:
 - scan copy code for one-client examples, local machine paths, and old 12-headline defaults
 - test asset-count contracts with fake LLM clients before touching real client data
 - keep model/provider credentials outside active unit tests
+
+## Client Template Scaffold Loop
+
+Cleanup target:
+
+- `templates/client_template/`
+- `shared/rebuild/scaffold_client.py`
+
+Outcome:
+
+- converted the campaign CSV template into a tab-separated active Search staging example
+- added the full 15 RSA headline and 4 description columns to the template
+- made the template use `Ad Group`, `Criterion Type: Phrase`, `Broad match keywords: Off`, and `EU political ads`
+- added separate campaign, ad group, keyword, RSA, and location rows so the template passes the active staging validator
+- made scaffold output materialize `*_template` files into active filenames such as `account_export.csv`
+- added temp-directory scaffold tests so no real client folder is touched
+
+Reusable lesson:
+
+- client templates should be validated like generated artifacts, not treated as static documentation
+- scaffolding tests should use temp directories and should prove existing client folders are protected from overwrite
+- source templates can stay UTF-8 for placeholder replacement, but the active schema and validator contract must still match Google Ads Editor staging
+
+Earlier checks to add to future loops:
+
+- validate scaffolded template CSVs through `shared/rebuild/staging_validator.py`
+- check template filenames match the README required first files
+- keep template defaults Search-first, phrase-only, and API-off
 - check output encoding before preserving old save methods
 - check whether a generic-looking exporter is quietly activating PMAX or API behavior
 - preserve old import names only when the active behavior is explicit and tested
