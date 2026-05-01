@@ -677,3 +677,31 @@ Earlier checks to add to future loops:
 - validate generated staging output before adding presentation/report generation
 - check for API upload fields and live mutation commands as part of dry-run evidence
 - confirm `MasterValidator` and `SearchMasterValidator` both report 0 issues before calling a build test clean
+
+## THLH Build Readiness Loop
+
+Cleanup target:
+
+- THLH REV1 staging evidence
+- THLH current build package readiness
+
+Outcome:
+
+- confirmed THLH is the first active client for the next account-build testing phase
+- revalidated the current REV1 staging artifact through the active staging validator
+- confirmed `MasterValidator` and `SearchMasterValidator` both report 0 issues
+- documented that REV1 is staging-clean but not yet a complete one-shot output package
+- identified that the older `human_review.md` describes a prior broad service build and should not be used as current REV1 authority
+- identified canonical one-shot filenames still missing or not yet normalized
+
+Reusable lesson:
+
+- a clean staging CSV is necessary, but it is not the same as a complete one-shot rebuild package
+- current review authority should point to the exact staging artifact being reviewed
+- old client build evidence can be valuable without being treated as current process output
+
+Earlier checks to add to future loops:
+
+- compare current staging evidence against the one-shot output contract before declaring a client fully packaged
+- detect stale human review files when they describe older output counts or campaign names
+- preserve client-specific filenames until canonical aliases are intentionally created in a new package folder
