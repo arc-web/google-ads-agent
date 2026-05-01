@@ -1,0 +1,6 @@
+❌ Import error: cannot import name 'create_server' from 'ads_mcp.server' (/Users/home/aimacpro/7_tools/mcp_tools/servers/google_ads_mcp/venv/lib/python3.14/site-packages/ads_mcp/server.py)
+
+💡 Try running:
+   cd /Users/home/aimacpro/7_tools/mcp_tools/servers/google_ads_mcp
+   source venv/bin/activate
+   pip install git+https://github.com/google-marketing-solutions/google_ads_mcp.git
