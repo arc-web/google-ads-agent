@@ -1,0 +1,39 @@
+{
+  "client": "Mindful Mental Health Counseling",
+  "website": "https://nycmindfulmentalhealthcounseling.com/",
+  "extracted_facts": {
+    "primary_positioning": "online therapy for anxiety and related concerns",
+    "service_area": [
+      "New York",
+      "New Jersey"
+    ],
+    "audience": [
+      "adolescents",
+      "young adults in their 20s and 30s",
+      "adults for group therapy"
+    ],
+    "services": [
+      "individual therapy",
+      "group therapy",
+      "anxiety therapy",
+      "depression therapy",
+      "OCD therapy",
+      "social anxiety support"
+    ],
+    "modalities": [
+      "CBT",
+      "DBT",
+      "ACT",
+      "mindfulness"
+    ],
+    "billing": "out-of-network with superbills available for eligible reimbursement",
+    "consultation": "introductory consultation call available"
+  },
+  "human_review_needed": [
+    "confirm current capacity by service",
+    "confirm whether adolescent-focused search should be active",
+    "confirm whether New York and New Jersey should share one campaign or split by state",
+    "confirm client-approved budget",
+    "confirm whether group therapy is currently enrolling or waitlist only"
+  ]
+}

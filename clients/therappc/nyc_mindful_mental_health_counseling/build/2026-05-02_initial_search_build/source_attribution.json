@@ -1,0 +1,52 @@
+{
+  "client": "Mindful Mental Health Counseling",
+  "website": "https://nycmindfulmentalhealthcounseling.com/",
+  "source_pages": [
+    {
+      "url": "https://nycmindfulmentalhealthcounseling.com/",
+      "used_for": [
+        "anxiety focus",
+        "online therapy for adolescents and young adults in New York and New Jersey",
+        "services and modalities",
+        "founder and licensing language"
+      ]
+    },
+    {
+      "url": "https://nycmindfulmentalhealthcounseling.com/contact/",
+      "used_for": [
+        "request appointment call to action",
+        "out-of-network insurance and superbill language",
+        "phone number"
+      ]
+    },
+    {
+      "url": "https://nycmindfulmentalhealthcounseling.com/group-therapy-nyc/",
+      "used_for": [
+        "group therapy process",
+        "online sessions only",
+        "group session pricing",
+        "NY and NJ license/service eligibility"
+      ]
+    },
+    {
+      "url": "https://nycmindfulmentalhealthcounseling.com/cbt/",
+      "used_for": [
+        "CBT positioning and online therapy service area"
+      ]
+    },
+    {
+      "url": "https://nycmindfulmentalhealthcounseling.com/dbt/",
+      "used_for": [
+        "DBT positioning and skills-based copy"
+      ]
+    }
+  ],
+  "not_available": [
+    "Google Ads account export",
+    "search terms report",
+    "location performance report",
+    "conversion action report",
+    "client-approved budgets",
+    "client-approved priority service order"
+  ]
+}
