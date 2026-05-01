@@ -400,3 +400,30 @@ python3 -m pytest tests/test_staging_validator.py -q
 Result:
 
 - 7 passed
+
+## Pytest Config Added
+
+Repository test discovery is now configured here:
+
+- `pytest.ini`
+
+It sets:
+
+- `testpaths = tests`
+- `python_files = test_*.py`
+- quiet output by default
+
+Current test command:
+
+```bash
+python3 -m pytest
+```
+
+Result:
+
+- 7 passed
+
+Note:
+
+- the local Python environment still prints a `requests` dependency warning before pytest warning filters fully apply
+- the warning is not caused by the staging validator tests
