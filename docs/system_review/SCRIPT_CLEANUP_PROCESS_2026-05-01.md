@@ -248,6 +248,36 @@ Earlier checks to add to future loops:
 - search for `auto_fix`, `--fix`, and writer calls before trusting old validation scripts
 - check CLI help examples for one-client names and old root path assumptions
 - require wrappers to expose the active validator report so failures can be traced to the current staging contract
+
+## Shared Scripts Quarantine Loop
+
+Cleanup target:
+
+- `shared/scripts/migrate_campaign_architecture.py`
+- `shared/scripts/setup_mcp.sh`
+- `shared/scripts/database/update-client-status.sql`
+- tracked generated cache under `shared/scripts/__pycache__/`
+
+Outcome:
+
+- converted the architecture migration script into an audit-only compatibility command
+- made legacy `--migrate` return a clear inactive-workflow error instead of creating directories or copying files
+- converted MCP setup into an inactive notice that does not install packages, write credentials, edit config, or contact Google Ads
+- converted the database status updater into a documentation-only SQL note with no executable statements
+- removed the tracked Python cache file from the shared scripts folder
+- added tests proving mutation modes are blocked and generated cache files are not tracked
+
+Reusable lesson:
+
+- setup, migration, and status scripts should default to inert audit behavior unless the current process explicitly activates them
+- shell scripts are high risk because they can install tools, write credentials, and edit local app configuration outside the repo
+- SQL files in shared folders can be dangerous even when they look like notes, so inactive SQL should contain comments only
+
+Earlier checks to add to future loops:
+
+- search scripts for `mkdir`, `curl`, `pip install`, `chmod`, `open(`, `write_text`, `shutil`, and SQL update statements
+- run inactive scripts with their old mutation flags and assert they exit nonzero without creating files
+- remove generated cache files from the touched script area as part of the same safety pass
 - check output encoding before preserving old save methods
 - check whether a generic-looking exporter is quietly activating PMAX or API behavior
 - preserve old import names only when the active behavior is explicit and tested
