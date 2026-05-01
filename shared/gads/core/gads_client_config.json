@@ -145,9 +145,10 @@
       "default_date_range": "LAST_30_DAYS",
       "max_accounts_per_query": 1,
       "mcp_server": {
-        "use_parent_directory": true,
-        "parent_config_path": "/Users/home/aimacpro/7_tools/mcp_tools/mcp_config.json",
-        "server_name": "google-ads"
+        "use_parent_directory": false,
+        "parent_config_path": "${ENV:GOOGLE_ADS_MCP_CONFIG_PATH}",
+        "server_name": "google-ads",
+        "status": "salvage_only"
       }
     },
     

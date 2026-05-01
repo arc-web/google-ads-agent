@@ -1,36 +1,28 @@
-# 🚀 Platform Integrations (integrations layer)
+# Shared GADS Integrations
 
-## Overview
-Platform integration layer for the Google Ads Client MCP system, including Airtable setup automation and natural language interface for conversational interaction with Google Ads accounts and client data.
+This folder is salvage-only.
 
-## Dependencies
-- Parent layer: Requires core at `../core`
-- Libraries: `aiohttp`, `openai`, `pyairtable`, `asyncio`
+## Current Status
 
-## Usage
-```bash
-# Setup Airtable integration
-python setup_airtable_integration.py
+The active Google Ads Agent workflow is Google Ads Editor staging. These integrations do not run as part of the active rebuild path.
 
-# Start natural language interface
-python natural_language_interface.py
+Files here may contain useful future ideas for:
 
-# Example queries:
-# "List accounts"
-# "Show campaign performance"
-# "List clients"
-# "Show spend data"
-```
+- Airtable setup
+- natural language interfaces
+- GitHub workflow helpers
+- external tool orchestration
 
-## Success Criteria
-- ✅ Airtable integration retrieves API credentials and client data
-- ✅ Natural language interface responds to user queries
-- ✅ OpenAI integration processes complex queries
-- ✅ Mock data provides immediate functionality
-- ✅ Environment file generation works correctly
+They also include inactive assumptions that must be reviewed before activation:
 
-## Links
-- Parent docs: ../../README.md
-- Child components: 
-  - `setup_airtable_integration.py` - Airtable setup and credential retrieval
-  - `natural_language_interface.py` - Conversational interface for Google Ads 
+- external credentials
+- API or MCP automation
+- command-line side effects
+- generated environment files
+- live repository operations
+
+## Activation Rule
+
+Do not use these integrations for live client work until a focused cleanup loop adds tests, removes local-machine assumptions, and documents the exact active workflow.
+
+Use Google Ads Editor staging files for the current active workflow.

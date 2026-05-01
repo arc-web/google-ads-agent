@@ -249,3 +249,34 @@ Earlier checks to add to future loops:
 - avoid importing legacy tools from the new active helper
 - prove new support helpers can feed the active exporter and staging validator
 - leave bulky salvage tools untouched until their behavior has a specific migration target
+
+## Shared GADS API/MCP Salvage Loop
+
+Fourth behavior cleanup:
+
+- `shared/gads/core/google_ads_api_service.py`
+- `shared/gads/core/gads_client_config.json`
+- `shared/gads/integrations/README.md`
+- `shared/gads/interface/README.md`
+
+Outcome:
+
+- kept API/MCP work salvage-only
+- removed the hard-coded local parent MCP config path
+- made the Google Ads API service importable without `google.ads`
+- blocked live API and parent MCP calls with an explicit exception
+- documented integrations and interface folders as inactive salvage
+- added synthetic tests proving live operations cannot run accidentally
+
+Reusable lesson:
+
+- optional live-account dependencies must not block offline repo cleanup
+- a future API activation phase should start by replacing the guard with tested read-only behavior before any mutation method is enabled
+- config files should use environment placeholders instead of local machine paths
+
+Earlier checks to add to future loops:
+
+- scan for `mutate_` methods before treating an API file as reference-only
+- scan config JSON for local filesystem paths
+- test imports without optional external SDKs installed
+- keep UI or integration folders inactive when they call guarded services

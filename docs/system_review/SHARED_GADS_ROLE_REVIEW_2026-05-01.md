@@ -125,11 +125,14 @@ Role:
 - future API/MCP reference
 - not active staging workflow code
 
-Risks found:
+Safety decision:
 
-- hard-coded local parent MCP paths
-- optional `google.ads` dependency should not break offline repo tooling
-- config examples include external service assumptions
+- `GoogleAdsAPIService` imports offline without requiring `google.ads`
+- live API methods raise `LiveGoogleAdsAutomationDisabled`
+- parent MCP calls raise `LiveGoogleAdsAutomationDisabled`
+- `gads_client_config.json` no longer points to a local parent-machine path
+- integrations and interface folders are documented as salvage-only
+- no live account mutation is active
 
 ## First Cleanup Batch Completed
 
@@ -205,15 +208,34 @@ Reason:
 - these older tools contain useful ideas, but still mix Broad, Exact, PMAX, API automation, auto-optimization, and account-shaped examples
 - they should be mined in later focused loops rather than activated as-is
 
+## API/MCP Salvage Quarantine Completed
+
+API and MCP behavior has been made safe for local cleanup work without activating live account operations.
+
+What changed:
+
+- replaced the old live API service with an offline-safe salvage facade
+- preserved the `GoogleAdsAPIService` import path
+- blocked live budget, campaign, asset group, ad group, keyword, RSA, account-read, and parent MCP methods
+- removed the hard-coded local parent MCP config path from `gads_client_config.json`
+- documented integrations and interface folders as salvage-only
+- added tests proving the API service imports offline and blocks live calls
+
+What stayed out of scope:
+
+- no Google Ads API upload
+- no parent MCP execution
+- no Streamlit interface activation
+- no Airtable or GitHub integration activation
+
 ## Next Recommended Cleanup Batch
 
-Continue with API/MCP and integrations.
+Continue with PMAX and asset salvage.
 
 Goal:
 
-- inspect `shared/gads/core/google_ads_api_service.py`, `shared/gads/core/gads_client_config.json`, `shared/gads/integrations/`, and `shared/gads/interface/`
-- remove or quarantine hard-coded local paths
-- make optional imports safe
-- keep API/MCP work salvage-only until explicit API automation approval
+- inspect `shared/gads/core/pmax_campaigns/`, PMAX branches in tools, and PMAX examples
+- keep PMAX salvage-only
+- add tests proving PMAX code does not affect active Search staging
 
-Do not edit PMAX behavior in the API/MCP PR.
+Do not activate PMAX behavior in the PMAX PR.
