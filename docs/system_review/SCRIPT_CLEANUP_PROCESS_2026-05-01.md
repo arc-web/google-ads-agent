@@ -192,3 +192,32 @@ Earlier checks to add to future loops:
 - scan for old 3-headline and 2-description ad output
 - verify that any writer uses the active UTF-16 tab-separated artifact format
 - confirm that the script delegates pass/fail authority to the active staging validator
+
+## Shared GADS Editor Exporter Loop
+
+Second behavior cleanup:
+
+- `shared/gads/core/business_logic/google_ads_editor_exporter.py`
+
+Outcome:
+
+- narrowed the old universal exporter to active Search staging only
+- preserved compatibility import names used by older scripts
+- removed PMAX from the active export path
+- removed silent auto-correction behavior from export
+- made saved output UTF-16 tab-separated staging files
+- made validation delegate to `shared/rebuild/staging_validator.py`
+- added synthetic tests proving Search output passes and PMAX export remains inactive
+
+Reusable lesson:
+
+- exporters should not rewrite strategic ad content while exporting
+- if content needs correction, that belongs in an explicit review or copy-generation step before export
+- export code should create a file, validate it, and report issues without mutating the source strategy silently
+
+Earlier checks to add to future loops:
+
+- search for auto-correction methods before deciding a script is safe
+- check output encoding before preserving old save methods
+- check whether a generic-looking exporter is quietly activating PMAX or API behavior
+- preserve old import names only when the active behavior is explicit and tested
