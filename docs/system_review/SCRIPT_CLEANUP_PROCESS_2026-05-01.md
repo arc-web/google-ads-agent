@@ -146,3 +146,19 @@ Still useful later, but not blocking this validator phase:
 - wire the shared validator into future non-THLH rebuild scripts as they are reviewed
 - decide later which old `shared/validators/` files are duplicated after more scripts use the active validator
 - add broader CI only when the repo has more active tests
+
+## Shared GADS First Pass
+
+The next cleanup area is `shared/gads/`.
+
+First-pass lessons:
+
+- do not activate the old `shared/gads/` generators just because they import
+- classify the folder by role before rewriting code
+- keep PMAX and API/MCP tooling salvage-only until explicitly activated
+- make package imports safe before deeper analysis so optional dependencies do not block local tests
+- treat old Search generators with Wright-specific copy, Exact/Broad defaults, and 3-headline/2-description output as stale drafts until rewritten against the active staging validator
+
+Current role review:
+
+- `docs/system_review/SHARED_GADS_ROLE_REVIEW_2026-05-01.md`
