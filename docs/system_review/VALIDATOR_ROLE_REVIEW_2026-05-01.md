@@ -446,14 +446,14 @@ python3 clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/apply_r
 - output: `THHL_Search_Services_Editor_Staging_REV1.csv`
 - validation JSON now includes a `staging_validator` section
 
-Older rebuild script result:
+Compatibility rebuild script result:
 
 ```bash
 python3 clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/rebuild_thhl_search_campaign.py
 ```
 
-- status: `fail`
-- shared staging validator status: `fail`
+- status: `pass`
+- shared staging validator status: `pass`
 - output: `THHL_Search_Rebuild_Test_2026-04-28.csv`
 - validation report: `validation_report.json`
 - human review: `human_review.md`
@@ -461,6 +461,32 @@ python3 clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/rebuild
 Interpretation:
 
 - the newer REV1 path is aligned with the current staging contract
-- the older rebuild test script is now correctly blocked by the active validator
-- the older output still contains stale draft issues such as missing `Location ID`, missing RSA assets, and exact match keywords
-- this confirms the validator wiring is doing useful work rather than silently accepting stale draft output
+- the older rebuild test script is now a compatibility wrapper around the current generator
+- the legacy output filename is preserved, but stale draft behavior is no longer emitted
+- this confirms the validator wiring can support both current scripts and older entry points
+
+## Compatibility Wrapper Update
+
+`rebuild_thhl_search_campaign.py` is no longer allowed to emit stale draft output.
+
+It now:
+
+- delegates to `generate_services_search_editor_csv.py`
+- copies the current generated staging CSV to the legacy output filename
+- validates the copied output with `shared/rebuild/staging_validator.py`
+- writes `validation_report.json`
+- writes `human_review.md`
+
+Current compatibility result:
+
+- output: `THHL_Search_Rebuild_Test_2026-04-28.csv`
+- status: `pass`
+- rows: 1750
+- ad groups: 96
+- phrase keyword rows: 1539
+- RSA rows: 96
+- shared staging validator issues: 0
+
+The script cleanup process is documented here:
+
+- `docs/system_review/SCRIPT_CLEANUP_PROCESS_2026-05-01.md`

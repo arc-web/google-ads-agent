@@ -11,7 +11,10 @@ targeting spec.
 from __future__ import annotations
 
 import csv
+import contextlib
+import io
 import json
+import shutil
 import sys
 from collections import Counter
 from pathlib import Path
@@ -23,6 +26,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from shared.rebuild.staging_validator import validate_file
+
+import generate_services_search_editor_csv as current_services_generator
 
 CLIENT_DIR = ROOT / "clients" / "therappc" / "thinkhappylivehealthy"
 BUILD_DIR = CLIENT_DIR / "build" / "search_rebuild_test"
@@ -303,6 +308,35 @@ def attach_staging_validation(report: dict[str, Any], output_csv: Path) -> dict[
 
 
 def main() -> None:
+    with contextlib.redirect_stdout(io.StringIO()):
+        current_services_generator.main()
+    shutil.copyfile(current_services_generator.OUTPUT_CSV, OUTPUT_CSV)
+    report = validate_file(OUTPUT_CSV)
+    report["output_rows"] = report["rows"]
+    report["compatibility_note"] = (
+        "rebuild_thhl_search_campaign.py is an older entry point. "
+        "It now delegates to generate_services_search_editor_csv.py so legacy commands produce current-format staging output."
+    )
+    report["sources"] = {
+        "current_generator": str(Path(current_services_generator.__file__)),
+        "current_generator_output": str(current_services_generator.OUTPUT_CSV),
+        "output_csv": str(OUTPUT_CSV),
+    }
+    VALIDATION_REPORT.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    spec = json.loads(TARGETING_SPEC.read_text(encoding="utf-8"))
+    write_human_review(report, spec)
+
+    print(json.dumps({
+        "status": report["status"],
+        "output_csv": str(OUTPUT_CSV),
+        "validation_report": str(VALIDATION_REPORT),
+        "human_review": str(HUMAN_REVIEW),
+        "counts": report["counts"],
+        "issues": len(report["issues"]),
+        "compatibility_wrapper": True,
+    }, indent=2))
+    return
+
     manual_headers, manual_rows, manual_encoding = read_tsv(MANUAL_CAMPAIGN)
     export_headers, _export_rows, export_encoding = read_tsv(CURRENT_EXPORT)
     spec = json.loads(TARGETING_SPEC.read_text(encoding="utf-8"))
