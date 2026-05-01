@@ -8,9 +8,9 @@ THLH is the active first client for the next account-build testing phase.
 
 The current best staging artifact is:
 
-- [THHL Search Services Editor Staging REV1](../../clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Services_Editor_Staging_REV1.csv)
+- [THHL Search Services Editor Staging REV2](../../clients/therappc/thinkhappylivehealthy/build/search_rebuild_test/THHL_Search_Services_Editor_Staging_REV2.csv)
 
-This file was previously staging-clean under the structural rules. After the 2026-05-01 headline quality rule update, it is now blocked for copy repair before package assembly. It is not a live-launch approval and does not activate API upload.
+REV2 repairs the short RSA headlines that blocked REV1 after the 2026-05-01 headline quality rule update. It is not a live-launch approval and does not activate API upload.
 
 ## Current Validation Result
 
@@ -20,14 +20,16 @@ Fresh structural validation before the headline quality rule update:
 - `MasterValidator`: PASS, 0 issues
 - `SearchMasterValidator`: success, 0 issues
 
-Current validation after the headline quality rule update:
+Current validation after the REV2 headline repair:
 
-- active staging validator: fail
-- failure type: `headline_minimum_value`
-- failed headline count: 443
-- reason: short low-value RSA headlines under 25 characters now fail quality review
+- active staging validator: pass, 0 issues
+- `MasterValidator`: PASS, 0 issues
+- `SearchMasterValidator`: success, 0 issues
+- headline repairs applied: 443 placements across 63 unique weak headlines
+- all RSA headlines are now 25 to 30 characters
+- all campaign network values are `Google search`
 
-REV1 output shape:
+REV2 output shape:
 
 - rows: 470
 - campaigns: 4
@@ -67,6 +69,10 @@ This makes it the best client for proving the cleaned system can move from stagi
 
 Usable now as source evidence:
 
+- `THHL_Search_Services_Editor_Staging_REV2.csv`
+- `THHL_Search_Services_Editor_Staging_REV2_review.md`
+- `THHL_Search_Services_Editor_Staging_REV2_validation.json`
+- `THHL_Search_Services_Editor_Staging_REV2_headline_repair_summary.json`
 - `THHL_Search_Services_Editor_Staging_REV1.csv`
 - `THHL_Search_Services_Editor_Staging_REV1_review.md`
 - `THHL_Search_Services_Editor_Staging_REV1_validation.json`
@@ -82,7 +88,7 @@ Usable now as source evidence:
 
 ## Current Gaps Before A Complete One-Shot Package
 
-The staging file structure is strong, but RSA headline quality must be repaired before the one-shot output contract is packaged.
+The staging file structure and RSA headline quality are now clean. The remaining work is packaging the current evidence into the canonical one-shot output contract.
 
 Missing or not yet normalized to canonical filenames:
 
@@ -105,21 +111,18 @@ Important note:
 
 - Some equivalent evidence exists under THLH-specific names, but it has not been normalized into the one-shot output contract.
 - The older `human_review.md` describes an earlier broad service build and should not be treated as the current REV1 review authority.
-- The current REV1 review authority is `THHL_Search_Services_Editor_Staging_REV1_review.md`.
+- The current staging review authority is `THHL_Search_Services_Editor_Staging_REV2_review.md`.
 
 ## Next Work For THLH
 
 Recommended next batch:
 
-1. Audit all REV1 RSA headlines that fail `headline_minimum_value`.
-2. Rewrite weak short headlines such as `Ashburn Care` and `Anxiety Counseling`.
-3. Re-run staging validation, `MasterValidator`, and `SearchMasterValidator`.
-4. Create a THLH one-shot package folder without moving existing client data.
-5. Copy or generate canonical aliases for the repaired staging and review evidence.
-6. Normalize existing THLH evidence into the one-shot filenames where the source is clear.
-7. Generate missing evidence only from current client inputs.
-8. Produce a current `human_review.md` tied to the repaired REV1, not the older broad service build.
-9. Keep API upload off.
+1. Create a THLH one-shot package folder without moving existing client data.
+2. Copy or generate canonical aliases for the REV2 staging and review evidence.
+3. Normalize existing THLH evidence into the one-shot filenames where the source is clear.
+4. Generate missing evidence only from current client inputs.
+5. Produce a current `human_review.md` tied to REV2, not the older broad service build.
+6. Keep API upload off.
 
 ## Human Review Stops
 
