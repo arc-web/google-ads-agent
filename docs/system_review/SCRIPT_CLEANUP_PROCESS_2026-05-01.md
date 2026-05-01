@@ -280,3 +280,30 @@ Earlier checks to add to future loops:
 - scan config JSON for local filesystem paths
 - test imports without optional external SDKs installed
 - keep UI or integration folders inactive when they call guarded services
+
+## Shared GADS PMAX Salvage Loop
+
+Fifth behavior cleanup:
+
+- `shared/gads/core/pmax_campaigns/pmax_csv_generator.py`
+- `shared/gads/core/pmax_campaigns/__init__.py`
+
+Outcome:
+
+- kept PMAX imports stable
+- preserved reference data containers for future review
+- blocked PMAX CSV generation with an explicit inactive-workflow exception
+- added tests proving PMAX cannot export through the active Search exporter
+- added tests proving active Search staging still validates after PMAX guard changes
+
+Reusable lesson:
+
+- keeping salvage code does not mean letting it produce workflow artifacts
+- inactive campaign types should fail clearly at the generation boundary
+- activation requires a separate PR with new tests, docs, and user approval
+
+Earlier checks to add to future loops:
+
+- look for generators that can write files even when their workflow is not active
+- keep import compatibility but block output when activation is not approved
+- test that inactive workflow modules cannot leak into active Search staging

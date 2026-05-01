@@ -107,6 +107,7 @@ Role:
 
 - reference only
 - not active for Search rebuild generation
+- `PMAXCSVGenerator` keeps the import path stable but blocks CSV output
 
 Reason:
 
@@ -228,14 +229,34 @@ What stayed out of scope:
 - no Streamlit interface activation
 - no Airtable or GitHub integration activation
 
+## PMAX Salvage Guard Completed
+
+PMAX remains preserved but inactive.
+
+What changed:
+
+- kept `shared.gads.core.pmax_campaigns.PMAXCSVGenerator` importable
+- converted PMAX CSV generation into an explicit inactive guard
+- allowed PMAX reference data to be recorded for later review
+- added tests proving PMAX cannot export through the active Search exporter
+- added tests proving active Search staging still validates after the PMAX guard
+
+What stayed out of scope:
+
+- no PMAX activation
+- no PMAX CSV output
+- no asset generation
+- no API upload
+
 ## Next Recommended Cleanup Batch
 
-Continue with PMAX and asset salvage.
+Continue with business-logic modules.
 
 Goal:
 
-- inspect `shared/gads/core/pmax_campaigns/`, PMAX branches in tools, and PMAX examples
-- keep PMAX salvage-only
-- add tests proving PMAX code does not affect active Search staging
+- inspect `shared/gads/core/business_logic/client_*`, compliance, reporting, optimization, onboarding, and asset generation modules
+- preserve useful ideas
+- remove one-account assumptions from shared code
+- keep business-specific examples in docs or fixtures only when needed
 
-Do not activate PMAX behavior in the PMAX PR.
+Do not activate live API, PMAX, or client-specific shared defaults in the business-logic PR.

@@ -5,6 +5,6 @@ Search-first Google Ads Editor staging workflow unless a later PMAX phase
 explicitly activates it.
 """
 
-from .pmax_csv_generator import PMAXCSVGenerator
+from .pmax_csv_generator import PMAXAssetGroupReference, PMAXCSVGenerator, PMAXWorkflowInactive
 
-__all__ = ["PMAXCSVGenerator"]
+__all__ = ["PMAXCSVGenerator", "PMAXAssetGroupReference", "PMAXWorkflowInactive"]
