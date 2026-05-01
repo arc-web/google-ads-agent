@@ -78,3 +78,34 @@ Start a focused tool-health phase:
 2. Add small smoke tests for import and CLI help behavior.
 3. Decide which repaired modules become active, which stay as reference, and which need deeper redesign.
 4. Run the current Google Ads Agent workflow against active client data after the syntax layer is clean.
+
+## Follow-Up: Syntax Repair Pass
+
+The first tool-health batch repaired parse-level Python failures in preserved older tool areas.
+
+Files repaired:
+
+- `shared/gads/core/business_logic/client_isolation_middleware.py`
+- `shared/gads/core/gads_client_implementation.py`
+- `shared/gads/interface/campaign_management_app.py`
+- `shared/gads/tools/ad_group_examples.py`
+- `shared/gads/tools/keyword_examples.py`
+- `shared/validators/search/search_keyword_validator.py`
+
+Verification run:
+
+```bash
+python3 -m compileall -q shared/gads/core/business_logic/client_isolation_middleware.py shared/gads/core/gads_client_implementation.py shared/gads/interface/campaign_management_app.py shared/gads/tools/ad_group_examples.py shared/gads/tools/keyword_examples.py shared/validators/search/search_keyword_validator.py
+python3 -m compileall -q shared presentations docs/system_review/api_mcp/google_ads_mcp clients/therappc/thinkhappylivehealthy/build/search_rebuild_test
+```
+
+Result:
+
+- the six previously failing files now compile
+- the broader compile pass now completes without syntax errors in the checked paths
+
+Important interpretation:
+
+- this confirms the preserved tool folders can now be parsed
+- this does not mean those tools are active, accurate, or ready to guide client work
+- behavior still needs review before anything from `shared/gads/`, `shared/tools/`, `shared/validators/`, or `shared/config/` is promoted into the current agent system

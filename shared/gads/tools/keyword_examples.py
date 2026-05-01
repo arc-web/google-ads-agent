@@ -323,8 +323,8 @@ def demonstrate_performance_dashboard():
     print(f"Negative Keywords: {dashboard['campaign_overview']['total_negative_keywords']}")
 
     perf = dashboard['performance_summary']
-    print("
-Performance Summary:"    print(f"  • Impressions: {perf['total_impressions']:,}")
+    print("\nPerformance Summary:")
+    print(f"  • Impressions: {perf['total_impressions']:,}")
     print(f"  • Clicks: {perf['total_clicks']:,}")
     print(f"  • Cost: ${perf['total_cost']:,.2f}")
     print(f"  • Conversions: {perf['total_conversions']}")
@@ -339,12 +339,12 @@ Performance Summary:"    print(f"  • Impressions: {perf['total_impressions']:,
     for kw in dashboard['underperforming_keywords']:
         print(f"  📉 {kw['keyword']}: {kw['conversions']} conv @ ${kw['cpa']:.2f} CPA")
 
-    print("
-Insights:"    for insight in dashboard['insights']:
+    print("\nInsights:")
+    for insight in dashboard['insights']:
         print(f"  💡 {insight}")
 
-    print("
-Recommendations:"    for rec in dashboard['recommendations']:
+    print("\nRecommendations:")
+    for rec in dashboard['recommendations']:
         print(f"  ✅ {rec}")
 
 def demonstrate_csv_export():
@@ -393,8 +393,8 @@ def demonstrate_best_practices():
     # Get match type specific practices
     exact_practices = kw_system.get_keyword_best_practices("EXACT")
     if "exact_match" in exact_practices:
-        print("
-Exact Match Specific Practices:"        for practice in exact_practices["exact_match"]:
+        print("\nExact Match Specific Practices:")
+        for practice in exact_practices["exact_match"]:
             print(f"  🎯 {practice}")
 
 def main():
