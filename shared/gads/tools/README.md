@@ -1,32 +1,35 @@
-# 🚀 Development Tools (tools layer)
+# Shared GADS Tools
 
-## Overview
-Development tools and dependencies for the Google Ads Client MCP system, including package requirements, testing frameworks, and development utilities to support the entire project workflow.
+This folder is mostly salvage material.
 
-## Dependencies
-- Parent layer: Requires root at `../..`
-- Libraries: See `requirements.txt` for complete list
+## Active Helper
 
-## Usage
+- `search_staging_support.py`
+
+Role:
+
+- creates generic Search ad group and keyword plans
+- defaults keywords to phrase match through `Criterion Type`
+- supports negative phrase plans without leading-minus keyword text
+- feeds `GoogleAdsEditorExporter`
+- does not activate PMAX, API upload, Broad, Exact, or client-specific logic
+
+## Salvage Material
+
+The older keyword, ad group, extension, campaign planning, and example files remain here for review. They should not be treated as active workflow code until useful behavior is migrated into a tested helper and validated through:
+
 ```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Install specific components
-pip install google-ads openai pyairtable
-
-# Development setup
-pip install -r requirements.txt[dev]
+python3 shared/rebuild/staging_validator.py --csv PATH_TO_STAGING_CSV
 ```
 
-## Success Criteria
-- ✅ All dependencies install without conflicts
-- ✅ Google APIs integration works correctly
-- ✅ OpenAI integration functions properly
-- ✅ Airtable integration operates smoothly
-- ✅ Development tools support testing and documentation
+Known stale assumptions in the older files:
 
-## Links
-- Parent docs: ../../README.md
-- Child components: 
-  - `requirements.txt` - Python package dependencies (45 lines) 
+- Broad and Exact examples
+- PMAX branches
+- API or MCP automation concepts
+- old optimization and auto-generation behavior
+- account-shaped examples
+
+## Current Rule
+
+Use `search_staging_support.py` for reusable Search helper behavior. Treat every other file in this folder as reference or salvage unless a later cleanup loop promotes it with tests.

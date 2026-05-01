@@ -64,6 +64,23 @@ Compatibility decision:
 - PMAX, Display, Shopping, Video, and Discovery export fail clearly until those workflows are explicitly activated
 - old content auto-correction behavior was removed because the current process should validate output, not silently rewrite source decisions
 
+### Active Search Support Helper
+
+- `shared/gads/tools/search_staging_support.py`
+
+Role:
+
+- generic Search-safe support helpers for ad group and keyword planning
+- phrase-only keyword defaults
+- negative phrase helper without leading-minus keyword notation
+- exporter-compatible output dictionaries
+- no API upload, PMAX, Broad, Exact, or client-specific behavior
+
+Compatibility decision:
+
+- older keyword, ad group, extension, and campaign-planning tools under `shared/gads/tools/` stay salvage-only until their useful behavior is migrated into tested helpers
+- the active helper is intentionally small so it can be used by future cleanup loops without inheriting stale assumptions
+
 ### Salvage For Search Editor Workflow
 
 - keyword, ad group, and extension tools under `shared/gads/tools/`
@@ -163,14 +180,40 @@ What stayed out of scope:
 - no extension activation
 - no client-specific campaign strategy moved into shared code
 
+## Search Support Tools Cleanup Completed
+
+`shared/gads/tools/search_staging_support.py` has been added as the active Search-safe support surface for this folder.
+
+What changed:
+
+- added phrase-only keyword planning helpers
+- added negative phrase planning without old leading-minus notation
+- added generic ad group planning that feeds `GoogleAdsEditorExporter`
+- added synthetic tests proving the helper exports through the active staging validator
+
+What stayed salvage-only:
+
+- old keyword management system
+- old ad group management system
+- old extension management system
+- old campaign planning with reference tool
+- PMAX examples and PMAX branches
+- API/MCP dependencies and upload concepts
+
+Reason:
+
+- these older tools contain useful ideas, but still mix Broad, Exact, PMAX, API automation, auto-optimization, and account-shaped examples
+- they should be mined in later focused loops rather than activated as-is
+
 ## Next Recommended Cleanup Batch
 
-Continue with Search support tools under `shared/gads/tools/`.
+Continue with API/MCP and integrations.
 
 Goal:
 
-- classify keyword, ad group, ad extension, campaign planning, and reference tools as active helper, reference-only, salvage, or delete-later
-- rewrite only reusable Search-safe pieces into active staging helpers
-- keep PMAX, API upload, Broad, and Exact behavior inactive unless a later phase explicitly activates them
+- inspect `shared/gads/core/google_ads_api_service.py`, `shared/gads/core/gads_client_config.json`, `shared/gads/integrations/`, and `shared/gads/interface/`
+- remove or quarantine hard-coded local paths
+- make optional imports safe
+- keep API/MCP work salvage-only until explicit API automation approval
 
-Do not edit PMAX or API tools in the same PR.
+Do not edit PMAX behavior in the API/MCP PR.
