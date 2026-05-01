@@ -9,8 +9,8 @@ Two modes:
              CSV export is not yet wired (placeholder only).
 
 Usage:
-  python -m copy_engine.orchestrator --mode sweep   --csv /path/to/export.tsv --client thinkhappylivehealthy
-  python -m copy_engine.orchestrator --mode generate --client thinkhappylivehealthy --client-dir /path/to/client
+  python -m copy_engine.orchestrator --mode sweep --csv /path/to/export.tsv --agency AGENCY --client CLIENT
+  python -m copy_engine.orchestrator --mode generate --agency AGENCY --client CLIENT --client-dir /path/to/client
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ import codecs
 import csv
 import os
 import sys
+from pathlib import Path
 from typing import Optional
 
 import yaml
@@ -44,6 +45,9 @@ _COL_AG_STATUS       = "Ad Group Status"
 _COL_FINAL_URL       = "Final URL"
 _HEADLINE_COLS       = [f"Headline {i}" for i in range(1, 16)]
 _DESCRIPTION_COLS    = [f"Description {i}" for i in range(1, 5)]
+RSA_HEADLINE_TARGET  = 15
+RSA_DESCRIPTION_TARGET = 4
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 # ---------------------------------------------------------------------------
@@ -56,8 +60,8 @@ class CopyEngineOrchestrator:
     Wires all copy engine components into a two-mode pipeline.
 
     Attributes:
-        agency:     Agency slug (e.g. "therappc").
-        client:     Client slug (e.g. "thinkhappylivehealthy").
+        agency:     Agency slug.
+        client:     Client slug.
         client_dir: Path to client directory - used to find YAML config and
                     to store reports.
         base_path:  Root of the google_ads_agent repo.  Reports land under
@@ -69,18 +73,20 @@ class CopyEngineOrchestrator:
         agency: str,
         client: str,
         client_dir: Optional[str] = None,
-        base_path: str = "/Users/home/ai/agents/ppc/google_ads_agent",
+        base_path: str | None = None,
+        llm_client: OpenRouterClient | None = None,
     ) -> None:
+        resolved_base = Path(base_path).resolve() if base_path else REPO_ROOT
         self.agency     = agency
         self.client     = client
-        self.client_dir = client_dir or os.path.join(base_path, "clients", agency, client)
-        self.base_path  = base_path
+        self.client_dir = client_dir or os.fspath(resolved_base / "clients" / agency / client)
+        self.base_path  = os.fspath(resolved_base)
 
         # Shared LLM client - instantiated once; all generators reuse it.
-        self._llm       = OpenRouterClient()
+        self._llm       = llm_client or OpenRouterClient()
         self._grader    = CopyGrader(self._llm)
         self._evaluator = CopyEvaluator()
-        self._reporter  = HITLReporter(base_path=base_path)
+        self._reporter  = HITLReporter(base_path=self.base_path)
 
     # ------------------------------------------------------------------
     # Public entry points
@@ -165,8 +171,8 @@ class CopyEngineOrchestrator:
 
         for ag_ctx in ad_groups:
             print(f"[generate]   Ad group: {ag_ctx.name}")
-            headlines = hl_gen.generate(ag_ctx)
-            descs     = desc_gen.generate(ag_ctx)
+            headlines = hl_gen.generate(ag_ctx, count=RSA_HEADLINE_TARGET)
+            descs     = desc_gen.generate(ag_ctx, count=RSA_DESCRIPTION_TARGET)
 
             generated_copy[ag_ctx.name] = {
                 "headlines":    [h.text for h in headlines],
@@ -483,7 +489,7 @@ class CopyEngineOrchestrator:
         """
         Generate a build plan dict for the reporter's Section D checklist.
 
-        For sweep mode: plan reflects what *would* be generated (12 headlines,
+        For sweep mode: plan reflects what *would* be generated (15 headlines,
         4 descriptions per ad group, plus client-level extensions).
         For generate mode: plan reflects what was actually generated.
         """
@@ -493,8 +499,8 @@ class CopyEngineOrchestrator:
         for ag_name, data in copy_data.items():
             if ag_name == "[Extensions]":
                 continue
-            hl_count   = len(data.get("headlines", [])) or 12
-            desc_count = len(data.get("descriptions", [])) or 4
+            hl_count   = len(data.get("headlines", [])) or RSA_HEADLINE_TARGET
+            desc_count = len(data.get("descriptions", [])) or RSA_DESCRIPTION_TARGET
 
             plan[ag_name] = {
                 "headlines":    hl_count,
@@ -546,17 +552,19 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Sweep - audit THHL's existing CSV
+  # Sweep an existing Google Ads Editor export
   python -m copy_engine.orchestrator \\
       --mode sweep \\
-      --csv /Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy/exports/ads.tsv \\
-      --client thinkhappylivehealthy
+      --csv /path/to/google_ads_editor_export.tsv \\
+      --agency AGENCY \\
+      --client CLIENT
 
-  # Generate - produce new copy (requires client_config.yaml)
+  # Generate new copy from client_config.yaml
   python -m copy_engine.orchestrator \\
       --mode generate \\
-      --client thinkhappylivehealthy \\
-      --client-dir /Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/thinkhappylivehealthy
+      --agency AGENCY \\
+      --client CLIENT \\
+      --client-dir /path/to/clients/AGENCY/CLIENT
 """,
     )
 
@@ -577,13 +585,13 @@ Examples:
     )
     parser.add_argument(
         "--agency",
-        default="therappc",
-        help="Agency slug (default: therappc)",
+        required=True,
+        help="Agency slug.",
     )
     parser.add_argument(
         "--client",
         required=True,
-        help="Client slug (e.g. thinkhappylivehealthy)",
+        help="Client slug.",
     )
 
     args = parser.parse_args()
