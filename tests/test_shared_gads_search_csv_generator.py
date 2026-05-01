@@ -1,0 +1,132 @@
+from __future__ import annotations
+
+import csv
+
+import pytest
+
+from shared.gads.core.search_campaigns.search_csv_generator import SearchCSVGenerator
+
+
+def _headlines() -> list[str]:
+    return [
+        "Service Help Today",
+        "Local Team Ready",
+        "Book A Consultation",
+        "Clear Pricing Info",
+        "Trusted Local Help",
+        "Fast Scheduling",
+        "Helpful Answers",
+        "Expert Service",
+        "Plan Your Next Step",
+        "Simple Online Booking",
+        "Focused Support",
+        "Quality Care Team",
+        "Request Details",
+        "Speak With A Team",
+        "Start With A Call",
+    ]
+
+
+def _descriptions() -> list[str]:
+    return [
+        "Get clear next steps from a local team focused on useful service support.",
+        "Review service options, availability, and fit before you decide.",
+        "Schedule a consultation and get answers from an experienced team.",
+        "Plan the right service path with practical guidance and transparent details.",
+    ]
+
+
+def test_search_csv_generator_writes_active_utf16_tsv_that_validates(tmp_path):
+    generator = SearchCSVGenerator()
+    generator.add_campaign("ARC - Search - Services - V1", "125.00")
+    generator.add_ad_group("ARC - Search - Services - V1", "Core Services")
+    generator.add_keyword(
+        "ARC - Search - Services - V1",
+        "Core Services",
+        "service consultation",
+        final_url="https://example.com/services",
+    )
+    generator.add_rsa(
+        "ARC - Search - Services - V1",
+        "Core Services",
+        "https://example.com/services",
+        headlines=_headlines(),
+        descriptions=_descriptions(),
+        path_1="services",
+        path_2="consult",
+    )
+    generator.add_location(
+        "ARC - Search - Services - V1",
+        "United States",
+        location_id="2840",
+    )
+
+    output_path = tmp_path / "Google_Ads_Editor_Staging_CURRENT.csv"
+    report = generator.write_and_validate(output_path)
+
+    assert report["status"] == "pass"
+    assert report["encoding"] == "utf-16"
+    assert report["counts"]["campaign_rows"] == 1
+    assert report["counts"]["keyword_rows"] == 1
+    assert report["counts"]["rsa_rows"] == 1
+    assert report["counts"]["location_rows"] == 1
+
+    with output_path.open("r", encoding="utf-16", newline="") as handle:
+        rows = list(csv.DictReader(handle, delimiter="\t"))
+
+    assert rows[0]["Broad match keywords"] == "Off"
+    assert rows[2]["Criterion Type"] == "Phrase"
+    assert rows[2]["Keyword"] == "service consultation"
+    assert rows[3]["Ad type"] == "Responsive search ad"
+    assert rows[3]["Headline 15"] == "Start With A Call"
+    assert rows[3]["Description 4"].startswith("Plan the right service")
+
+
+@pytest.mark.parametrize("criterion_type", ["Broad", "Exact"])
+def test_search_csv_generator_rejects_inactive_match_types(criterion_type):
+    generator = SearchCSVGenerator()
+
+    with pytest.raises(ValueError, match="only supports Phrase"):
+        generator.add_keyword(
+            "ARC - Search - Services - V1",
+            "Core Services",
+            "service consultation",
+            criterion_type=criterion_type,
+        )
+
+
+@pytest.mark.parametrize("keyword", ['"service consultation"', "[service consultation]", "-service consultation"])
+def test_search_csv_generator_requires_plain_keyword_text(keyword):
+    generator = SearchCSVGenerator()
+
+    with pytest.raises(ValueError, match="Keyword must be plain text"):
+        generator.add_keyword("ARC - Search - Services - V1", "Core Services", keyword)
+
+
+def test_search_csv_generator_requires_complete_responsive_search_ad_assets():
+    generator = SearchCSVGenerator()
+
+    with pytest.raises(ValueError, match="exactly 15 headlines"):
+        generator.add_rsa(
+            "ARC - Search - Services - V1",
+            "Core Services",
+            "https://example.com/services",
+            headlines=_headlines()[:14],
+            descriptions=_descriptions(),
+        )
+
+    with pytest.raises(ValueError, match="exactly 4 descriptions"):
+        generator.add_rsa(
+            "ARC - Search - Services - V1",
+            "Core Services",
+            "https://example.com/services",
+            headlines=_headlines(),
+            descriptions=_descriptions()[:3],
+        )
+
+
+def test_old_client_shaped_campaign_generation_is_explicitly_retired():
+    generator = SearchCSVGenerator()
+
+    with pytest.raises(NotImplementedError, match="old client-specific"):
+        generator.generate_campaign("Campaign", "county", "client")
