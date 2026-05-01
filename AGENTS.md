@@ -27,6 +27,9 @@ Client folders are active data assets and examples until the repo owner explicit
 - Do not archive, purge, or label client folders as historical until the overall system is tested and the repo owner explicitly approves that status.
 - Planning documents that may conflict with the current process belong in `docs/system_review/` until they are reconciled, superseded, or explicitly retired.
 - Generated rebuilds belong in `clients/{agency}/{client}/build/{date}_account_rebuild/`.
+- Shared Python under `shared/` must not hard-code a client, agency, brand, local absolute path, or one-off campaign. Shared code must accept client facts, source files, and build paths as inputs.
+- Client-specific Python under `clients/` is allowed only as a run artifact, migration wrapper, or temporary client workflow. Reusable behavior must be promoted into `shared/` before it becomes part of the agent system.
+- When a client-specific script proves a reusable behavior, extract the behavior into shared code, keep the client script as a thin wrapper if needed, and document the wrapper status.
 
 ## Rebuild Standards
 
@@ -112,7 +115,7 @@ A rebuild run should create:
 <claude-mem-context>
 # Memory Context
 
-# [google_ads_agent] recent context, 2026-05-01 1:32pm GMT+8
+# [google_ads_agent] recent context, 2026-05-01 1:38pm GMT+8
 
 No previous sessions found.
 </claude-mem-context>

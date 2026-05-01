@@ -36,6 +36,14 @@ python3 shared/rebuild/staging_validator.py --csv PATH_TO_STAGING_CSV
 
 The output must pass this validator before it is considered current.
 
+For shared Python, the architecture boundary contract is:
+
+```bash
+python3 shared/rebuild/code_boundary_audit.py
+```
+
+Shared code should not hard-code one client, one agency, one brand, one local machine path, or one campaign.
+
 ### 3. Add An Operator Note
 
 If a folder has confusing script names, add a short note in that folder explaining:
@@ -59,6 +67,8 @@ For THLH:
 
 - local client revision decisions stay in `apply_round1_core_focus_revisions.py`
 - the shared Google Ads Editor staging contract lives in `shared/rebuild/staging_validator.py`
+
+Do not promote a client-specific Python file into the agent system until the reusable part has been extracted into shared code with client facts passed as inputs.
 
 ### 5. Wire The Shared Validator
 
@@ -93,7 +103,7 @@ For THLH:
 
 ### 7. Test Both Synthetic Rules And Real Artifacts
 
-Use small tests for rule behavior and one real artifact test for current output shape.
+Use small tests for reusable rule behavior. Real client artifacts can be validated as workflow checks, but generic unit tests should not depend on one client folder.
 
 Current validator tests:
 
@@ -103,7 +113,7 @@ python3 -m pytest
 
 Expected result:
 
-- 7 passed
+- 6 passed
 
 ### 8. Commit In Reviewable Batches
 
