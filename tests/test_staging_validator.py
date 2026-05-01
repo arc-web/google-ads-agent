@@ -13,6 +13,18 @@ from shared.rebuild.staging_validator import (
 )
 
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+THLH_REV1_CSV = (
+    REPO_ROOT
+    / "clients"
+    / "therappc"
+    / "thinkhappylivehealthy"
+    / "build"
+    / "search_rebuild_test"
+    / "THHL_Search_Services_Editor_Staging_REV1.csv"
+)
+
+
 def staging_headers() -> list[str]:
     headers = list(REQUIRED_HEADERS)
     for header in REQUIRED_RSA_HEADLINES + REQUIRED_RSA_DESCRIPTIONS:
@@ -195,3 +207,29 @@ def test_missing_location_id_is_warning_not_failure(tmp_path: Path) -> None:
     assert report["status"] == "pass"
     assert report["issue_counts"] == {"warning": 1}
     assert "location_id_preferred" in issue_rules(report)
+
+
+def test_real_thlh_rev1_staging_file_matches_current_contract() -> None:
+    report = validate_file(THLH_REV1_CSV)
+
+    assert report["status"] == "pass"
+    assert report["encoding"] == "utf-16"
+    assert report["rows"] == 470
+    assert report["headers"] == 203
+    assert report["campaigns"] == [
+        "ARC - Search - Adult Therapy - V1",
+        "ARC - Search - Brand - V1",
+        "ARC - Search - Psychiatry - V1",
+        "ARC - Search - Testing - V1",
+    ]
+    assert report["ad_groups"] == 49
+    assert report["counts"]["campaign_rows"] == 4
+    assert report["counts"]["ad_group_rows"] == 49
+    assert report["counts"]["keyword_rows"] == 295
+    assert report["counts"]["negative_keyword_rows"] == 20
+    assert report["counts"]["rsa_rows"] == 49
+    assert report["counts"]["location_rows"] == 49
+    assert report["counts"]["radius_rows"] == 4
+    assert report["keyword_criterion_types"] == {"Phrase": 295, "Negative Phrase": 20}
+    assert report["issue_counts"] == {}
+    assert report["issues"] == []

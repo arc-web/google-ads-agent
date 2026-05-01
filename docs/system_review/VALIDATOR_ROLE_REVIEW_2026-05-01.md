@@ -383,6 +383,13 @@ Protected behavior:
 - Quoted keyword text fails because match type belongs in `Criterion Type`.
 - Campaign-level broad match setting must remain off.
 - Missing `Location ID` is a warning, not a failure, because the process prefers IDs when available.
+- The checked-in THLH REV1 staging CSV passes with the current expected shape:
+  - 470 rows
+  - 4 campaigns
+  - 49 ad groups
+  - 295 phrase keyword rows
+  - 20 negative phrase rows
+  - 49 responsive search ad rows
 
 Test command:
 
@@ -392,4 +399,4 @@ python3 -m pytest tests/test_staging_validator.py -q
 
 Result:
 
-- 6 passed
+- 7 passed
