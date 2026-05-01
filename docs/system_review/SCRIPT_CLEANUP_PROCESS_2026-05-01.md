@@ -358,3 +358,32 @@ Current inactive salvage surfaces:
 - API/MCP service and integrations
 - PMAX generator
 - business-logic modules other than the active exporter
+
+## Shared Config Active Search Loop
+
+Next subsystem after `shared/gads/`:
+
+- `shared/config/`
+
+Outcome:
+
+- made shared campaign defaults Search-only for the active workflow
+- removed one-client business defaults from shared config
+- marked non-Search campaign types as salvage-only references
+- made `ConfigLoader` reject inactive campaign types by default
+- kept an explicit `allow_inactive_campaign_types=True` option for salvage review
+- aligned generic ad limits with the active RSA contract of 15 headlines and 4 descriptions
+- added tests covering loader behavior, generic business config, inactive campaign references, and ad limits
+
+Reusable lesson:
+
+- config files are behavior, not passive documentation
+- stale defaults are as risky as stale code because they can silently shape future generated campaigns
+- shared config should describe the active contract and require client facts to come from client folders
+
+Earlier checks to add to future loops:
+
+- scan configs for one-client service lists and brand defaults
+- scan configs for non-active campaign type recommendations
+- test loader defaults rather than only reading YAML by eye
+- keep salvage access explicit so non-active configs cannot be loaded accidentally
