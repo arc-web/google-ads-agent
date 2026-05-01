@@ -366,6 +366,33 @@ Earlier checks to add to future loops:
 - validate scaffolded template CSVs through `shared/rebuild/staging_validator.py`
 - check template filenames match the README required first files
 - keep template defaults Search-first, phrase-only, and API-off
+
+## Client Test Candidate Review Loop
+
+Cleanup target:
+
+- `clients/` review only
+- `docs/system_review/CLIENT_TEST_CANDIDATES_2026-05-01.md`
+
+Outcome:
+
+- selected THLH as the current Search staging dry-run candidate
+- selected Sky Therapies as the simpler raw export candidate
+- selected EvoRestore as the PMAX-heavy guard candidate
+- documented why deferred clients stay available but are not first in line
+- added tests proving the review covers the required categories and does not authorize moving, archiving, or deleting client data
+
+Reusable lesson:
+
+- client data review is not archive review
+- choose test candidates by workflow coverage and evidence completeness
+- PMAX-heavy clients are useful for guard testing, not PMAX activation
+
+Earlier checks to add to future loops:
+
+- separate active-path test candidates from guard-test candidates
+- document why a client is deferred instead of silently ignoring it
+- add explicit human stops before any client data movement
 - check output encoding before preserving old save methods
 - check whether a generic-looking exporter is quietly activating PMAX or API behavior
 - preserve old import names only when the active behavior is explicit and tested
