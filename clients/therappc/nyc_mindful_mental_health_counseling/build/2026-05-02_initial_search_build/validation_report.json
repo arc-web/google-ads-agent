@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "source_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Google_Ads_Editor_Staging_CURRENT.csv",
+  "encoding": "utf-16",
+  "rows": 85,
+  "headers": 42,
+  "campaigns": [
+    "ARC - Search - Anxiety Therapy - V1"
+  ],
+  "ad_groups": 8,
+  "counts": {
+    "campaign_rows": 1,
+    "location_rows": 2,
+    "ad_group_rows": 8,
+    "keyword_rows": 56,
+    "rsa_rows": 8,
+    "negative_keyword_rows": 10
+  },
+  "keyword_criterion_types": {
+    "Phrase": 56,
+    "Negative Phrase": 10
+  },
+  "issue_counts": {},
+  "issues": []
+}

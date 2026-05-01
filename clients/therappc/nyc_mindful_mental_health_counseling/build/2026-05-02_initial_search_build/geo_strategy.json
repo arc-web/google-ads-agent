@@ -1,0 +1,14 @@
+{
+  "targeting": [
+    {
+      "location": "New York, United States",
+      "location_id": "21167"
+    },
+    {
+      "location": "New Jersey, United States",
+      "location_id": "21164"
+    }
+  ],
+  "targeting_method": "Location of presence",
+  "review_note": "Website says clients must live in New York or New Jersey. Confirm whether to split campaigns by state before launch."
+}

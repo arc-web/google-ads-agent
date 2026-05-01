@@ -1,0 +1,26 @@
+{
+  "active_services_for_staging": [
+    "Anxiety Therapy",
+    "Individual Therapy",
+    "Group Therapy",
+    "CBT Therapy",
+    "DBT Therapy",
+    "OCD Therapy",
+    "Depression Therapy",
+    "Social Anxiety Therapy"
+  ],
+  "excluded_from_initial_staging": [
+    {
+      "service": "Adolescent therapy",
+      "reason": "Website confirms adolescents, but age and guardian intake rules need client review before ad group activation."
+    },
+    {
+      "service": "ACT therapy",
+      "reason": "Used as support language in copy, but not activated as a separate ad group in the first compact build."
+    },
+    {
+      "service": "Mindfulness-based therapy",
+      "reason": "Used as brand differentiation, but not activated as a separate ad group in the first compact build."
+    }
+  ]
+}

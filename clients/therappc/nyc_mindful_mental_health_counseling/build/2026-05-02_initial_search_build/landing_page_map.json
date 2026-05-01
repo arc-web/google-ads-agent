@@ -1,0 +1,42 @@
+{
+  "Anxiety Therapy - Core": {
+    "final_url": "https://nycmindfulmentalhealthcounseling.com/",
+    "path_1": "Anxiety",
+    "path_2": "Therapy"
+  },
+  "Individual Therapy - Young Adults": {
+    "final_url": "https://nycmindfulmentalhealthcounseling.com/individual-therapy-nyc/",
+    "path_1": "Individual",
+    "path_2": "Therapy"
+  },
+  "Group Therapy - NYC": {
+    "final_url": "https://nycmindfulmentalhealthcounseling.com/group-therapy-nyc/",
+    "path_1": "Group",
+    "path_2": "Therapy"
+  },
+  "CBT Therapy - Skills": {
+    "final_url": "https://nycmindfulmentalhealthcounseling.com/cbt/",
+    "path_1": "CBT",
+    "path_2": "Therapy"
+  },
+  "DBT Therapy - Skills": {
+    "final_url": "https://nycmindfulmentalhealthcounseling.com/dbt/",
+    "path_1": "DBT",
+    "path_2": "Skills"
+  },
+  "OCD Therapy - Support": {
+    "final_url": "https://nycmindfulmentalhealthcounseling.com/",
+    "path_1": "OCD",
+    "path_2": "Therapy"
+  },
+  "Depression Therapy - Support": {
+    "final_url": "https://nycmindfulmentalhealthcounseling.com/",
+    "path_1": "Depression",
+    "path_2": "Therapy"
+  },
+  "Social Anxiety - Support": {
+    "final_url": "https://nycmindfulmentalhealthcounseling.com/",
+    "path_1": "Social",
+    "path_2": "Anxiety"
+  }
+}
