@@ -647,3 +647,33 @@ Earlier checks to add to future loops:
 - check tracked noise with `git ls-files` before deleting anything
 - remove generated noise only after confirming it is untracked or intentionally ignored
 - do not stage credential files or credential ignore-policy changes inside unrelated cleanup batches
+
+## Dry-Run Account Build Test Loop
+
+Cleanup target:
+
+- active Search campaign builder
+- selected THLH Search test candidate
+- Google Ads Editor staging validation path
+
+Outcome:
+
+- generated a small client-specific dry-run staging artifact through the active Search builder
+- wrote the artifact as UTF-16 Google Ads Editor staging output
+- confirmed Phrase-only keyword rows and Broad match Off
+- confirmed location IDs are present where available
+- confirmed no API upload fields or live mutation commands are part of the artifact
+- passed the active staging validator, `MasterValidator`, and `SearchMasterValidator` with 0 issues
+- documented the result in the client build folder and system review docs
+
+Reusable lesson:
+
+- the first build test should be small and validator-clean before scaling to the full one-shot output contract
+- location ID warnings should be resolved in the generated artifact, not waived, when the IDs are available from local geotarget evidence
+- dry-run evidence can live in the client build folder without moving or archiving client data
+
+Earlier checks to add to future loops:
+
+- validate generated staging output before adding presentation/report generation
+- check for API upload fields and live mutation commands as part of dry-run evidence
+- confirm `MasterValidator` and `SearchMasterValidator` both report 0 issues before calling a build test clean
