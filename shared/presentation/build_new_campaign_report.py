@@ -351,8 +351,7 @@ ul {
 }
 .budget-summary-card,
 .budget-chart-card,
-.budget-tile,
-.budget-approval {
+.budget-tile {
   background: #fffaf1;
   border: 1px solid #dfd2bf;
 }
@@ -467,42 +466,65 @@ ul {
 .budget-tile {
   padding: 10px 12px;
 }
-.budget-tile h3,
-.budget-approval h3 {
+.budget-tile h3 {
   margin: 0 0 4px;
   font-size: 13px;
 }
-.budget-tile p,
-.budget-approval p {
+.budget-tile p {
   margin: 0;
   color: #5e5144;
   font-size: 11px;
   line-height: 1.35;
 }
-.budget-approval {
-  margin-top: 18px;
+.approval-check-card {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
   padding: 14px;
 }
-.budget-checkline {
+.approval-check-head {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-top: 12px;
-  font-size: 11.5px;
-  color: #3d342b;
-  line-height: 1.35;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 8px;
 }
-.budget-sign-row {
+.approval-check-head input {
+  width: 16px;
+  height: 16px;
+  accent-color: #185c62;
+}
+.approval-check-head h3 {
+  margin: 0;
+  font-size: 16px;
+}
+.approval-check-card p {
+  margin: 0;
+  color: #4c4238;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.final-signoff {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
+  margin-top: 14px;
+}
+.final-signoff p {
+  margin: 0 0 12px;
+  color: #4c4238;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.sign-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-top: 14px;
-  font-size: 11px;
+  font-size: 12px;
   color: #5e5144;
 }
-.budget-sign-row .line {
+.sign-row .line {
   border-bottom: 1px solid #3d342b;
-  min-height: 20px;
+  min-height: 24px;
   margin-top: 4px;
 }
 .state-chip {
@@ -731,18 +753,6 @@ def budget_learning_section(budget: BudgetPlan) -> str:
   <div class="budget-tile"><h3>CPC changes click volume</h3><p>The same dollars buy more or fewer clicks as auctions shift.</p></div>
   <div class="budget-tile"><h3>Later spend is intentional</h3><p>Increases follow clearer performance, not random day-to-day noise.</p></div>
 </div>
-<div class="budget-approval">
-  <h3>Budget pacing approval</h3>
-  <p>I understand daily spend may vary within the approved range while we optimize toward the monthly budget and performance goals.</p>
-  <label class="budget-checkline">
-    <input type="checkbox" name="approve_pacing" />
-    <span>I have reviewed this summary and approve this budget pacing approach for the monthly amount shown on the prior page.</span>
-  </label>
-  <div class="budget-sign-row">
-    <div>Printed name<div class="line" role="presentation"></div></div>
-    <div>Date<div class="line" role="presentation"></div></div>
-  </div>
-</div>
 """
     return section(
         "Budget",
@@ -932,24 +942,32 @@ def approval_section(source_attribution: dict) -> str:
     approval_items = [
         (
             "Ad groups",
-            "Confirm the service list is complete and no important service focus is missing.",
+            "I confirm the services and ad groups listed in this proposal are the right areas to run ads for, including which services should receive the most traffic first.",
         ),
         (
-            "Priority services",
-            "Identify which ad groups should receive the most traffic first.",
-        ),
-        (
-            "Ad copy",
-            "Review the headline and description variations for tone, claims, and service fit.",
+            "Ads",
+            "I confirm the ad copy direction, including the headline and description variations, is accurate enough to move forward or revise from.",
         ),
         (
             "Regional targeting",
-            "Confirm the states, cities, ZIP clusters, or regional focus areas for launch.",
+            "I confirm where ads should run, including the current state targeting and any city, ZIP, or exclusion changes needed before launch.",
+        ),
+        (
+            "Budget",
+            "I confirm the monthly budget and pacing approach, including that daily spend may vary while we optimize toward the monthly budget and performance goals.",
         ),
     ]
     source_pages = source_attribution.get("source_pages", [])
     approvals = "".join(
-        f"<div class=\"approval-card\"><h3>{esc(title)}</h3><p>{esc(text)}</p></div>"
+        f"""
+<div class="approval-check-card">
+  <label class="approval-check-head">
+    <input type="checkbox" checked>
+    <h3>{esc(title)}</h3>
+  </label>
+  <p>{esc(text)}</p>
+</div>
+"""
         for title, text in approval_items
     )
     sources = "".join(
@@ -957,15 +975,22 @@ def approval_section(source_attribution: dict) -> str:
         for item in source_pages[:5]
     )
     body = f"""
-<div class="subsection-header">Approval checklist</div>
-<div class="approval-grid">{approvals}</div>
 <div class="subsection-header">Source trail</div>
 <div class="source-card">{sources}</div>
+<div class="subsection-header">Approval checklist</div>
+<div class="approval-grid">{approvals}</div>
+<div class="final-signoff">
+  <p>By signing below, I confirm the checked items above are approved or ready for final revisions before launch.</p>
+  <div class="sign-row">
+    <div>Printed name<div class="line" role="presentation"></div></div>
+    <div>Date<div class="line" role="presentation"></div></div>
+  </div>
+</div>
 """
     return section(
         "Approval",
         "What Needs Confirmation",
-        "The campaign is valid as a staging file. This review should focus on services, priority, ad copy, and regional targeting.",
+        "The campaign is valid as a staging file. This review should focus on services, ad copy, regional targeting, and budget.",
         body,
     )
 
