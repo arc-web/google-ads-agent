@@ -44,6 +44,23 @@ class RsaExample:
     descriptions: list[str]
 
 
+@dataclass(frozen=True)
+class BudgetPlan:
+    monthly_budget: float
+    cpc_low: float | None = None
+    cpc_high: float | None = None
+
+    @property
+    def daily_budget(self) -> float:
+        return self.monthly_budget / 30
+
+    @property
+    def daily_click_range(self) -> tuple[float, float] | None:
+        if not self.cpc_low or not self.cpc_high:
+            return None
+        return self.daily_budget / self.cpc_high, self.daily_budget / self.cpc_low
+
+
 def esc(value: object) -> str:
     return (
         html.escape(str(value or ""), quote=True)
@@ -326,6 +343,94 @@ ul {
   font-size: 10px;
   color: #7c6d5c;
 }
+.budget-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.budget-card {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 18px;
+}
+.budget-card .label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #746656;
+  font-weight: 900;
+}
+.budget-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+  color: #185c62;
+}
+.budget-chart {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 18px;
+}
+.spend-bars {
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+  align-items: end;
+  gap: 3px;
+  height: 190px;
+  margin-top: 16px;
+  padding: 16px 10px 8px;
+  border-left: 2px solid #d5c8b7;
+  border-bottom: 2px solid #d5c8b7;
+}
+.spend-bar {
+  background: linear-gradient(180deg, #2f6f76, #9cbfba);
+  min-height: 42px;
+}
+.chart-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #5e5144;
+  line-height: 1.45;
+}
+.targeting-map {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 14px;
+}
+.map-panel {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
+}
+.state-chip {
+  display: inline-block;
+  margin: 4px 5px 0 0;
+  padding: 6px 8px;
+  background: #e5f0ee;
+  color: #185c62;
+  font-size: 11px;
+  font-weight: 800;
+}
+.mini-map {
+  width: 100%;
+  height: 260px;
+}
+.state-shape {
+  fill: #d7e8e5;
+  stroke: #185c62;
+  stroke-width: 3;
+}
+.pin {
+  fill: #c8753f;
+  stroke: #fffaf1;
+  stroke-width: 3;
+}
+.map-label {
+  font-size: 13px;
+  fill: #2f2b27;
+  font-weight: 800;
+}
 """
 
 
@@ -343,7 +448,6 @@ def section(label: str, title: str, intro: str, body: str) -> str:
 
 
 def cover(client: str, date_label: str, summary: CampaignSummary) -> str:
-    campaign = summary.campaigns[0] if summary.campaigns else "Search Campaign"
     return f"""
 <section class="section pdf-page cover">
   <div class="section-header" style="display:none"></div>
@@ -352,7 +456,7 @@ def cover(client: str, date_label: str, summary: CampaignSummary) -> str:
   <div class="cover-title">
     <div class="label">New Campaign Review</div>
     <h1>{esc(client)}</h1>
-    <p>A client-ready proposal for a new Google Ads Search campaign, built from website evidence and staged for Google Ads Editor review.</p>
+    <p>A client-ready proposal for a new Google Ads Search campaign, built from website evidence and prepared for client review.</p>
   </div>
   <div class="metric-row">
     <div class="metric"><strong>{len(summary.campaigns)}</strong><span>Search campaign</span></div>
@@ -360,9 +464,46 @@ def cover(client: str, date_label: str, summary: CampaignSummary) -> str:
     <div class="metric"><strong>{summary.phrase_keywords}</strong><span>phrase keywords</span></div>
     <div class="metric"><strong>{summary.rsa_rows}</strong><span>responsive ads</span></div>
   </div>
-  <div class="footnote">Campaign: {esc(campaign)}. Status: paused staging file for Google Ads Editor review.</div>
+  <div class="footnote">{esc(date_label)}</div>
 </section>
 """
+
+
+def budget_section(budget: BudgetPlan) -> str:
+    click_range = budget.daily_click_range
+    click_text = "Add CPC range for click estimate"
+    if click_range:
+        click_text = f"{click_range[0]:.0f} to {click_range[1]:.0f} clicks per day"
+    bars = "".join('<div class="spend-bar" style="height:100%"></div>' for _day in range(30))
+    body = f"""
+<div class="budget-metrics">
+  <div class="budget-card">
+    <div class="label">Monthly Budget</div>
+    <strong>${budget.monthly_budget:,.0f}</strong>
+  </div>
+  <div class="budget-card">
+    <div class="label">Daily Average</div>
+    <strong>${budget.daily_budget:,.0f}</strong>
+  </div>
+  <div class="budget-card">
+    <div class="label">Click Planning</div>
+    <strong style="font-size:20px;">{esc(click_text)}</strong>
+  </div>
+</div>
+<div class="budget-chart">
+  <div class="subsection-header" style="margin-top:0;">30-day spend pacing</div>
+  <div class="spend-bars">{bars}</div>
+  <div class="chart-note">
+    This chart shows the planned average spend per day across a 30-day month. Actual daily spend can vary inside Google Ads, but this gives the client a clear budget target to approve before launch.
+  </div>
+</div>
+"""
+    return section(
+        "Budget",
+        "Budget And Pacing Plan",
+        "Budget approval is separate from campaign structure. This page shows monthly spend, daily pacing, and click planning when a CPC range is available.",
+        body,
+    )
 
 
 def strategy_section(
@@ -386,8 +527,8 @@ def strategy_section(
     <p>The launch focuses on services visible on the site: {esc(', '.join(services[:8]))}.</p>
   </div>
   <div class="insight-card">
-    <h3>Controlled network setting</h3>
-    <p>Search partners are off. The staged campaign uses {esc(', '.join(summary.networks))} only.</p>
+    <h3>Priority still needs input</h3>
+    <p>The client should confirm which services should receive the most traffic before the launch budget is finalized.</p>
   </div>
   <div class="insight-card">
     <h3>Launch review status</h3>
@@ -455,6 +596,40 @@ def structure_section(summary: CampaignSummary, rows: list[dict[str, str]]) -> s
     )
 
 
+def targeting_section(geo_strategy: dict) -> str:
+    targeting = geo_strategy.get("targeting", [])
+    location_names = [item.get("location", "") for item in targeting]
+    chips = "".join(f'<span class="state-chip">{esc(name)}</span>' for name in location_names)
+    body = f"""
+<div class="targeting-map">
+  <div class="map-panel">
+    <svg class="mini-map" viewBox="0 0 520 320" role="img" aria-label="Simple New York and New Jersey targeting sketch">
+      <path class="state-shape" d="M120 38 L284 56 L338 92 L320 132 L356 168 L326 210 L260 200 L222 244 L160 222 L138 170 L90 146 L104 86 Z"/>
+      <path class="state-shape" d="M330 118 L382 138 L404 204 L388 282 L346 284 L318 230 L326 176 Z"/>
+      <circle class="pin" cx="308" cy="194" r="10"/>
+      <circle class="pin" cx="358" cy="226" r="8"/>
+      <text class="map-label" x="140" y="125">New York</text>
+      <text class="map-label" x="352" y="258">New Jersey</text>
+      <text class="map-label" x="318" y="185">NYC</text>
+    </svg>
+  </div>
+  <div class="map-panel">
+    <div class="subsection-header" style="margin-top:0;">Current targeting</div>
+    <p>The current staging file targets the approved service states, with New York City called out as the visible market anchor.</p>
+    <div style="margin:12px 0;">{chips}</div>
+    <p style="margin-top:10px;">For a future revision, this can become a city or ZIP cluster view if the client wants to focus the launch around priority neighborhoods.</p>
+    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
+  </div>
+</div>
+"""
+    return section(
+        "Regional Targeting",
+        "Where The Campaign Is Set To Reach",
+        "This simple map-style view keeps regional targeting understandable without adding a heavy mapping system. The client can approve the current scope or request city and ZIP clusters.",
+        body,
+    )
+
+
 def ad_preview_url(example: RsaExample) -> str:
     host = example.final_url.replace("https://", "").replace("http://", "").strip("/")
     paths = [path for path in (example.path_1, example.path_2) if path]
@@ -496,12 +671,29 @@ def ads_section(examples: list[RsaExample]) -> str:
     )
 
 
-def approval_section(website_scan: dict, source_attribution: dict) -> str:
-    review_items = website_scan.get("human_review_needed", [])
+def approval_section(source_attribution: dict) -> str:
+    approval_items = [
+        (
+            "Ad groups",
+            "Confirm the service list is complete and no important service focus is missing.",
+        ),
+        (
+            "Priority services",
+            "Identify which ad groups should receive the most traffic first.",
+        ),
+        (
+            "Ad copy",
+            "Review the headline and description variations for tone, claims, and service fit.",
+        ),
+        (
+            "Regional targeting",
+            "Confirm the states, cities, ZIP clusters, or regional focus areas for launch.",
+        ),
+    ]
     source_pages = source_attribution.get("source_pages", [])
     approvals = "".join(
-        f"<div class=\"approval-card\"><h3>{esc(item)}</h3><p>Confirm this before importing or launching the campaign.</p></div>"
-        for item in review_items[:6]
+        f"<div class=\"approval-card\"><h3>{esc(title)}</h3><p>{esc(text)}</p></div>"
+        for title, text in approval_items
     )
     sources = "".join(
         f"<p><strong>{esc(item.get('url'))}</strong><br>{esc(', '.join(item.get('used_for', [])))}</p>"
@@ -516,7 +708,7 @@ def approval_section(website_scan: dict, source_attribution: dict) -> str:
     return section(
         "Approval",
         "What Needs Client Confirmation",
-        "The campaign is valid as a staging file. These are the business decisions to confirm before launch.",
+        "The campaign is valid as a staging file. The client review should focus on services, priority, ad copy, and regional targeting.",
         body,
     )
 
@@ -530,6 +722,7 @@ def build_html(
     service_catalog_json: Path,
     geo_strategy_json: Path,
     source_attribution_json: Path,
+    budget: BudgetPlan | None = None,
 ) -> str:
     rows = read_staging(staging_csv)
     summary = summarize_staging(rows)
@@ -538,6 +731,7 @@ def build_html(
     geo_strategy = read_json(geo_strategy_json)
     source_attribution = read_json(source_attribution_json)
     examples = select_rsa_examples(rows)
+    budget = budget or BudgetPlan(monthly_budget=3000)
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -548,9 +742,11 @@ def build_html(
 <body>
   {cover(client, date_label, summary)}
   {strategy_section(summary, website_scan, service_catalog, geo_strategy)}
+  {budget_section(budget)}
   {structure_section(summary, rows)}
+  {targeting_section(geo_strategy)}
   {ads_section(examples)}
-  {approval_section(website_scan, source_attribution)}
+  {approval_section(source_attribution)}
 </body>
 </html>
 """
@@ -566,6 +762,7 @@ def write_report(
     geo_strategy_json: Path,
     source_attribution_json: Path,
     output_html: Path,
+    budget: BudgetPlan | None = None,
 ) -> Path:
     html_text = build_html(
         client=client,
@@ -575,6 +772,7 @@ def write_report(
         service_catalog_json=service_catalog_json,
         geo_strategy_json=geo_strategy_json,
         source_attribution_json=source_attribution_json,
+        budget=budget,
     )
     output_html.parent.mkdir(parents=True, exist_ok=True)
     output_html.write_text(html_text, encoding="utf-8")
@@ -590,10 +788,14 @@ def main() -> int:
     parser.add_argument("--service-catalog-json", required=True, type=Path)
     parser.add_argument("--geo-strategy-json", required=True, type=Path)
     parser.add_argument("--source-attribution-json", required=True, type=Path)
+    parser.add_argument("--monthly-budget", type=float, default=3000)
+    parser.add_argument("--cpc-low", type=float)
+    parser.add_argument("--cpc-high", type=float)
     parser.add_argument("--output-html", required=True, type=Path)
     parser.add_argument("--output-pdf", type=Path)
     parser.add_argument("--visual-audit-dir", type=Path)
     args = parser.parse_args()
+    budget = BudgetPlan(args.monthly_budget, args.cpc_low, args.cpc_high)
 
     html_path = write_report(
         client=args.client,
@@ -604,6 +806,7 @@ def main() -> int:
         geo_strategy_json=args.geo_strategy_json,
         source_attribution_json=args.source_attribution_json,
         output_html=args.output_html,
+        budget=budget,
     )
 
     findings, summary = audit_html(html_path)

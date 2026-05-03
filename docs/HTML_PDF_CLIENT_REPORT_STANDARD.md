@@ -82,9 +82,17 @@ python3 presentations/tools/build_new_campaign_report.py \
   --service-catalog-json clients/{agency}/{client}/build/{date}_initial_search_build/service_catalog.json \
   --geo-strategy-json clients/{agency}/{client}/build/{date}_initial_search_build/geo_strategy.json \
   --source-attribution-json clients/{agency}/{client}/build/{date}_initial_search_build/source_attribution.json \
+  --monthly-budget 3000 \
   --output-html clients/{agency}/{client}/build/{date}_initial_search_build/Client_New_Campaign_Review.html \
   --output-pdf clients/{agency}/{client}/build/{date}_initial_search_build/Client_New_Campaign_Review.pdf \
   --visual-audit-dir clients/{agency}/{client}/build/{date}_initial_search_build/new_campaign_visual_audit
+```
+
+If there is an approved cost-per-click planning range, include:
+
+```bash
+  --cpc-low 8 \
+  --cpc-high 18
 ```
 
 ## Page Geometry
