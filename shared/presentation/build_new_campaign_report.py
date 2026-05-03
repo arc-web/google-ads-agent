@@ -257,6 +257,24 @@ body {
 .two-col { grid-template-columns: 1fr 1fr; }
 .approval-grid { grid-template-columns: repeat(2, 1fr); }
 .ad-grid { grid-template-columns: 1fr; }
+.confirm-strip {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: #e5f0ee;
+  border-left: 4px solid #185c62;
+  color: #234045;
+}
+.confirm-strip h3 {
+  margin: 0 0 5px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.confirm-strip p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.38;
+}
 .overview-steps {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -562,45 +580,48 @@ ul {
   font-size: 11px;
   line-height: 1.35;
 }
+.approval-grid.clean {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
 .approval-check-card {
   background: #fffaf1;
   border: 1px solid #dfd2bf;
-  padding: 14px;
+  padding: 16px 12px;
+  min-height: 152px;
 }
 .approval-check-head {
   display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-bottom: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 .approval-check-head input {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   accent-color: #185c62;
 }
 .approval-check-head h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 19px;
+  line-height: 1.08;
 }
 .approval-check-card p {
   margin: 0;
-  color: #4c4238;
-  font-size: 13px;
-  line-height: 1.45;
-}
-.approval-check-card .summary-line {
-  display: block;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #e2d7c6;
   color: #185c62;
   font-weight: 800;
+  font-size: 13px;
+  line-height: 1.3;
 }
-.approval-check-card .detail-list {
-  margin-top: 8px;
-  color: #4c4238;
-  font-size: 12px;
-  line-height: 1.38;
+.approval-note {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: #ebe2d3;
+  border-left: 5px solid #c8753f;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #3d342b;
 }
 .state-chip {
   display: inline-block;
@@ -974,6 +995,10 @@ def budget_learning_section(budget: BudgetPlan) -> str:
   <div class="budget-tile"><h3>CPC changes click volume</h3><p>The same dollars buy more or fewer clicks as auctions shift.</p></div>
   <div class="budget-tile"><h3>Later spend is intentional</h3><p>Increases follow clearer performance, not random day-to-day noise.</p></div>
 </div>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Budget: confirm the {money(budget.monthly_budget)} monthly budget before launch.</p>
+</div>
 """
     return section(
         "Budget",
@@ -1132,6 +1157,10 @@ def ad_groups_section(summary: CampaignSummary, rows: list[dict[str, str]]) -> s
   <tr><th>Ad group</th><th>Phrase keywords</th><th>Status</th></tr>
   {table_rows}
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ad groups: confirm these are the services you want ads to run for and flag any service that should receive priority traffic.</p>
+</div>
 <div class="continuation-header">Campaign detail continues with representative ad previews</div>
 """
     return section(
@@ -1205,6 +1234,10 @@ def targeting_section(geo_strategy: dict) -> str:
       {review_table_rows}
   </table>
   <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
+  <div class="confirm-strip">
+    <h3>Please confirm</h3>
+    <p>Regional targeting: confirm the staged states and provide any city, ZIP, or exclusion changes before launch.</p>
+  </div>
 </div>
 """
     return section(
@@ -1252,6 +1285,10 @@ def ad_copy_section(example: RsaExample, index: int, total: int) -> str:
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr>{description_rows}
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for {esc(example.ad_group)} or note any headline or description changes needed.</p>
+</div>
 """
     return f"""
 <section class="section pdf-page ad-copy-page">
@@ -1276,35 +1313,23 @@ def approval_section(
     geo_strategy: dict,
     budget: BudgetPlan,
 ) -> str:
-    ad_group_names = [row.get("Ad Group", "") for row in ad_group_rows(rows)]
-    ad_group_preview = "; ".join(ad_group_names[:4])
-    if len(ad_group_names) > 4:
-        ad_group_preview += f"; plus {len(ad_group_names) - 4} more"
-    locations = ", ".join(item.get("location", "") for item in geo_strategy.get("targeting", []))
-    budget_summary = f"{money(budget.monthly_budget)} monthly budget, about {money(budget.daily_budget)} per day on average"
-    if budget.daily_click_range:
-        click_low, click_high = budget.daily_click_range
-        budget_summary += f", estimated {click_low:.0f}-{click_high:.0f} clicks per day depending on CPC"
+    del rows, geo_strategy
     approval_items = [
         (
             "Ad groups",
-            "I confirm the services and ad groups listed in this proposal are the right areas to run ads for, including which services should receive the most traffic first.",
-            f"{summary.ad_groups} ad groups: {ad_group_preview}.",
+            f"{summary.ad_groups} service ad groups",
         ),
         (
             "Ads",
-            "I confirm the ad copy direction, including the headline and description variations, is accurate enough to move forward or revise from.",
-            f"{summary.rsa_rows} responsive search ads, each built with 15 headlines and 4 descriptions.",
+            f"{summary.rsa_rows} responsive search ads",
         ),
         (
             "Regional targeting",
-            "I confirm where ads should run, including the current state targeting and any New York City, ZIP, or exclusion changes needed before launch.",
-            f"State targeting staged: {locations}. City, ZIP, and exclusions remain review items unless approved.",
+            "Locations shown in this report",
         ),
         (
             "Budget",
-            "I confirm the monthly budget and pacing approach, including that daily spend may vary while we optimize toward the monthly budget and performance goals.",
-            budget_summary + ".",
+            f"{money(budget.monthly_budget)} monthly budget",
         ),
     ]
     approvals = "".join(
@@ -1315,14 +1340,14 @@ def approval_section(
     <h3>{esc(title)}</h3>
   </label>
   <p>{esc(text)}</p>
-  <span class="summary-line">{esc(summary_text)}</span>
 </div>
 """
-        for title, text, summary_text in approval_items
+        for title, text in approval_items
     )
     body = f"""
 <div class="subsection-header">Approval summary</div>
-<div class="approval-grid">{approvals}</div>
+<div class="approval-grid clean">{approvals}</div>
+<div class="approval-note">Please confirm the items above after reviewing the detailed pages in this report.</div>
 """
     return section(
         "Approval",
