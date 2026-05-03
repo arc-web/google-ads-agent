@@ -70,6 +70,10 @@ def esc(value: object) -> str:
     )
 
 
+def money(value: float) -> str:
+    return f"${value:,.0f}"
+
+
 def read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -372,12 +376,27 @@ body {
   margin: 10px 0 6px;
   padding: 7px 10px;
 }
+.ad-copy-page .subsection-header + .ad-copy-table {
+  margin-bottom: 10px;
+}
 .ad-copy-page table {
   font-size: 9.5px;
 }
 .ad-copy-page td,
 .ad-copy-page th {
   padding: 3px 5px;
+}
+.ad-copy-table col.slot-col { width: 34px; }
+.ad-copy-table col.char-col { width: 54px; }
+.ad-copy-table th:first-child,
+.ad-copy-table td:first-child,
+.ad-copy-table th:last-child,
+.ad-copy-table td:last-child {
+  text-align: left;
+}
+.ad-copy-table th:nth-child(2),
+.ad-copy-table td:nth-child(2) {
+  padding-left: 5px;
 }
 table {
   width: 100%;
@@ -569,6 +588,20 @@ ul {
   font-size: 13px;
   line-height: 1.45;
 }
+.approval-check-card .summary-line {
+  display: block;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2d7c6;
+  color: #185c62;
+  font-weight: 800;
+}
+.approval-check-card .detail-list {
+  margin-top: 8px;
+  color: #4c4238;
+  font-size: 12px;
+  line-height: 1.38;
+}
 .state-chip {
   display: inline-block;
   margin: 4px 5px 0 0;
@@ -588,6 +621,20 @@ ul {
   border: 1px solid #dfd2bf;
   padding: 14px;
 }
+.targeting-panel.compact {
+  padding: 12px;
+}
+.targeting-table {
+  font-size: 10px;
+  line-height: 1.22;
+}
+.targeting-table th,
+.targeting-table td {
+  padding: 5px 6px;
+}
+.targeting-table col.type-col { width: 58px; }
+.targeting-table col.area-col { width: 132px; }
+.targeting-table col.status-col { width: 86px; }
 .structure-flow {
   background: #fffaf1;
   border: 1px solid #dfd2bf;
@@ -727,7 +774,7 @@ def overview_section(summary: CampaignSummary) -> str:
         ),
         (
             "Budget and confirmation",
-            "How the budget is paced through the month, then one final page for signoff.",
+            "How the budget is paced through the month, then one final page for approval.",
         ),
     ]
     step_cards = "".join(
@@ -1099,43 +1146,71 @@ def targeting_section(geo_strategy: dict) -> str:
     targeting = geo_strategy.get("targeting", [])
     location_names = [item.get("location", "") for item in targeting]
     chips = "".join(f'<span class="state-chip">{esc(name)}</span>' for name in location_names)
-    target_rows = "".join(
-        f"""
-<tr>
-  <td>{esc(item.get('location', ''))}</td>
-  <td>{esc(item.get('status', 'Staged'))}</td>
-  <td>{esc(item.get('notes', 'Approved launch geography'))}</td>
-</tr>
-"""
-        for item in targeting
+    review_rows = [
+        (
+            "State",
+            "New York, United States",
+            "Staged",
+            "Staged across approved New York service areas unless a tighter city or ZIP focus is approved.",
+        ),
+        (
+            "State",
+            "New Jersey, United States",
+            "Staged",
+            "Staged across approved New Jersey service areas unless a tighter city or ZIP focus is approved.",
+        ),
+        (
+            "City",
+            "New York City, NY",
+            "Review item",
+            "Confirm whether NYC should stay as ad group language only or become a separate location focus.",
+        ),
+        (
+            "City",
+            "New Jersey cities",
+            "Not supplied yet",
+            "Provide exact New Jersey cities only if spend should concentrate beyond statewide targeting.",
+        ),
+        (
+            "ZIP",
+            "New York ZIPs",
+            "Not supplied yet",
+            "Provide ZIPs only if specific New York neighborhoods, boroughs, offices, or service pockets should receive focus.",
+        ),
+        (
+            "ZIP",
+            "New Jersey ZIPs",
+            "Not supplied yet",
+            "Provide ZIPs only if specific New Jersey towns, neighborhoods, offices, or service pockets should receive focus.",
+        ),
+        (
+            "Exclusion",
+            "NY/NJ exclusions",
+            "None staged",
+            "Identify any city, ZIP, borough, county, or service area that should not receive traffic.",
+        ),
+    ]
+    review_table_rows = "".join(
+        f"<tr><td>{esc(area_type)}</td><td>{esc(area)}</td><td>{esc(status)}</td><td>{esc(note)}</td></tr>"
+        for area_type, area, status, note in review_rows
     )
     body = f"""
-<div class="targeting-grid">
-  <div class="targeting-panel">
-    <div class="subsection-header" style="margin-top:0;">Current targeting</div>
-    <p>The current staging file targets the approved service states. If New York City or ZIP focus areas should be prioritized, they can be added after review.</p>
-    <div style="margin:12px 0;">{chips}</div>
-    <table>
-      <tr><th>Location</th><th>Status</th><th>Review note</th></tr>
-      {target_rows}
-    </table>
-  </div>
-  <div class="targeting-panel">
-    <div class="subsection-header" style="margin-top:0;">New York City and ZIP review</div>
-    <table>
-      <tr><th>Area type</th><th>Current detail</th><th>What to confirm</th></tr>
-      <tr><td>New York City focus</td><td>Not narrowed yet</td><td>Confirm New York City or other local focus areas before launch if some areas matter more than others.</td></tr>
-      <tr><td>ZIP clusters</td><td>Not supplied yet</td><td>Provide ZIPs only if spend should concentrate around specific neighborhoods or offices.</td></tr>
-      <tr><td>Regional exclusions</td><td>None staged</td><td>Identify any places that should not receive launch traffic.</td></tr>
-    </table>
-    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
-  </div>
+<div class="targeting-panel compact">
+  <div class="subsection-header" style="margin-top:0;">Current targeting and review items</div>
+  <p>The current staging file targets the approved service states. City and ZIP rows are review items, not separate launch targets unless they are approved.</p>
+  <div style="margin:10px 0;">{chips}</div>
+  <table class="targeting-table">
+    <colgroup><col class="type-col"><col class="area-col"><col class="status-col"><col></colgroup>
+    <tr><th>Area type</th><th>Area</th><th>Status</th><th>What to confirm</th></tr>
+      {review_table_rows}
+  </table>
+  <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
 </div>
 """
     return section(
         "Regional Targeting",
         "Where The Campaign Is Set To Reach",
-        "The current plan stays table-based so the launch geography is easy to review. Confirm the current scope or add New York City and ZIP priorities before launch.",
+        "The current plan stays table-based so the launch geography is easy to review. Confirm the current state scope or add city, ZIP, or exclusion priorities before launch.",
         body,
     )
 
@@ -1168,16 +1243,22 @@ def ad_copy_section(example: RsaExample, index: int, total: int) -> str:
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr>{headline_rows}</table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr>{headline_rows}
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr>{description_rows}</table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr>{description_rows}
+</table>
 """
     return f"""
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>{esc(f"Ad Copy Example {index} Of {total}")}</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>{esc(example.ad_group)}</h1>
+    <p>Ad group {index} of {total}. Review the full headline and description set for this service before launch.</p>
   </div>
   {body}
 </section>
@@ -1189,23 +1270,41 @@ def ads_sections(examples: list[RsaExample]) -> str:
     return "".join(ad_copy_section(example, index, total) for index, example in enumerate(examples, start=1))
 
 
-def approval_section(source_attribution: dict) -> str:
+def approval_section(
+    summary: CampaignSummary,
+    rows: list[dict[str, str]],
+    geo_strategy: dict,
+    budget: BudgetPlan,
+) -> str:
+    ad_group_names = [row.get("Ad Group", "") for row in ad_group_rows(rows)]
+    ad_group_preview = "; ".join(ad_group_names[:4])
+    if len(ad_group_names) > 4:
+        ad_group_preview += f"; plus {len(ad_group_names) - 4} more"
+    locations = ", ".join(item.get("location", "") for item in geo_strategy.get("targeting", []))
+    budget_summary = f"{money(budget.monthly_budget)} monthly budget, about {money(budget.daily_budget)} per day on average"
+    if budget.daily_click_range:
+        click_low, click_high = budget.daily_click_range
+        budget_summary += f", estimated {click_low:.0f}-{click_high:.0f} clicks per day depending on CPC"
     approval_items = [
         (
             "Ad groups",
             "I confirm the services and ad groups listed in this proposal are the right areas to run ads for, including which services should receive the most traffic first.",
+            f"{summary.ad_groups} ad groups: {ad_group_preview}.",
         ),
         (
             "Ads",
             "I confirm the ad copy direction, including the headline and description variations, is accurate enough to move forward or revise from.",
+            f"{summary.rsa_rows} responsive search ads, each built with 15 headlines and 4 descriptions.",
         ),
         (
             "Regional targeting",
             "I confirm where ads should run, including the current state targeting and any New York City, ZIP, or exclusion changes needed before launch.",
+            f"State targeting staged: {locations}. City, ZIP, and exclusions remain review items unless approved.",
         ),
         (
             "Budget",
             "I confirm the monthly budget and pacing approach, including that daily spend may vary while we optimize toward the monthly budget and performance goals.",
+            budget_summary + ".",
         ),
     ]
     approvals = "".join(
@@ -1216,12 +1315,13 @@ def approval_section(source_attribution: dict) -> str:
     <h3>{esc(title)}</h3>
   </label>
   <p>{esc(text)}</p>
+  <span class="summary-line">{esc(summary_text)}</span>
 </div>
 """
-        for title, text in approval_items
+        for title, text, summary_text in approval_items
     )
     body = f"""
-<div class="subsection-header">Approval checklist</div>
+<div class="subsection-header">Approval summary</div>
 <div class="approval-grid">{approvals}</div>
 """
     return section(
@@ -1267,7 +1367,7 @@ def build_html(
   {targeting_section(geo_strategy)}
   {budget_pacing_section(budget)}
   {budget_learning_section(budget)}
-  {approval_section(source_attribution)}
+  {approval_section(summary, rows, geo_strategy, budget)}
 </body>
 </html>
 """

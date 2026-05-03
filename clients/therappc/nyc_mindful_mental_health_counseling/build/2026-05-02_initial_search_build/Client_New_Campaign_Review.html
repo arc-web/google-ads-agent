@@ -251,12 +251,27 @@ body {
   margin: 10px 0 6px;
   padding: 7px 10px;
 }
+.ad-copy-page .subsection-header + .ad-copy-table {
+  margin-bottom: 10px;
+}
 .ad-copy-page table {
   font-size: 9.5px;
 }
 .ad-copy-page td,
 .ad-copy-page th {
   padding: 3px 5px;
+}
+.ad-copy-table col.slot-col { width: 34px; }
+.ad-copy-table col.char-col { width: 54px; }
+.ad-copy-table th:first-child,
+.ad-copy-table td:first-child,
+.ad-copy-table th:last-child,
+.ad-copy-table td:last-child {
+  text-align: left;
+}
+.ad-copy-table th:nth-child(2),
+.ad-copy-table td:nth-child(2) {
+  padding-left: 5px;
 }
 table {
   width: 100%;
@@ -448,6 +463,20 @@ ul {
   font-size: 13px;
   line-height: 1.45;
 }
+.approval-check-card .summary-line {
+  display: block;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2d7c6;
+  color: #185c62;
+  font-weight: 800;
+}
+.approval-check-card .detail-list {
+  margin-top: 8px;
+  color: #4c4238;
+  font-size: 12px;
+  line-height: 1.38;
+}
 .state-chip {
   display: inline-block;
   margin: 4px 5px 0 0;
@@ -467,6 +496,20 @@ ul {
   border: 1px solid #dfd2bf;
   padding: 14px;
 }
+.targeting-panel.compact {
+  padding: 12px;
+}
+.targeting-table {
+  font-size: 10px;
+  line-height: 1.22;
+}
+.targeting-table th,
+.targeting-table td {
+  padding: 5px 6px;
+}
+.targeting-table col.type-col { width: 58px; }
+.targeting-table col.area-col { width: 132px; }
+.targeting-table col.status-col { width: 86px; }
 .structure-flow {
   background: #fffaf1;
   border: 1px solid #dfd2bf;
@@ -588,7 +631,7 @@ ul {
 <div class="overview-step">
   <div class="step-number">4</div>
   <h3>Budget and confirmation</h3>
-  <p>How the budget is paced through the month, then one final page for signoff.</p>
+  <p>How the budget is paced through the month, then one final page for approval.</p>
 </div>
 </div>
 <div class="subsection-header">Current launch snapshot</div>
@@ -709,8 +752,8 @@ ul {
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>Ad Copy Example 1 Of 8</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>Therapy - Anxiety - General</h1>
+    <p>Ad group 1 of 8. Review the full headline and description set for this service before launch.</p>
   </div>
   
 <div class="ad-card">
@@ -723,17 +766,23 @@ ul {
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>NYC Anxiety Therapy Online</td><td>26</td></tr><tr><td>2</td><td>NJ Anxiety Therapy Online</td><td>25</td></tr><tr><td>3</td><td>Anxiety Therapy For Adults</td><td>26</td></tr><tr><td>4</td><td>Mindful Anxiety Counseling</td><td>26</td></tr><tr><td>5</td><td>CBT And Mindfulness Support</td><td>27</td></tr><tr><td>6</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>7</td><td>Practical Anxiety Skills NY</td><td>27</td></tr><tr><td>8</td><td>Online Therapy In NY And NJ</td><td>27</td></tr><tr><td>9</td><td>Support For Overthinking Care</td><td>29</td></tr><tr><td>10</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>11</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>12</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>13</td><td>Anxiety Care With CBT Skills</td><td>28</td></tr><tr><td>14</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>15</td><td>Private Online Therapy Care</td><td>27</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>NYC Anxiety Therapy Online</td><td>26</td></tr><tr><td>2</td><td>NJ Anxiety Therapy Online</td><td>25</td></tr><tr><td>3</td><td>Anxiety Therapy For Adults</td><td>26</td></tr><tr><td>4</td><td>Mindful Anxiety Counseling</td><td>26</td></tr><tr><td>5</td><td>CBT And Mindfulness Support</td><td>27</td></tr><tr><td>6</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>7</td><td>Practical Anxiety Skills NY</td><td>27</td></tr><tr><td>8</td><td>Online Therapy In NY And NJ</td><td>27</td></tr><tr><td>9</td><td>Support For Overthinking Care</td><td>29</td></tr><tr><td>10</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>11</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>12</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>13</td><td>Anxiety Care With CBT Skills</td><td>28</td></tr><tr><td>14</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>15</td><td>Private Online Therapy Care</td><td>27</td></tr>
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online anxiety therapy for young adults in New York and New Jersey.</td><td>67</td></tr><tr><td>2</td><td>Build practical skills with CBT, DBT, ACT, and mindfulness-informed care.</td><td>73</td></tr><tr><td>3</td><td>Start with a consultation call and confirm whether the practice is a fit.</td><td>73</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online anxiety therapy for young adults in New York and New Jersey.</td><td>67</td></tr><tr><td>2</td><td>Build practical skills with CBT, DBT, ACT, and mindfulness-informed care.</td><td>73</td></tr><tr><td>3</td><td>Start with a consultation call and confirm whether the practice is a fit.</td><td>73</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
+</table>
 
 </section>
 
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>Ad Copy Example 2 Of 8</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>Therapy - Young Adults - General</h1>
+    <p>Ad group 2 of 8. Review the full headline and description set for this service before launch.</p>
   </div>
   
 <div class="ad-card">
@@ -746,17 +795,23 @@ ul {
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Individual Therapy Online</td><td>25</td></tr><tr><td>2</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>3</td><td>NYC Young Adult Therapy Care</td><td>28</td></tr><tr><td>4</td><td>Online Therapy In NY And NJ</td><td>27</td></tr><tr><td>5</td><td>Mindful Therapy Support NY</td><td>26</td></tr><tr><td>6</td><td>CBT Skills For Daily Life</td><td>25</td></tr><tr><td>7</td><td>Support For Life Transitions</td><td>28</td></tr><tr><td>8</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Therapy For Overthinking Care</td><td>29</td></tr><tr><td>12</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Goal Oriented Therapy Care</td><td>26</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Individual Therapy Online</td><td>25</td></tr><tr><td>2</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>3</td><td>NYC Young Adult Therapy Care</td><td>28</td></tr><tr><td>4</td><td>Online Therapy In NY And NJ</td><td>27</td></tr><tr><td>5</td><td>Mindful Therapy Support NY</td><td>26</td></tr><tr><td>6</td><td>CBT Skills For Daily Life</td><td>25</td></tr><tr><td>7</td><td>Support For Life Transitions</td><td>28</td></tr><tr><td>8</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Therapy For Overthinking Care</td><td>29</td></tr><tr><td>12</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Goal Oriented Therapy Care</td><td>26</td></tr>
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online individual therapy for young adults navigating anxiety and related concerns.</td><td>83</td></tr><tr><td>2</td><td>Sessions focus on practical skills, mindfulness, and collaborative support.</td><td>75</td></tr><tr><td>3</td><td>Care is available to clients living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online individual therapy for young adults navigating anxiety and related concerns.</td><td>83</td></tr><tr><td>2</td><td>Sessions focus on practical skills, mindfulness, and collaborative support.</td><td>75</td></tr><tr><td>3</td><td>Care is available for people living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
+</table>
 
 </section>
 
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>Ad Copy Example 3 Of 8</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>Therapy - Group - New York City</h1>
+    <p>Ad group 3 of 8. Review the full headline and description set for this service before launch.</p>
   </div>
   
 <div class="ad-card">
@@ -769,17 +824,23 @@ ul {
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online Group Therapy NYC Care</td><td>29</td></tr><tr><td>2</td><td>Skills Based Group Therapy</td><td>26</td></tr><tr><td>3</td><td>Social Anxiety Group Care</td><td>25</td></tr><tr><td>4</td><td>CBT Group Skills Support NY</td><td>27</td></tr><tr><td>5</td><td>Group Therapy For Adults NYC</td><td>28</td></tr><tr><td>6</td><td>Connect With Supportive Peers</td><td>29</td></tr><tr><td>7</td><td>Guided Online Therapy Groups</td><td>28</td></tr><tr><td>8</td><td>Therapy Groups For Anxiety</td><td>26</td></tr><tr><td>9</td><td>Mindfulness Group Support</td><td>25</td></tr><tr><td>10</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>11</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>12</td><td>Support For Depression Skills</td><td>29</td></tr><tr><td>13</td><td>Private Online Group Care</td><td>25</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Mindful Mental Health Care</td><td>26</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online Group Therapy NYC Care</td><td>29</td></tr><tr><td>2</td><td>Skills Based Group Therapy</td><td>26</td></tr><tr><td>3</td><td>Social Anxiety Group Care</td><td>25</td></tr><tr><td>4</td><td>CBT Group Skills Support NY</td><td>27</td></tr><tr><td>5</td><td>Group Therapy For Adults NYC</td><td>28</td></tr><tr><td>6</td><td>Connect With Supportive Peers</td><td>29</td></tr><tr><td>7</td><td>Guided Online Therapy Groups</td><td>28</td></tr><tr><td>8</td><td>Therapy Groups For Anxiety</td><td>26</td></tr><tr><td>9</td><td>Mindfulness Group Support</td><td>25</td></tr><tr><td>10</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>11</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>12</td><td>Support For Depression Skills</td><td>29</td></tr><tr><td>13</td><td>Private Online Group Care</td><td>25</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Mindful Mental Health Care</td><td>26</td></tr>
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online group therapy options for adults seeking skills and support.</td><td>67</td></tr><tr><td>2</td><td>Groups may focus on social anxiety, depression skills, or mindfulness.</td><td>70</td></tr><tr><td>3</td><td>Start with an intro call to review fit, timing, rates, and next steps.</td><td>70</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online group therapy options for adults seeking skills and support.</td><td>67</td></tr><tr><td>2</td><td>Groups may focus on social anxiety, depression skills, or mindfulness.</td><td>70</td></tr><tr><td>3</td><td>Start with an intro call to review fit, timing, rates, and next steps.</td><td>70</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
+</table>
 
 </section>
 
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>Ad Copy Example 4 Of 8</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>Therapy - CBT - General</h1>
+    <p>Ad group 4 of 8. Review the full headline and description set for this service before launch.</p>
   </div>
   
 <div class="ad-card">
@@ -792,17 +853,23 @@ ul {
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online CBT Therapy Support</td><td>26</td></tr><tr><td>2</td><td>CBT Skills For Anxiety Care</td><td>27</td></tr><tr><td>3</td><td>Cognitive Behavioral Therapy</td><td>28</td></tr><tr><td>4</td><td>CBT Therapy Care In NY NJ</td><td>25</td></tr><tr><td>5</td><td>Practical CBT Tools Online</td><td>26</td></tr><tr><td>6</td><td>Therapy For Thought Patterns</td><td>28</td></tr><tr><td>7</td><td>Mindfulness Informed CBT Care</td><td>29</td></tr><tr><td>8</td><td>CBT Support For Young Adults</td><td>28</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Goal Oriented Therapy Care</td><td>26</td></tr><tr><td>12</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Online Therapy For Anxiety</td><td>26</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online CBT Therapy Support</td><td>26</td></tr><tr><td>2</td><td>CBT Skills For Anxiety Care</td><td>27</td></tr><tr><td>3</td><td>Cognitive Behavioral Therapy</td><td>28</td></tr><tr><td>4</td><td>CBT Therapy Care In NY NJ</td><td>25</td></tr><tr><td>5</td><td>Practical CBT Tools Online</td><td>26</td></tr><tr><td>6</td><td>Therapy For Thought Patterns</td><td>28</td></tr><tr><td>7</td><td>Mindfulness Informed CBT Care</td><td>29</td></tr><tr><td>8</td><td>CBT Support For Young Adults</td><td>28</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Goal Oriented Therapy Care</td><td>26</td></tr><tr><td>12</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Online Therapy For Anxiety</td><td>26</td></tr>
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>CBT-informed online therapy for anxiety and related concerns in NY and NJ.</td><td>74</td></tr><tr><td>2</td><td>Work on thought patterns, coping skills, mindfulness, and daily tools.</td><td>70</td></tr><tr><td>3</td><td>Care is collaborative, practical, and matched to individual goals.</td><td>66</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>CBT-informed online therapy for anxiety and related concerns in NY and NJ.</td><td>74</td></tr><tr><td>2</td><td>Work on thought patterns, coping skills, mindfulness, and daily tools.</td><td>70</td></tr><tr><td>3</td><td>Care is collaborative, practical, and matched to individual goals.</td><td>66</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
+</table>
 
 </section>
 
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>Ad Copy Example 5 Of 8</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>Therapy - DBT - General</h1>
+    <p>Ad group 5 of 8. Review the full headline and description set for this service before launch.</p>
   </div>
   
 <div class="ad-card">
@@ -815,17 +882,23 @@ ul {
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online DBT Skills Therapy</td><td>25</td></tr><tr><td>2</td><td>DBT Skills For Daily Stress</td><td>27</td></tr><tr><td>3</td><td>Emotional Regulation Support</td><td>28</td></tr><tr><td>4</td><td>DBT Therapy Care In NY NJ</td><td>25</td></tr><tr><td>5</td><td>Therapy For Life Transitions</td><td>28</td></tr><tr><td>6</td><td>Practical Coping Skills Care</td><td>28</td></tr><tr><td>7</td><td>Mindfulness Informed DBT Care</td><td>29</td></tr><tr><td>8</td><td>DBT Support For Young Adults</td><td>28</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>12</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Support For Intense Emotions</td><td>28</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online DBT Skills Therapy</td><td>25</td></tr><tr><td>2</td><td>DBT Skills For Daily Stress</td><td>27</td></tr><tr><td>3</td><td>Emotional Regulation Support</td><td>28</td></tr><tr><td>4</td><td>DBT Therapy Care In NY NJ</td><td>25</td></tr><tr><td>5</td><td>Therapy For Life Transitions</td><td>28</td></tr><tr><td>6</td><td>Practical Coping Skills Care</td><td>28</td></tr><tr><td>7</td><td>Mindfulness Informed DBT Care</td><td>29</td></tr><tr><td>8</td><td>DBT Support For Young Adults</td><td>28</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>12</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Support For Intense Emotions</td><td>28</td></tr>
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>DBT-informed online therapy for anxiety, emotions, and life transitions.</td><td>72</td></tr><tr><td>2</td><td>Learn skills for emotional regulation, distress tolerance, and mindfulness.</td><td>75</td></tr><tr><td>3</td><td>Care is available to clients living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>DBT-informed online therapy for anxiety, emotions, and life transitions.</td><td>72</td></tr><tr><td>2</td><td>Learn skills for emotional regulation, distress tolerance, and mindfulness.</td><td>75</td></tr><tr><td>3</td><td>Care is available for people living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
+</table>
 
 </section>
 
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>Ad Copy Example 6 Of 8</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>Therapy - OCD - General</h1>
+    <p>Ad group 6 of 8. Review the full headline and description set for this service before launch.</p>
   </div>
   
 <div class="ad-card">
@@ -838,17 +911,23 @@ ul {
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online OCD Therapy Support</td><td>26</td></tr><tr><td>2</td><td>OCD Therapy Care In NY NJ</td><td>25</td></tr><tr><td>3</td><td>Support For OCD Patterns NY</td><td>27</td></tr><tr><td>4</td><td>Therapy For Intrusive Thoughts</td><td>30</td></tr><tr><td>5</td><td>CBT Skills For OCD Support</td><td>26</td></tr><tr><td>6</td><td>Mindfulness For OCD Support</td><td>27</td></tr><tr><td>7</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>8</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Practical Coping Skills Care</td><td>28</td></tr><tr><td>12</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>13</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>14</td><td>Goal Oriented Therapy Care</td><td>26</td></tr><tr><td>15</td><td>Online Therapy For Anxiety</td><td>26</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online OCD Therapy Support</td><td>26</td></tr><tr><td>2</td><td>OCD Therapy Care In NY NJ</td><td>25</td></tr><tr><td>3</td><td>Support For OCD Patterns NY</td><td>27</td></tr><tr><td>4</td><td>Therapy For Intrusive Thoughts</td><td>30</td></tr><tr><td>5</td><td>CBT Skills For OCD Support</td><td>26</td></tr><tr><td>6</td><td>Mindfulness For OCD Support</td><td>27</td></tr><tr><td>7</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>8</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Practical Coping Skills Care</td><td>28</td></tr><tr><td>12</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>13</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>14</td><td>Goal Oriented Therapy Care</td><td>26</td></tr><tr><td>15</td><td>Online Therapy For Anxiety</td><td>26</td></tr>
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online therapy support for OCD-related concerns in New York and New Jersey.</td><td>75</td></tr><tr><td>2</td><td>Use evidence-informed tools for intrusive thoughts and compulsive patterns.</td><td>75</td></tr><tr><td>3</td><td>Start with a consultation call to confirm clinical fit and next steps.</td><td>70</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online therapy support for OCD-related concerns in New York and New Jersey.</td><td>75</td></tr><tr><td>2</td><td>Use evidence-informed tools for intrusive thoughts and compulsive patterns.</td><td>75</td></tr><tr><td>3</td><td>Start with a consultation call to confirm clinical fit and next steps.</td><td>70</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
+</table>
 
 </section>
 
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>Ad Copy Example 7 Of 8</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>Therapy - Depression - General</h1>
+    <p>Ad group 7 of 8. Review the full headline and description set for this service before launch.</p>
   </div>
   
 <div class="ad-card">
@@ -861,17 +940,23 @@ ul {
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online Depression Therapy</td><td>25</td></tr><tr><td>2</td><td>Depression Therapy Support</td><td>26</td></tr><tr><td>3</td><td>Therapy For Low Mood Support</td><td>28</td></tr><tr><td>4</td><td>Depression Care In NY And NJ</td><td>28</td></tr><tr><td>5</td><td>CBT Skills For Depression</td><td>25</td></tr><tr><td>6</td><td>Mindfulness Therapy Support</td><td>27</td></tr><tr><td>7</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>8</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>12</td><td>Goal Oriented Therapy Care</td><td>26</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Support For Life Transitions</td><td>28</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Online Depression Therapy</td><td>25</td></tr><tr><td>2</td><td>Depression Therapy Support</td><td>26</td></tr><tr><td>3</td><td>Therapy For Low Mood Support</td><td>28</td></tr><tr><td>4</td><td>Depression Care In NY And NJ</td><td>28</td></tr><tr><td>5</td><td>CBT Skills For Depression</td><td>25</td></tr><tr><td>6</td><td>Mindfulness Therapy Support</td><td>27</td></tr><tr><td>7</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>8</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>12</td><td>Goal Oriented Therapy Care</td><td>26</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Support For Life Transitions</td><td>28</td></tr>
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online depression therapy support for young adults in New York and New Jersey.</td><td>78</td></tr><tr><td>2</td><td>Sessions can focus on low mood, motivation, transitions, and daily skills.</td><td>74</td></tr><tr><td>3</td><td>Care is collaborative and grounded in CBT, DBT, ACT, and mindfulness.</td><td>69</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online depression therapy support for young adults in New York and New Jersey.</td><td>78</td></tr><tr><td>2</td><td>Sessions can focus on low mood, motivation, transitions, and daily skills.</td><td>74</td></tr><tr><td>3</td><td>Care is collaborative and grounded in CBT, DBT, ACT, and mindfulness.</td><td>69</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
+</table>
 
 </section>
 
 <section class="section pdf-page ad-copy-page">
   <div class="section-header">
     <div class="eyebrow">Ad Copy</div>
-    <h1>Ad Copy Example 8 Of 8</h1>
-    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+    <h1>Therapy - Social Anxiety - General</h1>
+    <p>Ad group 8 of 8. Review the full headline and description set for this service before launch.</p>
   </div>
   
 <div class="ad-card">
@@ -884,9 +969,15 @@ ul {
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
-<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Social Anxiety Therapy Care</td><td>27</td></tr><tr><td>2</td><td>Online Social Anxiety Support</td><td>29</td></tr><tr><td>3</td><td>CBT Skills For Social Anxiety</td><td>29</td></tr><tr><td>4</td><td>Social Anxiety In NY And NJ</td><td>27</td></tr><tr><td>5</td><td>Group Therapy For Anxiety</td><td>25</td></tr><tr><td>6</td><td>Therapy For Overthinking Care</td><td>29</td></tr><tr><td>7</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>8</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Mindfulness Therapy Support</td><td>27</td></tr><tr><td>12</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Goal Oriented Therapy Care</td><td>26</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Social Anxiety Therapy Care</td><td>27</td></tr><tr><td>2</td><td>Online Social Anxiety Support</td><td>29</td></tr><tr><td>3</td><td>CBT Skills For Social Anxiety</td><td>29</td></tr><tr><td>4</td><td>Social Anxiety In NY And NJ</td><td>27</td></tr><tr><td>5</td><td>Group Therapy For Anxiety</td><td>25</td></tr><tr><td>6</td><td>Therapy For Overthinking Care</td><td>29</td></tr><tr><td>7</td><td>Private Online Therapy Care</td><td>27</td></tr><tr><td>8</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>9</td><td>Book A Free Consult Today</td><td>25</td></tr><tr><td>10</td><td>Licensed NY And NJ Therapy</td><td>26</td></tr><tr><td>11</td><td>Mindfulness Therapy Support</td><td>27</td></tr><tr><td>12</td><td>Build Practical Coping Skills</td><td>29</td></tr><tr><td>13</td><td>Mindful Mental Health Care</td><td>26</td></tr><tr><td>14</td><td>Out Of Network Superbills</td><td>25</td></tr><tr><td>15</td><td>Goal Oriented Therapy Care</td><td>26</td></tr>
+</table>
 <div class="subsection-header">Description examples</div>
-<table><tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online therapy and group support options for social anxiety concerns.</td><td>69</td></tr><tr><td>2</td><td>Build practical skills for worry, avoidance, overthinking, and stress.</td><td>70</td></tr><tr><td>3</td><td>Care is available to clients living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr></table>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online therapy and group support options for social anxiety concerns.</td><td>69</td></tr><tr><td>2</td><td>Build practical skills for worry, avoidance, overthinking, and stress.</td><td>70</td></tr><tr><td>3</td><td>Care is available for people living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
+</table>
 
 </section>
 
@@ -895,41 +986,19 @@ ul {
   <div class="section-header">
     <div class="eyebrow">Regional Targeting</div>
     <h1>Where The Campaign Is Set To Reach</h1>
-    <p>The current plan stays table-based so the launch geography is easy to review. Confirm the current scope or add New York City and ZIP priorities before launch.</p>
+    <p>The current plan stays table-based so the launch geography is easy to review. Confirm the current state scope or add city, ZIP, or exclusion priorities before launch.</p>
   </div>
   
-<div class="targeting-grid">
-  <div class="targeting-panel">
-    <div class="subsection-header" style="margin-top:0;">Current targeting</div>
-    <p>The current staging file targets the approved service states. If New York City or ZIP focus areas should be prioritized, they can be added after review.</p>
-    <div style="margin:12px 0;"><span class="state-chip">New York, United States</span><span class="state-chip">New Jersey, United States</span></div>
-    <table>
-      <tr><th>Location</th><th>Status</th><th>Review note</th></tr>
-      
-<tr>
-  <td>New York, United States</td>
-  <td>Staged</td>
-  <td>Approved launch geography</td>
-</tr>
-
-<tr>
-  <td>New Jersey, United States</td>
-  <td>Staged</td>
-  <td>Approved launch geography</td>
-</tr>
-
-    </table>
-  </div>
-  <div class="targeting-panel">
-    <div class="subsection-header" style="margin-top:0;">New York City and ZIP review</div>
-    <table>
-      <tr><th>Area type</th><th>Current detail</th><th>What to confirm</th></tr>
-      <tr><td>New York City focus</td><td>Not narrowed yet</td><td>Confirm New York City or other local focus areas before launch if some areas matter more than others.</td></tr>
-      <tr><td>ZIP clusters</td><td>Not supplied yet</td><td>Provide ZIPs only if spend should concentrate around specific neighborhoods or offices.</td></tr>
-      <tr><td>Regional exclusions</td><td>None staged</td><td>Identify any places that should not receive launch traffic.</td></tr>
-    </table>
-    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
-  </div>
+<div class="targeting-panel compact">
+  <div class="subsection-header" style="margin-top:0;">Current targeting and review items</div>
+  <p>The current staging file targets the approved service states. City and ZIP rows are review items, not separate launch targets unless they are approved.</p>
+  <div style="margin:10px 0;"><span class="state-chip">New York, United States</span><span class="state-chip">New Jersey, United States</span></div>
+  <table class="targeting-table">
+    <colgroup><col class="type-col"><col class="area-col"><col class="status-col"><col></colgroup>
+    <tr><th>Area type</th><th>Area</th><th>Status</th><th>What to confirm</th></tr>
+      <tr><td>State</td><td>New York, United States</td><td>Staged</td><td>Staged across approved New York service areas unless a tighter city or ZIP focus is approved.</td></tr><tr><td>State</td><td>New Jersey, United States</td><td>Staged</td><td>Staged across approved New Jersey service areas unless a tighter city or ZIP focus is approved.</td></tr><tr><td>City</td><td>New York City, NY</td><td>Review item</td><td>Confirm whether NYC should stay as ad group language only or become a separate location focus.</td></tr><tr><td>City</td><td>New Jersey cities</td><td>Not supplied yet</td><td>Provide exact New Jersey cities only if spend should concentrate beyond statewide targeting.</td></tr><tr><td>ZIP</td><td>New York ZIPs</td><td>Not supplied yet</td><td>Provide ZIPs only if specific New York neighborhoods, boroughs, offices, or service pockets should receive focus.</td></tr><tr><td>ZIP</td><td>New Jersey ZIPs</td><td>Not supplied yet</td><td>Provide ZIPs only if specific New Jersey towns, neighborhoods, offices, or service pockets should receive focus.</td></tr><tr><td>Exclusion</td><td>NY/NJ exclusions</td><td>None staged</td><td>Identify any city, ZIP, borough, county, or service area that should not receive traffic.</td></tr>
+  </table>
+  <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
 </div>
 
 </section>
@@ -1114,7 +1183,7 @@ ul {
     <p>The campaign is valid as a staging file. This review should focus on services, ad copy, regional targeting, and budget.</p>
   </div>
   
-<div class="subsection-header">Approval checklist</div>
+<div class="subsection-header">Approval summary</div>
 <div class="approval-grid">
 <div class="approval-check-card">
   <label class="approval-check-head">
@@ -1122,6 +1191,7 @@ ul {
     <h3>Ad groups</h3>
   </label>
   <p>I confirm the services and ad groups listed in this proposal are the right areas to run ads for, including which services should receive the most traffic first.</p>
+  <span class="summary-line">8 ad groups: Therapy - Anxiety - General; Therapy - Young Adults - General; Therapy - Group - New York City; Therapy - CBT - General; plus 4 more.</span>
 </div>
 
 <div class="approval-check-card">
@@ -1130,6 +1200,7 @@ ul {
     <h3>Ads</h3>
   </label>
   <p>I confirm the ad copy direction, including the headline and description variations, is accurate enough to move forward or revise from.</p>
+  <span class="summary-line">8 responsive search ads, each built with 15 headlines and 4 descriptions.</span>
 </div>
 
 <div class="approval-check-card">
@@ -1138,6 +1209,7 @@ ul {
     <h3>Regional targeting</h3>
   </label>
   <p>I confirm where ads should run, including the current state targeting and any New York City, ZIP, or exclusion changes needed before launch.</p>
+  <span class="summary-line">State targeting staged: New York, United States, New Jersey, United States. City, ZIP, and exclusions remain review items unless approved.</span>
 </div>
 
 <div class="approval-check-card">
@@ -1146,6 +1218,7 @@ ul {
     <h3>Budget</h3>
   </label>
   <p>I confirm the monthly budget and pacing approach, including that daily spend may vary while we optimize toward the monthly budget and performance goals.</p>
+  <span class="summary-line">$3,000 monthly budget, about $100 per day on average.</span>
 </div>
 </div>
 
