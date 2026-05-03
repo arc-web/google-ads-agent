@@ -222,6 +222,94 @@ ul {
   font-size: 10px;
   color: #7c6d5c;
 }
+.budget-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.budget-card {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 18px;
+}
+.budget-card .label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #746656;
+  font-weight: 900;
+}
+.budget-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+  color: #185c62;
+}
+.budget-chart {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 18px;
+}
+.spend-bars {
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+  align-items: end;
+  gap: 3px;
+  height: 190px;
+  margin-top: 16px;
+  padding: 16px 10px 8px;
+  border-left: 2px solid #d5c8b7;
+  border-bottom: 2px solid #d5c8b7;
+}
+.spend-bar {
+  background: linear-gradient(180deg, #2f6f76, #9cbfba);
+  min-height: 42px;
+}
+.chart-note {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #5e5144;
+  line-height: 1.45;
+}
+.targeting-map {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 14px;
+}
+.map-panel {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
+}
+.state-chip {
+  display: inline-block;
+  margin: 4px 5px 0 0;
+  padding: 6px 8px;
+  background: #e5f0ee;
+  color: #185c62;
+  font-size: 11px;
+  font-weight: 800;
+}
+.mini-map {
+  width: 100%;
+  height: 260px;
+}
+.state-shape {
+  fill: #d7e8e5;
+  stroke: #185c62;
+  stroke-width: 3;
+}
+.pin {
+  fill: #c8753f;
+  stroke: #fffaf1;
+  stroke-width: 3;
+}
+.map-label {
+  font-size: 13px;
+  fill: #2f2b27;
+  font-weight: 800;
+}
 </style>
 </head>
 <body>
@@ -229,11 +317,11 @@ ul {
 <section class="section pdf-page cover">
   <div class="section-header" style="display:none"></div>
   <div class="subsection-header" style="display:none">Report start</div>
-  <div class="brand-row"><span>Advertising Report Card</span><span>May 2, 2026</span></div>
+  <div class="brand-row"><span>Advertising Report Card</span><span>May 3, 2026</span></div>
   <div class="cover-title">
     <div class="label">New Campaign Review</div>
     <h1>Mindful Mental Health Counseling</h1>
-    <p>A client-ready proposal for a new Google Ads Search campaign, built from website evidence and staged for Google Ads Editor review.</p>
+    <p>A client-ready proposal for a new Google Ads Search campaign, built from website evidence and prepared for client review.</p>
   </div>
   <div class="metric-row">
     <div class="metric"><strong>1</strong><span>Search campaign</span></div>
@@ -241,7 +329,7 @@ ul {
     <div class="metric"><strong>56</strong><span>phrase keywords</span></div>
     <div class="metric"><strong>8</strong><span>responsive ads</span></div>
   </div>
-  <div class="footnote">Campaign: ARC - Search - Anxiety Therapy - V1. Status: paused staging file for Google Ads Editor review.</div>
+  <div class="footnote">May 3, 2026</div>
 </section>
 
   
@@ -263,8 +351,8 @@ ul {
     <p>The launch focuses on services visible on the site: Anxiety Therapy, Individual Therapy, Group Therapy, CBT Therapy, DBT Therapy, OCD Therapy, Depression Therapy, Social Anxiety Therapy.</p>
   </div>
   <div class="insight-card">
-    <h3>Controlled network setting</h3>
-    <p>Search partners are off. The staged campaign uses Google search only.</p>
+    <h3>Priority still needs input</h3>
+    <p>The client should confirm which services should receive the most traffic before the launch budget is finalized.</p>
   </div>
   <div class="insight-card">
     <h3>Launch review status</h3>
@@ -280,6 +368,38 @@ ul {
   <div class="source-card">
     <p><strong>Targeting:</strong> New York, United States, New Jersey, United States</p>
     <p style="margin-top:8px;"><strong>Targeting method:</strong> Location of presence</p>
+  </div>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Budget</div>
+    <h1>Budget And Pacing Plan</h1>
+    <p>Budget approval is separate from campaign structure. This page shows monthly spend, daily pacing, and click planning when a CPC range is available.</p>
+  </div>
+  
+<div class="budget-metrics">
+  <div class="budget-card">
+    <div class="label">Monthly Budget</div>
+    <strong>$3,000</strong>
+  </div>
+  <div class="budget-card">
+    <div class="label">Daily Average</div>
+    <strong>$100</strong>
+  </div>
+  <div class="budget-card">
+    <div class="label">Click Planning</div>
+    <strong style="font-size:20px;">Add CPC range for click estimate</strong>
+  </div>
+</div>
+<div class="budget-chart">
+  <div class="subsection-header" style="margin-top:0;">30-day spend pacing</div>
+  <div class="spend-bars"><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div><div class="spend-bar" style="height:100%"></div></div>
+  <div class="chart-note">
+    This chart shows the planned average spend per day across a 30-day month. Actual daily spend can vary inside Google Ads, but this gives the client a clear budget target to approve before launch.
   </div>
 </div>
 
@@ -310,6 +430,37 @@ ul {
   <tr><td>Anxiety Therapy - Core</td><td>7</td><td>Paused</td></tr><tr><td>Individual Therapy - Young Adults</td><td>7</td><td>Paused</td></tr><tr><td>Group Therapy - NYC</td><td>7</td><td>Paused</td></tr><tr><td>CBT Therapy - Skills</td><td>7</td><td>Paused</td></tr><tr><td>DBT Therapy - Skills</td><td>7</td><td>Paused</td></tr><tr><td>OCD Therapy - Support</td><td>7</td><td>Paused</td></tr><tr><td>Depression Therapy - Support</td><td>7</td><td>Paused</td></tr><tr><td>Social Anxiety - Support</td><td>7</td><td>Paused</td></tr>
 </table>
 <div class="continuation-header">Campaign detail continues with representative ad previews</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Regional Targeting</div>
+    <h1>Where The Campaign Is Set To Reach</h1>
+    <p>This simple map-style view keeps regional targeting understandable without adding a heavy mapping system. The client can approve the current scope or request city and ZIP clusters.</p>
+  </div>
+  
+<div class="targeting-map">
+  <div class="map-panel">
+    <svg class="mini-map" viewBox="0 0 520 320" role="img" aria-label="Simple New York and New Jersey targeting sketch">
+      <path class="state-shape" d="M120 38 L284 56 L338 92 L320 132 L356 168 L326 210 L260 200 L222 244 L160 222 L138 170 L90 146 L104 86 Z"/>
+      <path class="state-shape" d="M330 118 L382 138 L404 204 L388 282 L346 284 L318 230 L326 176 Z"/>
+      <circle class="pin" cx="308" cy="194" r="10"/>
+      <circle class="pin" cx="358" cy="226" r="8"/>
+      <text class="map-label" x="140" y="125">New York</text>
+      <text class="map-label" x="352" y="258">New Jersey</text>
+      <text class="map-label" x="318" y="185">NYC</text>
+    </svg>
+  </div>
+  <div class="map-panel">
+    <div class="subsection-header" style="margin-top:0;">Current targeting</div>
+    <p>The current staging file targets the approved service states, with New York City called out as the visible market anchor.</p>
+    <div style="margin:12px 0;"><span class="state-chip">New York, United States</span><span class="state-chip">New Jersey, United States</span></div>
+    <p style="margin-top:10px;">For a future revision, this can become a city or ZIP cluster view if the client wants to focus the launch around priority neighborhoods.</p>
+    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
+  </div>
+</div>
 
 </section>
 
@@ -375,11 +526,11 @@ ul {
   <div class="section-header">
     <div class="eyebrow">Approval</div>
     <h1>What Needs Client Confirmation</h1>
-    <p>The campaign is valid as a staging file. These are the business decisions to confirm before launch.</p>
+    <p>The campaign is valid as a staging file. The client review should focus on services, priority, ad copy, and regional targeting.</p>
   </div>
   
 <div class="subsection-header">Approval checklist</div>
-<div class="approval-grid"><div class="approval-card"><h3>confirm current capacity by service</h3><p>Confirm this before importing or launching the campaign.</p></div><div class="approval-card"><h3>confirm whether adolescent-focused search should be active</h3><p>Confirm this before importing or launching the campaign.</p></div><div class="approval-card"><h3>confirm whether New York and New Jersey should share one campaign or split by state</h3><p>Confirm this before importing or launching the campaign.</p></div><div class="approval-card"><h3>confirm client-approved budget</h3><p>Confirm this before importing or launching the campaign.</p></div><div class="approval-card"><h3>confirm whether group therapy is currently enrolling or waitlist only</h3><p>Confirm this before importing or launching the campaign.</p></div></div>
+<div class="approval-grid"><div class="approval-card"><h3>Ad groups</h3><p>Confirm the service list is complete and no important service focus is missing.</p></div><div class="approval-card"><h3>Priority services</h3><p>Identify which ad groups should receive the most traffic first.</p></div><div class="approval-card"><h3>Ad copy</h3><p>Review the headline and description variations for tone, claims, and service fit.</p></div><div class="approval-card"><h3>Regional targeting</h3><p>Confirm the states, cities, ZIP clusters, or regional focus areas for launch.</p></div></div>
 <div class="subsection-header">Source trail</div>
 <div class="source-card"><p><strong>https://nycmindfulmentalhealthcounseling.com/</strong><br>anxiety focus, online therapy for adolescents and young adults in New York and New Jersey, services and modalities, founder and licensing language</p><p><strong>https://nycmindfulmentalhealthcounseling.com/contact/</strong><br>request appointment call to action, out-of-network insurance and superbill language, phone number</p><p><strong>https://nycmindfulmentalhealthcounseling.com/group-therapy-nyc/</strong><br>group therapy process, online sessions only, group session pricing, NY and NJ license/service eligibility</p><p><strong>https://nycmindfulmentalhealthcounseling.com/cbt/</strong><br>CBT positioning and online therapy service area</p><p><strong>https://nycmindfulmentalhealthcounseling.com/dbt/</strong><br>DBT positioning and skills-based copy</p></div>
 

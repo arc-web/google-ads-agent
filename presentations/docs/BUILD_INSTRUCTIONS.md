@@ -81,9 +81,17 @@ python3 presentations/tools/build_new_campaign_report.py \
   --service-catalog-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/service_catalog.json \
   --geo-strategy-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/geo_strategy.json \
   --source-attribution-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/source_attribution.json \
+  --monthly-budget 3000 \
   --output-html clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Client_New_Campaign_Review.html \
   --output-pdf clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Client_New_Campaign_Review.pdf \
   --visual-audit-dir clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/new_campaign_visual_audit
+```
+
+Optional CPC planning fields:
+
+```bash
+  --cpc-low 8 \
+  --cpc-high 18
 ```
 
 Run static HTML audit:
