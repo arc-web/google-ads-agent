@@ -102,24 +102,26 @@ With:
 - `Client_Rebuild_Review.html`
 - `Client_Rebuild_Review.pdf`
 - `validation_report.json`
-- `Google_Ads_Editor_Staging_CURRENT.csv`
+- `{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv`
 - `client_feedback_classified.json`
 - `revision_decision_log.csv`
-- `Google_Ads_Editor_Staging_REV1.csv` when revisions are approved.
+- `{client_slug}_google_ads_editor_staging_rev1_{YYYYMMDD_HHMMSS}.csv` when revisions are approved.
+
+Generated Google Ads Editor CSV filenames must include the client slug and date/time. Do not overwrite a prior upload candidate with a generic `CURRENT` filename. Keep old dated CSVs in the build folder so operators can search by client and select the intended version in Google Ads Editor.
 
 Provider-token validation helper:
 
 ```bash
 python3 shared/rebuild/provider_token_validator.py \
   --token RevKey \
-  --file clients/{agency}/{client}/build/{date}_account_rebuild/Google_Ads_Editor_Staging_CURRENT.csv
+  --file clients/{agency}/{client}/build/{date}_account_rebuild/{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv
 ```
 
 Google Ads Editor staging validation helper:
 
 ```bash
 python3 shared/rebuild/staging_validator.py \
-  --csv clients/{agency}/{client}/build/{date}_account_rebuild/Google_Ads_Editor_Staging_CURRENT.csv
+  --csv clients/{agency}/{client}/build/{date}_account_rebuild/{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv
 ```
 
 ## Pipeline
@@ -518,7 +520,7 @@ Required outputs:
 - `revision_decision_log.csv`
 - `engine_rule_updates.md`
 - `client_questions_for_call.md`
-- `Google_Ads_Editor_Staging_REV1.csv` when approved revisions are regenerated.
+- `{client_slug}_google_ads_editor_staging_rev1_{YYYYMMDD_HHMMSS}.csv` when approved revisions are regenerated.
 
 ## Agent Architecture
 

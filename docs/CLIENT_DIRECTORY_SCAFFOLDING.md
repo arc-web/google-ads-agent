@@ -79,6 +79,13 @@ Dated rebuilds:
 
 - `build/{date}_account_rebuild/`
 
+Generated Google Ads Editor CSV files:
+
+- Must include the client slug and date/time in the filename.
+- Use `{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv` for initial/current staging.
+- Use `{client_slug}_google_ads_editor_staging_rev1_{YYYYMMDD_HHMMSS}.csv` for approved revision staging.
+- Do not overwrite upload candidates with generic `CURRENT` filenames. Keep dated versions searchable for Google Ads Editor import review.
+
 ## Required Intake Fields
 
 Before generating a rebuild, fill in:

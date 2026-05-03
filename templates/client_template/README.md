@@ -35,13 +35,15 @@ Optional but recommended:
 
 The one-shot rebuild should create:
 
-- `build/{date}_account_rebuild/Google_Ads_Editor_Staging_CURRENT.csv`
+- `build/{date}_account_rebuild/{{CLIENT_SLUG}}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv`
 - `build/{date}_account_rebuild/Client_Rebuild_Review.html`
 - `build/{date}_account_rebuild/Client_Rebuild_Review.pdf`
 - `build/{date}_account_rebuild/human_review.md`
 - `build/{date}_account_rebuild/validation_report.json`
 - `build/{date}_account_rebuild/client_feedback_classified.json`
 - `build/{date}_account_rebuild/revision_decision_log.csv`
+
+Generated Google Ads Editor CSV filenames must include this client slug and a date/time stamp so upload candidates are searchable by client and version in Google Ads Editor.
 
 ## Reference Sources
 

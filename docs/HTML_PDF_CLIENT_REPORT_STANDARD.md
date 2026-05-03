@@ -80,18 +80,19 @@ python3 presentations/tools/build_initial_search_campaign.py \
   --display-name "Client Name" \
   --website https://example.com/ \
   --build-date YYYY-MM-DD \
+  --csv-timestamp YYYYMMDD_HHMMSS \
   --location "United States|2840" \
   --service "Core Services" \
   --monthly-budget 3000
 ```
 
-The one-shot builder creates the staging CSV, source artifacts, report HTML/PDF, visual audit folder, and `run_manifest.json`. To rebuild only the report from existing artifacts, use:
+The one-shot builder creates the staging CSV, source artifacts, report HTML/PDF, visual audit folder, and `run_manifest.json`. Generated CSV names use `{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv` so operators can find the correct dated version in Google Ads Editor. To rebuild only the report from existing artifacts, use:
 
 ```bash
 python3 presentations/tools/build_new_campaign_report.py \
   --client "Client Name" \
   --date "Month D, YYYY" \
-  --staging-csv clients/{agency}/{client}/build/{date}_initial_search_build/Google_Ads_Editor_Staging_CURRENT.csv \
+  --staging-csv clients/{agency}/{client}/build/{date}_initial_search_build/{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv \
   --website-scan-json clients/{agency}/{client}/build/{date}_initial_search_build/website_scan.json \
   --service-catalog-json clients/{agency}/{client}/build/{date}_initial_search_build/service_catalog.json \
   --geo-strategy-json clients/{agency}/{client}/build/{date}_initial_search_build/geo_strategy.json \

@@ -81,12 +81,13 @@ python3 presentations/tools/build_initial_search_campaign.py \
   --display-name "Client Name" \
   --website https://example.com/ \
   --build-date 2026-05-04 \
+  --csv-timestamp 20260504_153045 \
   --location "United States|2840" \
   --service "Core Services" \
   --monthly-budget 3000
 ```
 
-The one-shot command scans the site, writes reviewed source artifacts, builds a paused Google Ads Editor staging CSV, validates it, exports the HTML/PDF report, runs audits, and writes `run_manifest.json`.
+The one-shot command scans the site, writes reviewed source artifacts, builds a paused Google Ads Editor staging CSV, validates it, exports the HTML/PDF report, runs audits, and writes `run_manifest.json`. The generated CSV filename includes the client slug and date/time, for example `client_slug_google_ads_editor_staging_20260504_153045.csv`.
 
 Build only the client-facing new campaign review from existing artifacts:
 
@@ -94,7 +95,7 @@ Build only the client-facing new campaign review from existing artifacts:
 python3 presentations/tools/build_new_campaign_report.py \
   --client "Mindful Mental Health Counseling" \
   --date "May 2, 2026" \
-  --staging-csv clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Google_Ads_Editor_Staging_CURRENT.csv \
+  --staging-csv clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/nyc_mindful_mental_health_counseling_google_ads_editor_staging_20260502_120000.csv \
   --website-scan-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/website_scan.json \
   --service-catalog-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/service_catalog.json \
   --geo-strategy-json clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/geo_strategy.json \

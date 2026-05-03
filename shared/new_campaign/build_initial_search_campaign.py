@@ -22,6 +22,7 @@ if str(ROOT) not in sys.path:
 from shared.gads.core.search_campaigns.search_csv_generator import SearchCSVGenerator
 from shared.presentation.build_new_campaign_report import BudgetPlan, write_report
 from shared.presentation.report_quality_audit import audit_html
+from shared.rebuild.csv_naming import generated_csv_path, normalize_timestamp, validate_generated_csv_name
 from shared.rebuild.scaffold_client import scaffold_client, slug
 from shared.rebuild.staging_validator import validate_file
 from shared.tools.website.website_scanner import WebsiteScanner
@@ -336,6 +337,7 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
     run_date = args.build_date or date.today().isoformat()
     parsed_date = date.fromisoformat(run_date)
     date_label = args.date_label or f"{parsed_date.strftime('%B')} {parsed_date.day}, {parsed_date.year}"
+    csv_timestamp = normalize_timestamp(args.csv_timestamp)
     client_dir = ensure_client_dir(args.agency, args.client, args.display_name, args.website, args.clients_dir)
     build_dir = args.build_dir or client_dir / "build" / f"{run_date}_initial_search_build"
     build_dir.mkdir(parents=True, exist_ok=True)
@@ -388,7 +390,13 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
     for negative in args.negative:
         generator.add_negative_phrase(campaign, negative)
 
-    staging_csv = build_dir / "Google_Ads_Editor_Staging_CURRENT.csv"
+    staging_csv = generated_csv_path(
+        build_dir,
+        args.client,
+        args.csv_purpose,
+        csv_timestamp,
+    )
+    validate_generated_csv_name(staging_csv, args.client)
     validation = generator.write_and_validate(staging_csv)
     validation_path = build_dir / "validation_report.json"
     validation_path.write_text(json.dumps(validation, indent=2) + "\n", encoding="utf-8")
@@ -490,6 +498,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--build-dir", type=Path)
     parser.add_argument("--clients-dir", type=Path, default=ROOT / "clients")
     parser.add_argument("--campaign-name")
+    parser.add_argument(
+        "--csv-timestamp",
+        help="Timestamp used in generated CSV filenames. Defaults to current UTC time.",
+    )
+    parser.add_argument(
+        "--csv-purpose",
+        default="google_ads_editor_staging",
+        help="Purpose segment used in generated CSV filenames.",
+    )
     parser.add_argument("--daily-budget", type=float, default=100.0)
     parser.add_argument("--monthly-budget", type=float, default=3000.0)
     parser.add_argument("--cpc-low", type=float)

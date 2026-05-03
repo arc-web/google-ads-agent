@@ -29,6 +29,8 @@ def test_one_shot_initial_search_build_with_temp_client(tmp_path: Path) -> None:
             (FIXTURE_DIR / "index.html").as_uri(),
             "--build-date",
             "2026-05-04",
+            "--csv-timestamp",
+            "20260504_153045",
             "--date-label",
             "May 4, 2026",
             "--build-dir",
@@ -59,6 +61,7 @@ def test_one_shot_initial_search_build_with_temp_client(tmp_path: Path) -> None:
     website_scan = json.loads(Path(artifacts["website_scan"]).read_text(encoding="utf-8"))
 
     assert validate_file(staging)["status"] == "pass"
+    assert staging.name == "fixture_client_google_ads_editor_staging_20260504_153045.csv"
     findings, summary = audit_html(html)
     assert summary["errors"] == 0
     assert not [finding for finding in findings if finding.severity == "error"]
