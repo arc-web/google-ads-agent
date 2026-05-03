@@ -102,7 +102,7 @@ def summarize_staging(rows: list[dict[str, str]]) -> CampaignSummary:
     )
 
 
-def select_rsa_examples(rows: list[dict[str, str]], limit: int = 4) -> list[RsaExample]:
+def select_rsa_examples(rows: list[dict[str, str]], limit: int | None = None) -> list[RsaExample]:
     examples: list[RsaExample] = []
     for row in rows:
         if row.get("Ad type") != "Responsive search ad":
@@ -118,7 +118,7 @@ def select_rsa_examples(rows: list[dict[str, str]], limit: int = 4) -> list[RsaE
                 descriptions=[row.get(f"Description {index}", "") for index in range(1, 5)],
             )
         )
-        if len(examples) == limit:
+        if limit is not None and len(examples) == limit:
             break
     return examples
 
@@ -344,6 +344,41 @@ body {
   line-height: 1.35;
   margin-top: 5px;
 }
+.ad-copy-page .section-header {
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.ad-copy-page .section-header h1 {
+  font-size: 28px;
+}
+.ad-copy-page .section-header p {
+  font-size: 13px;
+  margin-top: 7px;
+}
+.ad-copy-page .ad-card {
+  padding: 10px;
+}
+.ad-copy-page .ad-card h3 {
+  margin-bottom: 6px;
+}
+.ad-copy-page .ad-preview {
+  padding: 8px;
+  margin: 6px 0 0;
+}
+.ad-copy-page .ad-preview .headline {
+  font-size: 16px;
+}
+.ad-copy-page .subsection-header {
+  margin: 10px 0 6px;
+  padding: 7px 10px;
+}
+.ad-copy-page table {
+  font-size: 9.5px;
+}
+.ad-copy-page td,
+.ad-copy-page th {
+  padding: 3px 5px;
+}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -534,31 +569,6 @@ ul {
   font-size: 13px;
   line-height: 1.45;
 }
-.final-signoff {
-  background: #fffaf1;
-  border: 1px solid #dfd2bf;
-  padding: 14px;
-  margin-top: 14px;
-}
-.final-signoff p {
-  margin: 0 0 12px;
-  color: #4c4238;
-  font-size: 13px;
-  line-height: 1.45;
-}
-.sign-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 14px;
-  font-size: 12px;
-  color: #5e5144;
-}
-.sign-row .line {
-  border-bottom: 1px solid #3d342b;
-  min-height: 24px;
-  margin-top: 4px;
-}
 .state-chip {
   display: inline-block;
   margin: 4px 5px 0 0;
@@ -713,7 +723,7 @@ def overview_section(summary: CampaignSummary) -> str:
         ),
         (
             "Ads and regions",
-            "Representative ad copy examples, current regional targeting, and any city or ZIP changes needed.",
+            "Representative ad copy examples, current regional targeting, and any New York City or ZIP changes needed.",
         ),
         (
             "Budget and confirmation",
@@ -1032,9 +1042,9 @@ def campaign_structure_section(summary: CampaignSummary) -> str:
     <path class="flow-muted" d="M590 359 C640 359, 652 378, 700 378"/>
     <path class="flow-muted" d="M590 429 C640 429, 652 410, 700 410"/>
     <path class="flow-muted" d="M590 429 C640 429, 652 448, 700 448"/>
-    <text class="flow-small" x="716" y="344">strongest city groups</text>
+    <text class="flow-small" x="716" y="344">New York City groups</text>
     <text class="flow-small" x="716" y="382">ZIP or neighborhood focus</text>
-    <text class="flow-small" x="716" y="414">secondary city groups</text>
+    <text class="flow-small" x="716" y="414">secondary local groups</text>
     <text class="flow-small" x="716" y="452">later regional tests</text>
   </svg>
 </div>
@@ -1103,7 +1113,7 @@ def targeting_section(geo_strategy: dict) -> str:
 <div class="targeting-grid">
   <div class="targeting-panel">
     <div class="subsection-header" style="margin-top:0;">Current targeting</div>
-    <p>The current staging file targets the approved service states. If city or ZIP focus areas should be prioritized, they can be added after review.</p>
+    <p>The current staging file targets the approved service states. If New York City or ZIP focus areas should be prioritized, they can be added after review.</p>
     <div style="margin:12px 0;">{chips}</div>
     <table>
       <tr><th>Location</th><th>Status</th><th>Review note</th></tr>
@@ -1111,10 +1121,10 @@ def targeting_section(geo_strategy: dict) -> str:
     </table>
   </div>
   <div class="targeting-panel">
-    <div class="subsection-header" style="margin-top:0;">City and ZIP review</div>
+    <div class="subsection-header" style="margin-top:0;">New York City and ZIP review</div>
     <table>
       <tr><th>Area type</th><th>Current detail</th><th>What to confirm</th></tr>
-      <tr><td>City focus</td><td>Not narrowed yet</td><td>Confirm priority cities before launch if some areas matter more than others.</td></tr>
+      <tr><td>New York City focus</td><td>Not narrowed yet</td><td>Confirm New York City or other local focus areas before launch if some areas matter more than others.</td></tr>
       <tr><td>ZIP clusters</td><td>Not supplied yet</td><td>Provide ZIPs only if spend should concentrate around specific neighborhoods or offices.</td></tr>
       <tr><td>Regional exclusions</td><td>None staged</td><td>Identify any places that should not receive launch traffic.</td></tr>
     </table>
@@ -1125,7 +1135,7 @@ def targeting_section(geo_strategy: dict) -> str:
     return section(
         "Regional Targeting",
         "Where The Campaign Is Set To Reach",
-        "The current plan stays table-based so the launch geography is easy to review. Confirm the current scope or add city and ZIP priorities before launch.",
+        "The current plan stays table-based so the launch geography is easy to review. Confirm the current scope or add New York City and ZIP priorities before launch.",
         body,
     )
 
@@ -1136,17 +1146,18 @@ def ad_preview_url(example: RsaExample) -> str:
     return host + ("/" + "/".join(paths) if paths else "")
 
 
-def ads_section(examples: list[RsaExample]) -> str:
-    blocks = []
-    for example in examples:
-        headline_preview = " | ".join(example.headlines[:3])
-        desc_preview = example.descriptions[0] if example.descriptions else ""
-        headline_rows = "".join(
-            f"<tr><td>{index}</td><td>{esc(value)}</td><td>{len(value)}</td></tr>"
-            for index, value in enumerate(example.headlines[:8], start=1)
-        )
-        blocks.append(
-            f"""
+def ad_copy_section(example: RsaExample, index: int, total: int) -> str:
+    headline_preview = " | ".join(example.headlines[:3])
+    desc_preview = example.descriptions[0] if example.descriptions else ""
+    headline_rows = "".join(
+        f"<tr><td>{slot}</td><td>{esc(value)}</td><td>{len(value)}</td></tr>"
+        for slot, value in enumerate(example.headlines, start=1)
+    )
+    description_rows = "".join(
+        f"<tr><td>{slot}</td><td>{esc(value)}</td><td>{len(value)}</td></tr>"
+        for slot, value in enumerate(example.descriptions, start=1)
+    )
+    body = f"""
 <div class="ad-card">
   <h3>{esc(example.ad_group)}</h3>
   <div class="ad-preview">
@@ -1155,20 +1166,27 @@ def ads_section(examples: list[RsaExample]) -> str:
     <div class="headline">{esc(headline_preview)}</div>
     <div class="desc">{esc(desc_preview)}</div>
   </div>
-  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr>{headline_rows}</table>
 </div>
+<div class="subsection-header">Headline examples</div>
+<table><tr><th>#</th><th>Headline</th><th>Chars</th></tr>{headline_rows}</table>
+<div class="subsection-header">Description examples</div>
+<table><tr><th>#</th><th>Description</th><th>Chars</th></tr>{description_rows}</table>
 """
-        )
-    body = f"""
-<div class="subsection-header">Representative ad copy</div>
-<div class="ad-grid">{''.join(blocks)}</div>
+    return f"""
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>{esc(f"Ad Copy Example {index} Of {total}")}</h1>
+    <p>Each page shows one complete ad group so headline and description tables stay together and do not split across pages.</p>
+  </div>
+  {body}
+</section>
 """
-    return section(
-        "Ad Copy",
-        "Examples To Review",
-        "Each responsive search ad has 15 headlines and 4 descriptions in the staging file. These examples show the tone and claims used across the build.",
-        body,
-    )
+
+
+def ads_sections(examples: list[RsaExample]) -> str:
+    total = len(examples)
+    return "".join(ad_copy_section(example, index, total) for index, example in enumerate(examples, start=1))
 
 
 def approval_section(source_attribution: dict) -> str:
@@ -1183,14 +1201,13 @@ def approval_section(source_attribution: dict) -> str:
         ),
         (
             "Regional targeting",
-            "I confirm where ads should run, including the current state targeting and any city, ZIP, or exclusion changes needed before launch.",
+            "I confirm where ads should run, including the current state targeting and any New York City, ZIP, or exclusion changes needed before launch.",
         ),
         (
             "Budget",
             "I confirm the monthly budget and pacing approach, including that daily spend may vary while we optimize toward the monthly budget and performance goals.",
         ),
     ]
-    source_pages = source_attribution.get("source_pages", [])
     approvals = "".join(
         f"""
 <div class="approval-check-card">
@@ -1203,22 +1220,9 @@ def approval_section(source_attribution: dict) -> str:
 """
         for title, text in approval_items
     )
-    sources = "".join(
-        f"<p><strong>{esc(item.get('url'))}</strong><br>{esc(', '.join(item.get('used_for', [])))}</p>"
-        for item in source_pages[:5]
-    )
     body = f"""
-<div class="subsection-header">Source trail</div>
-<div class="source-card">{sources}</div>
 <div class="subsection-header">Approval checklist</div>
 <div class="approval-grid">{approvals}</div>
-<div class="final-signoff">
-  <p>By signing below, I confirm the checked items above are approved or ready for final revisions before launch.</p>
-  <div class="sign-row">
-    <div>Printed name<div class="line" role="presentation"></div></div>
-    <div>Date<div class="line" role="presentation"></div></div>
-  </div>
-</div>
 """
     return section(
         "Approval",
@@ -1259,7 +1263,7 @@ def build_html(
   {overview_section(summary)}
   {campaign_structure_section(summary)}
   {ad_groups_section(summary, rows)}
-  {ads_section(examples)}
+  {ads_sections(examples)}
   {targeting_section(geo_strategy)}
   {budget_pacing_section(budget)}
   {budget_learning_section(budget)}
