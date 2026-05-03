@@ -132,6 +132,24 @@ body {
 .two-col { grid-template-columns: 1fr 1fr; }
 .approval-grid { grid-template-columns: repeat(2, 1fr); }
 .ad-grid { grid-template-columns: 1fr; }
+.confirm-strip {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: #e5f0ee;
+  border-left: 4px solid #185c62;
+  color: #234045;
+}
+.confirm-strip h3 {
+  margin: 0 0 5px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.confirm-strip p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.38;
+}
 .overview-steps {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -437,45 +455,48 @@ ul {
   font-size: 11px;
   line-height: 1.35;
 }
+.approval-grid.clean {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
 .approval-check-card {
   background: #fffaf1;
   border: 1px solid #dfd2bf;
-  padding: 14px;
+  padding: 16px 12px;
+  min-height: 152px;
 }
 .approval-check-head {
   display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-bottom: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 .approval-check-head input {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   accent-color: #185c62;
 }
 .approval-check-head h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 19px;
+  line-height: 1.08;
 }
 .approval-check-card p {
   margin: 0;
-  color: #4c4238;
-  font-size: 13px;
-  line-height: 1.45;
-}
-.approval-check-card .summary-line {
-  display: block;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #e2d7c6;
   color: #185c62;
   font-weight: 800;
+  font-size: 13px;
+  line-height: 1.3;
 }
-.approval-check-card .detail-list {
-  margin-top: 8px;
-  color: #4c4238;
-  font-size: 12px;
-  line-height: 1.38;
+.approval-note {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: #ebe2d3;
+  border-left: 5px solid #c8753f;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #3d342b;
 }
 .state-chip {
   display: inline-block;
@@ -744,6 +765,10 @@ ul {
   <tr><th>Ad group</th><th>Phrase keywords</th><th>Status</th></tr>
   <tr><td>Therapy - Anxiety - General</td><td>7</td><td>Paused</td></tr><tr><td>Therapy - Young Adults - General</td><td>7</td><td>Paused</td></tr><tr><td>Therapy - Group - New York City</td><td>7</td><td>Paused</td></tr><tr><td>Therapy - CBT - General</td><td>7</td><td>Paused</td></tr><tr><td>Therapy - DBT - General</td><td>7</td><td>Paused</td></tr><tr><td>Therapy - OCD - General</td><td>7</td><td>Paused</td></tr><tr><td>Therapy - Depression - General</td><td>7</td><td>Paused</td></tr><tr><td>Therapy - Social Anxiety - General</td><td>7</td><td>Paused</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ad groups: confirm these are the services you want ads to run for and flag any service that should receive priority traffic.</p>
+</div>
 <div class="continuation-header">Campaign detail continues with representative ad previews</div>
 
 </section>
@@ -775,6 +800,10 @@ ul {
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online anxiety therapy for young adults in New York and New Jersey.</td><td>67</td></tr><tr><td>2</td><td>Build practical skills with CBT, DBT, ACT, and mindfulness-informed care.</td><td>73</td></tr><tr><td>3</td><td>Start with a consultation call and confirm whether the practice is a fit.</td><td>73</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Therapy - Anxiety - General or note any headline or description changes needed.</p>
+</div>
 
 </section>
 
@@ -804,6 +833,10 @@ ul {
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online individual therapy for young adults navigating anxiety and related concerns.</td><td>83</td></tr><tr><td>2</td><td>Sessions focus on practical skills, mindfulness, and collaborative support.</td><td>75</td></tr><tr><td>3</td><td>Care is available for people living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Therapy - Young Adults - General or note any headline or description changes needed.</p>
+</div>
 
 </section>
 
@@ -833,6 +866,10 @@ ul {
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online group therapy options for adults seeking skills and support.</td><td>67</td></tr><tr><td>2</td><td>Groups may focus on social anxiety, depression skills, or mindfulness.</td><td>70</td></tr><tr><td>3</td><td>Start with an intro call to review fit, timing, rates, and next steps.</td><td>70</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Therapy - Group - New York City or note any headline or description changes needed.</p>
+</div>
 
 </section>
 
@@ -862,6 +899,10 @@ ul {
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>CBT-informed online therapy for anxiety and related concerns in NY and NJ.</td><td>74</td></tr><tr><td>2</td><td>Work on thought patterns, coping skills, mindfulness, and daily tools.</td><td>70</td></tr><tr><td>3</td><td>Care is collaborative, practical, and matched to individual goals.</td><td>66</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Therapy - CBT - General or note any headline or description changes needed.</p>
+</div>
 
 </section>
 
@@ -891,6 +932,10 @@ ul {
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>DBT-informed online therapy for anxiety, emotions, and life transitions.</td><td>72</td></tr><tr><td>2</td><td>Learn skills for emotional regulation, distress tolerance, and mindfulness.</td><td>75</td></tr><tr><td>3</td><td>Care is available for people living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Therapy - DBT - General or note any headline or description changes needed.</p>
+</div>
 
 </section>
 
@@ -920,6 +965,10 @@ ul {
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online therapy support for OCD-related concerns in New York and New Jersey.</td><td>75</td></tr><tr><td>2</td><td>Use evidence-informed tools for intrusive thoughts and compulsive patterns.</td><td>75</td></tr><tr><td>3</td><td>Start with a consultation call to confirm clinical fit and next steps.</td><td>70</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Therapy - OCD - General or note any headline or description changes needed.</p>
+</div>
 
 </section>
 
@@ -949,6 +998,10 @@ ul {
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online depression therapy support for young adults in New York and New Jersey.</td><td>78</td></tr><tr><td>2</td><td>Sessions can focus on low mood, motivation, transitions, and daily skills.</td><td>74</td></tr><tr><td>3</td><td>Care is collaborative and grounded in CBT, DBT, ACT, and mindfulness.</td><td>69</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Therapy - Depression - General or note any headline or description changes needed.</p>
+</div>
 
 </section>
 
@@ -978,6 +1031,10 @@ ul {
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Online therapy and group support options for social anxiety concerns.</td><td>69</td></tr><tr><td>2</td><td>Build practical skills for worry, avoidance, overthinking, and stress.</td><td>70</td></tr><tr><td>3</td><td>Care is available for people living in New York or New Jersey.</td><td>62</td></tr><tr><td>4</td><td>Out-of-network superbills are available for eligible reimbursement.</td><td>67</td></tr>
 </table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Therapy - Social Anxiety - General or note any headline or description changes needed.</p>
+</div>
 
 </section>
 
@@ -999,6 +1056,10 @@ ul {
       <tr><td>State</td><td>New York, United States</td><td>Staged</td><td>Staged across approved New York service areas unless a tighter city or ZIP focus is approved.</td></tr><tr><td>State</td><td>New Jersey, United States</td><td>Staged</td><td>Staged across approved New Jersey service areas unless a tighter city or ZIP focus is approved.</td></tr><tr><td>City</td><td>New York City, NY</td><td>Review item</td><td>Confirm whether NYC should stay as ad group language only or become a separate location focus.</td></tr><tr><td>City</td><td>New Jersey cities</td><td>Not supplied yet</td><td>Provide exact New Jersey cities only if spend should concentrate beyond statewide targeting.</td></tr><tr><td>ZIP</td><td>New York ZIPs</td><td>Not supplied yet</td><td>Provide ZIPs only if specific New York neighborhoods, boroughs, offices, or service pockets should receive focus.</td></tr><tr><td>ZIP</td><td>New Jersey ZIPs</td><td>Not supplied yet</td><td>Provide ZIPs only if specific New Jersey towns, neighborhoods, offices, or service pockets should receive focus.</td></tr><tr><td>Exclusion</td><td>NY/NJ exclusions</td><td>None staged</td><td>Identify any city, ZIP, borough, county, or service area that should not receive traffic.</td></tr>
   </table>
   <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
+  <div class="confirm-strip">
+    <h3>Please confirm</h3>
+    <p>Regional targeting: confirm the staged states and provide any city, ZIP, or exclusion changes before launch.</p>
+  </div>
 </div>
 
 </section>
@@ -1172,6 +1233,10 @@ ul {
   <div class="budget-tile"><h3>CPC changes click volume</h3><p>The same dollars buy more or fewer clicks as auctions shift.</p></div>
   <div class="budget-tile"><h3>Later spend is intentional</h3><p>Increases follow clearer performance, not random day-to-day noise.</p></div>
 </div>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Budget: confirm the $3,000 monthly budget before launch.</p>
+</div>
 
 </section>
 
@@ -1184,14 +1249,13 @@ ul {
   </div>
   
 <div class="subsection-header">Approval summary</div>
-<div class="approval-grid">
+<div class="approval-grid clean">
 <div class="approval-check-card">
   <label class="approval-check-head">
     <input type="checkbox" checked>
     <h3>Ad groups</h3>
   </label>
-  <p>I confirm the services and ad groups listed in this proposal are the right areas to run ads for, including which services should receive the most traffic first.</p>
-  <span class="summary-line">8 ad groups: Therapy - Anxiety - General; Therapy - Young Adults - General; Therapy - Group - New York City; Therapy - CBT - General; plus 4 more.</span>
+  <p>8 service ad groups</p>
 </div>
 
 <div class="approval-check-card">
@@ -1199,8 +1263,7 @@ ul {
     <input type="checkbox" checked>
     <h3>Ads</h3>
   </label>
-  <p>I confirm the ad copy direction, including the headline and description variations, is accurate enough to move forward or revise from.</p>
-  <span class="summary-line">8 responsive search ads, each built with 15 headlines and 4 descriptions.</span>
+  <p>8 responsive search ads</p>
 </div>
 
 <div class="approval-check-card">
@@ -1208,8 +1271,7 @@ ul {
     <input type="checkbox" checked>
     <h3>Regional targeting</h3>
   </label>
-  <p>I confirm where ads should run, including the current state targeting and any New York City, ZIP, or exclusion changes needed before launch.</p>
-  <span class="summary-line">State targeting staged: New York, United States, New Jersey, United States. City, ZIP, and exclusions remain review items unless approved.</span>
+  <p>Locations shown in this report</p>
 </div>
 
 <div class="approval-check-card">
@@ -1217,10 +1279,10 @@ ul {
     <input type="checkbox" checked>
     <h3>Budget</h3>
   </label>
-  <p>I confirm the monthly budget and pacing approach, including that daily spend may vary while we optimize toward the monthly budget and performance goals.</p>
-  <span class="summary-line">$3,000 monthly budget, about $100 per day on average.</span>
+  <p>$3,000 monthly budget</p>
 </div>
 </div>
+<div class="approval-note">Please confirm the items above after reviewing the detailed pages in this report.</div>
 
 </section>
 
