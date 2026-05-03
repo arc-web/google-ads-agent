@@ -36,7 +36,7 @@ WEBSITE = "https://nycmindfulmentalhealthcounseling.com/"
 
 AD_GROUPS = [
     {
-        "name": "Anxiety Therapy - Core",
+        "name": "Therapy - Anxiety - General",
         "final_url": "https://nycmindfulmentalhealthcounseling.com/",
         "path_1": "Anxiety",
         "path_2": "Therapy",
@@ -74,7 +74,7 @@ AD_GROUPS = [
         ],
     },
     {
-        "name": "Individual Therapy - Young Adults",
+        "name": "Therapy - Young Adults - General",
         "final_url": "https://nycmindfulmentalhealthcounseling.com/individual-therapy-nyc/",
         "path_1": "Individual",
         "path_2": "Therapy",
@@ -112,7 +112,7 @@ AD_GROUPS = [
         ],
     },
     {
-        "name": "Group Therapy - NYC",
+        "name": "Therapy - Group - New York City",
         "final_url": "https://nycmindfulmentalhealthcounseling.com/group-therapy-nyc/",
         "path_1": "Group",
         "path_2": "Therapy",
@@ -150,7 +150,7 @@ AD_GROUPS = [
         ],
     },
     {
-        "name": "CBT Therapy - Skills",
+        "name": "Therapy - CBT - General",
         "final_url": "https://nycmindfulmentalhealthcounseling.com/cbt/",
         "path_1": "CBT",
         "path_2": "Therapy",
@@ -188,7 +188,7 @@ AD_GROUPS = [
         ],
     },
     {
-        "name": "DBT Therapy - Skills",
+        "name": "Therapy - DBT - General",
         "final_url": "https://nycmindfulmentalhealthcounseling.com/dbt/",
         "path_1": "DBT",
         "path_2": "Skills",
@@ -226,7 +226,7 @@ AD_GROUPS = [
         ],
     },
     {
-        "name": "OCD Therapy - Support",
+        "name": "Therapy - OCD - General",
         "final_url": "https://nycmindfulmentalhealthcounseling.com/",
         "path_1": "OCD",
         "path_2": "Therapy",
@@ -264,7 +264,7 @@ AD_GROUPS = [
         ],
     },
     {
-        "name": "Depression Therapy - Support",
+        "name": "Therapy - Depression - General",
         "final_url": "https://nycmindfulmentalhealthcounseling.com/",
         "path_1": "Depression",
         "path_2": "Therapy",
@@ -302,7 +302,7 @@ AD_GROUPS = [
         ],
     },
     {
-        "name": "Social Anxiety - Support",
+        "name": "Therapy - Social Anxiety - General",
         "final_url": "https://nycmindfulmentalhealthcounseling.com/",
         "path_1": "Social",
         "path_2": "Anxiety",
