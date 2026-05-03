@@ -2,3 +2,5 @@ tasks/
 .DS_Store
 __pycache__/
 *.pyc
+google-ads.yaml
+.env

@@ -113,11 +113,8 @@ if __name__ == "__main__":
 
     # Example usage - would normally get input from user
     sample_input = """
-    MyExpertResume.com - Executive Resume Writing Services
-    Fort Lauderdale, FL - Since 2005
-    74% success rate landing executive jobs
-    10,000+ careers created
-    Services: Executive resumes, LinkedIn optimization, career coaching
+    Example Services Company - Professional Services
+    Services: Core service support, planning help, customer consultation
     """
 
     csv_output = create_rsa_campaign_csv(sample_input)

@@ -104,9 +104,9 @@ if __name__ == "__main__":
 
     # Example usage - would normally get input from user
     sample_input = """
-    MyExpertResume.com executive resume services
-    Pages: Executive Resume (/executive-resume/), Career Coaching (/career-coaching/),
-    LinkedIn Services (/linkedin-profiles/), About Us (/about-us/), Testimonials (/testimonials/)
+    Example Services Company professional services
+    Pages: Core Services (/services/), Consultations (/consultations/),
+    About Us (/about/), Testimonials (/testimonials/)
     """
 
     markdown_output = create_sitelinks_from_input(sample_input)

@@ -74,6 +74,20 @@ The builder wraps the Chrome headless export flags that produced the accepted re
 For a new campaign report, use:
 
 ```bash
+python3 presentations/tools/build_initial_search_campaign.py \
+  --agency agency_slug \
+  --client client_slug \
+  --display-name "Client Name" \
+  --website https://example.com/ \
+  --build-date YYYY-MM-DD \
+  --location "United States|2840" \
+  --service "Core Services" \
+  --monthly-budget 3000
+```
+
+The one-shot builder creates the staging CSV, source artifacts, report HTML/PDF, visual audit folder, and `run_manifest.json`. To rebuild only the report from existing artifacts, use:
+
+```bash
 python3 presentations/tools/build_new_campaign_report.py \
   --client "Client Name" \
   --date "Month D, YYYY" \
@@ -86,6 +100,13 @@ python3 presentations/tools/build_new_campaign_report.py \
   --output-html clients/{agency}/{client}/build/{date}_initial_search_build/Client_New_Campaign_Review.html \
   --output-pdf clients/{agency}/{client}/build/{date}_initial_search_build/Client_New_Campaign_Review.pdf \
   --visual-audit-dir clients/{agency}/{client}/build/{date}_initial_search_build/new_campaign_visual_audit
+```
+
+The report builder can also read a one-shot manifest:
+
+```bash
+python3 presentations/tools/build_new_campaign_report.py \
+  --manifest-json clients/{agency}/{client}/build/{date}_initial_search_build/run_manifest.json
 ```
 
 If there is an approved cost-per-click planning range, include:

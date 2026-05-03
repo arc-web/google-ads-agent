@@ -1427,20 +1427,51 @@ def write_report(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build a new-campaign review report.")
-    parser.add_argument("--client", required=True)
-    parser.add_argument("--date", required=True)
-    parser.add_argument("--staging-csv", required=True, type=Path)
-    parser.add_argument("--website-scan-json", required=True, type=Path)
-    parser.add_argument("--service-catalog-json", required=True, type=Path)
-    parser.add_argument("--geo-strategy-json", required=True, type=Path)
-    parser.add_argument("--source-attribution-json", required=True, type=Path)
+    parser.add_argument("--manifest-json", type=Path, help="Optional one-shot run manifest.")
+    parser.add_argument("--client")
+    parser.add_argument("--date")
+    parser.add_argument("--staging-csv", type=Path)
+    parser.add_argument("--website-scan-json", type=Path)
+    parser.add_argument("--service-catalog-json", type=Path)
+    parser.add_argument("--geo-strategy-json", type=Path)
+    parser.add_argument("--source-attribution-json", type=Path)
     parser.add_argument("--monthly-budget", type=float, default=3000)
     parser.add_argument("--cpc-low", type=float)
     parser.add_argument("--cpc-high", type=float)
-    parser.add_argument("--output-html", required=True, type=Path)
+    parser.add_argument("--output-html", type=Path)
     parser.add_argument("--output-pdf", type=Path)
     parser.add_argument("--visual-audit-dir", type=Path)
     args = parser.parse_args()
+
+    if args.manifest_json:
+        manifest = read_json(args.manifest_json)
+        artifacts = manifest.get("artifacts", {})
+        args.client = args.client or manifest.get("client")
+        args.date = args.date or manifest.get("date_label")
+        args.staging_csv = args.staging_csv or Path(artifacts.get("staging_csv", ""))
+        args.website_scan_json = args.website_scan_json or Path(artifacts.get("website_scan", ""))
+        args.service_catalog_json = args.service_catalog_json or Path(artifacts.get("service_catalog", ""))
+        args.geo_strategy_json = args.geo_strategy_json or Path(artifacts.get("geo_strategy", ""))
+        args.source_attribution_json = args.source_attribution_json or Path(artifacts.get("source_attribution", ""))
+        args.output_html = args.output_html or Path(artifacts.get("client_report_html", ""))
+        args.output_pdf = args.output_pdf or Path(artifacts.get("client_report_pdf", ""))
+        visual_dir = artifacts.get("visual_audit_dir")
+        args.visual_audit_dir = args.visual_audit_dir or (Path(visual_dir) if visual_dir else None)
+
+    required = {
+        "--client": args.client,
+        "--date": args.date,
+        "--staging-csv": args.staging_csv,
+        "--website-scan-json": args.website_scan_json,
+        "--service-catalog-json": args.service_catalog_json,
+        "--geo-strategy-json": args.geo_strategy_json,
+        "--source-attribution-json": args.source_attribution_json,
+        "--output-html": args.output_html,
+    }
+    missing = [name for name, value in required.items() if not value]
+    if missing:
+        parser.error(f"missing required arguments: {', '.join(missing)}")
+
     budget = BudgetPlan(args.monthly_budget, args.cpc_low, args.cpc_high)
 
     html_path = write_report(

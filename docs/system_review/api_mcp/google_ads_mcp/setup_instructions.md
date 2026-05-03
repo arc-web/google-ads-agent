@@ -1,74 +1,77 @@
-# Google Ads MCP Server Setup Instructions
+# Google Ads MCP Server - Credential Setup
 
-## ✅ Installation Complete!
+## Where credentials live
 
-## 🔑 Step 1: Get Google Ads API Credentials
+**Never** create a `google-ads.yaml` file. Credentials are stored in OpenBao and fetched at runtime.
 
-### A. Google Cloud Console Setup
+```
+secret/tool-infra/google-ads-client-id
+secret/tool-infra/google-ads-client-secret
+secret/tool-infra/google-ads-refresh-token
+secret/tool-infra/google-ads-developer-token
+secret/tool-infra/google-ads-login-customer-id
+```
 
-1. Go to: https://console.cloud.google.com
+## For agents / cron scripts (OpenBao AppRole)
 
-2. Create or select a project
+Source `/opt/openbao-wrapper/lib.sh`, call `bao_auth`, then `bao_get`:
 
-3. Enable **Google Ads API**: APIs & Services → Library → Search "Google Ads API" → Click "Enable"
+```bash
+source /opt/openbao-wrapper/lib.sh
+bao_auth
+export CLIENT_ID=$(bao_get /tool-infra google-ads-client-id)
+export CLIENT_SECRET=$(bao_get /tool-infra google-ads-client-secret)
+export REFRESH_TOKEN=$(bao_get /tool-infra google-ads-refresh-token)
+export DEV_TOKEN=$(bao_get /tool-infra google-ads-developer-token)
+export LOGIN_ID=$(bao_get /tool-infra google-ads-login-customer-id)
+```
 
-4. Create OAuth 2.0 Credentials: APIs & Services → Credentials → Create Credentials → OAuth client ID → Application type: **Desktop app** → Download credentials JSON → Extract `client_id` and `client_secret`
+See `/opt/openbao-wrapper/google-ads-report-v2.sh` for a working reference.
 
-### B. Get Developer Token
+Load in Python via dict (no yaml file needed):
 
-1. Go to: https://ads.google.com
+```python
+from google.ads.googleads.client import GoogleAdsClient
+import os
 
-2. Tools & Settings → API Center
+client = GoogleAdsClient.load_from_dict({
+    "client_id": os.environ["CLIENT_ID"],
+    "client_secret": os.environ["CLIENT_SECRET"],
+    "refresh_token": os.environ["REFRESH_TOKEN"],
+    "developer_token": os.environ["DEV_TOKEN"],
+    "login_customer_id": os.environ["LOGIN_ID"],
+    "use_proto_plus": True,
+})
+```
 
-3. Copy your **Developer Token**
+## For humans / local dev (1Password)
 
-### C. Generate Refresh Token
+Get credentials from 1Password ARC vault. Use `op run` to inject into environment without writing to disk:
 
-Use Google OAuth Playground:
+```bash
+op run --env-file=.env.1p -- python3 your_script.py
+```
 
-1. Go to: https://developers.google.com/oauthplayground
+`.env.1p` uses vault references only (no real values):
+```
+CLIENT_ID=op://ARC/Google Ads API/client_id
+REFRESH_TOKEN=op://ARC/Google Ads API/refresh_token
+```
 
-2. Settings (gear icon) → Check "Use your own OAuth credentials"
+## Updating credentials in OpenBao
 
-3. Enter your Client ID and Client Secret
+```bash
+# SSH to VPS, then:
+ROOT_TOKEN=$(op item get hl23px33remaz2xecl5ecvvaem --vault ARC --fields root_token --reveal)
+VAULT_ADDR=http://127.0.0.1:8200 VAULT_TOKEN=$ROOT_TOKEN \
+  bao kv put secret/tool-infra/google-ads-refresh-token value="NEW_TOKEN"
+```
 
-4. Find "Google Ads API" → Select scopes
+## Available tools
 
-5. Authorize → Exchange authorization code → Copy refresh_token
+- `search` - GAQL queries against Google Ads data
+- `list_accessible_customers` - list all accessible customer accounts
 
-## 📝 Step 2: Update google-ads.yaml
+## MCC account
 
-Edit $MCP_TOOLS_ROOT/servers/google_ads_mcp/google-ads.yaml with your actual credentials.
-
-## ⚙️ Step 3: Configure MCP in Claude Code
-
-The MCP configuration will be added to ~/.claude.json. After adding credentials, run: claude mcp list
-
-You should see: google-ads: ✓ Connected
-
-## 🧪 Step 4: Test the Server
-
-Test manually:
-
-cd $MCP_TOOLS_ROOT/servers/google_ads_mcp
-
-source venv/bin/activate
-
-python3 -m ads_mcp.server
-
-## 📊 Available Tools
-
-1. **`search`** - Query Google Ads data using GAQL
-
-2. **`list_accessible_customers`** - List all accessible customer accounts
-
-## 🎯 Example Usage in Claude
-
-Once set up, try asking Claude:
-
-- "List all my Google Ads accounts"
-
-- "Show me campaigns with more than 100 clicks"
-
-- "What's the performance of my Search campaigns this month?"
-
+Login customer ID: `2119931898` (MCC - manages all client accounts)

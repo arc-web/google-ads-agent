@@ -72,6 +72,24 @@ python3 presentations/tools/build_revision_review.py \
 
 Build a client-facing new campaign review when there is no inherited ad account:
 
+Run the full one-shot initial Search build:
+
+```bash
+python3 presentations/tools/build_initial_search_campaign.py \
+  --agency therappc \
+  --client client_slug \
+  --display-name "Client Name" \
+  --website https://example.com/ \
+  --build-date 2026-05-04 \
+  --location "United States|2840" \
+  --service "Core Services" \
+  --monthly-budget 3000
+```
+
+The one-shot command scans the site, writes reviewed source artifacts, builds a paused Google Ads Editor staging CSV, validates it, exports the HTML/PDF report, runs audits, and writes `run_manifest.json`.
+
+Build only the client-facing new campaign review from existing artifacts:
+
 ```bash
 python3 presentations/tools/build_new_campaign_report.py \
   --client "Mindful Mental Health Counseling" \
@@ -94,11 +112,25 @@ Optional CPC planning fields:
   --cpc-high 18
 ```
 
+Build from a one-shot run manifest:
+
+```bash
+python3 presentations/tools/build_new_campaign_report.py \
+  --manifest-json clients/{agency}/{client}/build/{date}_initial_search_build/run_manifest.json
+```
+
 Run static HTML audit:
 
 ```bash
 python3 presentations/tools/report_quality_audit.py \
   clients/therappc/thinkhappylivehealthy/build/2026-04-28_account_rebuild/campaign_review_2026-04-28_fixed.html
+```
+
+Run static HTML audit for the new-campaign example:
+
+```bash
+python3 presentations/tools/report_quality_audit.py \
+  clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Client_New_Campaign_Review.html
 ```
 
 Run rendered PDF visual audit:
@@ -107,6 +139,14 @@ Run rendered PDF visual audit:
 python3 presentations/tools/pdf_visual_audit.py \
   clients/therappc/thinkhappylivehealthy/build/2026-04-28_account_rebuild/campaign_review_2026-04-28_fixed.pdf \
   --pages-dir clients/therappc/thinkhappylivehealthy/build/2026-04-28_account_rebuild/fixed_visual_audit
+```
+
+Run rendered PDF visual audit for the new-campaign example:
+
+```bash
+python3 presentations/tools/pdf_visual_audit.py \
+  clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/Client_New_Campaign_Review.pdf \
+  --pages-dir clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/new_campaign_visual_audit
 ```
 
 ## Rules That Matter

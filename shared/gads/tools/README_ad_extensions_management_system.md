@@ -105,8 +105,8 @@ ext_system = AdExtensionsManagementSystem()
 
 # Business information
 business_info = {
-    "name": "My Expert Resume",
-    "website": "https://myexpertresume.com",
+    "name": "Example Services Company",
+    "website": "https://example.com",
     "phone": "+1-555-123-4567",
     "type": "professional_services",
     "address": {"city": "Miami", "state": "FL"}
@@ -131,7 +131,7 @@ integrator = AdExtensionsCampaignIntegrator()
 campaign_config = {
     "name": "Professional Services Campaign",
     "type": "SEARCH",
-    "brand_business_name": "My Expert Resume"
+    "brand_business_name": "Example Services Company"
 }
 
 extensions = integrator.generate_extensions_for_campaign(campaign_config)

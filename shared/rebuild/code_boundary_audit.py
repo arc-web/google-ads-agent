@@ -19,7 +19,6 @@ DEFAULT_BLOCKED_PATTERNS = [
     "my expert resume",
     "my_expert_resume",
     "/users/home/",
-    "arc - search -",
 ]
 
 DEFAULT_SHARED_ROOTS = ["shared", "presentations/tools"]
