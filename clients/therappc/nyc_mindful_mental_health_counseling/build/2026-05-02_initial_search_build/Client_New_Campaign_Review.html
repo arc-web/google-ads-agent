@@ -132,6 +132,38 @@ body {
 .two-col { grid-template-columns: 1fr 1fr; }
 .approval-grid { grid-template-columns: repeat(2, 1fr); }
 .ad-grid { grid-template-columns: 1fr; }
+.overview-steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.overview-step {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 16px;
+}
+.overview-step .step-number {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #185c62;
+  color: #fffaf1;
+  text-align: center;
+  line-height: 28px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+.overview-step h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.overview-step p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #4c4238;
+}
 .insight-card,
 .approval-card,
 .ad-card,
@@ -425,6 +457,75 @@ ul {
   border: 1px solid #dfd2bf;
   padding: 14px;
 }
+.structure-flow {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
+  margin-top: 14px;
+}
+.structure-flow svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.flow-box {
+  fill: #f8f4eb;
+  stroke: #dfd2bf;
+  stroke-width: 2;
+}
+.flow-current {
+  fill: #e5f0ee;
+  stroke: #185c62;
+  stroke-width: 2;
+}
+.flow-future {
+  fill: #fffaf1;
+  stroke: #c8753f;
+  stroke-width: 2;
+}
+.flow-line {
+  stroke: #c43ad3;
+  stroke-width: 5;
+  fill: none;
+  stroke-linecap: round;
+}
+.flow-muted {
+  stroke: #d6a6dd;
+  stroke-width: 4;
+  fill: none;
+  stroke-linecap: round;
+}
+.flow-label {
+  fill: #2f3d45;
+  font-size: 18px;
+  font-weight: 800;
+}
+.flow-small {
+  fill: #4c5c64;
+  font-size: 12px;
+  font-weight: 700;
+}
+.flow-note-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+.flow-note {
+  background: #f8f4eb;
+  border: 1px solid #dfd2bf;
+  padding: 12px;
+}
+.flow-note h3 {
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+.flow-note p {
+  margin: 0;
+  color: #4c4238;
+  font-size: 12px;
+  line-height: 1.4;
+}
 </style>
 </head>
 <body>
@@ -450,39 +551,246 @@ ul {
   
 <section class="section pdf-page">
   <div class="section-header">
-    <div class="eyebrow">Strategy</div>
-    <h1>A Controlled New Search Campaign</h1>
-    <p>This is the first version of the campaign plan. It keeps the launch focused on people already looking for therapy support, then gives you a clear way to approve services, priorities, copy, and regions before spend begins.</p>
+    <div class="eyebrow">Overview</div>
+    <h1>What This Review Covers</h1>
+    <p>This report walks through the campaign structure, service ad groups, ads, regional targeting, budget pacing, and final confirmation items before launch.</p>
   </div>
   
-<div class="subsection-header">What we are proposing</div>
-<div class="card-grid">
+<div class="overview-steps">
+<div class="overview-step">
+  <div class="step-number">1</div>
+  <h3>Structure</h3>
+  <p>How the launch is organized now and how it can expand later if performance supports it.</p>
+</div>
+
+<div class="overview-step">
+  <div class="step-number">2</div>
+  <h3>Ad groups</h3>
+  <p>Which services are staged to run ads and which priorities should be confirmed first.</p>
+</div>
+
+<div class="overview-step">
+  <div class="step-number">3</div>
+  <h3>Ads and regions</h3>
+  <p>Representative ad copy examples, current regional targeting, and any city or ZIP changes needed.</p>
+</div>
+
+<div class="overview-step">
+  <div class="step-number">4</div>
+  <h3>Budget and confirmation</h3>
+  <p>How the budget is paced through the month, then one final page for signoff.</p>
+</div>
+</div>
+<div class="subsection-header">Current launch snapshot</div>
+<div class="metric-row" style="margin-top:0;">
+  <div class="metric"><strong>1</strong><span>Search campaign</span></div>
+  <div class="metric"><strong>8</strong><span>ad groups</span></div>
+  <div class="metric"><strong>56</strong><span>phrase keywords</span></div>
+  <div class="metric"><strong>8</strong><span>responsive ads</span></div>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Campaign Structure</div>
+    <h1>How The Campaign Can Grow Over Time</h1>
+    <p>The launch starts compact. Future campaigns can split by service or region only after the data shows where separate budgets and reporting would help.</p>
+  </div>
+  
+<div class="two-col">
   <div class="insight-card">
-    <h3>Search-first launch</h3>
-    <p>The campaign is built for people already searching for therapy support, not broad awareness. All keywords use phrase match for cleaner early data.</p>
+    <h3>Launch shape</h3>
+    <p>The current launch uses 1 controlled Search campaign with 8 service-based ad groups. This keeps early learning clean and easier to review.</p>
   </div>
   <div class="insight-card">
-    <h3>Website-backed services</h3>
-    <p>The launch focuses on services visible on the site: Anxiety Therapy, Individual Therapy, Group Therapy, CBT Therapy, DBT Therapy, OCD Therapy, Depression Therapy, Social Anxiety Therapy.</p>
-  </div>
-  <div class="insight-card">
-    <h3>Priority still needs input</h3>
-    <p>Confirm which services should receive the most traffic before the launch budget is finalized.</p>
-  </div>
-  <div class="insight-card">
-    <h3>Launch review status</h3>
-    <p>The CSV validates cleanly, but remains paused until budget, service priority, and your approval decisions are confirmed.</p>
+    <h3>Expansion rule</h3>
+    <p>More campaigns should come later only when performance data shows a service or region needs its own budget, copy, and reporting focus.</p>
   </div>
 </div>
-<div class="subsection-header">Audience and service area</div>
-<div class="two-col">
-  <div class="source-card">
-    <p><strong>Audience from source material:</strong> adolescents, young adults in their 20s and 30s, adults for group therapy</p>
-    <p style="margin-top:8px;"><strong>Positioning:</strong> online therapy for anxiety and related concerns</p>
+<div class="structure-flow" aria-label="Current campaign structure and future expansion path">
+  <svg viewBox="0 0 900 470" role="img" aria-label="One current Search campaign can later split by services or regions when performance supports it">
+    <rect class="flow-current" x="34" y="52" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="88" text-anchor="middle">Current</text>
+    <text class="flow-small" x="126" y="114" text-anchor="middle">1 Search Campaign</text>
+    <path class="flow-line" d="M218 95 C270 95, 288 95, 334 95"/>
+    <rect class="flow-current" x="334" y="52" width="202" height="86" rx="8"/>
+    <text class="flow-label" x="435" y="88" text-anchor="middle">8 Service Ad Groups</text>
+    <text class="flow-small" x="435" y="114" text-anchor="middle">actual launch structure</text>
+    <path class="flow-line" d="M536 95 C610 95, 620 64, 692 64"/>
+    <path class="flow-line" d="M536 95 C610 95, 620 126, 692 126"/>
+    <text class="flow-label" x="710" y="70">Priority services</text>
+    <text class="flow-label" x="710" y="132">Support services</text>
+
+    <rect class="flow-box" x="34" y="198" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="234" text-anchor="middle">Later Option</text>
+    <text class="flow-small" x="126" y="260" text-anchor="middle">Split by service demand</text>
+    <path class="flow-muted" d="M218 241 C300 241, 310 214, 392 214"/>
+    <path class="flow-muted" d="M218 241 C300 241, 310 270, 392 270"/>
+    <rect class="flow-future" x="392" y="184" width="198" height="62" rx="8"/>
+    <rect class="flow-future" x="392" y="254" width="198" height="62" rx="8"/>
+    <text class="flow-label" x="491" y="221" text-anchor="middle">Primary Services</text>
+    <text class="flow-label" x="491" y="291" text-anchor="middle">Secondary Services</text>
+    <path class="flow-muted" d="M590 215 C640 215, 652 196, 700 196"/>
+    <path class="flow-muted" d="M590 215 C640 215, 652 234, 700 234"/>
+    <path class="flow-muted" d="M590 285 C640 285, 652 266, 700 266"/>
+    <path class="flow-muted" d="M590 285 C640 285, 652 304, 700 304"/>
+    <text class="flow-small" x="716" y="200">highest demand services</text>
+    <text class="flow-small" x="716" y="238">strongest lead quality</text>
+    <text class="flow-small" x="716" y="270">secondary demand</text>
+    <text class="flow-small" x="716" y="308">specialty follow-up</text>
+
+    <rect class="flow-box" x="34" y="342" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="378" text-anchor="middle">Later Option</text>
+    <text class="flow-small" x="126" y="404" text-anchor="middle">Split by regional demand</text>
+    <path class="flow-muted" d="M218 385 C300 385, 310 358, 392 358"/>
+    <path class="flow-muted" d="M218 385 C300 385, 310 414, 392 414"/>
+    <rect class="flow-future" x="392" y="328" width="198" height="62" rx="8"/>
+    <rect class="flow-future" x="392" y="398" width="198" height="62" rx="8"/>
+    <text class="flow-label" x="491" y="365" text-anchor="middle">Primary Regions</text>
+    <text class="flow-label" x="491" y="435" text-anchor="middle">Secondary Regions</text>
+    <path class="flow-muted" d="M590 359 C640 359, 652 340, 700 340"/>
+    <path class="flow-muted" d="M590 359 C640 359, 652 378, 700 378"/>
+    <path class="flow-muted" d="M590 429 C640 429, 652 410, 700 410"/>
+    <path class="flow-muted" d="M590 429 C640 429, 652 448, 700 448"/>
+    <text class="flow-small" x="716" y="344">strongest city groups</text>
+    <text class="flow-small" x="716" y="382">ZIP or neighborhood focus</text>
+    <text class="flow-small" x="716" y="414">secondary city groups</text>
+    <text class="flow-small" x="716" y="452">later regional tests</text>
+  </svg>
+</div>
+<div class="flow-note-grid">
+  <div class="flow-note"><h3>One campaign now</h3><p>The first launch stays compact so the early budget is not spread too thin.</p></div>
+  <div class="flow-note"><h3>Split later by proof</h3><p>Future campaign splits should follow lead quality, conversion signals, and search demand.</p></div>
+  <div class="flow-note"><h3>No extra campaigns yet</h3><p>The service and regional splits shown here are future paths, not active launch campaigns.</p></div>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Groups</div>
+    <h1>Services We Are Running Ads For</h1>
+    <p>These are the service areas currently staged in the Google Ads Editor file. Confirm the list is complete and identify which services should receive the most traffic first.</p>
   </div>
-  <div class="source-card">
-    <p><strong>Targeting:</strong> New York, United States, New Jersey, United States</p>
-    <p style="margin-top:8px;"><strong>Targeting method:</strong> Location of presence</p>
+  
+<div class="two-col">
+  <div class="insight-card">
+    <h3>Services staged for ads</h3>
+    <p>8 ad groups organize therapy service intent, modality intent, and social anxiety demand for the first launch.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Keyword control</h3>
+    <p>56 phrase keywords and 10 negative phrase keywords are staged. Active launch keywords use phrase match.</p>
+  </div>
+</div>
+<div class="subsection-header">Ad groups staged for review</div>
+<table>
+  <tr><th>Ad group</th><th>Phrase keywords</th><th>Status</th></tr>
+  <tr><td>Anxiety Therapy - Core</td><td>7</td><td>Paused</td></tr><tr><td>Individual Therapy - Young Adults</td><td>7</td><td>Paused</td></tr><tr><td>Group Therapy - NYC</td><td>7</td><td>Paused</td></tr><tr><td>CBT Therapy - Skills</td><td>7</td><td>Paused</td></tr><tr><td>DBT Therapy - Skills</td><td>7</td><td>Paused</td></tr><tr><td>OCD Therapy - Support</td><td>7</td><td>Paused</td></tr><tr><td>Depression Therapy - Support</td><td>7</td><td>Paused</td></tr><tr><td>Social Anxiety - Support</td><td>7</td><td>Paused</td></tr>
+</table>
+<div class="continuation-header">Campaign detail continues with representative ad previews</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Examples To Review</h1>
+    <p>Each responsive search ad has 15 headlines and 4 descriptions in the staging file. These examples show the tone and claims used across the build.</p>
+  </div>
+  
+<div class="subsection-header">Representative ad copy</div>
+<div class="ad-grid">
+<div class="ad-card">
+  <h3>Anxiety Therapy - Core</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">nycmindfulmentalhealthcounseling.com/Anxiety/Therapy</div>
+    <div class="headline">NYC Anxiety Therapy Online | NJ Anxiety Therapy Online | Anxiety Therapy For Adults</div>
+    <div class="desc">Online anxiety therapy for young adults in New York and New Jersey.</div>
+  </div>
+  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>NYC Anxiety Therapy Online</td><td>26</td></tr><tr><td>2</td><td>NJ Anxiety Therapy Online</td><td>25</td></tr><tr><td>3</td><td>Anxiety Therapy For Adults</td><td>26</td></tr><tr><td>4</td><td>Mindful Anxiety Counseling</td><td>26</td></tr><tr><td>5</td><td>CBT And Mindfulness Support</td><td>27</td></tr><tr><td>6</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>7</td><td>Practical Anxiety Skills NY</td><td>27</td></tr><tr><td>8</td><td>Online Therapy In NY And NJ</td><td>27</td></tr></table>
+</div>
+
+<div class="ad-card">
+  <h3>Individual Therapy - Young Adults</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">nycmindfulmentalhealthcounseling.com/individual-therapy-nyc/Individual/Therapy</div>
+    <div class="headline">Individual Therapy Online | Therapy For Young Adults NY | NYC Young Adult Therapy Care</div>
+    <div class="desc">Online individual therapy for young adults navigating anxiety and related concerns.</div>
+  </div>
+  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Individual Therapy Online</td><td>25</td></tr><tr><td>2</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>3</td><td>NYC Young Adult Therapy Care</td><td>28</td></tr><tr><td>4</td><td>Online Therapy In NY And NJ</td><td>27</td></tr><tr><td>5</td><td>Mindful Therapy Support NY</td><td>26</td></tr><tr><td>6</td><td>CBT Skills For Daily Life</td><td>25</td></tr><tr><td>7</td><td>Support For Life Transitions</td><td>28</td></tr><tr><td>8</td><td>Private Online Therapy Care</td><td>27</td></tr></table>
+</div>
+
+<div class="ad-card">
+  <h3>Group Therapy - NYC</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">nycmindfulmentalhealthcounseling.com/group-therapy-nyc/Group/Therapy</div>
+    <div class="headline">Online Group Therapy NYC Care | Skills Based Group Therapy | Social Anxiety Group Care</div>
+    <div class="desc">Online group therapy options for adults seeking skills and support.</div>
+  </div>
+  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Online Group Therapy NYC Care</td><td>29</td></tr><tr><td>2</td><td>Skills Based Group Therapy</td><td>26</td></tr><tr><td>3</td><td>Social Anxiety Group Care</td><td>25</td></tr><tr><td>4</td><td>CBT Group Skills Support NY</td><td>27</td></tr><tr><td>5</td><td>Group Therapy For Adults NYC</td><td>28</td></tr><tr><td>6</td><td>Connect With Supportive Peers</td><td>29</td></tr><tr><td>7</td><td>Guided Online Therapy Groups</td><td>28</td></tr><tr><td>8</td><td>Therapy Groups For Anxiety</td><td>26</td></tr></table>
+</div>
+
+<div class="ad-card">
+  <h3>CBT Therapy - Skills</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">nycmindfulmentalhealthcounseling.com/cbt/CBT/Therapy</div>
+    <div class="headline">Online CBT Therapy Support | CBT Skills For Anxiety Care | Cognitive Behavioral Therapy</div>
+    <div class="desc">CBT-informed online therapy for anxiety and related concerns in NY and NJ.</div>
+  </div>
+  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Online CBT Therapy Support</td><td>26</td></tr><tr><td>2</td><td>CBT Skills For Anxiety Care</td><td>27</td></tr><tr><td>3</td><td>Cognitive Behavioral Therapy</td><td>28</td></tr><tr><td>4</td><td>CBT Therapy Care In NY NJ</td><td>25</td></tr><tr><td>5</td><td>Practical CBT Tools Online</td><td>26</td></tr><tr><td>6</td><td>Therapy For Thought Patterns</td><td>28</td></tr><tr><td>7</td><td>Mindfulness Informed CBT Care</td><td>29</td></tr><tr><td>8</td><td>CBT Support For Young Adults</td><td>28</td></tr></table>
+</div>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Regional Targeting</div>
+    <h1>Where The Campaign Is Set To Reach</h1>
+    <p>The current plan stays table-based so the launch geography is easy to review. Confirm the current scope or add city and ZIP priorities before launch.</p>
+  </div>
+  
+<div class="targeting-grid">
+  <div class="targeting-panel">
+    <div class="subsection-header" style="margin-top:0;">Current targeting</div>
+    <p>The current staging file targets the approved service states. If city or ZIP focus areas should be prioritized, they can be added after review.</p>
+    <div style="margin:12px 0;"><span class="state-chip">New York, United States</span><span class="state-chip">New Jersey, United States</span></div>
+    <table>
+      <tr><th>Location</th><th>Status</th><th>Review note</th></tr>
+      
+<tr>
+  <td>New York, United States</td>
+  <td>Staged</td>
+  <td>Approved launch geography</td>
+</tr>
+
+<tr>
+  <td>New Jersey, United States</td>
+  <td>Staged</td>
+  <td>Approved launch geography</td>
+</tr>
+
+    </table>
+  </div>
+  <div class="targeting-panel">
+    <div class="subsection-header" style="margin-top:0;">City and ZIP review</div>
+    <table>
+      <tr><th>Area type</th><th>Current detail</th><th>What to confirm</th></tr>
+      <tr><td>City focus</td><td>Not narrowed yet</td><td>Confirm priority cities before launch if some areas matter more than others.</td></tr>
+      <tr><td>ZIP clusters</td><td>Not supplied yet</td><td>Provide ZIPs only if spend should concentrate around specific neighborhoods or offices.</td></tr>
+      <tr><td>Regional exclusions</td><td>None staged</td><td>Identify any places that should not receive launch traffic.</td></tr>
+    </table>
+    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
   </div>
 </div>
 
@@ -656,135 +964,6 @@ ul {
   <div class="budget-tile"><h3>Starting lighter protects budget</h3><p>Early limits leave room to learn before we push winning areas.</p></div>
   <div class="budget-tile"><h3>CPC changes click volume</h3><p>The same dollars buy more or fewer clicks as auctions shift.</p></div>
   <div class="budget-tile"><h3>Later spend is intentional</h3><p>Increases follow clearer performance, not random day-to-day noise.</p></div>
-</div>
-
-</section>
-
-  
-<section class="section pdf-page">
-  <div class="section-header">
-    <div class="eyebrow">Structure</div>
-    <h1>What The Campaign Contains</h1>
-    <p>The structure is intentionally compact so the first launch can validate service demand before expanding into separate state or specialty campaigns.</p>
-  </div>
-  
-<div class="subsection-header">Campaign architecture</div>
-<div class="two-col">
-  <div class="insight-card">
-    <h3>Build shape</h3>
-    <p>8 ad groups organize service intent, modality intent, and social anxiety demand into one compact Search launch.</p>
-  </div>
-  <div class="insight-card">
-    <h3>Keyword control</h3>
-    <p>56 phrase keywords and 10 negative phrase keywords are staged. Broad and exact match are not active.</p>
-  </div>
-</div>
-<div class="subsection-header">Ad groups staged for review</div>
-<table>
-  <tr><th>Ad group</th><th>Phrase keywords</th><th>Status</th></tr>
-  <tr><td>Anxiety Therapy - Core</td><td>7</td><td>Paused</td></tr><tr><td>Individual Therapy - Young Adults</td><td>7</td><td>Paused</td></tr><tr><td>Group Therapy - NYC</td><td>7</td><td>Paused</td></tr><tr><td>CBT Therapy - Skills</td><td>7</td><td>Paused</td></tr><tr><td>DBT Therapy - Skills</td><td>7</td><td>Paused</td></tr><tr><td>OCD Therapy - Support</td><td>7</td><td>Paused</td></tr><tr><td>Depression Therapy - Support</td><td>7</td><td>Paused</td></tr><tr><td>Social Anxiety - Support</td><td>7</td><td>Paused</td></tr>
-</table>
-<div class="continuation-header">Campaign detail continues with representative ad previews</div>
-
-</section>
-
-  
-<section class="section pdf-page">
-  <div class="section-header">
-    <div class="eyebrow">Regional Targeting</div>
-    <h1>Where The Campaign Is Set To Reach</h1>
-    <p>The current plan stays table-based so the launch geography is easy to review. Confirm the current scope or add city and ZIP priorities before launch.</p>
-  </div>
-  
-<div class="targeting-grid">
-  <div class="targeting-panel">
-    <div class="subsection-header" style="margin-top:0;">Current targeting</div>
-    <p>The current staging file targets the approved service states. If city or ZIP focus areas should be prioritized, they can be added after review.</p>
-    <div style="margin:12px 0;"><span class="state-chip">New York, United States</span><span class="state-chip">New Jersey, United States</span></div>
-    <table>
-      <tr><th>Location</th><th>Status</th><th>Review note</th></tr>
-      
-<tr>
-  <td>New York, United States</td>
-  <td>Staged</td>
-  <td>Approved launch geography</td>
-</tr>
-
-<tr>
-  <td>New Jersey, United States</td>
-  <td>Staged</td>
-  <td>Approved launch geography</td>
-</tr>
-
-    </table>
-  </div>
-  <div class="targeting-panel">
-    <div class="subsection-header" style="margin-top:0;">City and ZIP review</div>
-    <table>
-      <tr><th>Area type</th><th>Current detail</th><th>What to confirm</th></tr>
-      <tr><td>City focus</td><td>Not narrowed yet</td><td>Confirm priority cities before launch if some areas matter more than others.</td></tr>
-      <tr><td>ZIP clusters</td><td>Not supplied yet</td><td>Provide ZIPs only if spend should concentrate around specific neighborhoods or offices.</td></tr>
-      <tr><td>Regional exclusions</td><td>None staged</td><td>Identify any places that should not receive launch traffic.</td></tr>
-    </table>
-    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
-  </div>
-</div>
-
-</section>
-
-  
-<section class="section pdf-page">
-  <div class="section-header">
-    <div class="eyebrow">Ad Copy</div>
-    <h1>Examples To Review</h1>
-    <p>Each responsive search ad has 15 headlines and 4 descriptions in the staging file. These examples show the tone and claims used across the build.</p>
-  </div>
-  
-<div class="subsection-header">Representative ad copy</div>
-<div class="ad-grid">
-<div class="ad-card">
-  <h3>Anxiety Therapy - Core</h3>
-  <div class="ad-preview">
-    <div class="sponsored">Sponsored</div>
-    <div class="url">nycmindfulmentalhealthcounseling.com/Anxiety/Therapy</div>
-    <div class="headline">NYC Anxiety Therapy Online | NJ Anxiety Therapy Online | Anxiety Therapy For Adults</div>
-    <div class="desc">Online anxiety therapy for young adults in New York and New Jersey.</div>
-  </div>
-  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>NYC Anxiety Therapy Online</td><td>26</td></tr><tr><td>2</td><td>NJ Anxiety Therapy Online</td><td>25</td></tr><tr><td>3</td><td>Anxiety Therapy For Adults</td><td>26</td></tr><tr><td>4</td><td>Mindful Anxiety Counseling</td><td>26</td></tr><tr><td>5</td><td>CBT And Mindfulness Support</td><td>27</td></tr><tr><td>6</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>7</td><td>Practical Anxiety Skills NY</td><td>27</td></tr><tr><td>8</td><td>Online Therapy In NY And NJ</td><td>27</td></tr></table>
-</div>
-
-<div class="ad-card">
-  <h3>Individual Therapy - Young Adults</h3>
-  <div class="ad-preview">
-    <div class="sponsored">Sponsored</div>
-    <div class="url">nycmindfulmentalhealthcounseling.com/individual-therapy-nyc/Individual/Therapy</div>
-    <div class="headline">Individual Therapy Online | Therapy For Young Adults NY | NYC Young Adult Therapy Care</div>
-    <div class="desc">Online individual therapy for young adults navigating anxiety and related concerns.</div>
-  </div>
-  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Individual Therapy Online</td><td>25</td></tr><tr><td>2</td><td>Therapy For Young Adults NY</td><td>27</td></tr><tr><td>3</td><td>NYC Young Adult Therapy Care</td><td>28</td></tr><tr><td>4</td><td>Online Therapy In NY And NJ</td><td>27</td></tr><tr><td>5</td><td>Mindful Therapy Support NY</td><td>26</td></tr><tr><td>6</td><td>CBT Skills For Daily Life</td><td>25</td></tr><tr><td>7</td><td>Support For Life Transitions</td><td>28</td></tr><tr><td>8</td><td>Private Online Therapy Care</td><td>27</td></tr></table>
-</div>
-
-<div class="ad-card">
-  <h3>Group Therapy - NYC</h3>
-  <div class="ad-preview">
-    <div class="sponsored">Sponsored</div>
-    <div class="url">nycmindfulmentalhealthcounseling.com/group-therapy-nyc/Group/Therapy</div>
-    <div class="headline">Online Group Therapy NYC Care | Skills Based Group Therapy | Social Anxiety Group Care</div>
-    <div class="desc">Online group therapy options for adults seeking skills and support.</div>
-  </div>
-  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Online Group Therapy NYC Care</td><td>29</td></tr><tr><td>2</td><td>Skills Based Group Therapy</td><td>26</td></tr><tr><td>3</td><td>Social Anxiety Group Care</td><td>25</td></tr><tr><td>4</td><td>CBT Group Skills Support NY</td><td>27</td></tr><tr><td>5</td><td>Group Therapy For Adults NYC</td><td>28</td></tr><tr><td>6</td><td>Connect With Supportive Peers</td><td>29</td></tr><tr><td>7</td><td>Guided Online Therapy Groups</td><td>28</td></tr><tr><td>8</td><td>Therapy Groups For Anxiety</td><td>26</td></tr></table>
-</div>
-
-<div class="ad-card">
-  <h3>CBT Therapy - Skills</h3>
-  <div class="ad-preview">
-    <div class="sponsored">Sponsored</div>
-    <div class="url">nycmindfulmentalhealthcounseling.com/cbt/CBT/Therapy</div>
-    <div class="headline">Online CBT Therapy Support | CBT Skills For Anxiety Care | Cognitive Behavioral Therapy</div>
-    <div class="desc">CBT-informed online therapy for anxiety and related concerns in NY and NJ.</div>
-  </div>
-  <table><tr><th>#</th><th>Representative headline</th><th>Chars</th></tr><tr><td>1</td><td>Online CBT Therapy Support</td><td>26</td></tr><tr><td>2</td><td>CBT Skills For Anxiety Care</td><td>27</td></tr><tr><td>3</td><td>Cognitive Behavioral Therapy</td><td>28</td></tr><tr><td>4</td><td>CBT Therapy Care In NY NJ</td><td>25</td></tr><tr><td>5</td><td>Practical CBT Tools Online</td><td>26</td></tr><tr><td>6</td><td>Therapy For Thought Patterns</td><td>28</td></tr><tr><td>7</td><td>Mindfulness Informed CBT Care</td><td>29</td></tr><tr><td>8</td><td>CBT Support For Young Adults</td><td>28</td></tr></table>
-</div>
 </div>
 
 </section>
