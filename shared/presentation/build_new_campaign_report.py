@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a client-facing report for a new campaign build."""
+"""Build a reader-facing report for a new campaign build."""
 
 from __future__ import annotations
 
@@ -343,106 +343,167 @@ ul {
   font-size: 10px;
   color: #7c6d5c;
 }
-.budget-metrics {
+.budget-summary-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-bottom: 22px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
 }
-.budget-card {
+.budget-summary-card,
+.budget-chart-card,
+.budget-tile,
+.budget-approval {
   background: #fffaf1;
   border: 1px solid #dfd2bf;
-  padding: 18px;
 }
-.budget-card .label {
+.budget-summary-card {
+  padding: 14px 10px 15px;
+  text-align: center;
+}
+.budget-summary-card .label {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #746656;
   font-weight: 900;
+  min-height: 28px;
 }
-.budget-card strong {
+.budget-summary-card strong {
   display: block;
-  margin-top: 8px;
-  font-size: 28px;
+  margin-top: 6px;
+  font-size: 32px;
+  line-height: 1;
   color: #185c62;
 }
-.budget-chart {
-  background: #fffaf1;
-  border: 1px solid #dfd2bf;
-  padding: 18px;
+.budget-section-head {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  margin: 12px 0 10px;
 }
-.budget-viz-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+.budget-accent {
+  width: 5px;
+  min-width: 5px;
+  border-radius: 2px;
+  background: #c8753f;
 }
-.line-chart {
-  width: 100%;
-  height: 232px;
+.budget-section-head h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
 }
-.axis-line {
-  stroke: #d5c8b7;
-  stroke-width: 2;
+.budget-section-head p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #5e5144;
+  line-height: 1.4;
 }
-.grid-line {
-  stroke: #eadfce;
-  stroke-width: 1;
-}
-.budget-line {
-  fill: none;
-  stroke: #185c62;
-  stroke-width: 4;
-}
-.scenario-low {
-  fill: none;
-  stroke: #9cbfba;
-  stroke-width: 3;
-}
-.scenario-mid {
-  fill: none;
-  stroke: #2f6f76;
-  stroke-width: 3;
-}
-.scenario-high {
-  fill: none;
-  stroke: #c8753f;
-  stroke-width: 3;
-}
-.chart-label {
-  font-size: 10px;
-  fill: #6b5c4b;
-  font-weight: 800;
-}
-.legend-row {
+.budget-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px 14px;
+  margin: 0 0 10px;
+  color: #5e5144;
+  font-size: 11px;
+  font-weight: 700;
+}
+.budget-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.budget-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+.budget-chart-card {
+  padding: 10px 12px 8px;
+}
+.budget-svg-main,
+.budget-svg-ramp {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.budget-svg-main { max-height: 250px; }
+.budget-svg-ramp { max-height: 200px; }
+.budget-guide {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  line-height: 1.35;
   margin-top: 10px;
+}
+.budget-guide th,
+.budget-guide td {
+  border: 1px solid #dfd2bf;
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.budget-guide th {
+  background: rgba(255, 255, 255, 0.25);
+}
+.marker-cell {
+  width: 36px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 13px;
+  color: #185c62;
+}
+.budget-split {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.budget-takeaways {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+.budget-tile {
+  padding: 10px 12px;
+}
+.budget-tile h3,
+.budget-approval h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
+.budget-tile p,
+.budget-approval p {
+  margin: 0;
+  color: #5e5144;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.budget-approval {
+  margin-top: 18px;
+  padding: 14px;
+}
+.budget-checkline {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 11.5px;
+  color: #3d342b;
+  line-height: 1.35;
+}
+.budget-sign-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 14px;
   font-size: 11px;
   color: #5e5144;
 }
-.legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 5px;
-}
-.chart-note {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #5e5144;
-  line-height: 1.45;
-}
-.targeting-map {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 14px;
-}
-.map-panel {
-  background: #fffaf1;
-  border: 1px solid #dfd2bf;
-  padding: 14px;
+.budget-sign-row .line {
+  border-bottom: 1px solid #3d342b;
+  min-height: 20px;
+  margin-top: 4px;
 }
 .state-chip {
   display: inline-block;
@@ -453,24 +514,15 @@ ul {
   font-size: 11px;
   font-weight: 800;
 }
-.mini-map {
-  width: 100%;
-  height: 260px;
+.targeting-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
-.state-shape {
-  fill: #d7e8e5;
-  stroke: #185c62;
-  stroke-width: 3;
-}
-.pin {
-  fill: #c8753f;
-  stroke: #fffaf1;
-  stroke-width: 3;
-}
-.map-label {
-  font-size: 13px;
-  fill: #2f2b27;
-  font-weight: 800;
+.targeting-panel {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
 }
 """
 
@@ -497,7 +549,7 @@ def cover(client: str, date_label: str, summary: CampaignSummary) -> str:
   <div class="cover-title">
     <div class="label">New Campaign Review</div>
     <h1>{esc(client)}</h1>
-    <p>A client-ready proposal for a new Google Ads Search campaign, built from website evidence and prepared for client review.</p>
+    <p>A new Google Ads Search campaign proposal, built from website evidence and prepared for your review.</p>
   </div>
   <div class="metric-row">
     <div class="metric"><strong>{len(summary.campaigns)}</strong><span>Search campaign</span></div>
@@ -510,121 +562,192 @@ def cover(client: str, date_label: str, summary: CampaignSummary) -> str:
 """
 
 
-def chart_polyline(values: list[float], *, width: int = 520, height: int = 172, pad: int = 28) -> str:
-    low = min(values)
-    high = max(values)
-    span = high - low or 1
-    points: list[str] = []
-    for index, value in enumerate(values):
-        x = pad + (width - pad * 2) * index / (len(values) - 1)
-        y = pad + (height - pad * 2) * (1 - ((value - low) / span))
-        points.append(f"{x:.1f},{y:.1f}")
-    return " ".join(points)
-
-
-def pacing_values(monthly_budget: float) -> tuple[list[float], list[float], list[float], list[float]]:
-    days = list(range(1, 31))
-    planned_weights = [0.72 + (day - 1) * (0.56 / 29) for day in days]
-    low_weights = [0.86 + (day - 1) * (0.28 / 29) for day in days]
-    high_weights = [0.58 + (day - 1) * (0.84 / 29) for day in days]
-
-    def normalize(weights: list[float]) -> list[float]:
-        total = sum(weights)
-        return [monthly_budget * weight / total for weight in weights]
-
-    planned_daily = normalize(planned_weights)
-    low_daily = normalize(low_weights)
-    high_daily = normalize(high_weights)
-    remaining: list[float] = []
-    spent = 0.0
-    for value in planned_daily:
-        spent += value
-        remaining.append(max(monthly_budget - spent, 0))
-    return remaining, low_daily, planned_daily, high_daily
-
-
-def cpc_click_cards(budget: BudgetPlan) -> str:
-    cpcs = [8.0, 13.0, 18.0]
-    if budget.cpc_low and budget.cpc_high:
-        midpoint = (budget.cpc_low + budget.cpc_high) / 2
-        cpcs = [budget.cpc_low, midpoint, budget.cpc_high]
-    cards = []
-    for cpc in cpcs:
-        clicks = budget.daily_budget / cpc
-        cards.append(
-            f"""
-  <div class="budget-card">
-    <div class="label">${cpc:.0f} CPC</div>
-    <strong>{clicks:.0f}/day</strong>
-  </div>
-"""
-        )
-    return "".join(cards)
-
-
-def budget_section(budget: BudgetPlan) -> str:
-    remaining, low_daily, planned_daily, high_daily = pacing_values(budget.monthly_budget)
-    body = f"""
-<div class="budget-metrics">
-  <div class="budget-card">
-    <div class="label">Monthly Budget</div>
+def budget_summary_cards(budget: BudgetPlan) -> str:
+    low_range = budget.daily_budget * 0.60
+    high_range = budget.daily_budget * 1.45
+    return f"""
+<div class="budget-summary-cards">
+  <div class="budget-summary-card">
+    <div class="label">Approved monthly budget</div>
     <strong>${budget.monthly_budget:,.0f}</strong>
   </div>
-  <div class="budget-card">
-    <div class="label">Daily Average</div>
+  <div class="budget-summary-card">
+    <div class="label">Daily budget</div>
     <strong>${budget.daily_budget:,.0f}</strong>
   </div>
-  <div class="budget-card">
-    <div class="label">Planned Spend Curve</div>
-    <strong style="font-size:20px;">Slower start, stronger finish</strong>
+  <div class="budget-summary-card">
+    <div class="label">Low daily range</div>
+    <strong>${low_range:,.0f}</strong>
+  </div>
+  <div class="budget-summary-card">
+    <div class="label">High daily range</div>
+    <strong>${high_range:,.0f}</strong>
   </div>
 </div>
-<div class="budget-viz-grid">
-  <div class="budget-chart">
-    <div class="subsection-header" style="margin-top:0;">Budget remaining over 30 days</div>
-    <svg class="line-chart" viewBox="0 0 520 220" role="img" aria-label="Budget remaining line chart">
-      <line class="grid-line" x1="28" y1="58" x2="492" y2="58"/>
-      <line class="grid-line" x1="28" y1="104" x2="492" y2="104"/>
-      <line class="grid-line" x1="28" y1="150" x2="492" y2="150"/>
-      <line class="axis-line" x1="28" y1="28" x2="28" y2="172"/>
-      <line class="axis-line" x1="28" y1="172" x2="492" y2="172"/>
-      <polyline class="budget-line" points="{chart_polyline(remaining)}"/>
-      <text class="chart-label" x="30" y="205">Day 1</text>
-      <text class="chart-label" x="450" y="205">Day 30</text>
-      <text class="chart-label" x="38" y="42">${budget.monthly_budget:,.0f}</text>
-      <text class="chart-label" x="38" y="166">$0</text>
-    </svg>
-    <div class="chart-note">The curve leaves more budget available while the campaign learns, then spends more confidently as search terms and service priorities become clearer.</div>
-  </div>
-  <div class="budget-chart">
-    <div class="subsection-header" style="margin-top:0;">Daily spend scenarios</div>
-    <svg class="line-chart" viewBox="0 0 520 220" role="img" aria-label="Daily spend scenario line chart">
-      <line class="grid-line" x1="28" y1="58" x2="492" y2="58"/>
-      <line class="grid-line" x1="28" y1="104" x2="492" y2="104"/>
-      <line class="grid-line" x1="28" y1="150" x2="492" y2="150"/>
-      <line class="axis-line" x1="28" y1="28" x2="28" y2="172"/>
-      <line class="axis-line" x1="28" y1="172" x2="492" y2="172"/>
-      <polyline class="scenario-low" points="{chart_polyline(low_daily)}"/>
-      <polyline class="scenario-mid" points="{chart_polyline(planned_daily)}"/>
-      <polyline class="scenario-high" points="{chart_polyline(high_daily)}"/>
-      <text class="chart-label" x="30" y="205">Day 1</text>
-      <text class="chart-label" x="450" y="205">Day 30</text>
-    </svg>
-    <div class="legend-row">
-      <span><span class="legend-dot" style="background:#9cbfba"></span>Steady</span>
-      <span><span class="legend-dot" style="background:#2f6f76"></span>Planned</span>
-      <span><span class="legend-dot" style="background:#c8753f"></span>Faster ramp</span>
-    </div>
-    <div class="chart-note">These lines compare pacing choices. CPC changes the number of clicks the same budget can buy, not the approved monthly budget by itself.</div>
+"""
+
+
+def budget_pacing_section(budget: BudgetPlan) -> str:
+    body = f"""
+{budget_summary_cards(budget)}
+<div class="budget-section-head">
+  <div class="budget-accent"></div>
+  <div>
+    <h2>How your budget moves through the month</h2>
+    <p>The goal is to protect early spend while search terms, cost per click, and service demand become clearer.</p>
   </div>
 </div>
-<div class="subsection-header">Click examples at different CPCs</div>
-<div class="budget-metrics">{cpc_click_cards(budget)}</div>
+<div class="budget-legend" role="list">
+  <div class="budget-legend-item" role="listitem"><span class="budget-swatch" style="background: rgba(165, 201, 197, 0.38); border: 1px solid rgba(13, 104, 112, 0.28);"></span>Healthy daily range</div>
+  <div class="budget-legend-item" role="listitem"><span class="budget-swatch" style="background:#d17a32;"></span>Amount spent over time</div>
+  <div class="budget-legend-item" role="listitem"><span class="budget-swatch" style="background:#0d6870;"></span>Budget remaining</div>
+  <div class="budget-legend-item" role="listitem"><span class="budget-swatch" style="background:#b65f3e;"></span>CPC and click movement</div>
+</div>
+<div class="budget-chart-card">
+  <svg class="budget-svg-main" viewBox="0 0 920 400" role="img" aria-label="Budget pacing with healthy range, spend ramp, remaining budget, and daily variation">
+    <defs>
+      <linearGradient id="g-orange" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#e8883a" />
+        <stop offset="100%" stop-color="#d17a32" />
+      </linearGradient>
+      <linearGradient id="g-teal" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0d6870" />
+        <stop offset="100%" stop-color="#0a5258" />
+      </linearGradient>
+    </defs>
+    <rect x="88" y="52" width="758" height="292" fill="rgba(255,255,255,0.35)" stroke="#c9b79d" stroke-width="1.5" rx="4" />
+    <line x1="88" y1="344" x2="846" y2="344" stroke="#9a8b78" stroke-width="2" stroke-linecap="round" />
+    <line x1="88" y1="52" x2="88" y2="344" stroke="#9a8b78" stroke-width="2" stroke-linecap="round" />
+    <g stroke="#d7c3aa" stroke-width="1" stroke-dasharray="3 5">
+      <line x1="88" y1="96" x2="846" y2="96" />
+      <line x1="88" y1="164" x2="846" y2="164" />
+      <line x1="88" y1="232" x2="846" y2="232" />
+      <line x1="88" y1="300" x2="846" y2="300" />
+    </g>
+    <text x="24" y="102" fill="#6b5f54" font-size="11" font-weight="700">High</text>
+    <text x="15" y="238" fill="#6b5f54" font-size="11" font-weight="700">Target</text>
+    <text x="28" y="306" fill="#6b5f54" font-size="11" font-weight="700">Low</text>
+    <rect x="88" y="200" width="758" height="64" fill="rgba(165, 201, 197, 0.38)" rx="3" />
+    <line x1="88" y1="232" x2="846" y2="232" stroke="#6eb3ad" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12" opacity="0.85" />
+    <path d="M 88 312 L 88 312 C 200 292, 320 252, 430 198 C 540 152, 680 110, 846 42 L 846 344 L 88 344 Z" fill="url(#g-orange)" opacity="0.08" />
+    <path d="M 88 312 C 200 292, 320 252, 430 198 C 540 152, 680 110, 846 42" fill="none" stroke="url(#g-orange)" stroke-width="5" stroke-linecap="round" />
+    <path d="M 88 68 C 210 74, 320 104, 430 154 C 550 206, 680 274, 846 324" fill="none" stroke="url(#g-teal)" stroke-width="5.5" stroke-linecap="round" />
+    <path d="M 88 244 C 150 218, 220 218, 280 246 C 350 284, 400 274, 450 246 C 500 218, 560 226, 620 258 C 700 294, 780 274, 846 246" fill="none" stroke="#b65f3e" stroke-width="4.5" stroke-linecap="round" opacity="0.95" />
+    <g font-size="12" font-weight="800" text-anchor="middle" dominant-baseline="middle">
+      <circle cx="88" cy="68" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+      <text x="88" y="69" fill="#0d6870">A</text>
+      <circle cx="164" cy="236" r="11" fill="#f6f0e7" stroke="#b65f3e" stroke-width="3" />
+      <text x="164" y="237" fill="#b65f3e">B</text>
+      <circle cx="430" cy="248" r="11" fill="#f6f0e7" stroke="#b65f3e" stroke-width="3" />
+      <text x="430" y="249" fill="#b65f3e">C</text>
+      <circle cx="662" cy="268" r="11" fill="#f6f0e7" stroke="#b65f3e" stroke-width="3" />
+      <text x="662" y="269" fill="#b65f3e">D</text>
+      <circle cx="636" cy="138" r="11" fill="#f6f0e7" stroke="#d17a32" stroke-width="3" />
+      <text x="636" y="139" fill="#e27520">E</text>
+      <circle cx="846" cy="324" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+      <text x="846" y="325" fill="#0d6870">F</text>
+    </g>
+    <text x="88" y="378" fill="#6b5f54" font-size="12" font-weight="700">Day 1</text>
+    <text x="778" y="378" fill="#6b5f54" font-size="12" font-weight="700">Day 30</text>
+  </svg>
+</div>
+<table class="budget-guide">
+  <tr><th>Key</th><th>What it shows</th></tr>
+  <tr><td class="marker-cell">A</td><td>Most of the monthly budget is still available, so we can learn before pushing spend.</td></tr>
+  <tr><td class="marker-cell">B</td><td>Day-to-day swings in CPC, demand, and clicks are normal early on.</td></tr>
+  <tr><td class="marker-cell">C</td><td>We refine search terms and traffic while keeping daily spend inside the healthy band.</td></tr>
+  <tr><td class="marker-cell">D</td><td>A quieter day is not always a problem. Auction conditions and CPC move too.</td></tr>
+  <tr><td class="marker-cell">E</td><td>Spend steps up as results and intent become clearer.</td></tr>
+  <tr><td class="marker-cell">F</td><td>Remaining budget eases down through the month instead of front-loading spend.</td></tr>
+</table>
 """
     return section(
         "Budget",
-        "Budget, Pacing, And Click Planning",
-        "The launch budget should feel easy to approve. This page shows how the monthly budget turns into daily pacing, how spend can ramp as the campaign learns, and how CPC affects estimated click volume.",
+        "How We Protect Your Budget While Improving Performance",
+        "This page shows how the approved monthly budget turns into daily pacing, why spend should not be front-loaded, and how we keep room to improve once real search data appears.",
+        body,
+    )
+
+
+def budget_learning_section(budget: BudgetPlan) -> str:
+    body = f"""
+<div class="budget-section-head">
+  <div class="budget-accent"></div>
+  <div>
+    <h2>Why spend increases as performance gets clearer</h2>
+    <p>Early spend is intentionally cautious. As waste is cut and signals improve, more of the same monthly budget can be committed with confidence.</p>
+  </div>
+</div>
+<div class="budget-split">
+  <div class="budget-chart-card">
+    <svg class="budget-svg-ramp" viewBox="0 0 540 300" role="img" aria-label="Confidence in spending rises from early to late month">
+      <defs>
+        <linearGradient id="ramp-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0d6870" stop-opacity="0.18" />
+          <stop offset="100%" stop-color="#0d6870" stop-opacity="0.02" />
+        </linearGradient>
+      </defs>
+      <rect x="56" y="36" width="464" height="232" fill="rgba(255,255,255,0.35)" stroke="#c9b79d" stroke-width="1.2" rx="3" />
+      <line x1="56" y1="268" x2="520" y2="268" stroke="#9a8b78" stroke-width="1.8" />
+      <line x1="56" y1="36" x2="56" y2="268" stroke="#9a8b78" stroke-width="1.8" />
+      <g stroke="#d7c3aa" stroke-width="1" stroke-dasharray="3 5">
+        <line x1="56" y1="210" x2="520" y2="210" />
+        <line x1="56" y1="150" x2="520" y2="150" />
+        <line x1="56" y1="90" x2="520" y2="90" />
+      </g>
+      <text x="8" y="96" fill="#6b5f54" font-size="11" font-weight="700">More</text>
+      <text x="10" y="272" fill="#6b5f54" font-size="11" font-weight="700">Less</text>
+      <path d="M 56 252 C 120 246, 180 220, 240 186 C 300 150, 360 102, 520 48 L 520 268 L 56 268 Z" fill="url(#ramp-fill)" />
+      <path d="M 56 252 C 120 246, 180 220, 240 186 C 300 150, 360 102, 520 48" fill="none" stroke="#0d6870" stroke-width="5" stroke-linecap="round" />
+      <g font-size="12" font-weight="800" text-anchor="middle" dominant-baseline="middle">
+        <circle cx="118" cy="244" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+        <text x="118" y="245" fill="#0d6870">A</text>
+        <circle cx="232" cy="198" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+        <text x="232" y="199" fill="#0d6870">B</text>
+        <circle cx="352" cy="128" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+        <text x="352" y="129" fill="#0d6870">C</text>
+        <circle cx="488" cy="56" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+        <text x="488" y="57" fill="#0d6870">D</text>
+      </g>
+      <text x="58" y="292" fill="#6b5f54" font-size="11" font-weight="700">Early month</text>
+      <text x="404" y="292" fill="#6b5f54" font-size="11" font-weight="700">Later month</text>
+    </svg>
+  </div>
+  <table class="budget-guide" style="margin-top:0;">
+    <tr><th>Step</th><th>What improves</th></tr>
+    <tr><td class="marker-cell">A</td><td>We see which searches are worth paying for before scaling.</td></tr>
+    <tr><td class="marker-cell">B</td><td>Low-value traffic is trimmed.</td></tr>
+    <tr><td class="marker-cell">C</td><td>CPC, conversions, and lead quality become easier to read.</td></tr>
+    <tr><td class="marker-cell">D</td><td>We can raise spend because the data behind it is cleaner.</td></tr>
+  </table>
+</div>
+<div class="budget-section-head" style="margin-top:20px;">
+  <div class="budget-accent"></div>
+  <h2>What this means for your campaign</h2>
+</div>
+<div class="budget-takeaways">
+  <div class="budget-tile"><h3>We pace the full month</h3><p>Daily spend and clicks will move. The aim is healthy pacing through day 30.</p></div>
+  <div class="budget-tile"><h3>Starting lighter protects budget</h3><p>Early limits leave room to learn before we push winning areas.</p></div>
+  <div class="budget-tile"><h3>CPC changes click volume</h3><p>The same dollars buy more or fewer clicks as auctions shift.</p></div>
+  <div class="budget-tile"><h3>Later spend is intentional</h3><p>Increases follow clearer performance, not random day-to-day noise.</p></div>
+</div>
+<div class="budget-approval">
+  <h3>Budget pacing approval</h3>
+  <p>I understand daily spend may vary within the approved range while we optimize toward the monthly budget and performance goals.</p>
+  <label class="budget-checkline">
+    <input type="checkbox" name="approve_pacing" />
+    <span>I have reviewed this summary and approve this budget pacing approach for the monthly amount shown on the prior page.</span>
+  </label>
+  <div class="budget-sign-row">
+    <div>Printed name<div class="line" role="presentation"></div></div>
+    <div>Date<div class="line" role="presentation"></div></div>
+  </div>
+</div>
+"""
+    return section(
+        "Budget",
+        "Why Spend Increases As Performance Gets Clearer",
+        "This page explains the operating logic behind the pacing curve. We do not spend more because the campaign is guessing. We spend more when the evidence is cleaner.",
         body,
     )
 
@@ -651,11 +774,11 @@ def strategy_section(
   </div>
   <div class="insight-card">
     <h3>Priority still needs input</h3>
-    <p>The client should confirm which services should receive the most traffic before the launch budget is finalized.</p>
+    <p>Confirm which services should receive the most traffic before the launch budget is finalized.</p>
   </div>
   <div class="insight-card">
     <h3>Launch review status</h3>
-    <p>The CSV validates cleanly, but remains paused until budget, service priority, and client approval decisions are confirmed.</p>
+    <p>The CSV validates cleanly, but remains paused until budget, service priority, and your approval decisions are confirmed.</p>
   </div>
 </div>
 <div class="subsection-header">Audience and service area</div>
@@ -673,7 +796,7 @@ def strategy_section(
     return section(
         "Strategy",
         "A Controlled New Search Campaign",
-        "This is the first version of the campaign plan. It keeps the launch focused on people already looking for therapy support, then gives the client a clear way to approve services, priorities, copy, and regions before spend begins.",
+        "This is the first version of the campaign plan. It keeps the launch focused on people already looking for therapy support, then gives you a clear way to approve services, priorities, copy, and regions before spend begins.",
         body,
     )
 
@@ -723,33 +846,43 @@ def targeting_section(geo_strategy: dict) -> str:
     targeting = geo_strategy.get("targeting", [])
     location_names = [item.get("location", "") for item in targeting]
     chips = "".join(f'<span class="state-chip">{esc(name)}</span>' for name in location_names)
+    target_rows = "".join(
+        f"""
+<tr>
+  <td>{esc(item.get('location', ''))}</td>
+  <td>{esc(item.get('status', 'Staged'))}</td>
+  <td>{esc(item.get('notes', 'Approved launch geography'))}</td>
+</tr>
+"""
+        for item in targeting
+    )
     body = f"""
-<div class="targeting-map">
-  <div class="map-panel">
-    <svg class="mini-map" viewBox="0 0 520 320" role="img" aria-label="Simple New York and New Jersey targeting sketch">
-      <path class="state-shape" d="M150 44 L318 56 L396 96 L430 142 L382 160 L330 146 L292 172 L218 154 L168 116 Z"/>
-      <path class="state-shape" d="M332 160 L458 166 L492 184 L438 202 L358 192 Z"/>
-      <path class="state-shape" d="M222 166 L288 184 L300 238 L272 292 L226 276 L204 226 Z"/>
-      <circle class="pin" cx="326" cy="168" r="10"/>
-      <circle class="pin" cx="254" cy="220" r="8"/>
-      <text class="map-label" x="205" y="112">New York</text>
-      <text class="map-label" x="228" y="266">New Jersey</text>
-      <text class="map-label" x="338" y="158">NYC</text>
-    </svg>
-  </div>
-  <div class="map-panel">
+<div class="targeting-grid">
+  <div class="targeting-panel">
     <div class="subsection-header" style="margin-top:0;">Current targeting</div>
-    <p>The current staging file targets the approved service states, with New York City shown as the market anchor between New York and New Jersey.</p>
+    <p>The current staging file targets the approved service states. If city or ZIP focus areas should be prioritized, they can be added after review.</p>
     <div style="margin:12px 0;">{chips}</div>
-    <p style="margin-top:10px;">For a future revision, this can become a city or ZIP cluster view if the client wants to focus the launch around priority neighborhoods.</p>
-    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Simple sketch, not to scale. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
+    <table>
+      <tr><th>Location</th><th>Status</th><th>Review note</th></tr>
+      {target_rows}
+    </table>
+  </div>
+  <div class="targeting-panel">
+    <div class="subsection-header" style="margin-top:0;">City and ZIP review</div>
+    <table>
+      <tr><th>Area type</th><th>Current detail</th><th>What to confirm</th></tr>
+      <tr><td>City focus</td><td>Not narrowed yet</td><td>Confirm priority cities before launch if some areas matter more than others.</td></tr>
+      <tr><td>ZIP clusters</td><td>Not supplied yet</td><td>Provide ZIPs only if spend should concentrate around specific neighborhoods or offices.</td></tr>
+      <tr><td>Regional exclusions</td><td>None staged</td><td>Identify any places that should not receive launch traffic.</td></tr>
+    </table>
+    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
   </div>
 </div>
 """
     return section(
         "Regional Targeting",
         "Where The Campaign Is Set To Reach",
-        "This simple map-style view keeps regional targeting understandable without adding a heavy mapping system. The client can approve the current scope or request city and ZIP clusters.",
+        "The current plan stays table-based so the launch geography is easy to review. Confirm the current scope or add city and ZIP priorities before launch.",
         body,
     )
 
@@ -789,7 +922,7 @@ def ads_section(examples: list[RsaExample]) -> str:
 """
     return section(
         "Ad Copy",
-        "Examples The Client Can Review",
+        "Examples To Review",
         "Each responsive search ad has 15 headlines and 4 descriptions in the staging file. These examples show the tone and claims used across the build.",
         body,
     )
@@ -831,8 +964,8 @@ def approval_section(source_attribution: dict) -> str:
 """
     return section(
         "Approval",
-        "What Needs Client Confirmation",
-        "The campaign is valid as a staging file. The client review should focus on services, priority, ad copy, and regional targeting.",
+        "What Needs Confirmation",
+        "The campaign is valid as a staging file. This review should focus on services, priority, ad copy, and regional targeting.",
         body,
     )
 
@@ -866,7 +999,8 @@ def build_html(
 <body>
   {cover(client, date_label, summary)}
   {strategy_section(summary, website_scan, service_catalog, geo_strategy)}
-  {budget_section(budget)}
+  {budget_pacing_section(budget)}
+  {budget_learning_section(budget)}
   {structure_section(summary, rows)}
   {targeting_section(geo_strategy)}
   {ads_section(examples)}
@@ -904,7 +1038,7 @@ def write_report(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build a new-campaign client review report.")
+    parser = argparse.ArgumentParser(description="Build a new-campaign review report.")
     parser.add_argument("--client", required=True)
     parser.add_argument("--date", required=True)
     parser.add_argument("--staging-csv", required=True, type=Path)
