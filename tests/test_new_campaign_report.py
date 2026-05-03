@@ -26,7 +26,9 @@ def test_new_campaign_report_builds_client_facing_html(tmp_path: Path) -> None:
     findings, summary = audit_html(output)
 
     assert "New Campaign Review" in html
-    assert "A Controlled New Search Campaign" in html
+    assert "What This Review Covers" in html
+    assert "How The Campaign Can Grow Over Time" in html
+    assert "Services We Are Running Ads For" in html
     assert "Client_New_Campaign_Review" not in html
     assert summary["errors"] == 0
     assert not [finding for finding in findings if finding.severity == "error"]

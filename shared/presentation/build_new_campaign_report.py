@@ -253,6 +253,38 @@ body {
 .two-col { grid-template-columns: 1fr 1fr; }
 .approval-grid { grid-template-columns: repeat(2, 1fr); }
 .ad-grid { grid-template-columns: 1fr; }
+.overview-steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.overview-step {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 16px;
+}
+.overview-step .step-number {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #185c62;
+  color: #fffaf1;
+  text-align: center;
+  line-height: 28px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+.overview-step h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.overview-step p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #4c4238;
+}
 .insight-card,
 .approval-card,
 .ad-card,
@@ -546,6 +578,75 @@ ul {
   border: 1px solid #dfd2bf;
   padding: 14px;
 }
+.structure-flow {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
+  margin-top: 14px;
+}
+.structure-flow svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.flow-box {
+  fill: #f8f4eb;
+  stroke: #dfd2bf;
+  stroke-width: 2;
+}
+.flow-current {
+  fill: #e5f0ee;
+  stroke: #185c62;
+  stroke-width: 2;
+}
+.flow-future {
+  fill: #fffaf1;
+  stroke: #c8753f;
+  stroke-width: 2;
+}
+.flow-line {
+  stroke: #c43ad3;
+  stroke-width: 5;
+  fill: none;
+  stroke-linecap: round;
+}
+.flow-muted {
+  stroke: #d6a6dd;
+  stroke-width: 4;
+  fill: none;
+  stroke-linecap: round;
+}
+.flow-label {
+  fill: #2f3d45;
+  font-size: 18px;
+  font-weight: 800;
+}
+.flow-small {
+  fill: #4c5c64;
+  font-size: 12px;
+  font-weight: 700;
+}
+.flow-note-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+.flow-note {
+  background: #f8f4eb;
+  border: 1px solid #dfd2bf;
+  padding: 12px;
+}
+.flow-note h3 {
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+.flow-note p {
+  margin: 0;
+  color: #4c4238;
+  font-size: 12px;
+  line-height: 1.4;
+}
 """
 
 
@@ -582,6 +683,69 @@ def cover(client: str, date_label: str, summary: CampaignSummary) -> str:
   <div class="footnote">{esc(date_label)}</div>
 </section>
 """
+
+
+def ad_group_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    return [
+        row
+        for row in rows
+        if row.get("Ad Group") and not row.get("Keyword") and not row.get("Ad type")
+    ]
+
+
+def keyword_counts_by_ad_group(rows: list[dict[str, str]]) -> dict[str, int]:
+    keyword_counts: dict[str, int] = {}
+    for row in rows:
+        if row.get("Criterion Type") == "Phrase":
+            keyword_counts[row.get("Ad Group", "")] = keyword_counts.get(row.get("Ad Group", ""), 0) + 1
+    return keyword_counts
+
+
+def overview_section(summary: CampaignSummary) -> str:
+    steps = [
+        (
+            "Structure",
+            "How the launch is organized now and how it can expand later if performance supports it.",
+        ),
+        (
+            "Ad groups",
+            "Which services are staged to run ads and which priorities should be confirmed first.",
+        ),
+        (
+            "Ads and regions",
+            "Representative ad copy examples, current regional targeting, and any city or ZIP changes needed.",
+        ),
+        (
+            "Budget and confirmation",
+            "How the budget is paced through the month, then one final page for signoff.",
+        ),
+    ]
+    step_cards = "".join(
+        f"""
+<div class="overview-step">
+  <div class="step-number">{index}</div>
+  <h3>{esc(title)}</h3>
+  <p>{esc(text)}</p>
+</div>
+"""
+        for index, (title, text) in enumerate(steps, start=1)
+    )
+    body = f"""
+<div class="overview-steps">{step_cards}</div>
+<div class="subsection-header">Current launch snapshot</div>
+<div class="metric-row" style="margin-top:0;">
+  <div class="metric"><strong>{len(summary.campaigns)}</strong><span>Search campaign</span></div>
+  <div class="metric"><strong>{summary.ad_groups}</strong><span>ad groups</span></div>
+  <div class="metric"><strong>{summary.phrase_keywords}</strong><span>phrase keywords</span></div>
+  <div class="metric"><strong>{summary.rsa_rows}</strong><span>responsive ads</span></div>
+</div>
+"""
+    return section(
+        "Overview",
+        "What This Review Covers",
+        "This report walks through the campaign structure, service ad groups, ads, regional targeting, budget pacing, and final confirmation items before launch.",
+        body,
+    )
 
 
 def budget_summary_cards(budget: BudgetPlan) -> str:
@@ -811,30 +975,99 @@ def strategy_section(
     )
 
 
-def structure_section(summary: CampaignSummary, rows: list[dict[str, str]]) -> str:
-    ad_group_rows = [
-        row
-        for row in rows
-        if row.get("Ad Group") and not row.get("Keyword") and not row.get("Ad type")
-    ]
-    keyword_counts: dict[str, int] = {}
-    for row in rows:
-        if row.get("Criterion Type") == "Phrase":
-            keyword_counts[row.get("Ad Group", "")] = keyword_counts.get(row.get("Ad Group", ""), 0) + 1
-    table_rows = "".join(
-        f"<tr><td>{esc(row.get('Ad Group'))}</td><td>{keyword_counts.get(row.get('Ad Group', ''), 0)}</td><td>Paused</td></tr>"
-        for row in ad_group_rows
-    )
+def campaign_structure_section(summary: CampaignSummary) -> str:
     body = f"""
-<div class="subsection-header">Campaign architecture</div>
 <div class="two-col">
   <div class="insight-card">
-    <h3>Build shape</h3>
-    <p>{summary.ad_groups} ad groups organize service intent, modality intent, and social anxiety demand into one compact Search launch.</p>
+    <h3>Launch shape</h3>
+    <p>The current launch uses {len(summary.campaigns)} controlled Search campaign with {summary.ad_groups} service-based ad groups. This keeps early learning clean and easier to review.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Expansion rule</h3>
+    <p>More campaigns should come later only when performance data shows a service or region needs its own budget, copy, and reporting focus.</p>
+  </div>
+</div>
+<div class="structure-flow" aria-label="Current campaign structure and future expansion path">
+  <svg viewBox="0 0 900 470" role="img" aria-label="One current Search campaign can later split by services or regions when performance supports it">
+    <rect class="flow-current" x="34" y="52" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="88" text-anchor="middle">Current</text>
+    <text class="flow-small" x="126" y="114" text-anchor="middle">1 Search Campaign</text>
+    <path class="flow-line" d="M218 95 C270 95, 288 95, 334 95"/>
+    <rect class="flow-current" x="334" y="52" width="202" height="86" rx="8"/>
+    <text class="flow-label" x="435" y="88" text-anchor="middle">{summary.ad_groups} Service Ad Groups</text>
+    <text class="flow-small" x="435" y="114" text-anchor="middle">actual launch structure</text>
+    <path class="flow-line" d="M536 95 C610 95, 620 64, 692 64"/>
+    <path class="flow-line" d="M536 95 C610 95, 620 126, 692 126"/>
+    <text class="flow-label" x="710" y="70">Priority services</text>
+    <text class="flow-label" x="710" y="132">Support services</text>
+
+    <rect class="flow-box" x="34" y="198" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="234" text-anchor="middle">Later Option</text>
+    <text class="flow-small" x="126" y="260" text-anchor="middle">Split by service demand</text>
+    <path class="flow-muted" d="M218 241 C300 241, 310 214, 392 214"/>
+    <path class="flow-muted" d="M218 241 C300 241, 310 270, 392 270"/>
+    <rect class="flow-future" x="392" y="184" width="198" height="62" rx="8"/>
+    <rect class="flow-future" x="392" y="254" width="198" height="62" rx="8"/>
+    <text class="flow-label" x="491" y="221" text-anchor="middle">Primary Services</text>
+    <text class="flow-label" x="491" y="291" text-anchor="middle">Secondary Services</text>
+    <path class="flow-muted" d="M590 215 C640 215, 652 196, 700 196"/>
+    <path class="flow-muted" d="M590 215 C640 215, 652 234, 700 234"/>
+    <path class="flow-muted" d="M590 285 C640 285, 652 266, 700 266"/>
+    <path class="flow-muted" d="M590 285 C640 285, 652 304, 700 304"/>
+    <text class="flow-small" x="716" y="200">highest demand services</text>
+    <text class="flow-small" x="716" y="238">strongest lead quality</text>
+    <text class="flow-small" x="716" y="270">secondary demand</text>
+    <text class="flow-small" x="716" y="308">specialty follow-up</text>
+
+    <rect class="flow-box" x="34" y="342" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="378" text-anchor="middle">Later Option</text>
+    <text class="flow-small" x="126" y="404" text-anchor="middle">Split by regional demand</text>
+    <path class="flow-muted" d="M218 385 C300 385, 310 358, 392 358"/>
+    <path class="flow-muted" d="M218 385 C300 385, 310 414, 392 414"/>
+    <rect class="flow-future" x="392" y="328" width="198" height="62" rx="8"/>
+    <rect class="flow-future" x="392" y="398" width="198" height="62" rx="8"/>
+    <text class="flow-label" x="491" y="365" text-anchor="middle">Primary Regions</text>
+    <text class="flow-label" x="491" y="435" text-anchor="middle">Secondary Regions</text>
+    <path class="flow-muted" d="M590 359 C640 359, 652 340, 700 340"/>
+    <path class="flow-muted" d="M590 359 C640 359, 652 378, 700 378"/>
+    <path class="flow-muted" d="M590 429 C640 429, 652 410, 700 410"/>
+    <path class="flow-muted" d="M590 429 C640 429, 652 448, 700 448"/>
+    <text class="flow-small" x="716" y="344">strongest city groups</text>
+    <text class="flow-small" x="716" y="382">ZIP or neighborhood focus</text>
+    <text class="flow-small" x="716" y="414">secondary city groups</text>
+    <text class="flow-small" x="716" y="452">later regional tests</text>
+  </svg>
+</div>
+<div class="flow-note-grid">
+  <div class="flow-note"><h3>One campaign now</h3><p>The first launch stays compact so the early budget is not spread too thin.</p></div>
+  <div class="flow-note"><h3>Split later by proof</h3><p>Future campaign splits should follow lead quality, conversion signals, and search demand.</p></div>
+  <div class="flow-note"><h3>No extra campaigns yet</h3><p>The service and regional splits shown here are future paths, not active launch campaigns.</p></div>
+</div>
+"""
+    return section(
+        "Campaign Structure",
+        "How The Campaign Can Grow Over Time",
+        "The launch starts compact. Future campaigns can split by service or region only after the data shows where separate budgets and reporting would help.",
+        body,
+    )
+
+
+def ad_groups_section(summary: CampaignSummary, rows: list[dict[str, str]]) -> str:
+    rows_for_ad_groups = ad_group_rows(rows)
+    keyword_counts = keyword_counts_by_ad_group(rows)
+    table_rows = "".join(
+        f"<tr><td>{esc(row.get('Ad Group'))}</td><td>{keyword_counts.get(row.get('Ad Group', ''), 0)}</td><td>Paused</td></tr>"
+        for row in rows_for_ad_groups
+    )
+    body = f"""
+<div class="two-col">
+  <div class="insight-card">
+    <h3>Services staged for ads</h3>
+    <p>{summary.ad_groups} ad groups organize therapy service intent, modality intent, and social anxiety demand for the first launch.</p>
   </div>
   <div class="insight-card">
     <h3>Keyword control</h3>
-    <p>{summary.phrase_keywords} phrase keywords and {summary.negative_phrase_keywords} negative phrase keywords are staged. Broad and exact match are not active.</p>
+    <p>{summary.phrase_keywords} phrase keywords and {summary.negative_phrase_keywords} negative phrase keywords are staged. Active launch keywords use phrase match.</p>
   </div>
 </div>
 <div class="subsection-header">Ad groups staged for review</div>
@@ -845,9 +1078,9 @@ def structure_section(summary: CampaignSummary, rows: list[dict[str, str]]) -> s
 <div class="continuation-header">Campaign detail continues with representative ad previews</div>
 """
     return section(
-        "Structure",
-        "What The Campaign Contains",
-        "The structure is intentionally compact so the first launch can validate service demand before expanding into separate state or specialty campaigns.",
+        "Ad Groups",
+        "Services We Are Running Ads For",
+        "These are the service areas currently staged in the Google Ads Editor file. Confirm the list is complete and identify which services should receive the most traffic first.",
         body,
     )
 
@@ -1023,12 +1256,13 @@ def build_html(
 </head>
 <body>
   {cover(client, date_label, summary)}
-  {strategy_section(summary, website_scan, service_catalog, geo_strategy)}
+  {overview_section(summary)}
+  {campaign_structure_section(summary)}
+  {ad_groups_section(summary, rows)}
+  {ads_section(examples)}
+  {targeting_section(geo_strategy)}
   {budget_pacing_section(budget)}
   {budget_learning_section(budget)}
-  {structure_section(summary, rows)}
-  {targeting_section(geo_strategy)}
-  {ads_section(examples)}
   {approval_section(source_attribution)}
 </body>
 </html>
