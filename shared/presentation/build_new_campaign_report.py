@@ -372,20 +372,61 @@ ul {
   border: 1px solid #dfd2bf;
   padding: 18px;
 }
-.spend-bars {
+.budget-viz-grid {
   display: grid;
-  grid-template-columns: repeat(30, 1fr);
-  align-items: end;
-  gap: 3px;
-  height: 190px;
-  margin-top: 16px;
-  padding: 16px 10px 8px;
-  border-left: 2px solid #d5c8b7;
-  border-bottom: 2px solid #d5c8b7;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
-.spend-bar {
-  background: linear-gradient(180deg, #2f6f76, #9cbfba);
-  min-height: 42px;
+.line-chart {
+  width: 100%;
+  height: 232px;
+}
+.axis-line {
+  stroke: #d5c8b7;
+  stroke-width: 2;
+}
+.grid-line {
+  stroke: #eadfce;
+  stroke-width: 1;
+}
+.budget-line {
+  fill: none;
+  stroke: #185c62;
+  stroke-width: 4;
+}
+.scenario-low {
+  fill: none;
+  stroke: #9cbfba;
+  stroke-width: 3;
+}
+.scenario-mid {
+  fill: none;
+  stroke: #2f6f76;
+  stroke-width: 3;
+}
+.scenario-high {
+  fill: none;
+  stroke: #c8753f;
+  stroke-width: 3;
+}
+.chart-label {
+  font-size: 10px;
+  fill: #6b5c4b;
+  font-weight: 800;
+}
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 11px;
+  color: #5e5144;
+}
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
 }
 .chart-note {
   margin-top: 12px;
@@ -469,12 +510,60 @@ def cover(client: str, date_label: str, summary: CampaignSummary) -> str:
 """
 
 
+def chart_polyline(values: list[float], *, width: int = 520, height: int = 172, pad: int = 28) -> str:
+    low = min(values)
+    high = max(values)
+    span = high - low or 1
+    points: list[str] = []
+    for index, value in enumerate(values):
+        x = pad + (width - pad * 2) * index / (len(values) - 1)
+        y = pad + (height - pad * 2) * (1 - ((value - low) / span))
+        points.append(f"{x:.1f},{y:.1f}")
+    return " ".join(points)
+
+
+def pacing_values(monthly_budget: float) -> tuple[list[float], list[float], list[float], list[float]]:
+    days = list(range(1, 31))
+    planned_weights = [0.72 + (day - 1) * (0.56 / 29) for day in days]
+    low_weights = [0.86 + (day - 1) * (0.28 / 29) for day in days]
+    high_weights = [0.58 + (day - 1) * (0.84 / 29) for day in days]
+
+    def normalize(weights: list[float]) -> list[float]:
+        total = sum(weights)
+        return [monthly_budget * weight / total for weight in weights]
+
+    planned_daily = normalize(planned_weights)
+    low_daily = normalize(low_weights)
+    high_daily = normalize(high_weights)
+    remaining: list[float] = []
+    spent = 0.0
+    for value in planned_daily:
+        spent += value
+        remaining.append(max(monthly_budget - spent, 0))
+    return remaining, low_daily, planned_daily, high_daily
+
+
+def cpc_click_cards(budget: BudgetPlan) -> str:
+    cpcs = [8.0, 13.0, 18.0]
+    if budget.cpc_low and budget.cpc_high:
+        midpoint = (budget.cpc_low + budget.cpc_high) / 2
+        cpcs = [budget.cpc_low, midpoint, budget.cpc_high]
+    cards = []
+    for cpc in cpcs:
+        clicks = budget.daily_budget / cpc
+        cards.append(
+            f"""
+  <div class="budget-card">
+    <div class="label">${cpc:.0f} CPC</div>
+    <strong>{clicks:.0f}/day</strong>
+  </div>
+"""
+        )
+    return "".join(cards)
+
+
 def budget_section(budget: BudgetPlan) -> str:
-    click_range = budget.daily_click_range
-    click_text = "Add CPC range for click estimate"
-    if click_range:
-        click_text = f"{click_range[0]:.0f} to {click_range[1]:.0f} clicks per day"
-    bars = "".join('<div class="spend-bar" style="height:100%"></div>' for _day in range(30))
+    remaining, low_daily, planned_daily, high_daily = pacing_values(budget.monthly_budget)
     body = f"""
 <div class="budget-metrics">
   <div class="budget-card">
@@ -486,22 +575,56 @@ def budget_section(budget: BudgetPlan) -> str:
     <strong>${budget.daily_budget:,.0f}</strong>
   </div>
   <div class="budget-card">
-    <div class="label">Click Planning</div>
-    <strong style="font-size:20px;">{esc(click_text)}</strong>
+    <div class="label">Planned Spend Curve</div>
+    <strong style="font-size:20px;">Slower start, stronger finish</strong>
   </div>
 </div>
-<div class="budget-chart">
-  <div class="subsection-header" style="margin-top:0;">30-day spend pacing</div>
-  <div class="spend-bars">{bars}</div>
-  <div class="chart-note">
-    This chart shows the planned average spend per day across a 30-day month. Actual daily spend can vary inside Google Ads, but this gives the client a clear budget target to approve before launch.
+<div class="budget-viz-grid">
+  <div class="budget-chart">
+    <div class="subsection-header" style="margin-top:0;">Budget remaining over 30 days</div>
+    <svg class="line-chart" viewBox="0 0 520 220" role="img" aria-label="Budget remaining line chart">
+      <line class="grid-line" x1="28" y1="58" x2="492" y2="58"/>
+      <line class="grid-line" x1="28" y1="104" x2="492" y2="104"/>
+      <line class="grid-line" x1="28" y1="150" x2="492" y2="150"/>
+      <line class="axis-line" x1="28" y1="28" x2="28" y2="172"/>
+      <line class="axis-line" x1="28" y1="172" x2="492" y2="172"/>
+      <polyline class="budget-line" points="{chart_polyline(remaining)}"/>
+      <text class="chart-label" x="30" y="205">Day 1</text>
+      <text class="chart-label" x="450" y="205">Day 30</text>
+      <text class="chart-label" x="38" y="42">${budget.monthly_budget:,.0f}</text>
+      <text class="chart-label" x="38" y="166">$0</text>
+    </svg>
+    <div class="chart-note">The curve leaves more budget available while the campaign learns, then spends more confidently as search terms and service priorities become clearer.</div>
+  </div>
+  <div class="budget-chart">
+    <div class="subsection-header" style="margin-top:0;">Daily spend scenarios</div>
+    <svg class="line-chart" viewBox="0 0 520 220" role="img" aria-label="Daily spend scenario line chart">
+      <line class="grid-line" x1="28" y1="58" x2="492" y2="58"/>
+      <line class="grid-line" x1="28" y1="104" x2="492" y2="104"/>
+      <line class="grid-line" x1="28" y1="150" x2="492" y2="150"/>
+      <line class="axis-line" x1="28" y1="28" x2="28" y2="172"/>
+      <line class="axis-line" x1="28" y1="172" x2="492" y2="172"/>
+      <polyline class="scenario-low" points="{chart_polyline(low_daily)}"/>
+      <polyline class="scenario-mid" points="{chart_polyline(planned_daily)}"/>
+      <polyline class="scenario-high" points="{chart_polyline(high_daily)}"/>
+      <text class="chart-label" x="30" y="205">Day 1</text>
+      <text class="chart-label" x="450" y="205">Day 30</text>
+    </svg>
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:#9cbfba"></span>Steady</span>
+      <span><span class="legend-dot" style="background:#2f6f76"></span>Planned</span>
+      <span><span class="legend-dot" style="background:#c8753f"></span>Faster ramp</span>
+    </div>
+    <div class="chart-note">These lines compare pacing choices. CPC changes the number of clicks the same budget can buy, not the approved monthly budget by itself.</div>
   </div>
 </div>
+<div class="subsection-header">Click examples at different CPCs</div>
+<div class="budget-metrics">{cpc_click_cards(budget)}</div>
 """
     return section(
         "Budget",
-        "Budget And Pacing Plan",
-        "Budget approval is separate from campaign structure. This page shows monthly spend, daily pacing, and click planning when a CPC range is available.",
+        "Budget, Pacing, And Click Planning",
+        "The launch budget should feel easy to approve. This page shows how the monthly budget turns into daily pacing, how spend can ramp as the campaign learns, and how CPC affects estimated click volume.",
         body,
     )
 
@@ -550,7 +673,7 @@ def strategy_section(
     return section(
         "Strategy",
         "A Controlled New Search Campaign",
-        "This is a new-campaign proposal, not a rebuild comparison. The report shows what is ready, what is source-backed, and what needs approval before launch.",
+        "This is the first version of the campaign plan. It keeps the launch focused on people already looking for therapy support, then gives the client a clear way to approve services, priorities, copy, and regions before spend begins.",
         body,
     )
 
@@ -604,21 +727,22 @@ def targeting_section(geo_strategy: dict) -> str:
 <div class="targeting-map">
   <div class="map-panel">
     <svg class="mini-map" viewBox="0 0 520 320" role="img" aria-label="Simple New York and New Jersey targeting sketch">
-      <path class="state-shape" d="M120 38 L284 56 L338 92 L320 132 L356 168 L326 210 L260 200 L222 244 L160 222 L138 170 L90 146 L104 86 Z"/>
-      <path class="state-shape" d="M330 118 L382 138 L404 204 L388 282 L346 284 L318 230 L326 176 Z"/>
-      <circle class="pin" cx="308" cy="194" r="10"/>
-      <circle class="pin" cx="358" cy="226" r="8"/>
-      <text class="map-label" x="140" y="125">New York</text>
-      <text class="map-label" x="352" y="258">New Jersey</text>
-      <text class="map-label" x="318" y="185">NYC</text>
+      <path class="state-shape" d="M150 44 L318 56 L396 96 L430 142 L382 160 L330 146 L292 172 L218 154 L168 116 Z"/>
+      <path class="state-shape" d="M332 160 L458 166 L492 184 L438 202 L358 192 Z"/>
+      <path class="state-shape" d="M222 166 L288 184 L300 238 L272 292 L226 276 L204 226 Z"/>
+      <circle class="pin" cx="326" cy="168" r="10"/>
+      <circle class="pin" cx="254" cy="220" r="8"/>
+      <text class="map-label" x="205" y="112">New York</text>
+      <text class="map-label" x="228" y="266">New Jersey</text>
+      <text class="map-label" x="338" y="158">NYC</text>
     </svg>
   </div>
   <div class="map-panel">
     <div class="subsection-header" style="margin-top:0;">Current targeting</div>
-    <p>The current staging file targets the approved service states, with New York City called out as the visible market anchor.</p>
+    <p>The current staging file targets the approved service states, with New York City shown as the market anchor between New York and New Jersey.</p>
     <div style="margin:12px 0;">{chips}</div>
     <p style="margin-top:10px;">For a future revision, this can become a city or ZIP cluster view if the client wants to focus the launch around priority neighborhoods.</p>
-    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
+    <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Simple sketch, not to scale. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
   </div>
 </div>
 """
