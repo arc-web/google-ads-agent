@@ -107,7 +107,7 @@ AD_GROUPS = [
         "descriptions": [
             "Online individual therapy for young adults navigating anxiety and related concerns.",
             "Sessions focus on practical skills, mindfulness, and collaborative support.",
-            "Care is available to clients living in New York or New Jersey.",
+            "Care is available for people living in New York or New Jersey.",
             "Out-of-network superbills are available for eligible reimbursement.",
         ],
     },
@@ -221,7 +221,7 @@ AD_GROUPS = [
         "descriptions": [
             "DBT-informed online therapy for anxiety, emotions, and life transitions.",
             "Learn skills for emotional regulation, distress tolerance, and mindfulness.",
-            "Care is available to clients living in New York or New Jersey.",
+            "Care is available for people living in New York or New Jersey.",
             "Out-of-network superbills are available for eligible reimbursement.",
         ],
     },
@@ -335,7 +335,7 @@ AD_GROUPS = [
         "descriptions": [
             "Online therapy and group support options for social anxiety concerns.",
             "Build practical skills for worry, avoidance, overthinking, and stress.",
-            "Care is available to clients living in New York or New Jersey.",
+            "Care is available for people living in New York or New Jersey.",
             "Out-of-network superbills are available for eligible reimbursement.",
         ],
     },
