@@ -30,6 +30,7 @@ from shared.rebuild.csv_naming import generated_csv_path, normalize_timestamp, v
 from shared.rebuild.geo_taxonomy import build_geo_ad_group_plans, parse_geo_target
 from shared.rebuild.rsa_headline_quality import audit_ad_group_plans, generate_quality_headlines
 from shared.rebuild.scaffold_client import scaffold_client, slug
+from shared.rebuild.service_logic_research import build_service_logic_research, service_logic_by_name, write_service_logic_research
 from shared.rebuild.staging_validator import validate_file
 from shared.tools.website.website_scanner import WebsiteScanner
 
@@ -44,15 +45,18 @@ class LocationTarget:
 class AdGroupPlan:
     campaign: str
     name: str
+    service: str
     final_url: str
     path_1: str
     path_2: str
     keywords: list[str]
     headlines: list[str]
     descriptions: list[str]
+    service_logic: dict[str, Any]
 
 
 def clean_words(value: str) -> str:
+    value = re.sub(r"(?i)\b([a-z]+)['’]s\b", r"\1", value)
     return re.sub(r"\s+", " ", re.sub(r"[^a-zA-Z0-9 &/-]+", " ", value)).strip()
 
 
@@ -63,7 +67,12 @@ def path_part(value: str) -> str:
 
 def fit_description(value: str) -> str:
     text = clean_words(value)
-    return text[:90].rstrip()
+    if len(text) <= 90:
+        return text
+    trimmed = text[:90].rstrip(" ,;")
+    if " " in trimmed:
+        trimmed = trimmed.rsplit(" ", 1)[0].rstrip(" ,;")
+    return trimmed
 
 
 def description_with_cta(value: str, cta: str) -> str:
@@ -91,13 +100,107 @@ def unique(values: list[str], limit: int) -> list[str]:
     return output
 
 
-def description_set(service: str) -> list[str]:
-    return [
-        fit_description("Request details to confirm service fit, audience needs, timing, and budget before launch."),
-        fit_description("Schedule today to review training and consulting options with a practical support team."),
-        fit_description("Request details on scope, stakeholders, implementation needs, and launch readiness."),
-        fit_description("Schedule today to compare support options before campaign approval and account import."),
-    ]
+def description_list(values: list[str]) -> list[str]:
+    return [description_with_cta(value, "Call Today") for value in values]
+
+
+def description_set(service: str, service_logic: dict[str, Any] | None = None) -> list[str]:
+    if service_logic:
+        service_lower = service.lower()
+        concept_text = " ".join(str(token) for token in service_logic.get("concept_tokens", [])).lower()
+        if "restaurant" in concept_text or any(
+            term in service_lower
+            for term in ("chef", "dining", "dinner", "food", "menu", "pairing", "reservation", "restaurant", "tasting", "wine")
+        ):
+            return description_list([
+                "Guests can reserve a private tasting menu with contemporary Guatemalan dining",
+                "Guests can review restaurant reservation availability for Guatemalan dining",
+                "Book an experienced restaurant team for contemporary Guatemalan dining",
+                "Guests can schedule a clear tasting menu reservation in Guatemala City",
+            ])
+        if "lay counselor" in service_lower:
+            return description_list([
+                "Help organizations train staff in lay counseling skills and expand care access",
+                "Build lay counselor teams so organizations can expand mental health access now",
+                "Train care teams in counseling skills that support broader mental health access",
+                "Review academy fit for staff training, care capacity, and counseling access",
+            ])
+        if "employee mental health" in service_lower:
+            return description_list([
+                "Help employers improve employee mental health support and counseling access",
+                "Review employee mental health support for wellbeing, access, and workplace fit",
+                "Plan employee counseling access that helps employers support staff wellbeing",
+                "Compare employee mental health options for workplace support and care access",
+            ])
+        if "integrated behavioral" in service_lower:
+            return description_list([
+                "Help organizations use integrated behavioral health consulting for coordinated care",
+                "Review integrated behavioral health consulting for clinical teams and care workflows",
+                "Plan behavioral health workflows that help care teams coordinate patient support",
+                "Compare integrated care consulting options for clinical teams and health workflows",
+            ])
+        if "empathic communication" in service_lower:
+            return description_list([
+                "Help organizations use empathic communication training for stronger care teams",
+                "Review empathic communication training for organizations and care conversations",
+                "Plan empathic communication training that helps teams handle support conversations",
+                "Compare empathic communication training options for organizations and care skills",
+            ])
+        if "clinical support" in service_lower:
+            return description_list([
+                "Help clinical teams use clinical support consulting for clearer care practices",
+                "Review clinical support consulting for healthcare teams, workflow, and care fit",
+                "Plan clinical support around care delivery, team workflows, and patient support",
+                "Compare clinical consulting options for care teams and practical support needs",
+            ])
+        if "learning and development" in service_lower:
+            return description_list([
+                "Help organizations use learning and development programs for stronger staff skills",
+                "Review learning programs for staff development, team skills, and support practices",
+                "Plan staff development programs that strengthen training paths for care teams",
+                "Compare learning and development options for organizations and stronger team skills",
+            ])
+        if "human-centered" in service_lower or "human centered" in service_lower:
+            return description_list([
+                "Help healthcare organizations use human-centered care consulting for better care",
+                "Review human-centered care consulting for healthcare organizations and care models",
+                "Plan human-centered care delivery that helps organizations stay focused on people",
+                "Compare human-centered care consulting options for healthcare organizations and care",
+            ])
+        if "trauma-informed" in service_lower or "trauma informed" in service_lower:
+            return description_list([
+                "Help organizations use trauma-informed care training for safer support teams",
+                "Review trauma-informed training for staff skills, care teams, and support safety",
+                "Plan trauma-informed care training that helps teams support people more safely",
+                "Compare trauma-informed care training options for organizations and safer care teams",
+            ])
+        if service_logic.get("buyer_type") == "b2c":
+            mechanism = clean_words(str(service_logic.get("service_mechanism", f"{service} support"))).lower()
+            return description_list([
+                f"Help customers use {mechanism} to compare clearer service options and next steps",
+                f"Review {mechanism} for customers, clearer service options, and next steps",
+                f"Plan {mechanism} around customer needs, clearer options, and next steps",
+                f"Compare {mechanism} choices for customers and clearer service next steps",
+            ])
+        buyer = "organizations"
+        if "clinical" in service_lower:
+            buyer = "clinical teams"
+        elif "human-centered" in service_lower or "human centered" in service_lower:
+            buyer = "healthcare organizations"
+        mechanism = clean_words(str(service_logic.get("service_mechanism", ""))).lower()
+        outcome = clean_words(str(service_logic.get("outcome", ""))).lower()
+        return description_list([
+            f"Help {buyer} use {mechanism} to support {outcome}",
+            f"Review {mechanism} for {buyer} and confirm fit, timing, scope, and budget",
+            f"Plan {mechanism} so {buyer} can move toward {outcome}",
+            f"Compare {mechanism} options for {buyer} focused on {outcome}",
+        ])
+    return description_list([
+        "Request details to confirm service fit, audience needs, timing, and budget before launch",
+        "Schedule today to review training and consulting options with a practical support team",
+        "Request details on scope, stakeholders, implementation needs, and launch readiness",
+        "Schedule today to compare support options before campaign approval and account import",
+    ])
 
 
 def parse_location(value: str) -> LocationTarget:
@@ -146,6 +249,7 @@ def plan_ad_groups(
     campaign: str,
     website: str,
     service_catalog: dict[str, Any],
+    service_logic_map: dict[str, dict[str, Any]] | None = None,
     source_pages: list[str],
     locations: list[LocationTarget] | None = None,
 ) -> list[AdGroupPlan]:
@@ -163,10 +267,14 @@ def plan_ad_groups(
         ad_group_prefix="Services",
     )
     for geo_plan in geo_plans:
+        service_logic = (service_logic_map or {}).get(geo_plan.service)
+        if not service_logic or service_logic.get("status") != "pass":
+            raise RuntimeError(f"Service logic research failed for {geo_plan.service}.")
         plans.append(
             AdGroupPlan(
                 campaign=geo_plan.campaign,
                 name=geo_plan.ad_group,
+                service=geo_plan.service,
                 final_url=geo_plan.final_url,
                 path_1=geo_plan.path_1,
                 path_2=geo_plan.path_2,
@@ -175,8 +283,10 @@ def plan_ad_groups(
                     client_name=client,
                     service_label=geo_plan.service,
                     ad_group=geo_plan.ad_group,
+                    service_logic=service_logic,
                 ),
-                descriptions=description_set(geo_plan.service),
+                descriptions=description_set(geo_plan.service, service_logic),
+                service_logic=service_logic,
             )
         )
     return plans
@@ -365,6 +475,17 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
     service_catalog = infer_service_catalog(website_scan, args.service)
     service_catalog_path = build_dir / "service_catalog.json"
     service_catalog_path.write_text(json.dumps(service_catalog, indent=2) + "\n", encoding="utf-8")
+    service_logic = build_service_logic_research(
+        services=[str(service) for service in service_catalog.get("active_services_for_staging", [])],
+        website_scan=website_scan,
+        source_attribution=source_attribution,
+    )
+    service_logic_path = build_dir / "service_logic_research.json"
+    write_service_logic_research(service_logic_path, service_logic)
+    if service_logic["status"] != "pass":
+        failing = [record["service"] for record in service_logic.get("services", []) if record.get("status") != "pass"]
+        raise RuntimeError(f"Service logic research failed for: {', '.join(failing)}")
+    service_logic_map = service_logic_by_name(service_logic)
 
     locations = [parse_location(value) for value in args.location]
     geo_strategy = build_geo_strategy(locations)
@@ -378,6 +499,7 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
         campaign=campaign,
         website=args.website,
         service_catalog=service_catalog,
+        service_logic_map=service_logic_map,
         source_pages=source_pages,
         locations=locations,
     )
@@ -538,6 +660,7 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
         service_catalog_json=service_catalog_path,
         geo_strategy_json=geo_strategy_path,
         source_attribution_json=scanner_paths["source_attribution"],
+        service_logic_research_json=service_logic_path,
         output_html=output_html,
         budget=budget,
     )
@@ -564,6 +687,8 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
             str(geo_strategy_path),
             "--source-attribution-json",
             str(scanner_paths["source_attribution"]),
+            "--service-logic-research-json",
+            str(service_logic_path),
             "--monthly-budget",
             str(args.monthly_budget),
             "--output-html",
@@ -597,6 +722,7 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
         "source_attribution": scanner_paths["source_attribution"],
         "raw_crawl": scanner_paths["raw_crawl"],
         "service_catalog": service_catalog_path,
+        "service_logic_research": service_logic_path,
         "geo_strategy": geo_strategy_path,
         "rsa_headline_quality_audit": headline_audit_path,
         "human_review": human_review,
@@ -613,6 +739,7 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
         source_artifacts={
             "website_scan": scanner_paths["website_scan"],
             "service_catalog": service_catalog_path,
+            "service_logic_research": service_logic_path,
             "geo_strategy": geo_strategy_path,
             "source_attribution": scanner_paths["source_attribution"],
             "campaign_taxonomy": csv_paths["campaign_taxonomy"],
