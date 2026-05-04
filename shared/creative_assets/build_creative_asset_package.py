@@ -1206,9 +1206,18 @@ def build_creative_asset_package(args: argparse.Namespace) -> dict[str, Path]:
         allowed_domains=args.first_party_cdn_domain,
         minimum_approved_source_images=args.minimum_source_images,
     )
+    youtube_rows = youtube_video_rows(
+        raw_crawl=raw_crawl,
+        explicit_video_urls=getattr(args, "youtube_video_url", []),
+        channel_url=getattr(args, "youtube_channel_url", "") or "",
+        sync_status_path=getattr(args, "youtube_sync_status", None),
+    )
 
     manifest_path = build_dir / "creative_asset_manifest.json"
     review_csv = build_dir / "creative_asset_review.csv"
+    youtube_manifest_path = build_dir / "youtube_video_manifest.json"
+    youtube_review_csv = build_dir / "youtube_video_review.csv"
+    youtube_sync_checklist = build_dir / "youtube_sync_checklist.md"
     html_path = build_dir / "Client_Creative_Approval.html"
     email_path = build_dir / "client_email_draft.md"
     attribution_path = build_dir / "creative_source_attribution.json"
@@ -1216,16 +1225,44 @@ def build_creative_asset_package(args: argparse.Namespace) -> dict[str, Path]:
 
     write_json(manifest_path, {"approval_required": True, "campaign_ready": False, "assets": manifest_rows})
     write_review_csv(review_csv, manifest_rows)
-    write_html_gallery(html_path, manifest_rows, args.display_name or args.client, args.service_theme)
+    write_json(
+        youtube_manifest_path,
+        {
+            "approval_required": True,
+            "campaign_ready": False,
+            "youtube_channel_url": getattr(args, "youtube_channel_url", "") or "",
+            "videos": youtube_rows,
+        },
+    )
+    write_youtube_review_csv(youtube_review_csv, youtube_rows)
+    write_youtube_sync_checklist(youtube_sync_checklist, youtube_rows, getattr(args, "youtube_channel_url", "") or "")
+    write_html_gallery(html_path, manifest_rows, args.display_name or args.client, args.service_theme, youtube_rows)
     write_email(email_path, args.display_name or args.client, args.service_theme, html_path, review_csv)
     write_json(attribution_path, {"website": args.website, "assets": attribution_rows})
-    write_json(validation_path, validate_package(manifest_rows))
+    image_validation = validate_package(manifest_rows)
+    youtube_validation = validate_youtube_package(youtube_rows)
+    combined_issues = [*image_validation["issues"], *youtube_validation["issues"]]
+    write_json(
+        validation_path,
+        {
+            "status": "fail" if combined_issues else "pass",
+            "issues": combined_issues,
+            "image_assets": image_validation,
+            "youtube_videos": youtube_validation,
+            "approved_assets": image_validation["approved_assets"],
+            "campaign_ready_assets": image_validation["campaign_ready_assets"],
+            "asset_count": image_validation["asset_count"],
+        },
+    )
 
     return {
         "source_image_folder": source_dir,
         "processed_image_folder": processed_dir,
         "creative_asset_manifest": manifest_path,
         "creative_asset_review": review_csv,
+        "youtube_video_manifest": youtube_manifest_path,
+        "youtube_video_review": youtube_review_csv,
+        "youtube_sync_checklist": youtube_sync_checklist,
         "client_creative_approval_html": html_path,
         "client_email_draft": email_path,
         "creative_source_attribution": attribution_path,
@@ -1245,6 +1282,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--landing-page", action="append", default=[])
     parser.add_argument("--brand-rules", default="")
     parser.add_argument("--logo-file", action="append", default=[])
+    parser.add_argument("--youtube-channel-url", default="")
+    parser.add_argument("--youtube-video-url", action="append", default=[])
+    parser.add_argument("--youtube-sync-status", type=Path)
     parser.add_argument("--output-build-path", type=Path)
     parser.add_argument("--client-dir", type=Path, help="Existing client folder to use instead of scaffolding clients/{agency}/{client}.")
     parser.add_argument("--clients-dir", type=Path, default=ROOT / "clients")
