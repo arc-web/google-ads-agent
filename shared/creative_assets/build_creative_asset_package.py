@@ -422,6 +422,9 @@ def youtube_video_rows(
                     source_type="operator_supplied_video",
                 )
             )
+    if channel_url:
+        for video_url in discover_youtube_channel_video_urls(channel_url):
+            add_youtube_candidate(candidates, video_url, channel_url, "youtube_channel_public_page", "")
 
     for page in raw_crawl.get("pages", []):
         page_url = page.get("url", "")
@@ -454,6 +457,41 @@ def youtube_video_rows(
             row["risk_flags"].append("youtube_sync_not_confirmed")
         rows.append(row)
     return rows
+
+
+def discover_youtube_channel_video_urls(channel_url: str, limit: int = 24) -> list[str]:
+    if not channel_url:
+        return []
+    parsed = urllib.parse.urlparse(channel_url)
+    host = (parsed.hostname or "").lower().removeprefix("www.")
+    if not host.endswith("youtube.com"):
+        return []
+    discovered: list[str] = []
+    for video_url in [channel_url, *read_public_youtube_urls(channel_url)]:
+        video_id = parse_youtube_video_id(video_url)
+        if video_id:
+            canonical = canonical_youtube_url(video_id)
+            if canonical not in discovered:
+                discovered.append(canonical)
+        if len(discovered) >= limit:
+            break
+    return discovered
+
+
+def read_public_youtube_urls(url: str) -> list[str]:
+    try:
+        request = urllib.request.Request(url, headers={"User-Agent": "Google_Ads_Agent creative asset tool"})
+        with urllib.request.urlopen(request, timeout=12) as response:
+            charset = response.headers.get_content_charset() or "utf-8"
+            text = response.read().decode(charset, errors="replace")
+    except (OSError, UnicodeDecodeError, urllib.error.URLError):
+        return []
+    urls = find_youtube_urls(text)
+    for video_id in re.findall(r'"videoId"\s*:\s*"([A-Za-z0-9_-]{11})"', text):
+        urls.append(canonical_youtube_url(video_id))
+    for video_id in re.findall(r"/watch\?v=([A-Za-z0-9_-]{11})", text):
+        urls.append(canonical_youtube_url(video_id))
+    return urls
 
 
 def add_youtube_candidate(
