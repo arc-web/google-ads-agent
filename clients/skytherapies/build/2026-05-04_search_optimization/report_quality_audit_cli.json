@@ -1,0 +1,15 @@
+{
+  "summary": {
+    "sections": 5,
+    "errors": 0,
+    "warnings": 1
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "code": "presentation.no_continuation_header_pattern",
+      "message": "No .continuation-header pattern was found. Multi-page modules need repeated context.",
+      "evidence": ""
+    }
+  ]
+}

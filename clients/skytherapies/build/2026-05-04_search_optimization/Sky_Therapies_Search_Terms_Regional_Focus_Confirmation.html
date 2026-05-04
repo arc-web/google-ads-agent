@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sky Therapies Search Terms And Regional Focus Confirmation</title>
+<style>
+
+@page { size: Letter; margin: 0; }
+:root {
+  --sage:#83968F; --sage-light:#AEC8BE; --sage-dark:#57645F;
+  --blush:#E9C1AD; --blush-light:#F4DFD5; --teal:#5ABBBA;
+  --teal-dark:#3C7D7C; --bg:#F8F5F0; --card:#fff; --text:#323130;
+  --muted:#6E6C6A; --border:#DDD9D4; --green:#2E7D50;
+  --green-bg:#EAF5EE; --amber:#B45309; --amber-bg:#FEF3C7; --red:#C0392B;
+}
+* { box-sizing: border-box; }
+body { margin:0; background:#fff; color:var(--text); font-family: Arial, sans-serif; }
+.pdf-page {
+  width:8.5in; height:11in; overflow:hidden; break-after:page;
+  padding:.43in .48in; background:var(--bg); position:relative;
+}
+.pdf-page::before {
+  content:""; position:absolute; inset:.28in .30in; border-left:5px solid var(--teal);
+  background:rgba(255,255,255,.18); pointer-events:none;
+}
+.page-kicker {
+  position:relative; z-index:1; color:var(--teal-dark); font-weight:800;
+  text-transform:uppercase; letter-spacing:.16em; font-size:10px; margin-bottom:8px;
+}
+h1 { position:relative; z-index:1; margin:0 0 18px; color:var(--sage-dark); font-size:29px; line-height:1.08; }
+.page-body { position:relative; z-index:1; }
+p { margin:0; }
+strong { font-weight:800; }
+.cover-page { background:linear-gradient(135deg,var(--sage-dark),#42514c); color:white; }
+.cover-page::before { border-left-color:var(--blush); background:rgba(255,255,255,.04); }
+.cover-band { position:relative; z-index:1; margin-top:.25in; padding:.25in .28in; border-left:5px solid var(--blush); }
+.cover-band h1 { color:white; font-size:42px; margin-bottom:10px; }
+.cover-band p { color:var(--blush-light); font-size:16px; }
+.cover-meta { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:28px; font-size:12px; color:rgba(255,255,255,.82); }
+.cover-meta strong { display:block; color:white; font-size:10px; text-transform:uppercase; letter-spacing:.11em; }
+.cover-grid { position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:.55in; }
+.cover-grid div { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:18px; min-height:145px; }
+.cover-grid strong { display:block; margin-bottom:8px; color:var(--blush-light); }
+.cover-grid p { font-size:12px; line-height:1.5; color:rgba(255,255,255,.82); }
+.section-header, .subsection-header, .continuation-header { display:none !important; }
+.before-after { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.ba-col, .problem-card, .strategy-card, .insight-card, .card, .discussion-card, .ag-review-block {
+  background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden;
+}
+.ba-header { padding:10px 14px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+.ba-before .ba-header { background:#FDF2F0; color:var(--red); }
+.ba-after .ba-header { background:var(--green-bg); color:var(--green); }
+.ba-body { padding:13px 15px; }
+.ba-body ul { margin:0; padding:0; list-style:none; }
+.ba-body li { font-size:9.3px; line-height:1.26; padding:4px 0 4px 13px; border-bottom:1px solid #eee; position:relative; }
+.ba-body li::before { position:absolute; left:0; font-weight:800; }
+.ba-before li::before { content:"x"; color:var(--red); }
+.ba-after li::before { content:"✓"; color:var(--green); }
+.flag { font-size:8px; border-radius:3px; padding:1px 4px; font-weight:800; }
+.flag-red { background:#FDECEA; color:var(--red); }
+.flag-green { background:var(--green-bg); color:var(--green); }
+.problem-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:14px; }
+.strategy-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.problem-card { padding:12px; min-height:158px; }
+.pc-number { color:var(--blush); font-size:25px; font-weight:800; }
+.problem-card h4, .strategy-card .sc-title { color:var(--sage-dark); margin:5px 0 7px; font-size:13px; }
+.problem-card p { color:var(--muted); font-size:9.25px; line-height:1.33; }
+.strategy-card .sc-body { color:var(--muted); font-size:11.6px; line-height:1.48; }
+.strategy-card { padding:16px; border-left:4px solid var(--teal); min-height:185px; }
+.strategy-card .sc-why { margin-top:10px; padding:8px; color:var(--teal-dark); background:rgba(90,187,186,.08); border-left:2px solid var(--teal); font-size:10.5px; line-height:1.38; font-weight:700; }
+.insight-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.insight-card { padding:14px; min-height:105px; }
+.ic-value { font-size:22px; color:var(--teal-dark); font-weight:800; }
+.ic-label { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-weight:800; }
+.ic-note { font-size:10.5px; line-height:1.35; margin-top:5px; }
+table { width:100%; border-collapse:collapse; }
+th { background:var(--sage-dark); color:white; text-align:left; font-size:9px; text-transform:uppercase; letter-spacing:.04em; padding:7px 9px; }
+td { padding:7px 9px; border-bottom:1px solid var(--border); font-size:10.5px; line-height:1.32; vertical-align:top; }
+.geo-table th, .intent-table th, .tax-table th { background:var(--sage-dark); }
+.tier-1 { color:var(--green); font-weight:800; }
+.tier-2 { color:var(--teal-dark); font-weight:800; }
+.tier-review { color:var(--amber); font-weight:800; }
+.architecture-page .card { padding:14px; margin-bottom:12px; }
+.architecture-page .card p { font-size:11px !important; }
+.ag-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+.ag-chip { background:white; border:1px solid var(--border); border-radius:6px; padding:9px; min-height:54px; }
+.ag-name { font-size:11px; color:var(--sage-dark); font-weight:800; }
+.ag-meta { font-size:9px; color:var(--muted); margin-top:3px; }
+.roadmap { display:grid; grid-template-columns:repeat(5,1fr); gap:0; margin-bottom:16px; }
+.roadmap-item { background:white; border:1px solid var(--border); padding:11px; min-height:170px; }
+.roadmap-item.active { background:var(--sage-dark); color:white; }
+.rm-num { font-size:8px; text-transform:uppercase; letter-spacing:.08em; color:var(--sage); font-weight:800; }
+.roadmap-item.active .rm-num { color:var(--blush); }
+.rm-title { font-size:11px; font-weight:800; margin:7px 0; color:var(--sage-dark); }
+.roadmap-item.active .rm-title { color:white; }
+.rm-body { font-size:9.5px; line-height:1.35; color:var(--muted); }
+.roadmap-item.active .rm-body { color:rgba(255,255,255,.78); }
+.rm-tag { display:inline-block; margin-top:7px; padding:3px 6px; border-radius:8px; background:#eef4f2; font-size:7.5px; font-weight:800; color:var(--sage-dark); }
+.tax-table td, .tax-table th { font-size:9.2px; padding:6px 8px; }
+.ad-page { padding:.33in .38in; }
+.ad-page::before { inset:.22in .24in; }
+.ad-page .page-body { height:100%; }
+.ad-page .ag-review-block { height:100%; display:flex; flex-direction:column; border-radius:8px; }
+.ag-review-header { background:var(--sage-dark); color:white; display:flex; justify-content:space-between; align-items:center; padding:12px 16px; }
+.ag-review-header h3 { margin:0; color:white; font-size:17px; line-height:1.05; }
+.ag-num { color:var(--blush); font-size:22px; font-weight:800; margin-right:10px; }
+.ag-url-badge { font-size:8px; color:var(--blush); font-family:monospace; text-align:right; max-width:360px; }
+.ag-review-body { padding:14px; flex:1; }
+.ag-review-cols { display:grid; grid-template-columns:32% 68%; gap:16px; height:100%; }
+.copy-section-title { color:var(--sage); text-transform:uppercase; letter-spacing:.09em; font-size:9px; font-weight:800; margin:0 0 7px; }
+.ad-preview { border:1px solid var(--border); border-radius:7px; padding:12px; margin-bottom:12px; }
+.ap-label, .ap-url { font-size:9px; color:#4d5156; margin-bottom:4px; }
+.ap-headlines { color:#1a0dab; font-size:14px; line-height:1.35; margin-bottom:6px; }
+.ap-desc { font-size:10.5px; line-height:1.42; color:#4d5156; }
+.copy-grade-card { border:1px solid var(--border); border-left:4px solid var(--teal); border-radius:0 7px 7px 0; padding:10px; background:#F8FAF9; }
+.grade-compare { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+.grade-label { display:block; font-size:8px; text-transform:uppercase; color:var(--muted); font-weight:800; margin-bottom:4px; }
+.grade-pill { display:inline-block; min-width:42px; text-align:center; border-radius:5px; padding:4px 6px; font-size:12px; font-weight:800; }
+.grade-B { background:#DBEAFE; color:#1E40AF; }
+.grade-C { background:var(--amber-bg); color:var(--amber); }
+.grade-D { background:#FEE2E2; color:#991B1B; }
+.grade-note { font-size:9.3px; line-height:1.38; margin-top:5px; color:var(--text); }
+.grade-note.muted { color:var(--muted); }
+.copy-table { margin-bottom:10px; }
+.copy-table th { background:#F2EFE9; color:var(--sage-dark); font-size:8px; padding:5px 7px; }
+.copy-table td { font-size:9.25px; padding:4.6px 7px; line-height:1.22; }
+.char-ok { color:var(--muted); font-size:8.5px; font-family:monospace; }
+.char-bad { color:var(--muted); background:transparent; font-size:8.5px; }
+.copy-violation { background:transparent !important; }
+.ad-page p[style] { font-size:9px !important; color:var(--red) !important; line-height:1.35 !important; }
+.ad-page .ag-review-body::after {
+  content:"Review focus: confirm service availability, landing page accuracy, and claim-sensitive wording before launch.";
+  display:block; margin-top:12px; padding:10px 12px; border-left:3px solid var(--teal);
+  background:rgba(90,187,186,.08); color:var(--teal-dark); font-size:10.5px; line-height:1.35; font-weight:700;
+}
+.ad-pair-page { padding:.32in .34in; }
+.ad-pair-page::before { inset:.22in .24in; }
+.ad-pair-page h1 { font-size:22px; margin-bottom:10px; }
+.ad-pair-grid { position:relative; z-index:1; display:grid; grid-template-rows:1fr 1fr; gap:10px; height:9.45in; }
+.ad-pair-page .ag-review-block { height:100%; display:flex; flex-direction:column; border-radius:7px; background:#fff; border:1px solid var(--border); overflow:hidden; }
+.ad-pair-page .ag-review-header { padding:8px 12px; }
+.ad-pair-page .ag-review-header h3 { font-size:13px; }
+.ad-pair-page .ag-num { font-size:17px; min-width:24px; }
+.ad-pair-page .ag-url-badge { font-size:6.5px; max-width:330px; }
+.ad-pair-page .ag-review-body { padding:8px 10px; flex:1; }
+.ad-pair-page .ag-review-cols { display:grid; grid-template-columns:29% 71%; gap:10px; height:auto; }
+.ad-pair-page .copy-section-title { font-size:7.2px; margin-bottom:4px; letter-spacing:.08em; }
+.ad-pair-page .ad-preview { padding:8px; margin-bottom:7px; }
+.ad-pair-page .ap-label, .ad-pair-page .ap-url { font-size:7px; margin-bottom:2px; }
+.ad-pair-page .ap-headlines { font-size:10.5px; line-height:1.25; margin-bottom:3px; }
+.ad-pair-page .ap-desc { font-size:7.8px; line-height:1.27; }
+.ad-pair-page .copy-grade-card { padding:7px; }
+.ad-pair-page .grade-compare { gap:5px; margin-bottom:5px; }
+.ad-pair-page .grade-label { font-size:6.2px; margin-bottom:2px; }
+.ad-pair-page .grade-pill { min-width:34px; padding:2px 5px; font-size:9px; }
+.ad-pair-page .grade-note { font-size:7.1px; line-height:1.25; margin-top:3px; }
+.ad-pair-page .copy-table { margin-bottom:5px; }
+.ad-pair-page .copy-table th { font-size:6.3px; padding:3px 5px; }
+.ad-pair-page .copy-table td { font-size:7.25px; padding:2.55px 5px; line-height:1.12; }
+.ad-pair-page .char-ok, .ad-pair-page .char-bad { font-size:6.6px; }
+.ad-pair-page p[style] { font-size:7px !important; line-height:1.22 !important; margin-top:4px !important; }
+.revision-control-card {
+  background:white; border:1px solid var(--border); border-left:4px solid var(--teal);
+  border-radius:0 8px 8px 0; padding:18px 20px;
+}
+.revision-control-card .rc-label {
+  color:var(--teal-dark); font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.14em; margin-bottom:7px;
+}
+.revision-control-card h2 { margin:0 0 12px; color:var(--sage-dark); font-size:18px; }
+.revision-control-card .rc-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.revision-control-card h3 { margin:0 0 8px; color:var(--teal-dark); font-size:13px; }
+.revision-control-card ul { margin:0; padding-left:18px; }
+.revision-control-card li { font-size:11.6px; line-height:1.48; margin-bottom:7px; color:var(--text); }
+.approval-page .page-body { display:flex; flex-direction:column; gap:14px; }
+.approval-page .card { padding:14px; }
+.approval-page .card p, .approval-page li { font-size:11px !important; line-height:1.45; }
+.discussion-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.discussion-card { padding:12px; min-height:86px; }
+.dc-label { font-size:8px; text-transform:uppercase; letter-spacing:.09em; color:var(--sage); font-weight:800; }
+.dc-title { font-size:11px; font-weight:800; color:var(--sage-dark); margin:4px 0; }
+.dc-body { font-size:9.4px; line-height:1.32; color:var(--muted); }
+.dc-actions { display:flex; gap:5px; margin-top:8px; }
+.dc-action { flex:1; border:1px solid var(--border); border-radius:4px; text-align:center; padding:3px; font-size:7px; text-transform:uppercase; font-weight:800; color:var(--muted); }
+.dc-approve { border-color:#B7DEC7; color:var(--green); }
+.dc-changes { border-color:#FDE68A; color:var(--amber); }
+footer { display:none !important; }
+
+.page-body p { font-size: 13px; line-height: 1.52; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 18px 0; }
+.metric-card { border: 1px solid var(--line); padding: 14px; background: #fff; border-radius: 8px; }
+.metric-value { font-size: 28px; font-weight: 800; color: var(--sage-dark); }
+.metric-label { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.source-list a { color: var(--teal-dark); }
+</style>
+</head>
+<body>
+<section class="section pdf-page cover-page">
+  <div class="section-header" aria-hidden="true"></div>
+  <div class="subsection-header" aria-hidden="true"></div>
+  <div class="cover-band">
+    <div class="page-kicker">Search Optimization Review</div>
+    <h1>Sky Therapies</h1>
+    <p>Search terms and regional focus confirmation for the April 26, 2026 to May 2, 2026 report window.</p>
+    <div class="cover-meta">
+      <span><strong>Prepared by</strong> Advertising Report Card</span>
+      <span><strong>Date</strong> 2026-05-04</span>
+      <span><strong>Status</strong> Client confirmation needed</span>
+      <span><strong>Staging</strong> Google Ads Editor only</span>
+    </div>
+  </div>
+  <div class="cover-grid">
+    <div><strong>What changed</strong><p>New search terms and location data show clear Toronto volume and Markham conversion quality.</p></div>
+    <div><strong>What we staged</strong><p>Only obvious Focus keyword additions were added to a paused review CSV.</p></div>
+    <div><strong>What we need</strong><p>Client confirmation on Focus, Keep, or Exclude for the review terms below.</p></div>
+  </div>
+</section>
+<section class="section pdf-page">
+  <div class="section-header" aria-hidden="true"></div>
+  <div class="subsection-header" aria-hidden="true"></div>
+  <div class="page-kicker">Search Terms And Regional Focus Confirmation</div>
+  <h1>Client Decision Page</h1>
+  <div class="page-body">
+    <p>Please mark each term as <strong>Focus</strong>, <strong>Keep</strong>, or <strong>Exclude</strong>. Focus means we should actively build around it. Keep means we should continue observing it. Exclude means we should block or avoid it.</p>
+    <p>We are not asking the client to confirm obvious combinations such as a known service in an approved city. The questions below are grouped around uncertainty, especially cities where service-area coverage is not confirmed.</p>
+    <table class="tax-table"><tr><th>Question group</th><th>Client question</th><th>Example searches</th><th>Default action</th></tr><tr><td>Regional keyword targeting</td><td>From the search term report, we picked up cities of interest for services. Please confirm if you&#x27;d like to Focus, Keep, or Exclude keyword targeting for these cities. This may also warrant building ad groups with unique ad copy for these cities.</td><td>emdr therapy markham; emdr therapy scarborough; inpatient trauma treatment ontario; pain solutions pickering</td><td>Discuss before building city-specific ad groups</td></tr><tr><td>Review unclear search intent cluster</td><td>These searches are not clearly tied to a confirmed service. Are any of these services you want us to pursue?</td><td>211 toronto mental health; dr sarno; fibromyalgia counselling; hf care asian mental health and well being north york</td><td>Review intent</td></tr><tr><td>Review grouped exclusions</td><td>These look like non-fit searches, so we plan to keep them out unless you see a service we should support.</td><td>the pain clinic toronto; best pain clinic toronto; interventional pain &amp; spine specialists of canada 1262 don mills rd 62 north york on m3b 2w7; wasser pain clinic toronto</td><td>Exclude or continue excluding</td></tr></table>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-value">3</div><div class="metric-label">Focus candidates</div></div>
+      <div class="metric-card"><div class="metric-value">31</div><div class="metric-label">Needs client review</div></div>
+      <div class="metric-card"><div class="metric-value">85</div><div class="metric-label">Exclude recommendations</div></div>
+      <div class="metric-card"><div class="metric-value">2</div><div class="metric-label">Paused additions staged</div></div>
+    </div>
+    <table class="tax-table"><tr><th>Search term</th><th>Draft</th><th>Suggested ad group</th><th>Clicks</th><th>Impr.</th><th>Conv.</th><th>Client reply</th></tr><tr><td>emdr therapy markham</td><td>Focus</td><td>Therapy - EMDR</td><td>2</td><td>3</td><td>1.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr therapy toronto</td><td>Focus</td><td>Therapy - EMDR</td><td>6</td><td>60</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>chronic pain psychologist near me</td><td>Focus</td><td>Therapy - Chronic Pain</td><td>2</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>ibs treatment</td><td>Review</td><td>Therapy - IBS &amp; Gut Health</td><td>1</td><td>14</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>pain reprocessing therapy toronto</td><td>Review</td><td>Therapy - Chronic Pain</td><td>1</td><td>9</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr therapy scarborough</td><td>Review</td><td>Therapy - EMDR</td><td>1</td><td>6</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>ibs homeopathy treatment</td><td>Review</td><td>Therapy - IBS &amp; Gut Health</td><td>1</td><td>6</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr toronto</td><td>Review</td><td>Therapy - EMDR</td><td>1</td><td>3</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>fibromyalgia counselling</td><td>Review</td><td>Therapy - Chronic Pain</td><td>1</td><td>3</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr near me</td><td>Review</td><td>Therapy - EMDR</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr online</td><td>Review</td><td>Therapy - EMDR</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr therapist near me</td><td>Review</td><td>Therapy - EMDR</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>gut directed hypnotherapy near me</td><td>Review</td><td>Therapy - IBS &amp; Gut Health</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>trauma hypnotherapy</td><td>Review</td><td>Therapy - Trauma &amp; PTSD</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>childhood trauma therapist toronto</td><td>Review</td><td>Therapy - Trauma &amp; PTSD</td><td>1</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>ibs flare up treatment</td><td>Review</td><td>Therapy - IBS &amp; Gut Health</td><td>1</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>inpatient trauma treatment ontario</td><td>Review</td><td>Therapy - Trauma &amp; PTSD</td><td>1</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>somatic therapy toronto</td><td>Review</td><td>Therapy - Trauma &amp; PTSD</td><td>0</td><td>10</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>best emdr therapist toronto</td><td>Review</td><td>Therapy - EMDR</td><td>0</td><td>7</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>gut health toronto</td><td>Review</td><td>Therapy - IBS &amp; Gut Health</td><td>0</td><td>6</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr therapy mississauga</td><td>Review</td><td>Therapy - EMDR</td><td>0</td><td>5</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr therapist toronto</td><td>Review</td><td>Therapy - EMDR</td><td>0</td><td>3</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>somatic therapy ontario</td><td>Review</td><td>Therapy - Trauma &amp; PTSD</td><td>0</td><td>3</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>trauma centre toronto</td><td>Review</td><td>Therapy - Trauma &amp; PTSD</td><td>0</td><td>3</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>deep brain reorienting toronto</td><td>Review</td><td>Therapy - DBR</td><td>0</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>ibs toronto</td><td>Review</td><td>Therapy - IBS &amp; Gut Health</td><td>0</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr mississauga</td><td>Review</td><td>Therapy - EMDR</td><td>0</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr therapy north york</td><td>Review</td><td>Therapy - EMDR</td><td>0</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr therapy ontario</td><td>Review</td><td>Therapy - EMDR</td><td>0</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr therapy vaughan</td><td>Review</td><td>Therapy - EMDR</td><td>0</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>emdr trauma therapy toronto</td><td>Review</td><td>Therapy - EMDR</td><td>0</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>somatic experiencing therapy toronto</td><td>Review</td><td>Therapy - Trauma &amp; PTSD</td><td>0</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>the gut centre toronto</td><td>Review</td><td>Therapy - IBS &amp; Gut Health</td><td>0</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>trauma therapy ontario</td><td>Review</td><td>Therapy - Trauma &amp; PTSD</td><td>0</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>the pain clinic toronto</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>2</td><td>11</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>best pain clinic toronto</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>2</td><td>6</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>interventional pain &amp; spine specialists of canada 1262 don mills rd 62 north york on m3b 2w7</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>2</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>wasser pain clinic toronto</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>2</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>chronic pain specialist</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>1</td><td>9</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>pain clinic</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>1</td><td>6</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>211 toronto mental health</td><td>Exclude</td><td>Therapy - Chronic Illness</td><td>1</td><td>5</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>trigger point injections near me</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>1</td><td>4</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>dr khetani pain clinic</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>jacobs pain clinic markham</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>kopi pain clinic kingston</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>pain specialist toronto</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>1</td><td>2</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>hf care asian mental health and well being north york</td><td>Exclude</td><td>Therapy - Chronic Illness</td><td>1</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>pain clinic mount sinai</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>1</td><td>1</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>pain clinic near me</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>0</td><td>15</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>chronic pain clinic near me</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>0</td><td>10</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>ibs clinic near me</td><td>Exclude</td><td>Therapy - IBS &amp; Gut Health</td><td>0</td><td>9</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>gut specialist toronto</td><td>Exclude</td><td>Therapy - IBS &amp; Gut Health</td><td>0</td><td>5</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>pain clinic brampton</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>0</td><td>5</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>pain clinic don mills</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>0</td><td>5</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr><tr><td>silver pain clinic north york</td><td>Exclude</td><td>Therapy - Chronic Pain</td><td>0</td><td>5</td><td>0.00</td><td>Reply Focus, Keep, or Exclude.</td></tr></table>
+  </div>
+</section>
+<section class="section pdf-page">
+  <div class="section-header" aria-hidden="true"></div>
+  <div class="subsection-header" aria-hidden="true"></div>
+  <div class="page-kicker">Regional Targeting</div>
+  <h1>City Signals And Bid Review</h1>
+  <div class="page-body">
+    <p>Toronto is the volume center. Markham has the strongest efficiency signal. Mississauga and North York have engagement but no conversions. Brampton, Vaughan, and Richmond Hill should stay under scrutiny until more conversion evidence appears.</p>
+    <table class="tax-table"><tr><th>Location</th><th>Campaign</th><th>Interactions</th><th>Conv.</th><th>Cost</th><th>Recommendation</th><th>Bid review</th></tr><tr><td>Mississauga, Ontario, Canada</td><td>ARC - Regional - Search</td><td>0</td><td>0.00</td><td>$0.00</td><td>Hold for review</td><td>No positive modifier yet.</td></tr><tr><td>Brampton, Ontario, Canada</td><td>ARC - Regional - Search</td><td>0</td><td>0.00</td><td>$0.00</td><td>Scrutinize</td><td>No positive modifier. Consider reduction if weak trend continues.</td></tr><tr><td>Markham, Ontario, Canada</td><td>ARC - Regional - Search</td><td>0</td><td>0.00</td><td>$0.00</td><td>Observe</td><td>None</td></tr><tr><td>Richmond Hill, Ontario, Canada</td><td>ARC - Regional - Search</td><td>0</td><td>0.00</td><td>$0.00</td><td>Scrutinize</td><td>No positive modifier. Consider reduction if weak trend continues.</td></tr><tr><td>20.0|mi|(43.761538,-79.411079)</td><td>ARC - Regional - Search</td><td>0</td><td>0.00</td><td>$0.00</td><td>Observe</td><td>None</td></tr><tr><td>Vaughan, Ontario, Canada</td><td>ARC - Regional - Search</td><td>0</td><td>0.00</td><td>$0.00</td><td>Scrutinize</td><td>No positive modifier. Consider reduction if weak trend continues.</td></tr><tr><td>Toronto, Ontario, Canada</td><td>ARC - Regional - Search</td><td>7</td><td>0.00</td><td>$95.67</td><td>Observe</td><td>None</td></tr><tr><td>Toronto, Ontario, Canada</td><td>ARC - Search - Services</td><td>93</td><td>2.00</td><td>$486.89</td><td>Core focus</td><td>Review modest positive modifier only after budget and CPA tolerance are confirmed.</td></tr><tr><td>Vaughan, Ontario, Canada</td><td>ARC - Search - Services</td><td>2</td><td>0.00</td><td>$5.28</td><td>Scrutinize</td><td>No positive modifier. Consider reduction if weak trend continues.</td></tr><tr><td>Mississauga, Ontario, Canada</td><td>ARC - Search - Services</td><td>6</td><td>0.00</td><td>$10.26</td><td>Hold for review</td><td>No positive modifier yet.</td></tr><tr><td>20.0|mi|North York, ON</td><td>ARC - Search - Services</td><td>5</td><td>0.00</td><td>$25.32</td><td>Hold for review</td><td>No positive modifier yet.</td></tr><tr><td>Richmond Hill, Ontario, Canada</td><td>ARC - Search - Services</td><td>2</td><td>0.00</td><td>$5.50</td><td>Scrutinize</td><td>No positive modifier. Consider reduction if weak trend continues.</td></tr><tr><td>Markham, Ontario, Canada</td><td>ARC - Search - Services</td><td>7</td><td>1.00</td><td>$40.87</td><td>Priority review</td><td>Review positive modifier or dedicated Markham service coverage.</td></tr><tr><td>Brampton, Ontario, Canada</td><td>ARC - Search - Services</td><td>2</td><td>0.00</td><td>$11.11</td><td>Scrutinize</td><td>No positive modifier. Consider reduction if weak trend continues.</td></tr></table>
+    <p>No postal-code targeting is recommended from this report. We should only add postal codes if Sky Therapies confirms exact preferred service areas.</p>
+  </div>
+</section>
+<section class="section pdf-page">
+  <div class="section-header" aria-hidden="true"></div>
+  <div class="subsection-header" aria-hidden="true"></div>
+  <div class="page-kicker">Regional Ad Group Drafts</div>
+  <h1>City-Specific Opportunities</h1>
+  <div class="page-body">
+    <p>These are review drafts, not live structure changes. They should become staged ad groups only after the client confirms each city and service line as Focus.</p>
+    
+<div class="ag-review-block">
+  <div class="ag-review-header">
+    <div><span class="ag-num">Client review</span><h3>Toronto EMDR Therapy</h3></div>
+    <div class="ag-url-badge">ARC - Regional - Search</div>
+  </div>
+  <div class="ag-review-body">
+    <div class="copy-section-title">Draft keywords</div>
+    <p>emdr therapy toronto, emdr therapist toronto, best emdr therapist toronto</p>
+    <div class="copy-section-title">Draft headline direction</div>
+    <p>Toronto EMDR Therapy | EMDR Support In Toronto | Trauma Therapy Toronto | Book EMDR Therapy Online | Private EMDR Support | Talk With A Trauma Therapist</p>
+    <div class="copy-section-title">Draft description direction</div>
+    <p>Online EMDR therapy for trauma support with Sky Therapies in Ontario. Private trauma-informed therapy for people seeking EMDR support in Toronto.</p>
+  </div>
+</div>
+
+<div class="ag-review-block">
+  <div class="ag-review-header">
+    <div><span class="ag-num">Priority review</span><h3>Markham EMDR Therapy</h3></div>
+    <div class="ag-url-badge">ARC - Regional - Search</div>
+  </div>
+  <div class="ag-review-body">
+    <div class="copy-section-title">Draft keywords</div>
+    <p>emdr therapy markham</p>
+    <div class="copy-section-title">Draft headline direction</div>
+    <p>Markham EMDR Therapy | EMDR Support Markham | Trauma Therapy Markham | Book EMDR Therapy Online | Private EMDR Support | Start With A Consult</p>
+    <div class="copy-section-title">Draft description direction</div>
+    <p>Markham produced a conversion signal, so this deserves client confirmation. Online EMDR and trauma therapy support for Ontario clients.</p>
+  </div>
+</div>
+
+<div class="ag-review-block">
+  <div class="ag-review-header">
+    <div><span class="ag-num">Client review</span><h3>Toronto Pain Reprocessing Therapy</h3></div>
+    <div class="ag-url-badge">ARC - Regional - Search</div>
+  </div>
+  <div class="ag-review-body">
+    <div class="copy-section-title">Draft keywords</div>
+    <p>pain reprocessing therapy toronto</p>
+    <div class="copy-section-title">Draft headline direction</div>
+    <p>Pain Reprocessing Toronto | Chronic Pain Therapy | Pain Support In Toronto | Online Pain Therapy | Support For Chronic Pain | Mind-Body Pain Support</p>
+    <div class="copy-section-title">Draft description direction</div>
+    <p>Pain reprocessing searches show Toronto intent and should be confirmed by the client. Online therapy support for chronic pain, stress, and mind-body patterns.</p>
+  </div>
+</div>
+
+<div class="ag-review-block">
+  <div class="ag-review-header">
+    <div><span class="ag-num">Client review</span><h3>Toronto Trauma Therapy</h3></div>
+    <div class="ag-url-badge">ARC - Regional - Search</div>
+  </div>
+  <div class="ag-review-body">
+    <div class="copy-section-title">Draft keywords</div>
+    <p>childhood trauma therapist toronto, trauma centre toronto, somatic therapy toronto</p>
+    <div class="copy-section-title">Draft headline direction</div>
+    <p>Toronto Trauma Therapy | Trauma Support Online | Childhood Trauma Support | Private Therapy Online | Talk With A Trauma Therapist | Support For PTSD Symptoms</p>
+    <div class="copy-section-title">Draft description direction</div>
+    <p>Toronto trauma searches are relevant, but service fit should be confirmed first. Online trauma-informed support for Ontario clients.</p>
+  </div>
+</div>
+
+  </div>
+</section>
+<section class="section pdf-page">
+  <div class="section-header" aria-hidden="true"></div>
+  <div class="subsection-header" aria-hidden="true"></div>
+  <div class="page-kicker">Sources</div>
+  <h1>Source Files And Platform References</h1>
+  <div class="page-body source-list">
+    <p><strong>Source files:</strong> search_terms_report_2026-05-04.csv, location_report_2026-05-04.csv, and the Sky Therapies Google Ads Editor export dated 2026-05-04.</p>
+    <ul>
+      <li><a href="https://support.google.com/google-ads/editor/answer/30564?hl=en">Google Ads Editor CSV import</a></li>
+      <li><a href="https://support.google.com/google-ads/editor/answer/57747?hl=en">Google Ads Editor CSV columns</a></li>
+      <li><a href="https://support.google.com/google-ads/editor/answer/30573?hl=en">Google Ads Editor location import</a></li>
+      <li><a href="https://support.google.com/google-ads/answer/2732132?hl=en">Google Ads bid adjustments</a></li>
+      <li><a href="../../../../docs/GOOGLE_ADS_AGENT_PROCESS.md">Google Ads Agent process</a></li>
+    </ul>
+    <table class="tax-table"><tr><th>Artifact</th><th>Path</th><th>Use</th></tr><tr><td>Search terms report</td><td>clients/skytherapies/reports/performance_inputs/search_terms_report_2026-05-04.csv</td><td>Search queries, match context, clicks, cost, and conversions.</td></tr><tr><td>Location report</td><td>clients/skytherapies/reports/performance_inputs/location_report_2026-05-04.csv</td><td>City and radius performance by campaign for regional recommendations.</td></tr><tr><td>Google Ads Editor export</td><td>clients/skytherapies/Skytherapies.ca++2_Campaigns+14_Ad groups+2026-05-04.csv</td><td>Current campaign, ad group, keyword, RSA, and targeting structure.</td></tr><tr><td>Focus additions delta</td><td>paused_focus_keyword_additions.csv</td><td>Only the new paused Phrase keyword additions from this review.</td></tr><tr><td>Full revised review export</td><td>skytherapies_google_ads_editor_staging_rev1_20260504_optimization.tsv</td><td>Current Sky export plus the paused Focus additions for review context.</td></tr></table>
+    <p><strong>Validation note:</strong> the full current Sky export contains pre-existing exact-match, negative-exact, and RSA copy-quality issues. The Focus additions delta is the clean upload candidate from this pass. The full revised export is retained for review context and should not be treated as launch-ready until the existing export issues are reconciled.</p>
+    <p>The revised CSV is for Google Ads Editor review only. It is not a direct launch file and does not push changes to Google Ads.</p>
+  </div>
+</section>
+</body>
+</html>

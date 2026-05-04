@@ -1,0 +1,149 @@
+{
+  "csv_file": "clients/skytherapies/build/2026-05-04_search_optimization/paused_focus_keyword_additions.csv",
+  "success": true,
+  "error": null,
+  "validation_report": {
+    "csv_file": "clients/skytherapies/build/2026-05-04_search_optimization/paused_focus_keyword_additions.csv",
+    "timestamp": "2026-05-04T12:22:30.578514",
+    "total_issues": 3,
+    "issues_fixed": 0,
+    "severity_breakdown": {
+      "critical": 0,
+      "error": 3,
+      "warning": 0,
+      "info": 0
+    },
+    "level_breakdown": {
+      "campaign_rows_present": 1,
+      "rsa_rows_present": 1,
+      "location_rows_present": 1
+    },
+    "final_status": "FAIL",
+    "issues": [
+      {
+        "level": "campaign_rows_present",
+        "severity": "error",
+        "row_number": 0,
+        "column": "",
+        "issue_type": "campaign_rows_present",
+        "message": "No Search campaign rows were found.",
+        "value": null,
+        "auto_fixable": false
+      },
+      {
+        "level": "rsa_rows_present",
+        "severity": "error",
+        "row_number": 0,
+        "column": "",
+        "issue_type": "rsa_rows_present",
+        "message": "No responsive search ad rows were found.",
+        "value": null,
+        "auto_fixable": false
+      },
+      {
+        "level": "location_rows_present",
+        "severity": "error",
+        "row_number": 0,
+        "column": "",
+        "issue_type": "location_rows_present",
+        "message": "No location or radius targeting rows were found.",
+        "value": null,
+        "auto_fixable": false
+      }
+    ],
+    "fixes_applied": [],
+    "active_staging": {
+      "status": "fail",
+      "source_csv": "clients/skytherapies/build/2026-05-04_search_optimization/paused_focus_keyword_additions.csv",
+      "encoding": "utf-16",
+      "rows": 2,
+      "headers": 136,
+      "campaigns": [
+        "ARC - Search - Services"
+      ],
+      "ad_groups": 0,
+      "counts": {
+        "keyword_rows": 2
+      },
+      "keyword_criterion_types": {
+        "Phrase": 2
+      },
+      "issue_counts": {
+        "error": 3
+      },
+      "issues": [
+        {
+          "severity": "error",
+          "message": "No Search campaign rows were found.",
+          "row": null,
+          "column": null,
+          "value": null,
+          "rule": "campaign_rows_present"
+        },
+        {
+          "severity": "error",
+          "message": "No responsive search ad rows were found.",
+          "row": null,
+          "column": null,
+          "value": null,
+          "rule": "rsa_rows_present"
+        },
+        {
+          "severity": "error",
+          "message": "No location or radius targeting rows were found.",
+          "row": null,
+          "column": null,
+          "value": null,
+          "rule": "location_rows_present"
+        }
+      ]
+    }
+  },
+  "final_status": "FAIL",
+  "active_staging_report": {
+    "status": "fail",
+    "source_csv": "clients/skytherapies/build/2026-05-04_search_optimization/paused_focus_keyword_additions.csv",
+    "encoding": "utf-16",
+    "rows": 2,
+    "headers": 136,
+    "campaigns": [
+      "ARC - Search - Services"
+    ],
+    "ad_groups": 0,
+    "counts": {
+      "keyword_rows": 2
+    },
+    "keyword_criterion_types": {
+      "Phrase": 2
+    },
+    "issue_counts": {
+      "error": 3
+    },
+    "issues": [
+      {
+        "severity": "error",
+        "message": "No Search campaign rows were found.",
+        "row": null,
+        "column": null,
+        "value": null,
+        "rule": "campaign_rows_present"
+      },
+      {
+        "severity": "error",
+        "message": "No responsive search ad rows were found.",
+        "row": null,
+        "column": null,
+        "value": null,
+        "rule": "rsa_rows_present"
+      },
+      {
+        "severity": "error",
+        "message": "No location or radius targeting rows were found.",
+        "row": null,
+        "column": null,
+        "value": null,
+        "rule": "location_rows_present"
+      }
+    ]
+  }
+}
