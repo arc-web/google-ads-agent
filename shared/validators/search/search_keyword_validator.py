@@ -7,9 +7,8 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from typing import Any
 
+from shared.rebuild.match_type_policy import evaluate_match_type
 
-ALLOWED_KEYWORD_TYPES = {"Phrase", "Negative Phrase"}
-DISALLOWED_KEYWORD_TYPES = {"Broad", "Exact"}
 VALID_KEYWORD_STATUSES = {"Enabled", "Paused", "Removed"}
 MAX_KEYWORD_LENGTH = 80
 MAX_POSITIVE_KEYWORDS_PER_AD_GROUP = 20_000
@@ -37,16 +36,17 @@ class SearchKeywordValidator:
     Current agent rules:
     - Keyword text stays plain in the Keyword column.
     - Match type belongs in Criterion Type.
-    - Active positive keywords use Phrase.
-    - Campaign-level or ad-group-level negatives use Negative Phrase.
-    - Broad and Exact are not active unless the repo process changes later.
+    - New positive keywords use Phrase by default.
+    - Campaign-level or ad-group-level new negatives use Negative Phrase.
+    - Source-proven existing Exact can be preserved in revision and optimization modes.
+    - Broad is blocked in every mode.
     """
 
     def __init__(self, validation_rules: dict[str, Any] | None = None):
         """Initialize SearchKeywordValidator with optional rule overrides."""
         rules = validation_rules or {}
-        self.allowed_keyword_types = set(rules.get("allowed_keyword_types", ALLOWED_KEYWORD_TYPES))
-        self.disallowed_keyword_types = set(rules.get("disallowed_keyword_types", DISALLOWED_KEYWORD_TYPES))
+        self.match_type_mode = str(rules.get("match_type_mode", "new_rebuild"))
+        self.keyword_origin_map = dict(rules.get("keyword_origin_map", {}))
         self.valid_keyword_statuses = set(rules.get("valid_keyword_statuses", VALID_KEYWORD_STATUSES))
         self.max_keyword_length = int(rules.get("max_keyword_length", MAX_KEYWORD_LENGTH))
         self.max_positive_keywords_per_ad_group = int(
@@ -135,18 +135,26 @@ class SearchKeywordValidator:
                     'Use "Phrase" or "Negative Phrase".',
                 )
             )
-        elif criterion_type in self.disallowed_keyword_types:
-            issues.append(
-                self._issue(
-                    "critical",
-                    row_number,
-                    "Criterion Type",
-                    "disallowed_match_type",
-                    "Broad and exact keyword match types are not active in the current workflow.",
-                    'Use "Phrase" unless the repo process is deliberately changed.',
-                )
+        else:
+            match_decision = evaluate_match_type(
+                row,
+                mode=self.match_type_mode,
+                origin_map=self.keyword_origin_map,
             )
-        elif criterion_type not in self.allowed_keyword_types:
+            severity = "critical" if match_decision.status == "error" else "warning"
+            if match_decision.status != "pass":
+                issues.append(
+                    self._issue(
+                        severity,
+                        row_number,
+                        "Criterion Type",
+                        match_decision.rule,
+                        match_decision.message,
+                        'Use "Phrase" for new additions, or attach source proof for preserved existing Exact.',
+                    )
+                )
+
+        if criterion_type and criterion_type not in {"Phrase", "Exact", "Negative Phrase", "Negative Exact", "Broad"}:
             issues.append(
                 self._issue(
                     "critical",
@@ -154,11 +162,11 @@ class SearchKeywordValidator:
                     "Criterion Type",
                     "unsupported_criterion_type",
                     f'Criterion Type "{criterion_type}" is not supported by the current workflow.',
-                    f"Use one of: {', '.join(sorted(self.allowed_keyword_types))}.",
+                    'Use "Phrase" for new positives or "Negative Phrase" for new negatives.',
                 )
             )
 
-        if criterion_type != "Negative Phrase" and not ad_group:
+        if not criterion_type.startswith("Negative") and not ad_group:
             issues.append(
                 self._issue(
                     "critical",
@@ -253,7 +261,7 @@ class SearchKeywordValidator:
             criterion_type = str(row.get("Criterion Type", "") or "").strip()
             ad_group = self._ad_group_value(row) or "(campaign-level negative)"
 
-            if criterion_type == "Negative Phrase":
+            if criterion_type.startswith("Negative"):
                 keywords_by_adgroup[ad_group]["negative"].append(keyword)
             else:
                 keywords_by_adgroup[ad_group]["positive"].append(keyword)
@@ -301,7 +309,7 @@ class SearchKeywordValidator:
                     )
                 )
 
-        if keyword_counts and keyword_counts["Phrase"] == 0:
+        if keyword_counts and self.match_type_mode == "new_rebuild" and keyword_counts["Phrase"] == 0:
             issues.append(
                 self._issue(
                     "critical",
@@ -310,6 +318,17 @@ class SearchKeywordValidator:
                     "no_phrase_keywords",
                     "No active phrase keyword rows were found.",
                     'Add positive keyword rows with Criterion Type "Phrase".',
+                )
+            )
+        elif keyword_counts and self.match_type_mode != "new_rebuild" and not (keyword_counts["Phrase"] or keyword_counts["Exact"]):
+            issues.append(
+                self._issue(
+                    "critical",
+                    0,
+                    "Criterion Type",
+                    "no_positive_keywords",
+                    "No positive keyword rows were found.",
+                    'Preserve source-proven Exact or add Phrase keyword rows before activating the ad group.',
                 )
             )
 

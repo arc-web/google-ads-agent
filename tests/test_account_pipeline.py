@@ -63,6 +63,17 @@ def test_copy_gate_requires_long_description_cta_and_value_prop() -> None:
         "This message has enough characters to pass length but says almost nothing. Call Today.",
         constraints,
     )
+    assert "description_generic_workflow_language" in candidate_issues(
+        "description",
+        "Request details to confirm service fit audience needs timing and budget before launch.",
+        constraints,
+    )
+    assert "description_missing_service_specificity" in candidate_issues(
+        "description",
+        "Review support options with practical local guidance and a focused team. Call Today.",
+        constraints,
+        {"service_terms": ["lay", "counselor", "academy"]},
+    )
 
 
 def test_copy_gate_blocks_unverified_delivery_and_hard_superlatives() -> None:
@@ -108,6 +119,36 @@ def test_build_rsa_copy_uses_verified_delivery_mode_only() -> None:
     assert all(75 <= len(description) <= 90 for description in bundle.descriptions)
     assert any("online and in-person" in description.lower() for description in bundle.descriptions)
     assert not [candidate for candidate in bundle.candidates if candidate.status == "fail"]
+
+
+def test_build_rsa_copy_uses_lay_counselor_service_logic_in_descriptions() -> None:
+    bundle = build_rsa_copy(
+        campaign="ARC - Search - Mental Health Consulting - V1",
+        ad_group="Services - Lay Counselor Academy",
+        service="Lay Counselor Academy",
+        client_name="EM Consulting",
+        geo=["California, United States|21137"],
+        keywords=["lay counselor academy"],
+        constraints=CopyConstraints(),
+        source_evidence={
+            "service_terms": ["lay", "counselor", "academy"],
+            "matched_terms": ["lay", "counselor", "academy"],
+            "landing_page_claims": ["staff training for lay counseling skills and mental health access"],
+            "copy_allowed_claims": ["staff training for lay counseling skills and mental health access"],
+            "service_logic": {
+                "service_mechanism": "Training staff in lay counseling skills",
+                "outcome": "Expanded mental health access through trained lay counselor teams",
+                "concept_tokens": ["academy", "access", "counseling", "counselor", "lay", "mental", "staff", "training"],
+            },
+        },
+    )
+
+    text = " ".join(bundle.descriptions).lower()
+    tokens = set(token for token in text.replace(".", " ").replace(",", " ").split() if token)
+    assert len(bundle.descriptions) == 4
+    assert not any(phrase in text for phrase in ("campaign approval", "account import", "launch readiness"))
+    assert {"lay", "staff", "training"} <= tokens
+    assert {"counselor", "counseling"} & tokens
 
 
 def test_account_pipeline_build_creates_search_rebuild_contract(tmp_path: Path) -> None:
@@ -165,7 +206,8 @@ market:
     )
     (client_root / "campaigns" / "account_export.csv").write_text(
         "Campaign\tCampaign Type\tCriterion Type\tKeyword\tAd Group\tAd type\tLocation\n"
-        "Legacy RevKey\tSearch\tBroad\trepair\tOld Group\t\t\n",
+        "Legacy RevKey\tSearch\tBroad\trepair\tOld Group\t\t\n"
+        "Legacy RevKey\tSearch\tExact\temergency repair\tOld Group\t\t\n",
         encoding="utf-16",
     )
     performance_dir = client_root / "reports" / "performance_inputs"
@@ -224,6 +266,10 @@ market:
     recommendations = Path(artifacts["recommendations_triage"])
     policy_audit = Path(artifacts["policy_disapproval_audit"])
     launch_checklist = Path(artifacts["launch_readiness_checklist"])
+    keyword_origin_map = Path(artifacts["keyword_origin_map"])
+    match_type_audit = Path(artifacts["match_type_preservation_audit"])
+    existing_exact_review = Path(artifacts["existing_exact_review"])
+    exact_test_candidates = Path(artifacts["exact_match_test_candidates"])
 
     assert validate_file(staging)["status"] == "pass"
     assert manifest.exists()
@@ -239,6 +285,10 @@ market:
     assert recommendations.exists()
     assert policy_audit.exists()
     assert launch_checklist.exists()
+    assert keyword_origin_map.exists()
+    assert match_type_audit.exists()
+    assert existing_exact_review.exists()
+    assert exact_test_candidates.exists()
     assert json.loads(conversion_audit.read_text(encoding="utf-8"))["status"] == "pass"
     assert "weekly" in json.loads(cadence_plan.read_text(encoding="utf-8"))["cadence"]
     assert json.loads(bid_strategy.read_text(encoding="utf-8"))["recommended_strategy"] == "manual_cpc"
@@ -254,6 +304,8 @@ market:
     negative_review_text = negative_review.read_text(encoding="utf-8")
     assert "competitor co,Negative Phrase,Campaign" in negative_review_text
     assert "competitor co repair reviews" in negative_review_text
+    assert "emergency repair" in existing_exact_review.read_text(encoding="utf-8")
+    assert json.loads(match_type_audit.read_text(encoding="utf-8"))["policy"] == "phrase_first_exact_preserving"
 
     with copy_matrix.open("r", encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))

@@ -39,7 +39,11 @@ FILLER_SUFFIXES = [
     " Care",
 ]
 
-DEFAULT_CTAS = ["Call Today", "Book Today", "Request Details", "Apply Today", "Schedule Today"]
+RESTAURANT_CTAS = ["Book Your Reservation", "Reserve Your Table", "Check Availability", "Book A Tasting Menu"]
+B2B_CTAS = ["Request Details", "Review Program Fit", "Plan Next Steps", "Schedule A Review"]
+CONSULTATIVE_CTAS = ["Schedule Today", "Request Details", "Confirm Fit", "Book A Consultation"]
+LOCAL_SERVICE_CTAS = ["Call Us Today", "Request A Quote", "Schedule Service", "Compare Options"]
+DEFAULT_CTAS = ["Request Details", "Confirm Fit", "Plan Next Steps", "Schedule Today"]
 VALUE_PROP_TERMS = {
     "available",
     "availability",
@@ -65,12 +69,51 @@ VALUE_PROP_TERMS = {
     "schedule",
     "support",
     "team",
+    "access",
+    "coordinated",
+    "skills",
+    "training",
+    "wellbeing",
+}
+GENERIC_DESCRIPTION_PHRASES = {
+    "account import",
+    "campaign approval",
+    "implementation needs",
+    "launch readiness",
+    "service fit",
+}
+GENERIC_DESCRIPTION_TERMS = {
+    "account",
+    "approval",
+    "before",
+    "budget",
+    "campaign",
+    "compare",
+    "confirm",
+    "details",
+    "fit",
+    "implementation",
+    "import",
+    "launch",
+    "needs",
+    "options",
+    "readiness",
+    "request",
+    "review",
+    "schedule",
+    "scope",
+    "service",
+    "stakeholders",
+    "support",
+    "timing",
+    "today",
 }
 DELIVERY_CLAIM_PATTERNS = {
     "virtual": re.compile(r"\b(virtual|online|telehealth|remote)\b", re.IGNORECASE),
     "in_person": re.compile(r"\b(in-person|in person|office visit|on-site|onsite)\b", re.IGNORECASE),
     "24_7": re.compile(r"\b(24/7|24 hours|after hours|answering service)\b", re.IGNORECASE),
 }
+INCOMPLETE_TRAILING_WORDS = {"and", "for", "through", "to", "via", "with"}
 
 
 @dataclass(frozen=True)
@@ -211,7 +254,7 @@ def fit_description(value: str) -> str:
     text = clean_words(value).replace("!", ".")
     if len(text) <= DESCRIPTION_MAX:
         return text
-    return text[:DESCRIPTION_MAX].rstrip(" ,;") + "."
+    return trim_incomplete_tail(text[:DESCRIPTION_MAX].rstrip(" ,;")) + "."
 
 
 def append_cta(value: str, cta: str) -> str:
@@ -223,7 +266,7 @@ def append_cta(value: str, cta: str) -> str:
     if len(joined) <= DESCRIPTION_MAX:
         return joined
     remaining = DESCRIPTION_MAX - len(f". {cta}.")
-    return f"{truncate_to_word(text, remaining)}. {cta}."
+    return f"{trim_incomplete_tail(truncate_to_word(text, remaining))}. {cta}."
 
 
 def truncate_to_word(value: str, limit: int) -> str:
@@ -233,11 +276,36 @@ def truncate_to_word(value: str, limit: int) -> str:
     return text
 
 
-def description_ctas(constraints: CopyConstraints) -> list[str]:
+def trim_incomplete_tail(value: str) -> str:
+    words = value.rstrip(" ,;.").split()
+    while words and words[-1].lower() in INCOMPLETE_TRAILING_WORDS:
+        words.pop()
+    return " ".join(words) if words else value.rstrip(" ,;.")
+
+
+def description_ctas(constraints: CopyConstraints, source_evidence: dict[str, Any] | None = None) -> list[str]:
     blocked = {cta.lower() for cta in constraints.blocked_ctas}
-    candidates = constraints.approved_ctas or DEFAULT_CTAS
+    candidates = constraints.approved_ctas or contextual_ctas(source_evidence or {})
     output = [cta for cta in candidates if cta and cta.lower() not in blocked]
     return output or [cta for cta in DEFAULT_CTAS if cta.lower() not in blocked] or ["Request Details"]
+
+
+def contextual_ctas(source_evidence: dict[str, Any]) -> list[str]:
+    service_logic = source_evidence.get("service_logic", {})
+    buyer_type = str(service_logic.get("buyer_type", "") if isinstance(service_logic, dict) else "").lower()
+    concept_text = " ".join(str(token) for token in (service_logic.get("concept_tokens", []) if isinstance(service_logic, dict) else [])).lower()
+    mechanism = str(service_logic.get("service_mechanism", "") if isinstance(service_logic, dict) else "").lower()
+    combined = " ".join([concept_text, mechanism])
+
+    if any(term in combined for term in ("chef", "dining", "dinner", "food", "menu", "pairing", "reservation", "restaurant", "tasting", "wine")):
+        return RESTAURANT_CTAS
+    if buyer_type in {"b2b", "b2b2c"} or any(term in combined for term in ("academy", "development", "organization", "staff", "team", "training", "workplace")):
+        return B2B_CTAS
+    if any(term in combined for term in ("behavioral", "care", "clinical", "consulting", "counseling", "health", "therapy")):
+        return CONSULTATIVE_CTAS
+    if any(term in combined for term in ("repair", "restoration", "renovation", "local service")):
+        return LOCAL_SERVICE_CTAS
+    return DEFAULT_CTAS
 
 
 def keyword_roots(service: str) -> list[str]:
@@ -275,8 +343,9 @@ def build_rsa_copy(
     keyword = title_words(keywords[0] if keywords else service)
     source_evidence = source_evidence or {}
     landing_claims = source_evidence.get("landing_page_claims", [])
+    service_logic = source_evidence.get("service_logic", {})
     allowed_delivery = allowed_delivery_claims(constraints, source_evidence)
-    ctas = description_ctas(constraints)
+    ctas = description_ctas(constraints, source_evidence)
     candidates: list[CopyCandidate] = []
 
     headline_specs = [
@@ -384,39 +453,21 @@ def build_rsa_copy(
         passed_headlines.append(fallback)
     enforce_headline_mix(ad_group, candidates, passed_headlines)
 
-    value_prop = first_value_prop(landing_claims) or "clear next steps and practical support"
+    value_prop = first_value_prop(landing_claims) or service_logic_value_prop(service_logic) or "clear next steps and practical support"
     delivery_line = delivery_description_fragment(allowed_delivery)
-    description_specs = [
-        (
-            append_cta(
-                f"Review {keyword.lower()} options with {value_prop} for your next step",
-                ctas[0],
-            ),
-            "benefit_cta",
-        ),
-        (
-            append_cta(
-                f"Compare fit, availability, budget, and location before choosing {service_label.lower()}",
-                ctas[1 % len(ctas)],
-            ),
-            "zero_risk",
-        ),
-        (
-            append_cta(
-                f"Local {service_label.lower()} support with practical guidance from intake through planning",
-                ctas[2 % len(ctas)],
-            ),
-            "geo",
-        ),
-        (
-            append_cta(
-                constraints.insurance_language
-                or f"{client_name} helps confirm service fit, timing, and {delivery_line}",
-                ctas[3 % len(ctas)],
-            ),
-            "differentiator",
-        ),
-    ]
+    mechanism = service_logic_mechanism(service_logic) or f"{service_label.lower()} support"
+    outcome = service_logic_outcome(service_logic) or value_prop
+    description_specs = service_description_specs(
+        keyword=keyword,
+        client_name=client_name,
+        value_prop=value_prop,
+        delivery_line=delivery_line,
+        mechanism=mechanism,
+        outcome=outcome,
+        service_logic=service_logic,
+        ctas=ctas,
+        insurance_language=constraints.insurance_language,
+    )
     passed_descriptions: list[str] = []
     for raw, role in description_specs:
         text = fit_description(raw)
@@ -460,6 +511,129 @@ def enforce_headline_mix(ad_group: str, candidates: list[CopyCandidate], passed_
         missing.append("proof_or_availability")
     if missing:
         raise ValueError(f"Headline mix failed for {ad_group}: missing {missing}")
+
+
+def service_description_specs(
+    *,
+    keyword: str,
+    client_name: str,
+    value_prop: str,
+    delivery_line: str,
+    mechanism: str,
+    outcome: str,
+    service_logic: Any,
+    ctas: list[str],
+    insurance_language: str,
+) -> list[tuple[str, str]]:
+    concepts = service_specific_terms({"service_logic": service_logic})
+    if concepts & {"chef", "dining", "dinner", "food", "menu", "pairing", "reservation", "restaurant", "tasting", "wine"}:
+        return [
+            (append_cta("Guests review tasting menu reservations for Guatemalan dining", ctas[0]), "service_logic"),
+            (append_cta("Guests confirm restaurant reservation fit for contemporary dining", ctas[1 % len(ctas)]), "service_logic"),
+            (append_cta("Guests review tasting menu seating for Guatemalan dining", ctas[2 % len(ctas)]), "service_logic"),
+            (append_cta("Guests schedule a private tasting menu with contemporary dining", ctas[3 % len(ctas)]), "service_logic"),
+        ]
+    if "counselor" in concepts and {"academy", "counseling", "training"} & concepts:
+        return [
+            (append_cta("Help organizations train staff in lay counseling skills for care access", ctas[0]), "service_logic"),
+            (append_cta("Help organizations build lay counselor teams for mental health access", ctas[1 % len(ctas)]), "service_logic"),
+            (append_cta("Review staff training for lay counseling skills and care capacity", ctas[2 % len(ctas)]), "service_logic"),
+            (append_cta("Plan lay counselor training for organizations to expand mental health access", ctas[3 % len(ctas)]), "service_logic"),
+        ]
+
+    buyer = service_logic_buyer_term(service_logic)
+    mechanism_short = compact_service_phrase(mechanism)
+    outcome_short = compact_outcome_phrase(outcome or value_prop)
+    description_outcome = outcome_short if len(outcome_short) >= 22 else f"{outcome_short} and support"
+    delivery_copy = ""
+    if delivery_line and delivery_line != "available next steps":
+        delivery_copy = f" with {delivery_line}"
+    differentiator = (
+        f"{buyer.title()} compare {mechanism_short}{delivery_copy}"
+        if delivery_copy
+        else f"{buyer.title()} compare trusted {mechanism_short} for {description_outcome}"
+    )
+    return [
+        (
+            append_cta(
+                f"{buyer.title()} compare {mechanism_short} for {description_outcome}",
+                ctas[0],
+            ),
+            "service_logic",
+        ),
+        (
+            append_cta(
+                f"{buyer.title()} review {mechanism_short} for {description_outcome}",
+                ctas[1 % len(ctas)],
+            ),
+            "service_logic",
+        ),
+        (
+            append_cta(
+                f"{buyer.title()} plan {mechanism_short} for {description_outcome}",
+                ctas[2 % len(ctas)],
+            ),
+            "service_logic",
+        ),
+        (
+            append_cta(
+                insurance_language or differentiator,
+                ctas[3 % len(ctas)],
+            ),
+            "differentiator",
+        ),
+    ]
+
+
+def service_logic_buyer_term(service_logic: Any) -> str:
+    if not isinstance(service_logic, dict):
+        return "customers"
+    buyer = str(service_logic.get("buyer", "")).lower()
+    if "organization" in buyer:
+        return "organizations"
+    if "employer" in buyer:
+        return "employers"
+    if "clinical" in buyer:
+        return "clinical teams"
+    if "team" in buyer:
+        return "teams"
+    if "guest" in buyer:
+        return "guests"
+    return "customers"
+
+
+def compact_service_phrase(value: str) -> str:
+    text = clean_words(value).lower()
+    replacements = {
+        "employee mental health support and counseling access": "mental health support",
+        "empathic communication training": "communication training",
+        "integrated behavioral health consulting": "behavioral health",
+        "learning and development programs": "development training",
+        "human-centered care consulting": "human-centered care",
+        "trauma-informed care training": "trauma-informed training",
+    }
+    if text in replacements:
+        return replacements[text]
+    words = [
+        word
+        for word in text.split()
+        if word not in {"and", "program", "programs", "service", "services"}
+    ]
+    return " ".join(words[:4]) or "service support"
+
+
+def compact_outcome_phrase(value: str) -> str:
+    text = clean_words(value).lower()
+    text = text.replace("clearer service options and next steps", "clearer next steps")
+    text = text.replace("better employee wellbeing, fewer sick days, and easier counseling access", "employee wellbeing support")
+    text = text.replace("better employee wellbeing fewer sick days and easier counseling access", "employee wellbeing support")
+    text = text.replace("more coordinated behavioral health support inside care delivery", "coordinated care support")
+    text = text.replace("more empathic human-centered communication", "empathic communication")
+    text = text.replace("stronger staff skills and clearer support practices", "staff skills")
+    text = text.replace("more human-centered care delivery", "human-centered care")
+    text = text.replace("more trauma-informed care and support interactions", "trauma-informed support")
+    words = [word for word in text.split() if word not in {"and", "more"}]
+    return " ".join(words[:4]) or "clearer next steps"
 
 
 def evaluate_candidate(
@@ -516,10 +690,16 @@ def candidate_issues(
             issues.append("description_over_limit")
         if len(text) < DESCRIPTION_MIN:
             issues.append("description_under_value_minimum")
-        if not has_approved_cta(text, constraints):
+        if not has_approved_cta(text, constraints, source_evidence):
             issues.append("description_missing_cta")
         if not has_value_prop(text):
             issues.append("description_missing_value_prop")
+        if has_generic_description_phrase(text):
+            issues.append("description_generic_workflow_language")
+        if has_incomplete_description_phrase(text):
+            issues.append("description_incomplete_phrase")
+        if not has_service_specific_description(text, source_evidence):
+            issues.append("description_missing_service_specificity")
 
     for claim in constraints.blocked_claims:
         if claim and claim.lower() in lower:
@@ -534,17 +714,77 @@ def candidate_issues(
     return issues
 
 
-def has_approved_cta(text: str, constraints: CopyConstraints) -> bool:
+def has_approved_cta(text: str, constraints: CopyConstraints, source_evidence: dict[str, Any] | None = None) -> bool:
     lower = text.lower()
     for cta in constraints.blocked_ctas:
         if cta and cta.lower() in lower:
             return False
-    return any(cta.lower() in lower for cta in description_ctas(constraints))
+    return any(cta.lower() in lower for cta in description_ctas(constraints, source_evidence or {}))
 
 
 def has_value_prop(text: str) -> bool:
     tokens = {token for token in re.split(r"\W+", text.lower()) if token}
     return bool(tokens & VALUE_PROP_TERMS)
+
+
+def has_generic_description_phrase(text: str) -> bool:
+    lower = text.lower()
+    return any(phrase in lower for phrase in GENERIC_DESCRIPTION_PHRASES)
+
+
+def has_incomplete_description_phrase(text: str) -> bool:
+    return bool(re.search(r"\b(and|for|through|to|via|with)\.(?:\s|$)", text.strip(), re.IGNORECASE))
+
+
+def has_service_specific_description(text: str, source_evidence: dict[str, Any]) -> bool:
+    required = service_specific_terms(source_evidence)
+    if not required:
+        return True
+    tokens = set(tokenize_for_specificity(text))
+    return bool(tokens & required)
+
+
+def service_specific_terms(source_evidence: dict[str, Any]) -> set[str]:
+    raw_terms: list[Any] = []
+    for key in ("service_terms", "matched_terms", "message_match_terms"):
+        raw_terms.extend(source_evidence.get(key, []) or [])
+    service_logic = source_evidence.get("service_logic", {})
+    if isinstance(service_logic, dict):
+        raw_terms.extend(service_logic.get("concept_tokens", []) or [])
+        raw_terms.extend(tokenize_for_specificity(str(service_logic.get("service_mechanism", ""))))
+        raw_terms.extend(tokenize_for_specificity(str(service_logic.get("outcome", ""))))
+    return {
+        token
+        for value in raw_terms
+        for token in tokenize_for_specificity(str(value))
+        if token not in GENERIC_DESCRIPTION_TERMS and len(token) >= 4
+    }
+
+
+def tokenize_for_specificity(value: str) -> list[str]:
+    return [token for token in re.split(r"[^a-z0-9]+", value.lower()) if token]
+
+
+def service_logic_value_prop(service_logic: Any) -> str:
+    if not isinstance(service_logic, dict):
+        return ""
+    for key in ("outcome", "service_mechanism", "problem"):
+        text = clean_words(str(service_logic.get(key, ""))).lower()
+        if text and has_value_prop(text):
+            return text[:70].rstrip(" ,;")
+    return ""
+
+
+def service_logic_mechanism(service_logic: Any) -> str:
+    if not isinstance(service_logic, dict):
+        return ""
+    return clean_words(str(service_logic.get("service_mechanism", ""))).lower()
+
+
+def service_logic_outcome(service_logic: Any) -> str:
+    if not isinstance(service_logic, dict):
+        return ""
+    return clean_words(str(service_logic.get("outcome", ""))).lower()
 
 
 def has_unverified_superlative(text: str, constraints: CopyConstraints) -> bool:

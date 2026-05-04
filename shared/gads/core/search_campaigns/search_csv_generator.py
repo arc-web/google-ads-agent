@@ -2,8 +2,9 @@
 
 This module replaces an older client-shaped generator with a small shared helper
 that writes the active staging format and validates through the rebuild
-staging validator. It does not activate API upload, PMAX, broad match, or exact
-match behavior.
+staging validator. New generated keywords stay phrase-first. Existing exact
+preservation is handled by validator modes and sidecar artifacts, not by adding
+new exact rows to generated Editor CSVs.
 """
 
 from __future__ import annotations

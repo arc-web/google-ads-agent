@@ -46,6 +46,7 @@ from shared.rebuild.department_standards import (
     write_launch_readiness_checklist,
     write_recommendations_csv,
 )
+from shared.rebuild.match_type_policy import write_match_type_sidecars
 from shared.rebuild.provider_token_validator import DEFAULT_BLOCKED_FIELDS, token_re, validate_csv
 from shared.rebuild.revision_feedback import build_revised_staging_csv, write_revision_artifacts
 from shared.rebuild.search_term_review import build_search_term_review, region_name
@@ -235,11 +236,14 @@ def snapshot_account(client_root: Path, build_dir: Path) -> dict[str, Any]:
         "provider_tokens_detected": provider_tokens,
     }
     (build_dir / "account_snapshot.json").write_text(json.dumps(snapshot, indent=2) + "\n", encoding="utf-8")
+    write_match_type_sidecars(build_dir, source_rows=rows)
     audit = {
         "status": "complete",
         "search_campaigns_detected": counts.get("search_campaign_rows", 0),
         "phrase_keywords_detected": counts.get("criterion_type:Phrase", 0),
-        "broad_or_exact_detected": counts.get("criterion_type:Broad", 0) + counts.get("criterion_type:Exact", 0),
+        "broad_detected": counts.get("criterion_type:Broad", 0),
+        "existing_exact_detected": counts.get("criterion_type:Exact", 0),
+        "existing_negative_exact_detected": counts.get("criterion_type:Negative Exact", 0),
         "provider_tokens_detected": provider_tokens,
     }
     (build_dir / "account_audit.json").write_text(json.dumps(audit, indent=2) + "\n", encoding="utf-8")
@@ -878,8 +882,15 @@ def write_human_review(
         f"- Ad groups: `{len(plans)}`",
         f"- Phrase keywords: `{sum(len(plan.keywords) for plan in plans)}`",
         "- Network: `Google search` only",
-        "- Match type: `Phrase` only",
+        "- Match type: new keyword coverage is `Phrase` first; source-proven existing `Exact` can be preserved in revision or optimization review.",
         "- Rows are paused for Google Ads Editor review.",
+        "",
+        "## Match Type Review",
+        "",
+        "- Preserved exact keywords: see `existing_exact_review.csv` when source account export includes exact rows.",
+        "- Exact keywords recommended for review or removal: keep in the sidecar review, not as automatic deletions.",
+        "- New phrase additions: staged in the Google Ads Editor CSV.",
+        "- Future exact tests: stage candidates in `exact_match_test_candidates.csv`; do not add them to staging without approval.",
         "",
         "## Human Review",
         "",
@@ -1107,6 +1118,10 @@ def run_build(profile: ClientProfile, client_root: Path, build_dir: Path, build_
         "recommendations_triage_summary": strategy_paths["recommendations_triage_summary"],
         "policy_disapproval_audit": strategy_paths["policy_disapproval_audit"],
         "launch_readiness_checklist": strategy_paths["launch_readiness_checklist"],
+        "keyword_origin_map": build_dir / "keyword_origin_map.json",
+        "match_type_preservation_audit": build_dir / "match_type_preservation_audit.json",
+        "existing_exact_review": build_dir / "existing_exact_review.csv",
+        "exact_match_test_candidates": build_dir / "exact_match_test_candidates.csv",
         "human_review": human_review,
         "staging_csv": staging_csv,
         "validation_report": build_dir / "validation_report.json",
