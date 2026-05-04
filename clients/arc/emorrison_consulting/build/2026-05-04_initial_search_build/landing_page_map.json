@@ -1,0 +1,42 @@
+{
+  "Services - Lay Counselor Academy": {
+    "final_url": "https://www.emorrisonconsulting.com/services/lay-counselor-training-academy/",
+    "path_1": "LayCounselorAca",
+    "path_2": "Services"
+  },
+  "Services - Employee Mental Health Support": {
+    "final_url": "https://www.emorrisonconsulting.com/services/supporting-employee-mental-health/",
+    "path_1": "EmployeeMentalH",
+    "path_2": "Services"
+  },
+  "Services - Integrated Behavioral Health Consulting": {
+    "final_url": "https://www.emorrisonconsulting.com/services/supporting-employee-mental-health/",
+    "path_1": "IntegratedBehav",
+    "path_2": "Services"
+  },
+  "Services - Empathic Communication Training": {
+    "final_url": "https://www.emorrisonconsulting.com/services/lay-counselor-training-academy/",
+    "path_1": "EmpathicCommuni",
+    "path_2": "Services"
+  },
+  "Services - Clinical Support": {
+    "final_url": "https://www.emorrisonconsulting.com/services/supporting-employee-mental-health/",
+    "path_1": "ClinicalSupport",
+    "path_2": "Services"
+  },
+  "Services - Learning and Development": {
+    "final_url": "https://www.emorrisonconsulting.com/",
+    "path_1": "LearningAndDeve",
+    "path_2": "Services"
+  },
+  "Services - Human-Centered Care Consulting": {
+    "final_url": "https://www.emorrisonconsulting.com/",
+    "path_1": "HumanCenteredCa",
+    "path_2": "Services"
+  },
+  "Services - Trauma-Informed Care Training": {
+    "final_url": "https://www.emorrisonconsulting.com/services/lay-counselor-training-academy/",
+    "path_1": "TraumaInformedC",
+    "path_2": "Services"
+  }
+}

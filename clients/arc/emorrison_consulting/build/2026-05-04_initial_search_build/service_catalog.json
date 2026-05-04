@@ -1,0 +1,72 @@
+{
+  "active_services_for_staging": [
+    "Lay Counselor Academy",
+    "Employee Mental Health Support",
+    "Integrated Behavioral Health Consulting",
+    "Empathic Communication Training",
+    "Clinical Support",
+    "Learning and Development",
+    "Human-Centered Care Consulting",
+    "Trauma-Informed Care Training"
+  ],
+  "excluded_from_initial_staging": [],
+  "fact_review": {
+    "verified_website_facts": [
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/",
+        "source": "https://www.emorrisonconsulting.com/"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/services/",
+        "source": "https://www.emorrisonconsulting.com/services/"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/services/lay-counselor-training-academy/",
+        "source": "https://www.emorrisonconsulting.com/services/lay-counselor-training-academy/"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/services/supporting-employee-mental-health/",
+        "source": "https://www.emorrisonconsulting.com/services/supporting-employee-mental-health/"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/about-emc/",
+        "source": "https://www.emorrisonconsulting.com/about-emc/"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/about-emc",
+        "source": "https://www.emorrisonconsulting.com/about-emc"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/blog",
+        "source": "https://www.emorrisonconsulting.com/blog"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/blog/",
+        "source": "https://www.emorrisonconsulting.com/blog/"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/contact",
+        "source": "https://www.emorrisonconsulting.com/contact"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/contact/",
+        "source": "https://www.emorrisonconsulting.com/contact/"
+      },
+      {
+        "fact": "Page scanned: https://www.emorrisonconsulting.com/cookie-policy-uk/",
+        "source": "https://www.emorrisonconsulting.com/cookie-policy-uk/"
+      }
+    ],
+    "strategy_inferences": [
+      {
+        "fact": "Service candidates were inferred from page URLs and headings.",
+        "source": "scanner heuristic"
+      }
+    ],
+    "human_review_needed": [
+      "Confirm active services and priority order before launch.",
+      "Confirm target locations and location IDs before launch.",
+      "Confirm budget and conversion tracking before launch."
+    ]
+  }
+}

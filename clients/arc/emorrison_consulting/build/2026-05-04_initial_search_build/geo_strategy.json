@@ -1,0 +1,12 @@
+{
+  "targeting": [
+    {
+      "location": "United States",
+      "location_id": "2840"
+    }
+  ],
+  "targeting_method": "Location of presence",
+  "human_review_needed": [
+    "Confirm each location and location ID before Google Ads Editor import."
+  ]
+}

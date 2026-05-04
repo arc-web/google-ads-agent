@@ -1,0 +1,66 @@
+client:
+  display_name: "EM Consulting"
+  client_slug: "emorrison_consulting"
+  agency_slug: "arc"
+  website_url: "https://www.emorrisonconsulting.com/"
+
+agency:
+  display_name: "Advertising Report Card"
+  short_name: "ARC"
+
+source_attribution:
+  previous_provider_tokens: []
+  allowed_client_facing_sections:
+    - "Before And After"
+    - "Sources And Staging Notes"
+  blocked_generated_fields:
+    - "Campaign"
+    - "Ad Group"
+    - "Keyword"
+    - "Headline"
+    - "Description"
+    - "Path"
+    - "Final URL"
+  generated_campaign_suffix: "V1"
+
+campaign_naming:
+  ownership_prefix: "ARC"
+  search_pattern: "ARC - Search - {campaign_theme} - V1"
+  label_owner: "ARC"
+  client_identity_in_ad_facing_assets: true
+
+market:
+  primary_service_area: ""
+  target_cities: []
+  target_states: []
+  target_zip_codes: []
+  radius_targets: []
+
+campaign_defaults:
+  campaign_type: "Search"
+  networks: "Google search"
+  broad_match_keywords: "Off"
+  keyword_match_type: "Phrase"
+  keyword_format: "plain_text"
+  targeting_method: "Location of presence"
+  exclusion_method: "Location of presence"
+  editor_staging_required: true
+  human_review_required: true
+
+copy_defaults:
+  rsa_headlines: 15
+  rsa_descriptions: 4
+  headline_max_chars: 30
+  description_min_chars: 75
+  description_max_chars: 90
+  path_max_chars: 15
+  one_word_headlines_allowed: false
+  bare_label_headlines_allowed: false
+
+reports:
+  account_export: "campaigns/account_export.csv"
+  search_terms: "reports/performance_inputs/search_terms_report.csv"
+  location_report: "reports/performance_inputs/location_report.csv"
+  rsa_asset_report: "reports/performance_inputs/rsa_asset_report.csv"
+  landing_page_report: "reports/performance_inputs/landing_page_report.csv"
+  conversion_action_report: "reports/performance_inputs/conversion_action_report.csv"

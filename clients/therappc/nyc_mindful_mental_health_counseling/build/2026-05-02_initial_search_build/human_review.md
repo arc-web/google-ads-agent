@@ -38,3 +38,8 @@ Validation status: `pass`
 - https://nycmindfulmentalhealthcounseling.com/group-therapy-nyc/
 - https://nycmindfulmentalhealthcounseling.com/cbt/
 - https://nycmindfulmentalhealthcounseling.com/dbt/
+
+## Revision Feedback Review
+
+- Billing question requires account-manager confirmation before being stated to the client as fact.
+- Group therapy remains excluded from active launch until September planning is approved.

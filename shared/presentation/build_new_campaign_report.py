@@ -920,7 +920,7 @@ def overview_section(summary: CampaignSummary) -> str:
         ),
         (
             "Ads and regions",
-            "Representative ad copy examples, proposed national targeting, and the priority market questions to confirm before launch.",
+            "Representative ad copy examples, proposed regional targeting, and the priority market questions to confirm before launch.",
         ),
         (
             "Budget and confirmation",
@@ -1198,7 +1198,7 @@ def strategy_section(
   </div>
   <div class="insight-card">
     <h3>Launch review status</h3>
-    <p>The CSV validates cleanly, but remains paused until budget, service priority, and your approval decisions are confirmed.</p>
+    <p>The campaign build validates cleanly, but remains paused until budget, service priority, and your approval decisions are confirmed.</p>
   </div>
 </div>
 <div class="subsection-header">Audience and service area</div>
@@ -1549,7 +1549,7 @@ def approval_section(
         ),
         (
             "Confirm regional targeting",
-            f"{location_label} is the current reach. Confirm all 50 states or send priority markets.",
+            f"{location_label} is the current reach. Confirm this state split or send priority market changes.",
             "Confirm",
             True,
         ),

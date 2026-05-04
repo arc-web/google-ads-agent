@@ -1,0 +1,6 @@
+id,decision,why,output_to_update,engine_rule_update_needed,owner
+R001,Use conservative May pacing and document June capacity ramp before launch approval.,"Capacity changed: owner has 2 to 3 openings now, associate adds capacity end of May and ramps into fall.",staging_csv; client_report; client_email_draft; client_hq,Yes,ARC
+R002,Remove adolescent targeting and add compliant college-student intent.,"Audience changed: keep young adults and adults, target college students instead of adolescents.",staging_csv; client_report; client_email_draft; client_hq,Yes,ARC
+R003,Create state-specific NY and NJ campaign variants for staged review.,Geo architecture preference: split campaigns by state.,staging_csv; client_report; client_email_draft; client_hq,Yes,ARC
+R004,Do not force spend. Stage May conservative pacing and require budget approval before launch.,Budget question: clarify management fee versus ad spend and recommend May conservative pacing with June ramp.,staging_csv; client_report; client_email_draft; client_hq,Yes,ARC
+R005,Pause or exclude group therapy from the active revision build.,Group therapy is not active now. Two groups are planned for September.,staging_csv; client_report; client_email_draft; client_hq,Yes,ARC

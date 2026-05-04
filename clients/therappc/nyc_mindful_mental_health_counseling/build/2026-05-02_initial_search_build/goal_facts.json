@@ -1,0 +1,14 @@
+{
+  "section_title": "Capacity And Lead Goal",
+  "initial_new_client_goal": 2,
+  "planning_close_rate": 0.5,
+  "minimum_qualified_leads": 4,
+  "planning_qualified_lead_range": "4 to 8",
+  "capacity_notes": [
+    "Owner has immediate openings for about 2 to 3 clients.",
+    "Associate therapist starts at the end of May with openings for 6 clients.",
+    "Associate capacity is expected to reach 10 to 12 clients in the fall."
+  ],
+  "pacing_recommendation": "Start more conservatively in May, then increase in June when associate capacity begins.",
+  "assumption_note": "Close rate is a planning assumption until confirmed by campaign data."
+}

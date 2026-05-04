@@ -1,0 +1,1436 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>EM Consulting New Campaign Review</title>
+  <style>
+@page { size: Letter; margin: 0; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #eee9df;
+  color: #211f1d;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.pdf-page {
+  width: 8.5in;
+  min-height: 11in;
+  padding: 0.54in;
+  background: #f8f4eb;
+  position: relative;
+  overflow: hidden;
+}
+.pdf-page + .pdf-page { break-before: page; }
+.section-header {
+  border-left: 7px solid #185c62;
+  padding: 16px 20px;
+  background: #ebe2d3;
+  margin-bottom: 24px;
+}
+.section-header .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6b5c4b;
+  font-weight: 800;
+}
+.section-header h1 {
+  margin: 8px 0 0;
+  font-size: 34px;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+.section-header p {
+  margin: 10px 0 0;
+  max-width: 660px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #4b4037;
+}
+.subsection-header {
+  margin: 16px 0 14px;
+  padding: 10px 14px;
+  border-left: 4px solid #c8753f;
+  background: #fffaf1;
+  font-weight: 800;
+  color: #3d342b;
+}
+.continuation-header {
+  margin: 16px 0 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #766858;
+  font-weight: 800;
+}
+.cover {
+  background: linear-gradient(135deg, #f8f4eb 0%, #f3eadc 58%, #e5f0ee 100%);
+}
+.brand-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 92px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #5e5144;
+  font-weight: 800;
+}
+.cover-title {
+  max-width: 720px;
+}
+.cover-title .label {
+  color: #185c62;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+.cover-title h1 {
+  margin: 16px 0 18px;
+  font-size: 54px;
+  line-height: 0.98;
+  letter-spacing: 0;
+}
+.cover-title p {
+  margin: 0;
+  max-width: 620px;
+  font-size: 20px;
+  line-height: 1.35;
+  color: #40362f;
+}
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 50px;
+}
+.metric {
+  padding: 16px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid #dfd2bf;
+}
+.metric strong {
+  display: block;
+  font-size: 28px;
+  color: #185c62;
+}
+.metric span {
+  font-size: 12px;
+  color: #6f6256;
+  font-weight: 700;
+}
+.card-grid,
+.two-col,
+.approval-grid,
+.ad-grid {
+  display: grid;
+  gap: 14px;
+}
+.card-grid { grid-template-columns: repeat(2, 1fr); }
+.two-col { grid-template-columns: 1fr 1fr; }
+.approval-grid { grid-template-columns: repeat(2, 1fr); }
+.ad-grid { grid-template-columns: 1fr; }
+.confirm-strip {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: #e5f0ee;
+  border-left: 4px solid #185c62;
+  color: #234045;
+}
+.confirm-strip h3 {
+  margin: 0 0 5px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.confirm-strip p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.38;
+}
+.overview-steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.overview-step {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 16px;
+}
+.overview-step .step-number {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #185c62;
+  color: #fffaf1;
+  text-align: center;
+  line-height: 28px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+.overview-step h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.overview-step p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #4c4238;
+}
+.insight-card,
+.approval-card,
+.ad-card,
+.source-card {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 15px;
+}
+.insight-card h3,
+.approval-card h3,
+.ad-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.insight-card p,
+.approval-card p,
+.source-card p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #4c4238;
+}
+.badge {
+  display: inline-block;
+  padding: 5px 8px;
+  margin: 4px 5px 0 0;
+  background: #e5f0ee;
+  color: #185c62;
+  font-size: 11px;
+  font-weight: 800;
+}
+.ad-preview {
+  border-left: 4px solid #2f6f76;
+  background: #fff;
+  padding: 12px;
+  margin: 10px 0 12px;
+}
+.ad-preview .sponsored {
+  font-size: 11px;
+  color: #6e6257;
+  font-weight: 700;
+}
+.ad-preview .url {
+  font-size: 12px;
+  color: #247b4d;
+  margin-top: 4px;
+}
+.ad-preview .headline {
+  color: #1a0dab;
+  font-size: 18px;
+  line-height: 1.2;
+  margin-top: 5px;
+}
+.ad-preview .desc {
+  color: #3f3f3f;
+  font-size: 12px;
+  line-height: 1.35;
+  margin-top: 5px;
+}
+.ad-copy-page .section-header {
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+.ad-copy-page .section-header h1 {
+  font-size: 28px;
+}
+.ad-copy-page .section-header p {
+  font-size: 13px;
+  margin-top: 7px;
+}
+.ad-copy-page .ad-card {
+  padding: 10px;
+}
+.ad-copy-page .ad-card h3 {
+  margin-bottom: 6px;
+}
+.ad-copy-page .ad-preview {
+  padding: 8px;
+  margin: 6px 0 0;
+}
+.ad-copy-page .ad-preview .headline {
+  font-size: 16px;
+}
+.ad-copy-page .subsection-header {
+  margin: 10px 0 6px;
+  padding: 7px 10px;
+}
+.ad-copy-page .subsection-header + .ad-copy-table {
+  margin-bottom: 10px;
+}
+.audit-note {
+  margin: 0 0 6px;
+  font-size: 10px;
+  color: #6b5c4b;
+  font-weight: 700;
+}
+.ad-copy-page table {
+  font-size: 9.5px;
+}
+.ad-copy-page td,
+.ad-copy-page th {
+  padding: 3px 5px;
+}
+.ad-copy-table col.slot-col { width: 34px; }
+.ad-copy-table col.char-col { width: 54px; }
+.ad-copy-table th:first-child,
+.ad-copy-table td:first-child,
+.ad-copy-table th:last-child,
+.ad-copy-table td:last-child {
+  text-align: left;
+}
+.ad-copy-table th:nth-child(2),
+.ad-copy-table td:nth-child(2) {
+  padding-left: 5px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+td, th {
+  border-bottom: 1px solid #e2d7c6;
+  padding: 6px 5px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  color: #6b5c4b;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.42;
+}
+.footnote {
+  position: absolute;
+  left: 0.54in;
+  right: 0.54in;
+  bottom: 0.34in;
+  font-size: 10px;
+  color: #7c6d5c;
+}
+.budget-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.budget-summary-card,
+.budget-chart-card,
+.budget-tile {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+}
+.budget-summary-card {
+  padding: 14px 10px 15px;
+  text-align: center;
+}
+.budget-summary-card .label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #746656;
+  font-weight: 900;
+  min-height: 28px;
+}
+.budget-summary-card strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 32px;
+  line-height: 1;
+  color: #185c62;
+}
+.budget-section-head {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  margin: 12px 0 10px;
+}
+.budget-accent {
+  width: 5px;
+  min-width: 5px;
+  border-radius: 2px;
+  background: #c8753f;
+}
+.budget-section-head h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.budget-section-head p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #5e5144;
+  line-height: 1.4;
+}
+.budget-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0 0 10px;
+  color: #5e5144;
+  font-size: 11px;
+  font-weight: 700;
+}
+.budget-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.budget-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+.budget-chart-card {
+  padding: 10px 12px 8px;
+}
+.budget-svg-main,
+.budget-svg-ramp {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.budget-svg-main { max-height: 250px; }
+.budget-svg-ramp { max-height: 200px; }
+.budget-guide {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  line-height: 1.35;
+  margin-top: 10px;
+}
+.budget-guide th,
+.budget-guide td {
+  border: 1px solid #dfd2bf;
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.budget-guide th {
+  background: rgba(255, 255, 255, 0.25);
+}
+.marker-cell {
+  width: 36px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 13px;
+  color: #185c62;
+}
+.budget-split {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.budget-takeaways {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+.budget-tile {
+  padding: 10px 12px;
+}
+.budget-tile h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
+.budget-tile p {
+  margin: 0;
+  color: #5e5144;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.goal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+.goal-card {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
+}
+.goal-card .label {
+  color: #756657;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.goal-card strong {
+  display: block;
+  color: #185c62;
+  font-size: 24px;
+  margin-top: 6px;
+}
+.goal-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: #4d4238;
+  line-height: 1.45;
+  font-size: 13px;
+}
+.launch-brief {
+  border: 1px solid #dfd2bf;
+  background: #fffaf1;
+  padding: 28px;
+}
+.launch-brief-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 0.9fr;
+  gap: 28px;
+  align-items: center;
+}
+.launch-kicker {
+  color: #185c62;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.launch-brief h2 {
+  margin: 0;
+  font-size: 42px;
+  line-height: 0.98;
+  letter-spacing: 0;
+  color: #241f1b;
+}
+.launch-brief p {
+  margin: 18px 0 0;
+  color: #62584f;
+  font-size: 16px;
+  line-height: 1.45;
+}
+.launch-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+.launch-pill {
+  display: inline-block;
+  padding: 11px 18px;
+  border-radius: 22px;
+  color: #fffaf1;
+  font-size: 12px;
+  font-weight: 900;
+}
+.launch-pill.primary { background: #0f7779; }
+.launch-pill.secondary { background: #d9783d; }
+.launch-stat-list {
+  display: grid;
+  gap: 10px;
+}
+.launch-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #efe6da;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-weight: 900;
+  color: #25211d;
+}
+.launch-stat span:first-child {
+  font-size: 14px;
+}
+.launch-stat span:last-child {
+  font-size: 16px;
+}
+.approval-list {
+  margin-top: 20px;
+  border: 1px solid #dfd2bf;
+  background: #fffaf1;
+}
+.approval-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 94px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #dfd2bf;
+}
+.approval-row:last-child {
+  border-bottom: 0;
+}
+.approval-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: #0f7779;
+  color: #fffaf1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+}
+.approval-icon.warn {
+  background: #d9783d;
+}
+.approval-copy h3 {
+  margin: 0 0 3px;
+  font-size: 17px;
+  line-height: 1.1;
+  color: #241f1b;
+}
+.approval-copy p {
+  margin: 0;
+  color: #6a5f55;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.approval-button {
+  justify-self: end;
+  border-radius: 20px;
+  padding: 9px 15px;
+  color: #fffaf1;
+  background: #0f7779;
+  font-size: 12px;
+  font-weight: 900;
+}
+.approval-button.warn {
+  background: #d9783d;
+}
+.state-chip {
+  display: inline-block;
+  margin: 4px 5px 0 0;
+  padding: 6px 8px;
+  background: #e5f0ee;
+  color: #185c62;
+  font-size: 11px;
+  font-weight: 800;
+}
+.targeting-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.targeting-panel {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
+}
+.targeting-panel.compact {
+  padding: 12px;
+}
+.targeting-table {
+  font-size: 10px;
+  line-height: 1.22;
+}
+.targeting-table th,
+.targeting-table td {
+  padding: 5px 6px;
+}
+.targeting-table col.type-col { width: 58px; }
+.targeting-table col.area-col { width: 132px; }
+.targeting-table col.status-col { width: 86px; }
+.structure-flow {
+  background: #fffaf1;
+  border: 1px solid #dfd2bf;
+  padding: 14px;
+  margin-top: 14px;
+}
+.structure-flow svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.flow-box {
+  fill: #f8f4eb;
+  stroke: #dfd2bf;
+  stroke-width: 2;
+}
+.flow-current {
+  fill: #e5f0ee;
+  stroke: #185c62;
+  stroke-width: 2;
+}
+.flow-future {
+  fill: #fffaf1;
+  stroke: #c8753f;
+  stroke-width: 2;
+}
+.flow-line {
+  stroke: #c43ad3;
+  stroke-width: 5;
+  fill: none;
+  stroke-linecap: round;
+}
+.flow-muted {
+  stroke: #d6a6dd;
+  stroke-width: 4;
+  fill: none;
+  stroke-linecap: round;
+}
+.flow-label {
+  fill: #2f3d45;
+  font-size: 18px;
+  font-weight: 800;
+}
+.flow-small {
+  fill: #4c5c64;
+  font-size: 12px;
+  font-weight: 700;
+}
+.flow-note-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+.flow-note {
+  background: #f8f4eb;
+  border: 1px solid #dfd2bf;
+  padding: 12px;
+}
+.flow-note h3 {
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+.flow-note p {
+  margin: 0;
+  color: #4c4238;
+  font-size: 12px;
+  line-height: 1.4;
+}
+</style>
+</head>
+<body>
+  
+<section class="section pdf-page cover">
+  <div class="section-header" style="display:none"></div>
+  <div class="subsection-header" style="display:none">Report start</div>
+  <div class="brand-row"><span>Advertising Report Card</span><span>May 4, 2026</span></div>
+  <div class="cover-title">
+    <div class="label">New Campaign Review</div>
+    <h1>EM Consulting</h1>
+    <p>A new Google Ads Search campaign proposal, built from website evidence and prepared for your review.</p>
+  </div>
+  <div class="metric-row">
+    <div class="metric"><strong>1</strong><span>Search campaign</span></div>
+    <div class="metric"><strong>8</strong><span>ad groups</span></div>
+    <div class="metric"><strong>56</strong><span>phrase keywords</span></div>
+    <div class="metric"><strong>8</strong><span>responsive ads</span></div>
+  </div>
+  <div class="footnote">May 4, 2026</div>
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Overview</div>
+    <h1>What This Review Covers</h1>
+    <p>This report walks through the campaign structure, service ad groups, ads, proposed targeting, budget pacing, and final confirmation items before launch.</p>
+  </div>
+  
+<div class="overview-steps">
+<div class="overview-step">
+  <div class="step-number">1</div>
+  <h3>Structure</h3>
+  <p>How the launch is organized now and how it can expand later if performance supports it.</p>
+</div>
+
+<div class="overview-step">
+  <div class="step-number">2</div>
+  <h3>Ad groups</h3>
+  <p>Which services are ready to run ads and which priorities should be confirmed first.</p>
+</div>
+
+<div class="overview-step">
+  <div class="step-number">3</div>
+  <h3>Ads and regions</h3>
+  <p>Representative ad copy examples, proposed national targeting, and the priority market questions to confirm before launch.</p>
+</div>
+
+<div class="overview-step">
+  <div class="step-number">4</div>
+  <h3>Budget and confirmation</h3>
+  <p>How the budget is paced through the month, then one final page for approval.</p>
+</div>
+</div>
+<div class="subsection-header">Current launch snapshot</div>
+<div class="metric-row" style="margin-top:0;">
+  <div class="metric"><strong>1</strong><span>Search campaign</span></div>
+  <div class="metric"><strong>8</strong><span>ad groups</span></div>
+  <div class="metric"><strong>56</strong><span>phrase keywords</span></div>
+  <div class="metric"><strong>8</strong><span>responsive ads</span></div>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Campaign Structure</div>
+    <h1>How The Campaign Can Grow Over Time</h1>
+    <p>The launch starts compact. Future campaigns can split by service or region only after the data shows where separate budgets and reporting would help.</p>
+  </div>
+  
+<div class="two-col">
+  <div class="insight-card">
+    <h3>Launch shape</h3>
+    <p>The current launch uses 1 controlled Search campaign with 8 service-based ad groups. This keeps early learning clean and easier to review.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Expansion rule</h3>
+    <p>More campaigns should come later only when performance data shows a service or region needs its own budget, copy, and reporting focus.</p>
+  </div>
+</div>
+<div class="structure-flow" aria-label="Current campaign structure and future expansion path">
+  <svg viewBox="0 0 900 470" role="img" aria-label="One current Search campaign can later split by services or regions when performance supports it">
+    <rect class="flow-current" x="34" y="52" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="88" text-anchor="middle">Current</text>
+    <text class="flow-small" x="126" y="114" text-anchor="middle">1 Search Campaign</text>
+    <path class="flow-line" d="M218 95 C270 95, 288 95, 334 95"/>
+    <rect class="flow-current" x="334" y="52" width="202" height="86" rx="8"/>
+    <text class="flow-label" x="435" y="88" text-anchor="middle">8 Service Ad Groups</text>
+    <text class="flow-small" x="435" y="114" text-anchor="middle">actual launch structure</text>
+    <path class="flow-line" d="M536 95 C610 95, 620 64, 692 64"/>
+    <path class="flow-line" d="M536 95 C610 95, 620 126, 692 126"/>
+    <text class="flow-label" x="710" y="70">Priority services</text>
+    <text class="flow-label" x="710" y="132">Support services</text>
+
+    <rect class="flow-box" x="34" y="198" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="234" text-anchor="middle">Later Option</text>
+    <text class="flow-small" x="126" y="260" text-anchor="middle">Split by service demand</text>
+    <path class="flow-muted" d="M218 241 C300 241, 310 214, 392 214"/>
+    <path class="flow-muted" d="M218 241 C300 241, 310 270, 392 270"/>
+    <rect class="flow-future" x="392" y="184" width="198" height="62" rx="8"/>
+    <rect class="flow-future" x="392" y="254" width="198" height="62" rx="8"/>
+    <text class="flow-label" x="491" y="221" text-anchor="middle">Primary Services</text>
+    <text class="flow-label" x="491" y="291" text-anchor="middle">Secondary Services</text>
+    <path class="flow-muted" d="M590 215 C640 215, 652 196, 700 196"/>
+    <path class="flow-muted" d="M590 215 C640 215, 652 234, 700 234"/>
+    <path class="flow-muted" d="M590 285 C640 285, 652 266, 700 266"/>
+    <path class="flow-muted" d="M590 285 C640 285, 652 304, 700 304"/>
+    <text class="flow-small" x="716" y="200">highest demand services</text>
+    <text class="flow-small" x="716" y="238">strongest lead quality</text>
+    <text class="flow-small" x="716" y="270">secondary demand</text>
+    <text class="flow-small" x="716" y="308">specialty follow-up</text>
+
+    <rect class="flow-box" x="34" y="342" width="184" height="86" rx="8"/>
+    <text class="flow-label" x="126" y="378" text-anchor="middle">Later Option</text>
+    <text class="flow-small" x="126" y="404" text-anchor="middle">Split by regional demand</text>
+    <path class="flow-muted" d="M218 385 C300 385, 310 358, 392 358"/>
+    <path class="flow-muted" d="M218 385 C300 385, 310 414, 392 414"/>
+    <rect class="flow-future" x="392" y="328" width="198" height="62" rx="8"/>
+    <rect class="flow-future" x="392" y="398" width="198" height="62" rx="8"/>
+    <text class="flow-label" x="491" y="365" text-anchor="middle">Primary Regions</text>
+    <text class="flow-label" x="491" y="435" text-anchor="middle">Secondary Regions</text>
+    <path class="flow-muted" d="M590 359 C640 359, 652 340, 700 340"/>
+    <path class="flow-muted" d="M590 359 C640 359, 652 378, 700 378"/>
+    <path class="flow-muted" d="M590 429 C640 429, 652 410, 700 410"/>
+    <path class="flow-muted" d="M590 429 C640 429, 652 448, 700 448"/>
+    <text class="flow-small" x="716" y="344">top priority states</text>
+    <text class="flow-small" x="716" y="382">top cities or metros</text>
+    <text class="flow-small" x="716" y="414">current strongest markets</text>
+    <text class="flow-small" x="716" y="452">later regional tests</text>
+  </svg>
+</div>
+<div class="flow-note-grid">
+  <div class="flow-note"><h3>One campaign now</h3><p>The first launch stays compact so the early budget is not spread too thin.</p></div>
+  <div class="flow-note"><h3>Split later by proof</h3><p>Future campaign splits should follow lead quality, conversion signals, and search demand.</p></div>
+  <div class="flow-note"><h3>No extra campaigns yet</h3><p>The service and regional splits shown here are future paths, not active launch campaigns.</p></div>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Groups</div>
+    <h1>Services We Are Running Ads For</h1>
+    <p>These are the service areas currently prepared in the Google Ads Editor file. Confirm the list is complete and identify which services should receive the most traffic first.</p>
+  </div>
+  
+<div class="two-col">
+  <div class="insight-card">
+    <h3>Services ready for ads</h3>
+    <p>8 ad groups organize service intent, training intent, and consulting demand for the first launch.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Keyword control</h3>
+    <p>56 phrase keywords and 3 negative phrase keywords are prepared. Active launch keywords use phrase match.</p>
+  </div>
+</div>
+<div class="subsection-header">Ad groups ready for review</div>
+<table>
+  <tr><th>Ad group</th><th>Phrase keywords</th><th>Status</th></tr>
+  <tr><td>Services - Lay Counselor Academy</td><td>7</td><td>Paused</td></tr><tr><td>Services - Employee Mental Health Support</td><td>7</td><td>Paused</td></tr><tr><td>Services - Integrated Behavioral Health Consulting</td><td>7</td><td>Paused</td></tr><tr><td>Services - Empathic Communication Training</td><td>7</td><td>Paused</td></tr><tr><td>Services - Clinical Support</td><td>7</td><td>Paused</td></tr><tr><td>Services - Learning and Development</td><td>7</td><td>Paused</td></tr><tr><td>Services - Human-Centered Care Consulting</td><td>7</td><td>Paused</td></tr><tr><td>Services - Trauma-Informed Care Training</td><td>7</td><td>Paused</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ad groups: confirm these are the services you want ads to run for and flag any service that should receive priority traffic.</p>
+</div>
+<div class="continuation-header">Campaign detail continues with representative ad previews</div>
+
+</section>
+
+  
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Services - Lay Counselor Academy</h1>
+    <p>Ad group 1 of 8. Review the full headline and description set for this service before launch.</p>
+  </div>
+  
+<div class="ad-card">
+  <h3>Services - Lay Counselor Academy</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">www.emorrisonconsulting.com/services/lay-counselor-training-academy/LayCounselorAca/Services</div>
+    <div class="headline">Lay Counselor Training Help | Plan Lay Counselor Programs | EM Consulting Support Team</div>
+    <div class="desc">Request details to confirm service fit audience needs timing and budget before launch</div>
+  </div>
+</div>
+<div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: pass. This table shows 15 complete headlines with character counts for launch review.</p>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Lay Counselor Training Help</td><td>27</td></tr><tr><td>2</td><td>Plan Lay Counselor Programs</td><td>27</td></tr><tr><td>3</td><td>EM Consulting Support Team</td><td>26</td></tr><tr><td>4</td><td>Practical Support Planning</td><td>26</td></tr><tr><td>5</td><td>Training for Care Teams Now</td><td>27</td></tr><tr><td>6</td><td>Support for Better Access</td><td>25</td></tr><tr><td>7</td><td>Build Human Centered Care</td><td>25</td></tr><tr><td>8</td><td>Clear Implementation Steps</td><td>26</td></tr><tr><td>9</td><td>Review Team Support Needs</td><td>25</td></tr><tr><td>10</td><td>Improve Care Team Readiness</td><td>27</td></tr><tr><td>11</td><td>Plan Your Next Service Step</td><td>27</td></tr><tr><td>12</td><td>Consulting for Care Teams</td><td>25</td></tr><tr><td>13</td><td>Skills for Support Teams Now</td><td>28</td></tr><tr><td>14</td><td>Focused Training Review Today</td><td>29</td></tr><tr><td>15</td><td>Request Program Details Now</td><td>27</td></tr>
+</table>
+<div class="subsection-header">Description examples</div>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Request details to confirm service fit audience needs timing and budget before launch</td><td>85</td></tr><tr><td>2</td><td>Schedule today to review training and consulting options with a practical support team</td><td>86</td></tr><tr><td>3</td><td>Request details on scope stakeholders implementation needs and launch readiness</td><td>79</td></tr><tr><td>4</td><td>Schedule today to compare support options before campaign approval and account import</td><td>85</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Services - Lay Counselor Academy or note any headline or description changes needed.</p>
+</div>
+
+</section>
+
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Services - Employee Mental Health Support</h1>
+    <p>Ad group 2 of 8. Review the full headline and description set for this service before launch.</p>
+  </div>
+  
+<div class="ad-card">
+  <h3>Services - Employee Mental Health Support</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">www.emorrisonconsulting.com/services/supporting-employee-mental-health/EmployeeMentalH/Services</div>
+    <div class="headline">Employee Wellbeing Planning | Employee Mental Health Plans | EM Consulting Support Team</div>
+    <div class="desc">Request details to confirm service fit audience needs timing and budget before launch</div>
+  </div>
+</div>
+<div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: pass. This table shows 15 complete headlines with character counts for launch review.</p>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Employee Wellbeing Planning</td><td>27</td></tr><tr><td>2</td><td>Employee Mental Health Plans</td><td>28</td></tr><tr><td>3</td><td>EM Consulting Support Team</td><td>26</td></tr><tr><td>4</td><td>Practical Support Planning</td><td>26</td></tr><tr><td>5</td><td>Training for Care Teams Now</td><td>27</td></tr><tr><td>6</td><td>Support for Better Access</td><td>25</td></tr><tr><td>7</td><td>Build Human Centered Care</td><td>25</td></tr><tr><td>8</td><td>Clear Implementation Steps</td><td>26</td></tr><tr><td>9</td><td>Review Team Support Needs</td><td>25</td></tr><tr><td>10</td><td>Improve Care Team Readiness</td><td>27</td></tr><tr><td>11</td><td>Plan Your Next Service Step</td><td>27</td></tr><tr><td>12</td><td>Consulting for Care Teams</td><td>25</td></tr><tr><td>13</td><td>Skills for Support Teams Now</td><td>28</td></tr><tr><td>14</td><td>Focused Training Review Today</td><td>29</td></tr><tr><td>15</td><td>Request Program Details Now</td><td>27</td></tr>
+</table>
+<div class="subsection-header">Description examples</div>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Request details to confirm service fit audience needs timing and budget before launch</td><td>85</td></tr><tr><td>2</td><td>Schedule today to review training and consulting options with a practical support team</td><td>86</td></tr><tr><td>3</td><td>Request details on scope stakeholders implementation needs and launch readiness</td><td>79</td></tr><tr><td>4</td><td>Schedule today to compare support options before campaign approval and account import</td><td>85</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Services - Employee Mental Health Support or note any headline or description changes needed.</p>
+</div>
+
+</section>
+
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Services - Integrated Behavioral Health Consulting</h1>
+    <p>Ad group 3 of 8. Review the full headline and description set for this service before launch.</p>
+  </div>
+  
+<div class="ad-card">
+  <h3>Services - Integrated Behavioral Health Consulting</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">www.emorrisonconsulting.com/services/supporting-employee-mental-health/IntegratedBehav/Services</div>
+    <div class="headline">Behavioral Health Consulting | Integrated Care Consulting | EM Consulting Support Team</div>
+    <div class="desc">Request details to confirm service fit audience needs timing and budget before launch</div>
+  </div>
+</div>
+<div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: pass. This table shows 15 complete headlines with character counts for launch review.</p>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Behavioral Health Consulting</td><td>28</td></tr><tr><td>2</td><td>Integrated Care Consulting</td><td>26</td></tr><tr><td>3</td><td>EM Consulting Support Team</td><td>26</td></tr><tr><td>4</td><td>Practical Support Planning</td><td>26</td></tr><tr><td>5</td><td>Training for Care Teams Now</td><td>27</td></tr><tr><td>6</td><td>Support for Better Access</td><td>25</td></tr><tr><td>7</td><td>Build Human Centered Care</td><td>25</td></tr><tr><td>8</td><td>Clear Implementation Steps</td><td>26</td></tr><tr><td>9</td><td>Review Team Support Needs</td><td>25</td></tr><tr><td>10</td><td>Improve Care Team Readiness</td><td>27</td></tr><tr><td>11</td><td>Plan Your Next Service Step</td><td>27</td></tr><tr><td>12</td><td>Consulting for Care Teams</td><td>25</td></tr><tr><td>13</td><td>Skills for Support Teams Now</td><td>28</td></tr><tr><td>14</td><td>Focused Training Review Today</td><td>29</td></tr><tr><td>15</td><td>Request Program Details Now</td><td>27</td></tr>
+</table>
+<div class="subsection-header">Description examples</div>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Request details to confirm service fit audience needs timing and budget before launch</td><td>85</td></tr><tr><td>2</td><td>Schedule today to review training and consulting options with a practical support team</td><td>86</td></tr><tr><td>3</td><td>Request details on scope stakeholders implementation needs and launch readiness</td><td>79</td></tr><tr><td>4</td><td>Schedule today to compare support options before campaign approval and account import</td><td>85</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Services - Integrated Behavioral Health Consulting or note any headline or description changes needed.</p>
+</div>
+
+</section>
+
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Services - Empathic Communication Training</h1>
+    <p>Ad group 4 of 8. Review the full headline and description set for this service before launch.</p>
+  </div>
+  
+<div class="ad-card">
+  <h3>Services - Empathic Communication Training</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">www.emorrisonconsulting.com/services/lay-counselor-training-academy/EmpathicCommuni/Services</div>
+    <div class="headline">Empathic Communication Help | Communication Training Help | EM Consulting Support Team</div>
+    <div class="desc">Request details to confirm service fit audience needs timing and budget before launch</div>
+  </div>
+</div>
+<div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: pass. This table shows 15 complete headlines with character counts for launch review.</p>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Empathic Communication Help</td><td>27</td></tr><tr><td>2</td><td>Communication Training Help</td><td>27</td></tr><tr><td>3</td><td>EM Consulting Support Team</td><td>26</td></tr><tr><td>4</td><td>Practical Support Planning</td><td>26</td></tr><tr><td>5</td><td>Training for Care Teams Now</td><td>27</td></tr><tr><td>6</td><td>Support for Better Access</td><td>25</td></tr><tr><td>7</td><td>Build Human Centered Care</td><td>25</td></tr><tr><td>8</td><td>Clear Implementation Steps</td><td>26</td></tr><tr><td>9</td><td>Review Team Support Needs</td><td>25</td></tr><tr><td>10</td><td>Improve Care Team Readiness</td><td>27</td></tr><tr><td>11</td><td>Plan Your Next Service Step</td><td>27</td></tr><tr><td>12</td><td>Consulting for Care Teams</td><td>25</td></tr><tr><td>13</td><td>Skills for Support Teams Now</td><td>28</td></tr><tr><td>14</td><td>Focused Training Review Today</td><td>29</td></tr><tr><td>15</td><td>Request Program Details Now</td><td>27</td></tr>
+</table>
+<div class="subsection-header">Description examples</div>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Request details to confirm service fit audience needs timing and budget before launch</td><td>85</td></tr><tr><td>2</td><td>Schedule today to review training and consulting options with a practical support team</td><td>86</td></tr><tr><td>3</td><td>Request details on scope stakeholders implementation needs and launch readiness</td><td>79</td></tr><tr><td>4</td><td>Schedule today to compare support options before campaign approval and account import</td><td>85</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Services - Empathic Communication Training or note any headline or description changes needed.</p>
+</div>
+
+</section>
+
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Services - Clinical Support</h1>
+    <p>Ad group 5 of 8. Review the full headline and description set for this service before launch.</p>
+  </div>
+  
+<div class="ad-card">
+  <h3>Services - Clinical Support</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">www.emorrisonconsulting.com/services/supporting-employee-mental-health/ClinicalSupport/Services</div>
+    <div class="headline">Clinical Team Support Plans | Clinical Support Planning | EM Consulting Support Team</div>
+    <div class="desc">Request details to confirm service fit audience needs timing and budget before launch</div>
+  </div>
+</div>
+<div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: pass. This table shows 15 complete headlines with character counts for launch review.</p>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Clinical Team Support Plans</td><td>27</td></tr><tr><td>2</td><td>Clinical Support Planning</td><td>25</td></tr><tr><td>3</td><td>EM Consulting Support Team</td><td>26</td></tr><tr><td>4</td><td>Practical Support Planning</td><td>26</td></tr><tr><td>5</td><td>Training for Care Teams Now</td><td>27</td></tr><tr><td>6</td><td>Support for Better Access</td><td>25</td></tr><tr><td>7</td><td>Build Human Centered Care</td><td>25</td></tr><tr><td>8</td><td>Clear Implementation Steps</td><td>26</td></tr><tr><td>9</td><td>Review Team Support Needs</td><td>25</td></tr><tr><td>10</td><td>Improve Care Team Readiness</td><td>27</td></tr><tr><td>11</td><td>Plan Your Next Service Step</td><td>27</td></tr><tr><td>12</td><td>Consulting for Care Teams</td><td>25</td></tr><tr><td>13</td><td>Skills for Support Teams Now</td><td>28</td></tr><tr><td>14</td><td>Focused Training Review Today</td><td>29</td></tr><tr><td>15</td><td>Request Program Details Now</td><td>27</td></tr>
+</table>
+<div class="subsection-header">Description examples</div>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Request details to confirm service fit audience needs timing and budget before launch</td><td>85</td></tr><tr><td>2</td><td>Schedule today to review training and consulting options with a practical support team</td><td>86</td></tr><tr><td>3</td><td>Request details on scope stakeholders implementation needs and launch readiness</td><td>79</td></tr><tr><td>4</td><td>Schedule today to compare support options before campaign approval and account import</td><td>85</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Services - Clinical Support or note any headline or description changes needed.</p>
+</div>
+
+</section>
+
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Services - Learning and Development</h1>
+    <p>Ad group 6 of 8. Review the full headline and description set for this service before launch.</p>
+  </div>
+  
+<div class="ad-card">
+  <h3>Services - Learning and Development</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">www.emorrisonconsulting.com/LearningAndDeve/Services</div>
+    <div class="headline">Learning Development Help | EM Consulting Support Team | Practical Support Planning</div>
+    <div class="desc">Request details to confirm service fit audience needs timing and budget before launch</div>
+  </div>
+</div>
+<div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: pass. This table shows 15 complete headlines with character counts for launch review.</p>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Learning Development Help</td><td>25</td></tr><tr><td>2</td><td>EM Consulting Support Team</td><td>26</td></tr><tr><td>3</td><td>Practical Support Planning</td><td>26</td></tr><tr><td>4</td><td>Training for Care Teams Now</td><td>27</td></tr><tr><td>5</td><td>Support for Better Access</td><td>25</td></tr><tr><td>6</td><td>Build Human Centered Care</td><td>25</td></tr><tr><td>7</td><td>Clear Implementation Steps</td><td>26</td></tr><tr><td>8</td><td>Review Team Support Needs</td><td>25</td></tr><tr><td>9</td><td>Improve Care Team Readiness</td><td>27</td></tr><tr><td>10</td><td>Plan Your Next Service Step</td><td>27</td></tr><tr><td>11</td><td>Consulting for Care Teams</td><td>25</td></tr><tr><td>12</td><td>Skills for Support Teams Now</td><td>28</td></tr><tr><td>13</td><td>Focused Training Review Today</td><td>29</td></tr><tr><td>14</td><td>Request Program Details Now</td><td>27</td></tr><tr><td>15</td><td>Compare Support Options Today</td><td>29</td></tr>
+</table>
+<div class="subsection-header">Description examples</div>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Request details to confirm service fit audience needs timing and budget before launch</td><td>85</td></tr><tr><td>2</td><td>Schedule today to review training and consulting options with a practical support team</td><td>86</td></tr><tr><td>3</td><td>Request details on scope stakeholders implementation needs and launch readiness</td><td>79</td></tr><tr><td>4</td><td>Schedule today to compare support options before campaign approval and account import</td><td>85</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Services - Learning and Development or note any headline or description changes needed.</p>
+</div>
+
+</section>
+
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Services - Human-Centered Care Consulting</h1>
+    <p>Ad group 7 of 8. Review the full headline and description set for this service before launch.</p>
+  </div>
+  
+<div class="ad-card">
+  <h3>Services - Human-Centered Care Consulting</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">www.emorrisonconsulting.com/HumanCenteredCa/Services</div>
+    <div class="headline">Human Centered Care Plans | Human Centered Consulting | EM Consulting Support Team</div>
+    <div class="desc">Request details to confirm service fit audience needs timing and budget before launch</div>
+  </div>
+</div>
+<div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: pass. This table shows 15 complete headlines with character counts for launch review.</p>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Human Centered Care Plans</td><td>25</td></tr><tr><td>2</td><td>Human Centered Consulting</td><td>25</td></tr><tr><td>3</td><td>EM Consulting Support Team</td><td>26</td></tr><tr><td>4</td><td>Practical Support Planning</td><td>26</td></tr><tr><td>5</td><td>Training for Care Teams Now</td><td>27</td></tr><tr><td>6</td><td>Support for Better Access</td><td>25</td></tr><tr><td>7</td><td>Build Human Centered Care</td><td>25</td></tr><tr><td>8</td><td>Clear Implementation Steps</td><td>26</td></tr><tr><td>9</td><td>Review Team Support Needs</td><td>25</td></tr><tr><td>10</td><td>Improve Care Team Readiness</td><td>27</td></tr><tr><td>11</td><td>Plan Your Next Service Step</td><td>27</td></tr><tr><td>12</td><td>Consulting for Care Teams</td><td>25</td></tr><tr><td>13</td><td>Skills for Support Teams Now</td><td>28</td></tr><tr><td>14</td><td>Focused Training Review Today</td><td>29</td></tr><tr><td>15</td><td>Request Program Details Now</td><td>27</td></tr>
+</table>
+<div class="subsection-header">Description examples</div>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Request details to confirm service fit audience needs timing and budget before launch</td><td>85</td></tr><tr><td>2</td><td>Schedule today to review training and consulting options with a practical support team</td><td>86</td></tr><tr><td>3</td><td>Request details on scope stakeholders implementation needs and launch readiness</td><td>79</td></tr><tr><td>4</td><td>Schedule today to compare support options before campaign approval and account import</td><td>85</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Services - Human-Centered Care Consulting or note any headline or description changes needed.</p>
+</div>
+
+</section>
+
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header">
+    <div class="eyebrow">Ad Copy</div>
+    <h1>Services - Trauma-Informed Care Training</h1>
+    <p>Ad group 8 of 8. Review the full headline and description set for this service before launch.</p>
+  </div>
+  
+<div class="ad-card">
+  <h3>Services - Trauma-Informed Care Training</h3>
+  <div class="ad-preview">
+    <div class="sponsored">Sponsored</div>
+    <div class="url">www.emorrisonconsulting.com/services/lay-counselor-training-academy/TraumaInformedC/Services</div>
+    <div class="headline">Trauma Informed Training Help | Care Team Training Support | EM Consulting Support Team</div>
+    <div class="desc">Request details to confirm service fit audience needs timing and budget before launch</div>
+  </div>
+</div>
+<div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: pass. This table shows 15 complete headlines with character counts for launch review.</p>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Headline</th><th>Chars</th></tr><tr><td>1</td><td>Trauma Informed Training Help</td><td>29</td></tr><tr><td>2</td><td>Care Team Training Support</td><td>26</td></tr><tr><td>3</td><td>EM Consulting Support Team</td><td>26</td></tr><tr><td>4</td><td>Practical Support Planning</td><td>26</td></tr><tr><td>5</td><td>Training for Care Teams Now</td><td>27</td></tr><tr><td>6</td><td>Support for Better Access</td><td>25</td></tr><tr><td>7</td><td>Build Human Centered Care</td><td>25</td></tr><tr><td>8</td><td>Clear Implementation Steps</td><td>26</td></tr><tr><td>9</td><td>Review Team Support Needs</td><td>25</td></tr><tr><td>10</td><td>Improve Care Team Readiness</td><td>27</td></tr><tr><td>11</td><td>Plan Your Next Service Step</td><td>27</td></tr><tr><td>12</td><td>Consulting for Care Teams</td><td>25</td></tr><tr><td>13</td><td>Skills for Support Teams Now</td><td>28</td></tr><tr><td>14</td><td>Request Program Details Now</td><td>27</td></tr><tr><td>15</td><td>Compare Support Options Today</td><td>29</td></tr>
+</table>
+<div class="subsection-header">Description examples</div>
+<table class="ad-copy-table">
+  <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
+  <tr><th>#</th><th>Description</th><th>Chars</th></tr><tr><td>1</td><td>Request details to confirm service fit audience needs timing and budget before launch</td><td>85</td></tr><tr><td>2</td><td>Schedule today to review training and consulting options with a practical support team</td><td>86</td></tr><tr><td>3</td><td>Request details on scope stakeholders implementation needs and launch readiness</td><td>79</td></tr><tr><td>4</td><td>Schedule today to compare support options before campaign approval and account import</td><td>85</td></tr>
+</table>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Ads: confirm this ad copy direction for Services - Trauma-Informed Care Training or note any headline or description changes needed.</p>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Regional Targeting</div>
+    <h1>Where The Campaign Is Set To Reach</h1>
+    <p>The current plan uses national targeting as a review placeholder because the website does not prove a specific service area. Confirm the full service area or provide priority markets before launch.</p>
+  </div>
+  
+<div class="targeting-panel compact">
+  <div class="subsection-header" style="margin-top:0;">Current targeting and review items</div>
+  <p>The current build targets United States because the website does not clearly define a service area. Treat this as a review item, not a confirmed market decision.</p>
+  <div style="margin:10px 0;"><span class="state-chip">United States</span></div>
+  <table class="targeting-table">
+    <colgroup><col class="type-col"><col class="area-col"><col class="status-col"><col></colgroup>
+    <tr><th>Area type</th><th>Area</th><th>Status</th><th>What to confirm</th></tr>
+      <tr><td>Country</td><td>United States</td><td>Ready for review</td><td>Confirm whether this means all 50 states are eligible to receive traffic.</td></tr><tr><td>Top states</td><td>Top 5 states</td><td>Needed</td><td>List the states where you do most of your work, or where new wins would matter most.</td></tr><tr><td>City</td><td>Top 5 cities or metros</td><td>Needed</td><td>List the cities or metro areas where spend should concentrate first if national reach is too broad.</td></tr><tr><td>Current work</td><td>Largest current markets</td><td>Needed</td><td>Tell us where most current clients or organizational relationships are located.</td></tr><tr><td>Fastest wins</td><td>Priority growth markets</td><td>Needed</td><td>Tell us whether there are focus areas where stronger referrals, recognition, or capacity can produce faster wins.</td></tr><tr><td>Exclusions</td><td>States, cities, or ZIPs</td><td>Needed</td><td>Identify anywhere the campaign should not spend, even if national targeting is approved.</td></tr>
+  </table>
+  <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
+  <div class="confirm-strip">
+    <h3>Please confirm</h3>
+    <p>Regional targeting: confirm whether you serve all 50 states. If not, send your top 5 states, top 5 cities or metros, current strongest markets, fastest-win focus areas, and any exclusions.</p>
+  </div>
+</div>
+
+</section>
+
+  
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Budget</div>
+    <h1>How We Protect Your Budget While Improving Performance</h1>
+    <p>This page shows how the approved monthly budget turns into daily pacing, why spend should not be front-loaded, and how we keep room to improve once real search data appears.</p>
+  </div>
+  
+
+<div class="budget-summary-cards">
+  <div class="budget-summary-card">
+    <div class="label">Approved monthly budget</div>
+    <strong>$3,000</strong>
+  </div>
+  <div class="budget-summary-card">
+    <div class="label">Daily budget</div>
+    <strong>$100</strong>
+  </div>
+  <div class="budget-summary-card">
+    <div class="label">Low daily range</div>
+    <strong>$60</strong>
+  </div>
+  <div class="budget-summary-card">
+    <div class="label">High daily range</div>
+    <strong>$145</strong>
+  </div>
+</div>
+
+<div class="budget-section-head">
+  <div class="budget-accent"></div>
+  <div>
+    <h2>How your budget moves through the month</h2>
+    <p>The goal is to protect early spend while search terms, cost per click, and service demand become clearer.</p>
+  </div>
+</div>
+<div class="budget-legend" role="list">
+  <div class="budget-legend-item" role="listitem"><span class="budget-swatch" style="background: rgba(165, 201, 197, 0.38); border: 1px solid rgba(13, 104, 112, 0.28);"></span>Healthy daily range</div>
+  <div class="budget-legend-item" role="listitem"><span class="budget-swatch" style="background:#d17a32;"></span>Amount spent over time</div>
+  <div class="budget-legend-item" role="listitem"><span class="budget-swatch" style="background:#0d6870;"></span>Budget remaining</div>
+  <div class="budget-legend-item" role="listitem"><span class="budget-swatch" style="background:#b65f3e;"></span>CPC and click movement</div>
+</div>
+<div class="budget-chart-card">
+  <svg class="budget-svg-main" viewBox="0 0 920 400" role="img" aria-label="Budget pacing with healthy range, spend ramp, remaining budget, and daily variation">
+    <defs>
+      <linearGradient id="g-orange" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#e8883a" />
+        <stop offset="100%" stop-color="#d17a32" />
+      </linearGradient>
+      <linearGradient id="g-teal" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0d6870" />
+        <stop offset="100%" stop-color="#0a5258" />
+      </linearGradient>
+    </defs>
+    <rect x="88" y="52" width="758" height="292" fill="rgba(255,255,255,0.35)" stroke="#c9b79d" stroke-width="1.5" rx="4" />
+    <line x1="88" y1="344" x2="846" y2="344" stroke="#9a8b78" stroke-width="2" stroke-linecap="round" />
+    <line x1="88" y1="52" x2="88" y2="344" stroke="#9a8b78" stroke-width="2" stroke-linecap="round" />
+    <g stroke="#d7c3aa" stroke-width="1" stroke-dasharray="3 5">
+      <line x1="88" y1="96" x2="846" y2="96" />
+      <line x1="88" y1="164" x2="846" y2="164" />
+      <line x1="88" y1="232" x2="846" y2="232" />
+      <line x1="88" y1="300" x2="846" y2="300" />
+    </g>
+    <text x="24" y="102" fill="#6b5f54" font-size="11" font-weight="700">High</text>
+    <text x="15" y="238" fill="#6b5f54" font-size="11" font-weight="700">Target</text>
+    <text x="28" y="306" fill="#6b5f54" font-size="11" font-weight="700">Low</text>
+    <rect x="88" y="200" width="758" height="64" fill="rgba(165, 201, 197, 0.38)" rx="3" />
+    <line x1="88" y1="232" x2="846" y2="232" stroke="#6eb3ad" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12" opacity="0.85" />
+    <path d="M 88 312 L 88 312 C 200 292, 320 252, 430 198 C 540 152, 680 110, 846 42 L 846 344 L 88 344 Z" fill="url(#g-orange)" opacity="0.08" />
+    <path d="M 88 312 C 200 292, 320 252, 430 198 C 540 152, 680 110, 846 42" fill="none" stroke="url(#g-orange)" stroke-width="5" stroke-linecap="round" />
+    <path d="M 88 68 C 210 74, 320 104, 430 154 C 550 206, 680 274, 846 324" fill="none" stroke="url(#g-teal)" stroke-width="5.5" stroke-linecap="round" />
+    <path d="M 88 244 C 150 218, 220 218, 280 246 C 350 284, 400 274, 450 246 C 500 218, 560 226, 620 258 C 700 294, 780 274, 846 246" fill="none" stroke="#b65f3e" stroke-width="4.5" stroke-linecap="round" opacity="0.95" />
+    <g font-size="12" font-weight="800" text-anchor="middle" dominant-baseline="middle">
+      <circle cx="88" cy="68" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+      <text x="88" y="69" fill="#0d6870">A</text>
+      <circle cx="164" cy="236" r="11" fill="#f6f0e7" stroke="#b65f3e" stroke-width="3" />
+      <text x="164" y="237" fill="#b65f3e">B</text>
+      <circle cx="430" cy="248" r="11" fill="#f6f0e7" stroke="#b65f3e" stroke-width="3" />
+      <text x="430" y="249" fill="#b65f3e">C</text>
+      <circle cx="662" cy="268" r="11" fill="#f6f0e7" stroke="#b65f3e" stroke-width="3" />
+      <text x="662" y="269" fill="#b65f3e">D</text>
+      <circle cx="636" cy="138" r="11" fill="#f6f0e7" stroke="#d17a32" stroke-width="3" />
+      <text x="636" y="139" fill="#e27520">E</text>
+      <circle cx="846" cy="324" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+      <text x="846" y="325" fill="#0d6870">F</text>
+    </g>
+    <text x="88" y="378" fill="#6b5f54" font-size="12" font-weight="700">Day 1</text>
+    <text x="778" y="378" fill="#6b5f54" font-size="12" font-weight="700">Day 30</text>
+  </svg>
+</div>
+<table class="budget-guide">
+  <tr><th>Key</th><th>What it shows</th></tr>
+  <tr><td class="marker-cell">A</td><td>Most of the monthly budget is still available, so we can learn before pushing spend.</td></tr>
+  <tr><td class="marker-cell">B</td><td>Day-to-day swings in CPC, demand, and clicks are normal early on.</td></tr>
+  <tr><td class="marker-cell">C</td><td>We refine search terms and traffic while keeping daily spend inside the healthy band.</td></tr>
+  <tr><td class="marker-cell">D</td><td>A quieter day is not always a problem. Auction conditions and CPC move too.</td></tr>
+  <tr><td class="marker-cell">E</td><td>Spend steps up as results and intent become clearer.</td></tr>
+  <tr><td class="marker-cell">F</td><td>Remaining budget eases down through the month instead of front-loading spend.</td></tr>
+</table>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Budget</div>
+    <h1>Why Spend Increases As Performance Gets Clearer</h1>
+    <p>This page explains the operating logic behind the pacing curve. We do not spend more because the campaign is guessing. We spend more when the evidence is cleaner.</p>
+  </div>
+  
+<div class="budget-section-head">
+  <div class="budget-accent"></div>
+  <div>
+    <h2>Why spend increases as performance gets clearer</h2>
+    <p>Early spend is intentionally cautious. As waste is cut and signals improve, more of the same monthly budget can be committed with confidence.</p>
+  </div>
+</div>
+<div class="budget-split">
+  <div class="budget-chart-card">
+    <svg class="budget-svg-ramp" viewBox="0 0 540 300" role="img" aria-label="Confidence in spending rises from early to late month">
+      <defs>
+        <linearGradient id="ramp-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0d6870" stop-opacity="0.18" />
+          <stop offset="100%" stop-color="#0d6870" stop-opacity="0.02" />
+        </linearGradient>
+      </defs>
+      <rect x="56" y="36" width="464" height="232" fill="rgba(255,255,255,0.35)" stroke="#c9b79d" stroke-width="1.2" rx="3" />
+      <line x1="56" y1="268" x2="520" y2="268" stroke="#9a8b78" stroke-width="1.8" />
+      <line x1="56" y1="36" x2="56" y2="268" stroke="#9a8b78" stroke-width="1.8" />
+      <g stroke="#d7c3aa" stroke-width="1" stroke-dasharray="3 5">
+        <line x1="56" y1="210" x2="520" y2="210" />
+        <line x1="56" y1="150" x2="520" y2="150" />
+        <line x1="56" y1="90" x2="520" y2="90" />
+      </g>
+      <text x="8" y="96" fill="#6b5f54" font-size="11" font-weight="700">More</text>
+      <text x="10" y="272" fill="#6b5f54" font-size="11" font-weight="700">Less</text>
+      <path d="M 56 252 C 120 246, 180 220, 240 186 C 300 150, 360 102, 520 48 L 520 268 L 56 268 Z" fill="url(#ramp-fill)" />
+      <path d="M 56 252 C 120 246, 180 220, 240 186 C 300 150, 360 102, 520 48" fill="none" stroke="#0d6870" stroke-width="5" stroke-linecap="round" />
+      <g font-size="12" font-weight="800" text-anchor="middle" dominant-baseline="middle">
+        <circle cx="118" cy="244" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+        <text x="118" y="245" fill="#0d6870">A</text>
+        <circle cx="232" cy="198" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+        <text x="232" y="199" fill="#0d6870">B</text>
+        <circle cx="352" cy="128" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+        <text x="352" y="129" fill="#0d6870">C</text>
+        <circle cx="488" cy="56" r="11" fill="#f6f0e7" stroke="#0d6870" stroke-width="3" />
+        <text x="488" y="57" fill="#0d6870">D</text>
+      </g>
+      <text x="58" y="292" fill="#6b5f54" font-size="11" font-weight="700">Early month</text>
+      <text x="404" y="292" fill="#6b5f54" font-size="11" font-weight="700">Later month</text>
+    </svg>
+  </div>
+  <table class="budget-guide" style="margin-top:0;">
+    <tr><th>Step</th><th>What improves</th></tr>
+    <tr><td class="marker-cell">A</td><td>We see which searches are worth paying for before scaling.</td></tr>
+    <tr><td class="marker-cell">B</td><td>Low-value traffic is trimmed.</td></tr>
+    <tr><td class="marker-cell">C</td><td>CPC, conversions, and lead quality become easier to read.</td></tr>
+    <tr><td class="marker-cell">D</td><td>We can raise spend because the data behind it is cleaner.</td></tr>
+  </table>
+</div>
+<div class="budget-section-head" style="margin-top:20px;">
+  <div class="budget-accent"></div>
+  <h2>What this means for your campaign</h2>
+</div>
+<div class="budget-takeaways">
+  <div class="budget-tile"><h3>We pace the full month</h3><p>Daily spend and clicks will move. The aim is healthy pacing through day 30.</p></div>
+  <div class="budget-tile"><h3>Starting lighter protects budget</h3><p>Early limits leave room to learn before we push winning areas.</p></div>
+  <div class="budget-tile"><h3>CPC changes click volume</h3><p>The same dollars buy more or fewer clicks as auctions shift.</p></div>
+  <div class="budget-tile"><h3>Later spend is intentional</h3><p>Increases follow clearer performance, not reactive day-to-day changes.</p></div>
+</div>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Budget: confirm the $3,000 monthly budget before launch.</p>
+</div>
+
+</section>
+
+  
+<section class="section pdf-page">
+  <div class="section-header">
+    <div class="eyebrow">Approval</div>
+    <h1>Ready for Approval</h1>
+    <p>The core campaign build is ready. Confirm service priority, ad copy, regional targeting, and budget so the launch can move forward.</p>
+  </div>
+  
+<div class="launch-brief">
+  <div class="launch-brief-grid">
+    <div>
+      <div class="launch-kicker">Launch brief</div>
+      <h2>Campaign setup is ready. Confirm targeting.</h2>
+      <p>The campaign is prepared with service-based structure, responsive search ads, and a proposed monthly budget. One regional coverage decision remains before launch.</p>
+      <div class="launch-actions">
+        <span class="launch-pill primary">Approve Core Setup</span>
+        <span class="launch-pill secondary">Confirm Regions</span>
+      </div>
+    </div>
+    <div class="launch-stat-list">
+      <div class="launch-stat"><span>Ad Groups</span><span>8</span></div>
+      <div class="launch-stat"><span>Ads</span><span>8</span></div>
+      <div class="launch-stat"><span>Regions</span><span>1</span></div>
+      <div class="launch-stat"><span>Budget</span><span>$3,000</span></div>
+    </div>
+  </div>
+</div>
+<div class="approval-list">
+<div class="approval-row">
+  <div class="approval-icon">&#10003;</div>
+  <div class="approval-copy">
+    <h3>Approve ad group structure</h3>
+    <p>8 service-specific ad groups are ready.</p>
+  </div>
+  <div class="approval-button">Approve</div>
+</div>
+
+<div class="approval-row">
+  <div class="approval-icon">&#10003;</div>
+  <div class="approval-copy">
+    <h3>Approve responsive search ads</h3>
+    <p>8 ads are written around the service categories.</p>
+  </div>
+  <div class="approval-button">Approve</div>
+</div>
+
+<div class="approval-row">
+  <div class="approval-icon warn">!</div>
+  <div class="approval-copy">
+    <h3>Confirm regional targeting</h3>
+    <p>United States is the current reach. Confirm all 50 states or send priority markets.</p>
+  </div>
+  <div class="approval-button warn">Confirm</div>
+</div>
+
+<div class="approval-row">
+  <div class="approval-icon">&#10003;</div>
+  <div class="approval-copy">
+    <h3>Approve monthly budget</h3>
+    <p>Proposed launch budget is $3,000/month.</p>
+  </div>
+  <div class="approval-button">Approve</div>
+</div>
+</div>
+
+</section>
+
+</body>
+</html>

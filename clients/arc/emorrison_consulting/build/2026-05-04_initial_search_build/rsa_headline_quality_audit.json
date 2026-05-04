@@ -1,0 +1,711 @@
+{
+  "status": "pass",
+  "rsa_rows": 8,
+  "failing_rsa_rows": 0,
+  "audits": [
+    {
+      "status": "pass",
+      "ad_group": "Services - Lay Counselor Academy",
+      "service_label": "Lay Counselor Academy",
+      "client_name": "EM Consulting",
+      "headline_count": 15,
+      "headline_characters": [
+        {
+          "slot": 1,
+          "headline": "Lay Counselor Training Help",
+          "chars": 27
+        },
+        {
+          "slot": 2,
+          "headline": "Plan Lay Counselor Programs",
+          "chars": 27
+        },
+        {
+          "slot": 3,
+          "headline": "EM Consulting Support Team",
+          "chars": 26
+        },
+        {
+          "slot": 4,
+          "headline": "Practical Support Planning",
+          "chars": 26
+        },
+        {
+          "slot": 5,
+          "headline": "Training for Care Teams Now",
+          "chars": 27
+        },
+        {
+          "slot": 6,
+          "headline": "Support for Better Access",
+          "chars": 25
+        },
+        {
+          "slot": 7,
+          "headline": "Build Human Centered Care",
+          "chars": 25
+        },
+        {
+          "slot": 8,
+          "headline": "Clear Implementation Steps",
+          "chars": 26
+        },
+        {
+          "slot": 9,
+          "headline": "Review Team Support Needs",
+          "chars": 25
+        },
+        {
+          "slot": 10,
+          "headline": "Improve Care Team Readiness",
+          "chars": 27
+        },
+        {
+          "slot": 11,
+          "headline": "Plan Your Next Service Step",
+          "chars": 27
+        },
+        {
+          "slot": 12,
+          "headline": "Consulting for Care Teams",
+          "chars": 25
+        },
+        {
+          "slot": 13,
+          "headline": "Skills for Support Teams Now",
+          "chars": 28
+        },
+        {
+          "slot": 14,
+          "headline": "Focused Training Review Today",
+          "chars": 29
+        },
+        {
+          "slot": 15,
+          "headline": "Request Program Details Now",
+          "chars": 27
+        }
+      ],
+      "issues": [],
+      "duplicate_groups": [],
+      "repeated_root_counts": {},
+      "broken_truncations": []
+    },
+    {
+      "status": "pass",
+      "ad_group": "Services - Employee Mental Health Support",
+      "service_label": "Employee Mental Health Support",
+      "client_name": "EM Consulting",
+      "headline_count": 15,
+      "headline_characters": [
+        {
+          "slot": 1,
+          "headline": "Employee Wellbeing Planning",
+          "chars": 27
+        },
+        {
+          "slot": 2,
+          "headline": "Employee Mental Health Plans",
+          "chars": 28
+        },
+        {
+          "slot": 3,
+          "headline": "EM Consulting Support Team",
+          "chars": 26
+        },
+        {
+          "slot": 4,
+          "headline": "Practical Support Planning",
+          "chars": 26
+        },
+        {
+          "slot": 5,
+          "headline": "Training for Care Teams Now",
+          "chars": 27
+        },
+        {
+          "slot": 6,
+          "headline": "Support for Better Access",
+          "chars": 25
+        },
+        {
+          "slot": 7,
+          "headline": "Build Human Centered Care",
+          "chars": 25
+        },
+        {
+          "slot": 8,
+          "headline": "Clear Implementation Steps",
+          "chars": 26
+        },
+        {
+          "slot": 9,
+          "headline": "Review Team Support Needs",
+          "chars": 25
+        },
+        {
+          "slot": 10,
+          "headline": "Improve Care Team Readiness",
+          "chars": 27
+        },
+        {
+          "slot": 11,
+          "headline": "Plan Your Next Service Step",
+          "chars": 27
+        },
+        {
+          "slot": 12,
+          "headline": "Consulting for Care Teams",
+          "chars": 25
+        },
+        {
+          "slot": 13,
+          "headline": "Skills for Support Teams Now",
+          "chars": 28
+        },
+        {
+          "slot": 14,
+          "headline": "Focused Training Review Today",
+          "chars": 29
+        },
+        {
+          "slot": 15,
+          "headline": "Request Program Details Now",
+          "chars": 27
+        }
+      ],
+      "issues": [],
+      "duplicate_groups": [],
+      "repeated_root_counts": {},
+      "broken_truncations": []
+    },
+    {
+      "status": "pass",
+      "ad_group": "Services - Integrated Behavioral Health Consulting",
+      "service_label": "Integrated Behavioral Health Consulting",
+      "client_name": "EM Consulting",
+      "headline_count": 15,
+      "headline_characters": [
+        {
+          "slot": 1,
+          "headline": "Behavioral Health Consulting",
+          "chars": 28
+        },
+        {
+          "slot": 2,
+          "headline": "Integrated Care Consulting",
+          "chars": 26
+        },
+        {
+          "slot": 3,
+          "headline": "EM Consulting Support Team",
+          "chars": 26
+        },
+        {
+          "slot": 4,
+          "headline": "Practical Support Planning",
+          "chars": 26
+        },
+        {
+          "slot": 5,
+          "headline": "Training for Care Teams Now",
+          "chars": 27
+        },
+        {
+          "slot": 6,
+          "headline": "Support for Better Access",
+          "chars": 25
+        },
+        {
+          "slot": 7,
+          "headline": "Build Human Centered Care",
+          "chars": 25
+        },
+        {
+          "slot": 8,
+          "headline": "Clear Implementation Steps",
+          "chars": 26
+        },
+        {
+          "slot": 9,
+          "headline": "Review Team Support Needs",
+          "chars": 25
+        },
+        {
+          "slot": 10,
+          "headline": "Improve Care Team Readiness",
+          "chars": 27
+        },
+        {
+          "slot": 11,
+          "headline": "Plan Your Next Service Step",
+          "chars": 27
+        },
+        {
+          "slot": 12,
+          "headline": "Consulting for Care Teams",
+          "chars": 25
+        },
+        {
+          "slot": 13,
+          "headline": "Skills for Support Teams Now",
+          "chars": 28
+        },
+        {
+          "slot": 14,
+          "headline": "Focused Training Review Today",
+          "chars": 29
+        },
+        {
+          "slot": 15,
+          "headline": "Request Program Details Now",
+          "chars": 27
+        }
+      ],
+      "issues": [],
+      "duplicate_groups": [],
+      "repeated_root_counts": {},
+      "broken_truncations": []
+    },
+    {
+      "status": "pass",
+      "ad_group": "Services - Empathic Communication Training",
+      "service_label": "Empathic Communication Training",
+      "client_name": "EM Consulting",
+      "headline_count": 15,
+      "headline_characters": [
+        {
+          "slot": 1,
+          "headline": "Empathic Communication Help",
+          "chars": 27
+        },
+        {
+          "slot": 2,
+          "headline": "Communication Training Help",
+          "chars": 27
+        },
+        {
+          "slot": 3,
+          "headline": "EM Consulting Support Team",
+          "chars": 26
+        },
+        {
+          "slot": 4,
+          "headline": "Practical Support Planning",
+          "chars": 26
+        },
+        {
+          "slot": 5,
+          "headline": "Training for Care Teams Now",
+          "chars": 27
+        },
+        {
+          "slot": 6,
+          "headline": "Support for Better Access",
+          "chars": 25
+        },
+        {
+          "slot": 7,
+          "headline": "Build Human Centered Care",
+          "chars": 25
+        },
+        {
+          "slot": 8,
+          "headline": "Clear Implementation Steps",
+          "chars": 26
+        },
+        {
+          "slot": 9,
+          "headline": "Review Team Support Needs",
+          "chars": 25
+        },
+        {
+          "slot": 10,
+          "headline": "Improve Care Team Readiness",
+          "chars": 27
+        },
+        {
+          "slot": 11,
+          "headline": "Plan Your Next Service Step",
+          "chars": 27
+        },
+        {
+          "slot": 12,
+          "headline": "Consulting for Care Teams",
+          "chars": 25
+        },
+        {
+          "slot": 13,
+          "headline": "Skills for Support Teams Now",
+          "chars": 28
+        },
+        {
+          "slot": 14,
+          "headline": "Focused Training Review Today",
+          "chars": 29
+        },
+        {
+          "slot": 15,
+          "headline": "Request Program Details Now",
+          "chars": 27
+        }
+      ],
+      "issues": [],
+      "duplicate_groups": [],
+      "repeated_root_counts": {},
+      "broken_truncations": []
+    },
+    {
+      "status": "pass",
+      "ad_group": "Services - Clinical Support",
+      "service_label": "Clinical Support",
+      "client_name": "EM Consulting",
+      "headline_count": 15,
+      "headline_characters": [
+        {
+          "slot": 1,
+          "headline": "Clinical Team Support Plans",
+          "chars": 27
+        },
+        {
+          "slot": 2,
+          "headline": "Clinical Support Planning",
+          "chars": 25
+        },
+        {
+          "slot": 3,
+          "headline": "EM Consulting Support Team",
+          "chars": 26
+        },
+        {
+          "slot": 4,
+          "headline": "Practical Support Planning",
+          "chars": 26
+        },
+        {
+          "slot": 5,
+          "headline": "Training for Care Teams Now",
+          "chars": 27
+        },
+        {
+          "slot": 6,
+          "headline": "Support for Better Access",
+          "chars": 25
+        },
+        {
+          "slot": 7,
+          "headline": "Build Human Centered Care",
+          "chars": 25
+        },
+        {
+          "slot": 8,
+          "headline": "Clear Implementation Steps",
+          "chars": 26
+        },
+        {
+          "slot": 9,
+          "headline": "Review Team Support Needs",
+          "chars": 25
+        },
+        {
+          "slot": 10,
+          "headline": "Improve Care Team Readiness",
+          "chars": 27
+        },
+        {
+          "slot": 11,
+          "headline": "Plan Your Next Service Step",
+          "chars": 27
+        },
+        {
+          "slot": 12,
+          "headline": "Consulting for Care Teams",
+          "chars": 25
+        },
+        {
+          "slot": 13,
+          "headline": "Skills for Support Teams Now",
+          "chars": 28
+        },
+        {
+          "slot": 14,
+          "headline": "Focused Training Review Today",
+          "chars": 29
+        },
+        {
+          "slot": 15,
+          "headline": "Request Program Details Now",
+          "chars": 27
+        }
+      ],
+      "issues": [],
+      "duplicate_groups": [],
+      "repeated_root_counts": {},
+      "broken_truncations": []
+    },
+    {
+      "status": "pass",
+      "ad_group": "Services - Learning and Development",
+      "service_label": "Learning and Development",
+      "client_name": "EM Consulting",
+      "headline_count": 15,
+      "headline_characters": [
+        {
+          "slot": 1,
+          "headline": "Learning Development Help",
+          "chars": 25
+        },
+        {
+          "slot": 2,
+          "headline": "EM Consulting Support Team",
+          "chars": 26
+        },
+        {
+          "slot": 3,
+          "headline": "Practical Support Planning",
+          "chars": 26
+        },
+        {
+          "slot": 4,
+          "headline": "Training for Care Teams Now",
+          "chars": 27
+        },
+        {
+          "slot": 5,
+          "headline": "Support for Better Access",
+          "chars": 25
+        },
+        {
+          "slot": 6,
+          "headline": "Build Human Centered Care",
+          "chars": 25
+        },
+        {
+          "slot": 7,
+          "headline": "Clear Implementation Steps",
+          "chars": 26
+        },
+        {
+          "slot": 8,
+          "headline": "Review Team Support Needs",
+          "chars": 25
+        },
+        {
+          "slot": 9,
+          "headline": "Improve Care Team Readiness",
+          "chars": 27
+        },
+        {
+          "slot": 10,
+          "headline": "Plan Your Next Service Step",
+          "chars": 27
+        },
+        {
+          "slot": 11,
+          "headline": "Consulting for Care Teams",
+          "chars": 25
+        },
+        {
+          "slot": 12,
+          "headline": "Skills for Support Teams Now",
+          "chars": 28
+        },
+        {
+          "slot": 13,
+          "headline": "Focused Training Review Today",
+          "chars": 29
+        },
+        {
+          "slot": 14,
+          "headline": "Request Program Details Now",
+          "chars": 27
+        },
+        {
+          "slot": 15,
+          "headline": "Compare Support Options Today",
+          "chars": 29
+        }
+      ],
+      "issues": [],
+      "duplicate_groups": [],
+      "repeated_root_counts": {},
+      "broken_truncations": []
+    },
+    {
+      "status": "pass",
+      "ad_group": "Services - Human-Centered Care Consulting",
+      "service_label": "Human-Centered Care Consulting",
+      "client_name": "EM Consulting",
+      "headline_count": 15,
+      "headline_characters": [
+        {
+          "slot": 1,
+          "headline": "Human Centered Care Plans",
+          "chars": 25
+        },
+        {
+          "slot": 2,
+          "headline": "Human Centered Consulting",
+          "chars": 25
+        },
+        {
+          "slot": 3,
+          "headline": "EM Consulting Support Team",
+          "chars": 26
+        },
+        {
+          "slot": 4,
+          "headline": "Practical Support Planning",
+          "chars": 26
+        },
+        {
+          "slot": 5,
+          "headline": "Training for Care Teams Now",
+          "chars": 27
+        },
+        {
+          "slot": 6,
+          "headline": "Support for Better Access",
+          "chars": 25
+        },
+        {
+          "slot": 7,
+          "headline": "Build Human Centered Care",
+          "chars": 25
+        },
+        {
+          "slot": 8,
+          "headline": "Clear Implementation Steps",
+          "chars": 26
+        },
+        {
+          "slot": 9,
+          "headline": "Review Team Support Needs",
+          "chars": 25
+        },
+        {
+          "slot": 10,
+          "headline": "Improve Care Team Readiness",
+          "chars": 27
+        },
+        {
+          "slot": 11,
+          "headline": "Plan Your Next Service Step",
+          "chars": 27
+        },
+        {
+          "slot": 12,
+          "headline": "Consulting for Care Teams",
+          "chars": 25
+        },
+        {
+          "slot": 13,
+          "headline": "Skills for Support Teams Now",
+          "chars": 28
+        },
+        {
+          "slot": 14,
+          "headline": "Focused Training Review Today",
+          "chars": 29
+        },
+        {
+          "slot": 15,
+          "headline": "Request Program Details Now",
+          "chars": 27
+        }
+      ],
+      "issues": [],
+      "duplicate_groups": [],
+      "repeated_root_counts": {},
+      "broken_truncations": []
+    },
+    {
+      "status": "pass",
+      "ad_group": "Services - Trauma-Informed Care Training",
+      "service_label": "Trauma-Informed Care Training",
+      "client_name": "EM Consulting",
+      "headline_count": 15,
+      "headline_characters": [
+        {
+          "slot": 1,
+          "headline": "Trauma Informed Training Help",
+          "chars": 29
+        },
+        {
+          "slot": 2,
+          "headline": "Care Team Training Support",
+          "chars": 26
+        },
+        {
+          "slot": 3,
+          "headline": "EM Consulting Support Team",
+          "chars": 26
+        },
+        {
+          "slot": 4,
+          "headline": "Practical Support Planning",
+          "chars": 26
+        },
+        {
+          "slot": 5,
+          "headline": "Training for Care Teams Now",
+          "chars": 27
+        },
+        {
+          "slot": 6,
+          "headline": "Support for Better Access",
+          "chars": 25
+        },
+        {
+          "slot": 7,
+          "headline": "Build Human Centered Care",
+          "chars": 25
+        },
+        {
+          "slot": 8,
+          "headline": "Clear Implementation Steps",
+          "chars": 26
+        },
+        {
+          "slot": 9,
+          "headline": "Review Team Support Needs",
+          "chars": 25
+        },
+        {
+          "slot": 10,
+          "headline": "Improve Care Team Readiness",
+          "chars": 27
+        },
+        {
+          "slot": 11,
+          "headline": "Plan Your Next Service Step",
+          "chars": 27
+        },
+        {
+          "slot": 12,
+          "headline": "Consulting for Care Teams",
+          "chars": 25
+        },
+        {
+          "slot": 13,
+          "headline": "Skills for Support Teams Now",
+          "chars": 28
+        },
+        {
+          "slot": 14,
+          "headline": "Request Program Details Now",
+          "chars": 27
+        },
+        {
+          "slot": 15,
+          "headline": "Compare Support Options Today",
+          "chars": 29
+        }
+      ],
+      "issues": [],
+      "duplicate_groups": [],
+      "repeated_root_counts": {},
+      "broken_truncations": []
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "sources": {
+    "account_limits": "https://support.google.com/google-ads/answer/6372658?hl=en",
+    "sitelink": "https://support.google.com/google-ads/answer/2375416?hl=en",
+    "callout": "https://support.google.com/google-ads/answer/6079510?hl=en",
+    "structured_snippet": "https://support.google.com/google-ads/answer/6280012?hl=en",
+    "price": "https://support.google.com/google-ads/answer/7065415?hl=en",
+    "promotion": "https://support.google.com/google-ads/answer/7367521?hl=en",
+    "image": "https://support.google.com/google-ads/answer/9566341?hl=en",
+    "business_information": "https://support.google.com/google-ads/answer/12497613?hl=en-GB",
+    "business_information_requirements": "https://support.google.com/adspolicy/answer/12499303?hl=en",
+    "location": "https://support.google.com/google-ads/answer/2404182?hl=en"
+  },
+  "matrix": [
+    {
+      "asset_type": "sitelink",
+      "official_source": "https://support.google.com/google-ads/answer/2375416?hl=en",
+      "limits": {
+        "link_text": 25,
+        "description_line": 35,
+        "preferred_count": 6,
+        "minimum_to_show": 2
+      },
+      "editor_fields": [
+        "Campaign",
+        "Ad Group",
+        "Link text",
+        "Final URL",
+        "Description line 1",
+        "Description line 2"
+      ],
+      "generation_rule": "Use user-intent labels, never bare sitemap labels. Require distinct final URLs and both description lines."
+    },
+    {
+      "asset_type": "callout",
+      "official_source": "https://support.google.com/google-ads/answer/6079510?hl=en",
+      "limits": {
+        "text": 25
+      },
+      "editor_fields": [
+        "Campaign",
+        "Ad Group",
+        "Callout text"
+      ],
+      "generation_rule": "Use confirmed value props that apply at the selected account branch."
+    },
+    {
+      "asset_type": "structured_snippet",
+      "official_source": "https://support.google.com/google-ads/answer/6280012?hl=en",
+      "limits": {
+        "values_min": 3,
+        "values_max": 10,
+        "value": 25
+      },
+      "editor_fields": [
+        "Campaign",
+        "Structured snippet header",
+        "Structured snippet values"
+      ],
+      "generation_rule": "Use approved headers. Prefer Services and service-area lists when evidence supports them."
+    },
+    {
+      "asset_type": "call",
+      "official_source": "https://support.google.com/google-ads/answer/2454052?hl=en",
+      "limits": {
+        "phone_number": "must match website or client evidence"
+      },
+      "editor_fields": [
+        "Campaign",
+        "Phone number",
+        "Country code"
+      ],
+      "generation_rule": "Generate only when website evidence has one confirmed phone number."
+    },
+    {
+      "asset_type": "price",
+      "official_source": "https://support.google.com/google-ads/answer/7065415?hl=en",
+      "limits": {
+        "items_min": 3,
+        "header": 25,
+        "description": 25
+      },
+      "editor_fields": [
+        "Campaign",
+        "Price type",
+        "Price qualifier",
+        "Currency",
+        "Price header",
+        "Price amount",
+        "Final URL"
+      ],
+      "generation_rule": "Generate only from explicit website prices. Skip if fewer than 3 price points are visible."
+    },
+    {
+      "asset_type": "promotion",
+      "official_source": "https://support.google.com/google-ads/answer/7367521?hl=en",
+      "limits": {
+        "promotion_target": 20
+      },
+      "editor_fields": [
+        "Campaign",
+        "Promotion target",
+        "Percent off",
+        "Money amount off",
+        "Promotion code",
+        "Final URL"
+      ],
+      "generation_rule": "Generate only when explicit promotion or sale evidence exists."
+    },
+    {
+      "asset_type": "image",
+      "official_source": "https://support.google.com/google-ads/answer/9566341?hl=en",
+      "limits": {
+        "minimum_local_manifest_check": "300x300 with known file path"
+      },
+      "editor_fields": [
+        "manifest only until Editor import/export is verified"
+      ],
+      "generation_rule": "Copy only local image files with basic dimension evidence into the review import package."
+    },
+    {
+      "asset_type": "business_logo",
+      "official_source": "https://support.google.com/adspolicy/answer/12499303?hl=en",
+      "limits": {
+        "minimum_local_manifest_check": "128x128 with logo evidence"
+      },
+      "editor_fields": [
+        "manifest only until Editor import/export is verified"
+      ],
+      "generation_rule": "Require website logo evidence and flag approval depends on advertiser verification."
+    },
+    {
+      "asset_type": "business_name",
+      "official_source": "https://support.google.com/google-ads/answer/12497613?hl=en-GB",
+      "limits": {
+        "business_name": 25
+      },
+      "editor_fields": [
+        "Campaign",
+        "Business name"
+      ],
+      "generation_rule": "Generate when inferred name fits limits. Human review must confirm legal or domain match."
+    },
+    {
+      "asset_type": "location",
+      "official_source": "https://support.google.com/google-ads/answer/2404182?hl=en",
+      "limits": {
+        "gbp_link_required": true
+      },
+      "editor_fields": [
+        "review task only"
+      ],
+      "generation_rule": "Do not fake location assets. Create GBP linking review task when not confirmed."
+    }
+  ]
+}

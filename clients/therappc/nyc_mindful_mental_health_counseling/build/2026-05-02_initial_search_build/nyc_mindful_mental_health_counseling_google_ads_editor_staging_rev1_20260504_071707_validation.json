@@ -1,0 +1,35 @@
+{
+  "status": "pass",
+  "source_csv": "clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/nyc_mindful_mental_health_counseling_google_ads_editor_staging_rev1_20260504_071707.csv",
+  "encoding": "utf-16",
+  "rows": 372,
+  "headers": 42,
+  "campaigns": [
+    "ARC - Search - Anxiety Therapy - NJ - REV1",
+    "ARC - Search - Anxiety Therapy - NY - REV1"
+  ],
+  "ad_groups": 42,
+  "counts": {
+    "campaign_rows": 2,
+    "ad_group_rows": 42,
+    "keyword_rows": 264,
+    "negative_keyword_rows": 20,
+    "rsa_rows": 42,
+    "location_rows": 2,
+    "radius_rows": 0,
+    "sitelink_rows": 0,
+    "callout_rows": 0,
+    "structured_snippet_rows": 0,
+    "call_asset_rows": 0,
+    "price_rows": 0,
+    "promotion_rows": 0,
+    "business_name_rows": 0,
+    "bid_modifier_rows": 0
+  },
+  "keyword_criterion_types": {
+    "Negative Phrase": 20,
+    "Phrase": 264
+  },
+  "issue_counts": {},
+  "issues": []
+}
