@@ -46,7 +46,27 @@ def test_master_instructions_keep_human_review_stops_visible() -> None:
         "activating Google Ads API upload or any live account mutation",
         "activating PMAX as part of the current workflow",
         "deleting, archiving, or moving client data",
+        "dropping safety branches or stashes after cleanup inventory",
         "changing the default Search policy away from phrase-only",
         "promoting client-specific strategy into shared code",
     ]:
         assert phrase in instructions
+
+
+def test_no_blind_purge_contract_stays_visible() -> None:
+    sources = [
+        REPO_ROOT / "AGENTS.md",
+        REPO_ROOT / "docs" / "CLIENT_DIRECTORY_SCAFFOLDING.md",
+        REPO_ROOT / "shared" / "MASTER_AI_AGENT_INSTRUCTIONS.md",
+    ]
+
+    required_phrases = [
+        "Never purge, drop, archive, delete, or discard",
+        "Every removal needs a documented logical resolution",
+        "Client data, source inputs, reports, stashes, and generated artifacts must be preserved until",
+    ]
+
+    for source in sources:
+        text = source.read_text(encoding="utf-8")
+        for phrase in required_phrases:
+            assert phrase in text

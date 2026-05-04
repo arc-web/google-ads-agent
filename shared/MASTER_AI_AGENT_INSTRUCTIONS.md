@@ -39,6 +39,8 @@ Compatibility wrappers may keep old command names alive, but they must delegate 
 - Keep Google Ads API upload off unless the user explicitly activates live automation.
 - Keep PMAX, API/MCP, and external database scripts salvage-only until explicitly activated.
 - Validation reads and reports. It must not auto-fix or rewrite source staging CSVs.
+- Never purge, drop, archive, delete, or discard files, folders, stashes, branches, or artifacts blindly. Every removal needs a documented logical resolution.
+- Client data, source inputs, reports, stashes, and generated artifacts must be preserved until an inventory confirms their resolution.
 
 ## Human Review Stops
 
@@ -47,6 +49,7 @@ Stop for explicit human approval before:
 - activating Google Ads API upload or any live account mutation
 - activating PMAX as part of the current workflow
 - deleting, archiving, or moving client data
+- dropping safety branches or stashes after cleanup inventory
 - changing the default Search policy away from phrase-only
 - promoting client-specific strategy into shared code
 - choosing between two valid business strategies that current docs and tests cannot resolve

@@ -25,6 +25,8 @@ Client folders are active data assets and examples until the repo owner explicit
 - New clients must be created from `templates/client_template/`.
 - Existing client folders that predate the agency/client layout still belong under `clients/{client_slug}/` until they are reviewed and normalized.
 - Do not archive, purge, or label client folders as historical until the overall system is tested and the repo owner explicitly approves that status.
+- Never purge, drop, archive, delete, or discard any file, folder, stash, branch, or artifact blindly. Every removal needs a documented logical resolution: `kept`, `committed`, `moved`, `superseded`, `archived`, `generated-noise`, or `owner-approved purge`.
+- Client data, source inputs, reports, stashes, and generated artifacts must be preserved until they are inventoried. Safety branches and stashes may be dropped only after the inventory confirms there is no unique needed content left.
 - Planning documents that may conflict with the current process belong in `docs/system_review/` until they are reconciled, superseded, or explicitly retired.
 - Generated rebuilds belong in `clients/{agency}/{client}/build/{date}_account_rebuild/`.
 - Shared Python under `shared/` must not hard-code a client, agency, brand, local absolute path, or one-off campaign. Shared code must accept client facts, source files, and build paths as inputs.
@@ -118,7 +120,7 @@ A rebuild run should create:
 <claude-mem-context>
 # Memory Context
 
-# [google_ads_agent] recent context, 2026-05-01 8:55pm GMT+8
+# [google_ads_agent] recent context, 2026-05-05 12:50am GMT+8
 
 No previous sessions found.
 </claude-mem-context>
