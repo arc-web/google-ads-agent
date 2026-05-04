@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from shared.rebuild.rsa_headline_quality import audit_rsa_headlines
+from shared.rebuild.match_type_policy import MATCH_TYPE_MODES, evaluate_match_type, load_keyword_origin_map
 
 
 ENCODINGS = ("utf-16", "utf-8-sig", "utf-8", "latin-1")
@@ -72,21 +73,40 @@ REQUIRED_HEADERS = [
 
 REQUIRED_RSA_HEADLINES = [f"Headline {index}" for index in range(1, 16)]
 REQUIRED_RSA_DESCRIPTIONS = [f"Description {index}" for index in range(1, 5)]
-ALLOWED_KEYWORD_TYPES = {"Phrase", "Negative Phrase"}
-DISALLOWED_KEYWORD_TYPES = {"Broad", "Exact"}
 SEARCH_NETWORK_VALUE = "Google search"
 OFF_VALUES = {"Off", "Disabled", "No", "False", "0"}
-DEFAULT_DESCRIPTION_CTAS = {"call today", "book today", "request details", "apply today", "schedule today"}
+DEFAULT_DESCRIPTION_CTAS = {
+    "apply today",
+    "book a consultation",
+    "book a tasting menu",
+    "book today",
+    "book your reservation",
+    "call today",
+    "call us today",
+    "check availability",
+    "compare options",
+    "confirm fit",
+    "plan next steps",
+    "request a quote",
+    "request details",
+    "reserve your table",
+    "review program fit",
+    "schedule a review",
+    "schedule service",
+    "schedule today",
+}
 DESCRIPTION_VALUE_TERMS = {
     "available",
     "availability",
     "budget",
     "care",
     "clear",
+    "communication",
     "compare",
     "confirm",
     "consult",
     "details",
+    "empathic",
     "experienced",
     "fit",
     "focused",
@@ -102,6 +122,13 @@ DESCRIPTION_VALUE_TERMS = {
     "schedule",
     "support",
     "team",
+}
+GENERIC_DESCRIPTION_PHRASES = {
+    "account import",
+    "campaign approval",
+    "implementation needs",
+    "launch readiness",
+    "service fit",
 }
 SMART_BIDDING_STRATEGIES = {
     "Maximize conversions",
@@ -413,6 +440,9 @@ def validate_keyword_row(
     row_number: int,
     issues: list[ValidationIssue],
     keyword_counts: Counter[str],
+    *,
+    match_type_mode: str = "new_rebuild",
+    keyword_origin_map: dict[str, Any] | None = None,
 ) -> None:
     keyword = row.get("Keyword", "").strip()
     criterion_type = row.get("Criterion Type", "").strip()
@@ -430,7 +460,7 @@ def validate_keyword_row(
             rule="keyword_campaign_required",
         )
 
-    if criterion_type != "Negative Phrase" and not row.get("Ad Group", "").strip():
+    if not criterion_type.startswith("Negative") and not row.get("Ad Group", "").strip():
         add_issue(
             issues,
             "error",
@@ -440,35 +470,31 @@ def validate_keyword_row(
             rule="keyword_ad_group_required",
         )
 
-    if not criterion_type:
+    match_decision = evaluate_match_type(row, mode=match_type_mode, origin_map=keyword_origin_map)
+    if match_decision.status != "pass":
         add_issue(
             issues,
-            "error",
-            "Keyword row is missing Criterion Type.",
-            row=row_number,
-            column="Criterion Type",
-            rule="criterion_type_required",
-        )
-    elif criterion_type in DISALLOWED_KEYWORD_TYPES:
-        add_issue(
-            issues,
-            "error",
-            "Broad and exact keyword match types are not active in the current workflow.",
+            "error" if match_decision.status == "error" else "warning",
+            match_decision.message,
             row=row_number,
             column="Criterion Type",
             value=criterion_type,
-            rule="disallowed_match_type",
+            rule=match_decision.rule,
         )
-    elif criterion_type not in ALLOWED_KEYWORD_TYPES:
-        add_issue(
-            issues,
-            "error",
-            "Keyword row has unsupported Criterion Type.",
-            row=row_number,
-            column="Criterion Type",
-            value=criterion_type,
-            rule="unsupported_criterion_type",
-        )
+        if (
+            match_decision.status == "error"
+            and match_decision.rule != "disallowed_match_type"
+            and criterion_type not in {"Phrase", "Negative Phrase"}
+        ):
+            add_issue(
+                issues,
+                "error",
+                "Search rebuild keyword rows must use Phrase or Negative Phrase unless an approved sidecar decision applies.",
+                row=row_number,
+                column="Criterion Type",
+                value=criterion_type,
+                rule="disallowed_match_type",
+            )
 
     if keyword.startswith('"') or keyword.endswith('"') or keyword.startswith("[") or keyword.endswith("]"):
         add_issue(
@@ -593,6 +619,26 @@ def validate_rsa_row(row: dict[str, str], row_number: int, issues: list[Validati
                 value=value,
                 rule="description_missing_value_prop",
             )
+        elif has_generic_description_phrase(value):
+            add_issue(
+                issues,
+                "error",
+                f"{description} uses internal workflow language instead of client-facing service copy.",
+                row=row_number,
+                column=description,
+                value=value,
+                rule="description_generic_workflow_language",
+            )
+        if value and has_incomplete_description_phrase(value):
+            add_issue(
+                issues,
+                "error",
+                f"{description} ends with an incomplete phrase.",
+                row=row_number,
+                column=description,
+                value=value,
+                rule="description_incomplete_phrase",
+            )
 
     for path_field in ("Path 1", "Path 2"):
         value = row.get(path_field, "").strip()
@@ -608,6 +654,15 @@ def has_description_cta(value: str) -> bool:
 def has_description_value_prop(value: str) -> bool:
     tokens = {token for token in re_split(value.lower()) if token}
     return bool(tokens & DESCRIPTION_VALUE_TERMS)
+
+
+def has_generic_description_phrase(value: str) -> bool:
+    lower = value.lower()
+    return any(phrase in lower for phrase in GENERIC_DESCRIPTION_PHRASES)
+
+
+def has_incomplete_description_phrase(value: str) -> bool:
+    return bool(re.search(r"\b(and|for|through|to|via|with)\.(?:\s|$)", value.strip(), re.IGNORECASE))
 
 
 def re_split(value: str) -> list[str]:
@@ -840,7 +895,15 @@ def validate_business_name_row(row: dict[str, str], row_number: int, issues: lis
         add_issue(issues, "error", f"Business name exceeds {BUSINESS_NAME_LIMIT} characters.", row=row_number, column="Business name", value=value, rule="business_name_length")
 
 
-def validate_rows(headers: list[str], rows: list[dict[str, str]], source: Path, encoding: str) -> dict[str, Any]:
+def validate_rows(
+    headers: list[str],
+    rows: list[dict[str, str]],
+    source: Path,
+    encoding: str,
+    *,
+    match_type_mode: str = "new_rebuild",
+    keyword_origin_map: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     issues: list[ValidationIssue] = []
     counts: Counter[str] = Counter()
     campaigns: Counter[str] = Counter()
@@ -869,7 +932,14 @@ def validate_rows(headers: list[str], rows: list[dict[str, str]], source: Path, 
                 counts["negative_keyword_rows"] += 1
             else:
                 counts["keyword_rows"] += 1
-            validate_keyword_row(row, row_number, issues, keyword_counts)
+            validate_keyword_row(
+                row,
+                row_number,
+                issues,
+                keyword_counts,
+                match_type_mode=match_type_mode,
+                keyword_origin_map=keyword_origin_map,
+            )
 
         if is_rsa_row(row):
             counts["rsa_rows"] += 1
@@ -963,8 +1033,11 @@ def validate_rows(headers: list[str], rows: list[dict[str, str]], source: Path, 
     if counts["campaign_rows"] == 0:
         add_issue(issues, "error", "No Search campaign rows were found.", rule="campaign_rows_present")
 
-    if counts["keyword_rows"] == 0:
-        add_issue(issues, "error", "No phrase keyword rows were found.", rule="keyword_rows_present")
+    if match_type_mode == "new_rebuild":
+        if keyword_counts["Phrase"] == 0:
+            add_issue(issues, "error", "No phrase keyword rows were found.", rule="keyword_rows_present")
+    elif counts["keyword_rows"] == 0:
+        add_issue(issues, "error", "No positive keyword rows were found.", rule="keyword_rows_present")
 
     if counts["rsa_rows"] == 0:
         add_issue(issues, "error", "No responsive search ad rows were found.", rule="rsa_rows_present")
@@ -1006,23 +1079,47 @@ def validate_rows(headers: list[str], rows: list[dict[str, str]], source: Path, 
         "ad_groups": sum(len(groups) for groups in ad_groups_by_campaign.values()),
         "counts": stable_counts,
         "keyword_criterion_types": dict(keyword_counts),
+        "match_type_mode": match_type_mode,
         "issue_counts": dict(issue_counts),
         "issues": [asdict(issue) for issue in issues],
     }
 
 
-def validate_file(path: Path) -> dict[str, Any]:
+def validate_file(
+    path: Path,
+    *,
+    match_type_mode: str = "new_rebuild",
+    keyword_origin_map_path: Path | str | None = None,
+) -> dict[str, Any]:
     headers, rows, encoding = read_tsv(path)
-    return validate_rows(headers, rows, path, encoding)
+    return validate_rows(
+        headers,
+        rows,
+        path,
+        encoding,
+        match_type_mode=match_type_mode,
+        keyword_origin_map=load_keyword_origin_map(keyword_origin_map_path),
+    )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate active Google Ads Editor staging CSV output.")
     parser.add_argument("--csv", required=True, help="Path to a Google Ads Editor staging CSV or TSV file.")
     parser.add_argument("--json-output", help="Optional path to write validation JSON.")
+    parser.add_argument(
+        "--match-type-mode",
+        choices=sorted(MATCH_TYPE_MODES),
+        default="new_rebuild",
+        help="Match-type policy mode. Defaults to new rebuild phrase-first validation.",
+    )
+    parser.add_argument("--keyword-origin-map", help="Optional sidecar JSON proving existing account keyword origin.")
     args = parser.parse_args()
 
-    report = validate_file(Path(args.csv))
+    report = validate_file(
+        Path(args.csv),
+        match_type_mode=args.match_type_mode,
+        keyword_origin_map_path=args.keyword_origin_map,
+    )
     output = json.dumps(report, indent=2)
 
     if args.json_output:

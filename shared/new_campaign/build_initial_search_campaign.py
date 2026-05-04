@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from shared.copy_engine.search.copy_matrix import CopyConstraints, build_rsa_copy, candidate_issues
 from shared.gads.core.search_campaigns.search_asset_generator import SearchAssetGenerator, SearchAssetPlan, write_asset_artifacts
 from shared.gads.core.search_campaigns.search_csv_generator import SearchCSVGenerator
 from shared.presentation.build_new_campaign_report import BudgetPlan, write_report
@@ -84,7 +85,42 @@ def description_with_cta(value: str, cta: str) -> str:
     trimmed = base[:remaining].rstrip(" ,;")
     if " " in trimmed:
         trimmed = trimmed.rsplit(" ", 1)[0].rstrip(" ,;")
+    while trimmed.split() and trimmed.split()[-1].lower() in {"and", "for", "through", "to", "via", "with"}:
+        trimmed = " ".join(trimmed.split()[:-1])
     return f"{trimmed}. {cta}."
+
+
+RESTAURANT_CTA_BANK = ["Book Your Reservation", "Reserve Your Table", "Check Availability", "Book A Tasting Menu"]
+B2B_CTA_BANK = ["Request Details", "Review Program Fit", "Plan Next Steps", "Schedule A Review"]
+CONSULTATIVE_CTA_BANK = ["Schedule Today", "Request Details", "Confirm Fit", "Book A Consultation"]
+LOCAL_SERVICE_CTA_BANK = ["Call Us Today", "Request A Quote", "Schedule Service", "Compare Options"]
+GENERAL_CTA_BANK = ["Request Details", "Confirm Fit", "Plan Next Steps", "Schedule Today"]
+
+
+def is_restaurant_service(service: str, service_logic: dict[str, Any] | None = None) -> bool:
+    service_lower = service.lower()
+    concept_text = " ".join(str(token) for token in (service_logic or {}).get("concept_tokens", [])).lower()
+    return "restaurant" in concept_text or any(
+        term in service_lower
+        for term in ("chef", "dining", "dinner", "food", "menu", "pairing", "reservation", "restaurant", "tasting", "wine")
+    )
+
+
+def cta_candidates_for_service(service: str, service_logic: dict[str, Any] | None = None) -> list[str]:
+    service_lower = service.lower()
+    buyer_type = str((service_logic or {}).get("buyer_type", "")).lower()
+    concept_text = " ".join(str(token) for token in (service_logic or {}).get("concept_tokens", [])).lower()
+    combined = " ".join([service_lower, concept_text])
+
+    if is_restaurant_service(service, service_logic):
+        return RESTAURANT_CTA_BANK
+    if buyer_type in {"b2b", "b2b2c"} or any(term in combined for term in ("academy", "development", "organization", "staff", "team", "training", "workplace")):
+        return B2B_CTA_BANK
+    if any(term in combined for term in ("behavioral", "care", "clinical", "consulting", "counseling", "health", "therapy")):
+        return CONSULTATIVE_CTA_BANK
+    if any(term in combined for term in ("repair", "restoration", "renovation", "local service")):
+        return LOCAL_SERVICE_CTA_BANK
+    return GENERAL_CTA_BANK
 
 
 def unique(values: list[str], limit: int) -> list[str]:
@@ -100,88 +136,86 @@ def unique(values: list[str], limit: int) -> list[str]:
     return output
 
 
-def description_list(values: list[str]) -> list[str]:
-    return [description_with_cta(value, "Call Today") for value in values]
+def description_list(values: list[str], ctas: list[str] | None = None) -> list[str]:
+    cta_bank = ctas or GENERAL_CTA_BANK
+    return [description_with_cta(value, cta_bank[index % len(cta_bank)]) for index, value in enumerate(values)]
 
 
 def description_set(service: str, service_logic: dict[str, Any] | None = None) -> list[str]:
     if service_logic:
         service_lower = service.lower()
-        concept_text = " ".join(str(token) for token in service_logic.get("concept_tokens", [])).lower()
-        if "restaurant" in concept_text or any(
-            term in service_lower
-            for term in ("chef", "dining", "dinner", "food", "menu", "pairing", "reservation", "restaurant", "tasting", "wine")
-        ):
+        ctas = cta_candidates_for_service(service, service_logic)
+        if is_restaurant_service(service, service_logic):
             return description_list([
                 "Guests can reserve a private tasting menu with contemporary Guatemalan dining",
-                "Guests can review restaurant reservation availability for Guatemalan dining",
+                "Guests review restaurant reservations for Guatemalan dining",
                 "Book an experienced restaurant team for contemporary Guatemalan dining",
                 "Guests can schedule a clear tasting menu reservation in Guatemala City",
-            ])
+            ], ctas)
         if "lay counselor" in service_lower:
             return description_list([
                 "Help organizations train staff in lay counseling skills and expand care access",
                 "Build lay counselor teams so organizations can expand mental health access now",
                 "Train care teams in counseling skills that support broader mental health access",
                 "Review academy fit for staff training, care capacity, and counseling access",
-            ])
+            ], ctas)
         if "employee mental health" in service_lower:
             return description_list([
                 "Help employers improve employee mental health support and counseling access",
                 "Review employee mental health support for wellbeing, access, and workplace fit",
                 "Plan employee counseling access that helps employers support staff wellbeing",
                 "Compare employee mental health options for workplace support and care access",
-            ])
+            ], ctas)
         if "integrated behavioral" in service_lower:
             return description_list([
                 "Help organizations use integrated behavioral health consulting for coordinated care",
                 "Review integrated behavioral health consulting for clinical teams and care workflows",
                 "Plan behavioral health workflows that help care teams coordinate patient support",
                 "Compare integrated care consulting options for clinical teams and health workflows",
-            ])
+            ], ctas)
         if "empathic communication" in service_lower:
             return description_list([
                 "Help organizations use empathic communication training for stronger care teams",
                 "Review empathic communication training for organizations and care conversations",
                 "Plan empathic communication training that helps teams handle support conversations",
                 "Compare empathic communication training options for organizations and care skills",
-            ])
+            ], ctas)
         if "clinical support" in service_lower:
             return description_list([
                 "Help clinical teams use clinical support consulting for clearer care practices",
                 "Review clinical support consulting for healthcare teams, workflow, and care fit",
                 "Plan clinical support around care delivery, team workflows, and patient support",
                 "Compare clinical consulting options for care teams and practical support needs",
-            ])
+            ], ctas)
         if "learning and development" in service_lower:
             return description_list([
                 "Help organizations use learning and development programs for stronger staff skills",
                 "Review learning programs for staff development, team skills, and support practices",
                 "Plan staff development programs that strengthen training paths for care teams",
                 "Compare learning and development options for organizations and stronger team skills",
-            ])
+            ], ctas)
         if "human-centered" in service_lower or "human centered" in service_lower:
             return description_list([
                 "Help healthcare organizations use human-centered care consulting for better care",
                 "Review human-centered care consulting for healthcare organizations and care models",
                 "Plan human-centered care delivery that helps organizations stay focused on people",
                 "Compare human-centered care consulting options for healthcare organizations and care",
-            ])
+            ], ctas)
         if "trauma-informed" in service_lower or "trauma informed" in service_lower:
             return description_list([
                 "Help organizations use trauma-informed care training for safer support teams",
                 "Review trauma-informed training for staff skills, care teams, and support safety",
                 "Plan trauma-informed care training that helps teams support people more safely",
                 "Compare trauma-informed care training options for organizations and safer care teams",
-            ])
+            ], ctas)
         if service_logic.get("buyer_type") == "b2c":
             mechanism = clean_words(str(service_logic.get("service_mechanism", f"{service} support"))).lower()
             return description_list([
-                f"Help customers use {mechanism} to compare clearer service options and next steps",
-                f"Review {mechanism} for customers, clearer service options, and next steps",
-                f"Plan {mechanism} around customer needs, clearer options, and next steps",
-                f"Compare {mechanism} choices for customers and clearer service next steps",
-            ])
+                f"Customers compare {mechanism} with clearer options and next steps",
+                f"Customers review {mechanism} for clearer options and next steps",
+                f"Customers plan {mechanism} around clearer options and next steps",
+                f"Customers compare {mechanism} choices for clearer options and next steps",
+            ], ctas)
         buyer = "organizations"
         if "clinical" in service_lower:
             buyer = "clinical teams"
@@ -194,13 +228,13 @@ def description_set(service: str, service_logic: dict[str, Any] | None = None) -
             f"Review {mechanism} for {buyer} and confirm fit, timing, scope, and budget",
             f"Plan {mechanism} so {buyer} can move toward {outcome}",
             f"Compare {mechanism} options for {buyer} focused on {outcome}",
-        ])
+        ], ctas)
     return description_list([
-        "Request details to confirm service fit, audience needs, timing, and budget before launch",
-        "Schedule today to review training and consulting options with a practical support team",
-        "Request details on scope, stakeholders, implementation needs, and launch readiness",
-        "Schedule today to compare support options before campaign approval and account import",
-    ])
+        f"Review {service.lower()} options with clear support and practical next steps",
+        f"Plan {service.lower()} support around needs, goals, and available service options",
+        f"Compare {service.lower()} choices with a focused team and clear next steps",
+        f"Request {service.lower()} details with practical guidance before choosing support",
+    ], GENERAL_CTA_BANK)
 
 
 def parse_location(value: str) -> LocationTarget:
@@ -243,6 +277,65 @@ def landing_page_for_service(service: str, source_pages: list[str], website: str
     return best
 
 
+def re_split(value: str) -> list[str]:
+    return re.split(r"\W+", value)
+
+
+def landing_page_evidence_for_service(
+    *,
+    service: str,
+    final_url: str,
+    website_scan: dict[str, Any],
+    service_logic: dict[str, Any],
+) -> dict[str, Any]:
+    page_evidence = website_scan.get("page_evidence", {})
+    evidence = dict(page_evidence.get(final_url, {}))
+    service_terms = sorted({term.lower() for term in re_split(service) if len(term) > 2})
+    evidence_text = " ".join(
+        [
+            final_url,
+            str(evidence.get("title", "")),
+            " ".join(str(heading) for heading in evidence.get("headings", []) or []),
+            str(evidence.get("text_sample", "")),
+        ]
+    ).lower()
+    matched_terms = sorted(term for term in service_terms if term in evidence_text)
+    copy_allowed_claims = [
+        *list(evidence.get("delivery_modes", []) or []),
+        *list(evidence.get("availability_signals", []) or []),
+        *list(evidence.get("landing_page_claims", []) or []),
+    ]
+    return {
+        "final_url": final_url,
+        "status": str(evidence.get("status") or "missing"),
+        "service_terms": service_terms,
+        "matched_terms": matched_terms,
+        "message_match_terms": matched_terms,
+        "delivery_modes": list(evidence.get("delivery_modes", []) or []),
+        "availability_signals": list(evidence.get("availability_signals", []) or []),
+        "cta_signals": list(evidence.get("cta_signals", []) or []),
+        "landing_page_claims": list(evidence.get("landing_page_claims", []) or []),
+        "copy_allowed_claims": copy_allowed_claims,
+        "service_logic": service_logic,
+    }
+
+
+def validate_descriptions(
+    *,
+    ad_group: str,
+    descriptions: list[str],
+    constraints: CopyConstraints,
+    source_evidence: dict[str, Any],
+) -> None:
+    failures = []
+    for index, description in enumerate(descriptions, start=1):
+        issues = candidate_issues("description", description, constraints, source_evidence)
+        if issues:
+            failures.append({"slot": index, "text": description, "issues": issues})
+    if failures:
+        raise ValueError(f"Generated descriptions failed copy quality for {ad_group}: {failures}")
+
+
 def plan_ad_groups(
     *,
     client: str,
@@ -250,6 +343,8 @@ def plan_ad_groups(
     website: str,
     service_catalog: dict[str, Any],
     service_logic_map: dict[str, dict[str, Any]] | None = None,
+    website_scan: dict[str, Any],
+    constraints: CopyConstraints,
     source_pages: list[str],
     locations: list[LocationTarget] | None = None,
 ) -> list[AdGroupPlan]:
@@ -270,6 +365,29 @@ def plan_ad_groups(
         service_logic = (service_logic_map or {}).get(geo_plan.service)
         if not service_logic or service_logic.get("status") != "pass":
             raise RuntimeError(f"Service logic research failed for {geo_plan.service}.")
+        source_evidence = landing_page_evidence_for_service(
+            service=geo_plan.service,
+            final_url=geo_plan.final_url,
+            website_scan=website_scan,
+            service_logic=service_logic,
+        )
+        copy_bundle = build_rsa_copy(
+            campaign=geo_plan.campaign,
+            ad_group=geo_plan.ad_group,
+            service=geo_plan.service,
+            client_name=client,
+            geo=[location.location for location in locations or []],
+            keywords=geo_plan.keywords,
+            constraints=constraints,
+            source_evidence=source_evidence,
+        )
+        descriptions = copy_bundle.descriptions
+        validate_descriptions(
+            ad_group=geo_plan.ad_group,
+            descriptions=descriptions,
+            constraints=constraints,
+            source_evidence=source_evidence,
+        )
         plans.append(
             AdGroupPlan(
                 campaign=geo_plan.campaign,
@@ -285,7 +403,7 @@ def plan_ad_groups(
                     ad_group=geo_plan.ad_group,
                     service_logic=service_logic,
                 ),
-                descriptions=description_set(geo_plan.service, service_logic),
+                descriptions=descriptions,
                 service_logic=service_logic,
             )
         )
@@ -395,7 +513,8 @@ def write_human_review(
         "- Sitelinks are staged at ad group level only when landing pages are not the homepage and enough distinct URLs exist.",
         "- Campaign-level callouts and structured snippets are staged only as reviewable assets.",
         "- Price and promotion assets are staged only when explicit website evidence exists.",
-        "- Image and logo assets are packaged for manual Editor review only after local manifest checks.",
+        "- Image and logo assets are packaged as local files for manual Google Ads Editor image asset import.",
+        "- Business logos require advertiser verification, business name match, and usage-rights review before launch.",
         "- Location assets require Google Business Profile linking confirmation before launch.",
         "",
     ]
@@ -414,6 +533,7 @@ def write_human_review(
         "- Confirm budget, conversion tracking, and final URL readiness.",
         "- Confirm staged assets, asset level, and platform warnings before upload.",
         "- Confirm business name and logo approval requirements before launch.",
+        "- Import logo files from `ad_asset_import_package/processed/` into Google Ads Editor, then associate approved business logos at account or campaign level.",
         "- Import into Google Ads Editor and inspect platform warnings before upload.",
         ]
     )
@@ -460,6 +580,7 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
     date_label = args.date_label or f"{parsed_date.strftime('%B')} {parsed_date.day}, {parsed_date.year}"
     csv_timestamp = normalize_timestamp(args.csv_timestamp)
     client_dir = ensure_client_dir(args.agency, args.client, args.display_name, args.website, args.clients_dir)
+    constraints = CopyConstraints.from_file(client_dir / "config" / "client_copy_constraints.json")
     build_dir = args.build_dir or client_dir / "build" / f"{run_date}_initial_search_build"
     build_dir.mkdir(parents=True, exist_ok=True)
 
@@ -500,6 +621,8 @@ def build_initial_campaign(args: argparse.Namespace) -> dict[str, Path]:
         website=args.website,
         service_catalog=service_catalog,
         service_logic_map=service_logic_map,
+        website_scan=website_scan,
+        constraints=constraints,
         source_pages=source_pages,
         locations=locations,
     )

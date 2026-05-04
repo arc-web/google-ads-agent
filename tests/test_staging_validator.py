@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 
 import pytest
@@ -11,6 +12,7 @@ from shared.rebuild.staging_validator import (
     REQUIRED_RSA_HEADLINES,
     validate_file,
 )
+from shared.rebuild.match_type_policy import keyword_origin_key
 
 VALID_HEADLINES = [
     "Practical Support Planning",
@@ -305,15 +307,74 @@ def test_valid_current_phrase_workflow_accepts_utf16_and_campaign_level_negative
     assert report["issues"] == []
 
 
-@pytest.mark.parametrize("criterion_type", ["Broad", "Exact"])
-def test_broad_and_exact_keyword_types_fail(tmp_path: Path, criterion_type: str) -> None:
+@pytest.mark.parametrize(
+    ("criterion_type", "rule"),
+    [
+        ("Broad", "broad_match_blocked"),
+        ("Exact", "new_exact_requires_approval"),
+    ],
+)
+def test_broad_and_new_exact_keyword_types_fail(tmp_path: Path, criterion_type: str, rule: str) -> None:
     csv_path = tmp_path / "staging.csv"
     write_tsv(csv_path, [campaign_row(), keyword_row(**{"Criterion Type": criterion_type})])
 
     report = validate_file(csv_path)
 
     assert report["status"] == "fail"
-    assert "disallowed_match_type" in issue_rules(report)
+    assert rule in issue_rules(report)
+
+
+def test_revision_mode_preserves_source_proven_existing_exact_as_warning(tmp_path: Path) -> None:
+    csv_path = tmp_path / "staging.csv"
+    exact = keyword_row(**{"Criterion Type": "Exact"})
+    write_tsv(csv_path, [campaign_row(), exact, rsa_row(), location_row()])
+    origin_map = tmp_path / "keyword_origin_map.json"
+    origin_map.write_text(
+        json.dumps(
+            {
+                "keywords": {
+                    keyword_origin_key(exact): {
+                        "origin": "source_account_export",
+                        "preserve": True,
+                        "relevance_status": "preserve",
+                    }
+                }
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    report = validate_file(csv_path, match_type_mode="revision_existing_account", keyword_origin_map_path=origin_map)
+
+    assert report["status"] == "pass"
+    assert "preserved_existing_exact" in issue_rules(report)
+
+
+def test_revision_mode_preserves_source_negative_exact_for_review(tmp_path: Path) -> None:
+    csv_path = tmp_path / "staging.csv"
+    negative_exact = negative_phrase_row(**{"Criterion Type": "Negative Exact"})
+    write_tsv(csv_path, [campaign_row(), keyword_row(), negative_exact, rsa_row(), location_row()])
+    origin_map = tmp_path / "keyword_origin_map.json"
+    origin_map.write_text(
+        json.dumps({"keywords": {keyword_origin_key(negative_exact): {"origin": "source_account_export"}}}) + "\n",
+        encoding="utf-8",
+    )
+
+    report = validate_file(csv_path, match_type_mode="revision_existing_account", keyword_origin_map_path=origin_map)
+
+    assert report["status"] == "pass"
+    assert "preserved_existing_negative_exact" in issue_rules(report)
+
+
+def test_new_negative_exact_fails(tmp_path: Path) -> None:
+    csv_path = tmp_path / "staging.csv"
+    write_tsv(csv_path, [campaign_row(), keyword_row(), negative_phrase_row(**{"Criterion Type": "Negative Exact"})])
+
+    report = validate_file(csv_path, match_type_mode="revision_existing_account")
+
+    assert report["status"] == "fail"
+    assert "new_negative_exact_blocked" in issue_rules(report)
 
 
 def test_quoted_keyword_text_fails_even_when_criterion_type_is_phrase(tmp_path: Path) -> None:
@@ -482,6 +543,46 @@ def test_rsa_description_without_cta_fails(tmp_path: Path) -> None:
     assert "description_missing_cta" in issue_rules(report)
 
 
+@pytest.mark.parametrize(
+    "cta",
+    [
+        "Book Your Reservation",
+        "Reserve Your Table",
+        "Check Availability",
+        "Book A Tasting Menu",
+        "Book A Consultation",
+        "Confirm Fit",
+        "Call Us Today",
+        "Request A Quote",
+        "Schedule Service",
+        "Compare Options",
+        "Review Program Fit",
+        "Plan Next Steps",
+        "Schedule A Review",
+    ],
+)
+def test_contextual_rsa_description_ctas_pass(tmp_path: Path, cta: str) -> None:
+    csv_path = tmp_path / "staging.csv"
+    write_tsv(
+        csv_path,
+        [
+            campaign_row(),
+            keyword_row(),
+            rsa_row(
+                **{
+                    "Description 1": f"Review local support options with clear process and care team. {cta}."
+                }
+            ),
+            location_row(),
+        ],
+    )
+
+    report = validate_file(csv_path)
+
+    assert report["status"] == "pass"
+    assert "description_missing_cta" not in issue_rules(report)
+
+
 def test_rsa_description_without_value_prop_fails(tmp_path: Path) -> None:
     csv_path = tmp_path / "staging.csv"
     write_tsv(
@@ -498,6 +599,48 @@ def test_rsa_description_without_value_prop_fails(tmp_path: Path) -> None:
 
     assert report["status"] == "fail"
     assert "description_missing_value_prop" in issue_rules(report)
+
+
+def test_rsa_description_with_internal_workflow_language_fails(tmp_path: Path) -> None:
+    csv_path = tmp_path / "staging.csv"
+    write_tsv(
+        csv_path,
+        [
+            campaign_row(),
+            keyword_row(),
+            rsa_row(
+                **{
+                    "Description 1": (
+                        "Schedule today to compare support options before campaign approval and account import"
+                    )
+                }
+            ),
+            location_row(),
+        ],
+    )
+
+    report = validate_file(csv_path)
+
+    assert report["status"] == "fail"
+    assert "description_generic_workflow_language" in issue_rules(report)
+
+
+def test_rsa_description_with_incomplete_phrase_fails(tmp_path: Path) -> None:
+    csv_path = tmp_path / "staging.csv"
+    write_tsv(
+        csv_path,
+        [
+            campaign_row(),
+            keyword_row(),
+            rsa_row(**{"Description 1": "Review staff training options for care access and team support with. Request Details."}),
+            location_row(),
+        ],
+    )
+
+    report = validate_file(csv_path)
+
+    assert report["status"] == "fail"
+    assert "description_incomplete_phrase" in issue_rules(report)
 
 
 def test_missing_location_id_is_warning_not_failure(tmp_path: Path) -> None:

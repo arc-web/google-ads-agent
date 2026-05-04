@@ -850,6 +850,8 @@ def description_has_service_logic(description: str, service_logic: dict[str, Any
     outcome_tokens = token_forms(set(significant_tokens(str(service_logic.get("outcome", "")))))
     if not mechanism_tokens:
         mechanism_tokens = token_forms({token for token in service_logic.get("concept_tokens", []) if len(str(token)) > 2})
+    if not outcome_tokens:
+        return bool(description_tokens & buyer_tokens) and bool(description_tokens & mechanism_tokens)
     return bool(description_tokens & buyer_tokens) and bool(description_tokens & mechanism_tokens) and bool(description_tokens & outcome_tokens)
 
 
