@@ -1,0 +1,16 @@
+{
+  "approved_claims": [],
+  "blocked_claims": [],
+  "services_with_capacity": [],
+  "services_excluded": [],
+  "insurance_language": "",
+  "age_eligibility": {},
+  "geo_constraints": {},
+  "legal_or_verification_notes": [],
+  "approved_ctas": [],
+  "blocked_ctas": [],
+  "approved_superlatives": [],
+  "delivery_modes": [],
+  "availability_claims": [],
+  "landing_page_fallback_allowed": false
+}

@@ -1,0 +1,39 @@
+{
+  "pdf": "clients/NKPsych.com/build/2026-05-04_search_optimization/NKPsych_Search_Terms_Regional_Targeting_Review.pdf",
+  "pages_dir": "clients/NKPsych.com/build/2026-05-04_search_optimization/revision_visual_audit",
+  "pages": 3,
+  "failures": 0,
+  "min_content_ratio": 0.032,
+  "audits": [
+    {
+      "page": 1,
+      "width": 612,
+      "height": 792,
+      "content_ratio": 0.1658723674655047,
+      "vertical_span_ratio": 0.9886363636363636,
+      "max_content_y_ratio": 0.98989898989899,
+      "status": "pass",
+      "image": "clients/NKPsych.com/build/2026-05-04_search_optimization/revision_visual_audit/page-1.png"
+    },
+    {
+      "page": 2,
+      "width": 612,
+      "height": 792,
+      "content_ratio": 0.18310143922889022,
+      "vertical_span_ratio": 0.9722222222222222,
+      "max_content_y_ratio": 0.9709595959595959,
+      "status": "pass",
+      "image": "clients/NKPsych.com/build/2026-05-04_search_optimization/revision_visual_audit/page-2.png"
+    },
+    {
+      "page": 3,
+      "width": 612,
+      "height": 792,
+      "content_ratio": 0.038349178055060405,
+      "vertical_span_ratio": 0.369949494949495,
+      "max_content_y_ratio": 0.3686868686868687,
+      "status": "pass",
+      "image": "clients/NKPsych.com/build/2026-05-04_search_optimization/revision_visual_audit/page-3.png"
+    }
+  ]
+}
