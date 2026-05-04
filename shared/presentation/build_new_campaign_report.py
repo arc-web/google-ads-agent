@@ -381,66 +381,41 @@ body {
   margin-top: 5px;
 }
 .ad-copy-page .section-header {
-  padding: 12px 16px;
-  margin-bottom: 12px;
-}
-.ad-copy-page .section-header h1 {
-  font-size: 28px;
-}
-.ad-copy-page .section-header p {
-  font-size: 13px;
-  margin-top: 7px;
-}
-.ad-copy-page .ad-card {
-  padding: 10px;
-}
-.ad-copy-page .ad-card h3 {
-  margin-bottom: 6px;
-}
-.ad-copy-page .ad-preview {
-  padding: 8px;
-  margin: 6px 0 0;
-}
-.ad-copy-page .ad-preview .headline {
-  font-size: 16px;
-}
-.ad-copy-page .subsection-header {
-  margin: 10px 0 6px;
-  padding: 7px 10px;
-}
-.ad-copy-page .subsection-header + .ad-copy-table {
+  padding: 10px 14px;
   margin-bottom: 10px;
 }
+.ad-copy-page .section-header h1 {
+  font-size: 26px;
+}
+.ad-copy-page .section-header p {
+  font-size: 12px;
+  margin-top: 5px;
+}
+.ad-copy-page .ad-card {
+  padding: 8px 10px;
+}
+.ad-copy-page .ad-card h3 {
+  margin-bottom: 5px;
+}
+.ad-copy-page .ad-preview {
+  padding: 7px 8px;
+  margin: 5px 0 0;
+}
+.ad-copy-page .ad-preview .headline {
+  font-size: 15px;
+}
+.ad-copy-page .subsection-header {
+  margin: 8px 0 5px;
+  padding: 6px 9px;
+}
+.ad-copy-page .subsection-header + .ad-copy-table {
+  margin-bottom: 8px;
+}
 .audit-note {
-  margin: 0 0 6px;
+  margin: 0 0 5px;
   font-size: 10px;
   color: #6b5c4b;
   font-weight: 700;
-}
-.service-logic-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin: 8px 0 10px;
-}
-.service-logic-card {
-  border: 1px solid #dfd2bf;
-  background: #fffaf1;
-  padding: 8px 10px;
-  min-height: 58px;
-}
-.service-logic-card h3 {
-  margin: 0 0 4px;
-  color: #185c62;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.service-logic-card p {
-  margin: 0;
-  font-size: 10.5px;
-  line-height: 1.32;
-  color: #4c4238;
 }
 .ad-copy-page table {
   font-size: 9.5px;
@@ -448,6 +423,18 @@ body {
 .ad-copy-page td,
 .ad-copy-page th {
   padding: 3px 5px;
+}
+.ad-copy-page .confirm-strip {
+  margin-top: 8px;
+  padding: 8px 10px;
+}
+.ad-copy-page .confirm-strip h3 {
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+.ad-copy-page .confirm-strip p {
+  font-size: 10.5px;
+  line-height: 1.25;
 }
 .ad-copy-table col.slot-col { width: 34px; }
 .ad-copy-table col.char-col { width: 54px; }
@@ -859,16 +846,16 @@ ul {
   font-size: 12px;
   font-weight: 700;
 }
-.flow-note-grid {
+.flow-note-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 .flow-note {
   background: #f8f4eb;
   border: 1px solid #dfd2bf;
-  padding: 12px;
+  padding: 10px 12px;
 }
 .flow-note h3 {
   margin: 0 0 6px;
@@ -1219,7 +1206,7 @@ def strategy_section(
 <div class="card-grid">
   <div class="insight-card">
     <h3>Search-first launch</h3>
-    <p>The campaign is built for people already searching for the client's services, not broad awareness. All keywords use phrase match for cleaner early data.</p>
+    <p>The campaign is built for people already searching for the client's services, not broad awareness. New keyword coverage is phrase-first for cleaner early data.</p>
   </div>
   <div class="insight-card">
     <h3>Website-backed services</h3>
@@ -1324,60 +1311,40 @@ def campaign_structure_section(summary: CampaignSummary) -> str:
   </div>
 </div>
 <div class="structure-flow" aria-label="Current campaign structure and future expansion path">
-  <svg viewBox="0 0 900 470" role="img" aria-label="One current Search campaign can later split by services or regions when performance supports it">
-    <rect class="flow-current" x="34" y="52" width="184" height="86" rx="8"/>
-    <text class="flow-label" x="126" y="88" text-anchor="middle">Current</text>
-    <text class="flow-small" x="126" y="114" text-anchor="middle">{len(summary.campaigns)} Search {campaign_label.title()}</text>
-    <path class="flow-line" d="M218 95 C270 95, 288 95, 334 95"/>
-    <rect class="flow-current" x="334" y="52" width="202" height="86" rx="8"/>
-    <text class="flow-label" x="435" y="88" text-anchor="middle">{summary.ad_groups} Geo Intent Ad Groups</text>
-    <text class="flow-small" x="435" y="114" text-anchor="middle">actual launch structure</text>
-    <path class="flow-line" d="M536 95 C610 95, 620 64, 692 64"/>
-    <path class="flow-line" d="M536 95 C610 95, 620 126, 692 126"/>
-    <text class="flow-label" x="710" y="70">Priority services</text>
-    <text class="flow-label" x="710" y="132">Support services</text>
+  <svg viewBox="0 0 900 275" role="img" aria-label="One current Search campaign can later split by services or regions when performance supports it">
+    <rect class="flow-current" x="44" y="50" width="180" height="74" rx="8"/>
+    <text class="flow-label" x="134" y="82" text-anchor="middle">Current Launch</text>
+    <text class="flow-small" x="134" y="105" text-anchor="middle">{len(summary.campaigns)} Search {campaign_label.title()}</text>
+    <path class="flow-line" d="M224 87 C278 87, 292 87, 336 87"/>
+    <rect class="flow-current" x="336" y="50" width="216" height="74" rx="8"/>
+    <text class="flow-label" x="444" y="82" text-anchor="middle">{summary.ad_groups} Intent Ad Groups</text>
+    <text class="flow-small" x="444" y="105" text-anchor="middle">actual launch structure</text>
+    <path class="flow-line" d="M552 87 C614 87, 626 60, 692 60"/>
+    <path class="flow-line" d="M552 87 C614 87, 626 114, 692 114"/>
+    <text class="flow-label" x="710" y="66">Priority services</text>
+    <text class="flow-label" x="710" y="120">Support services</text>
 
-    <rect class="flow-box" x="34" y="198" width="184" height="86" rx="8"/>
-    <text class="flow-label" x="126" y="234" text-anchor="middle">Later Option</text>
-    <text class="flow-small" x="126" y="260" text-anchor="middle">Split by service demand</text>
-    <path class="flow-muted" d="M218 241 C300 241, 310 214, 392 214"/>
-    <path class="flow-muted" d="M218 241 C300 241, 310 270, 392 270"/>
-    <rect class="flow-future" x="392" y="184" width="198" height="62" rx="8"/>
-    <rect class="flow-future" x="392" y="254" width="198" height="62" rx="8"/>
-    <text class="flow-label" x="491" y="221" text-anchor="middle">Primary Services</text>
-    <text class="flow-label" x="491" y="291" text-anchor="middle">Secondary Services</text>
-    <path class="flow-muted" d="M590 215 C640 215, 652 196, 700 196"/>
-    <path class="flow-muted" d="M590 215 C640 215, 652 234, 700 234"/>
-    <path class="flow-muted" d="M590 285 C640 285, 652 266, 700 266"/>
-    <path class="flow-muted" d="M590 285 C640 285, 652 304, 700 304"/>
-    <text class="flow-small" x="716" y="200">highest demand services</text>
-    <text class="flow-small" x="716" y="238">strongest lead quality</text>
-    <text class="flow-small" x="716" y="270">secondary demand</text>
-    <text class="flow-small" x="716" y="308">specialty follow-up</text>
-
-    <rect class="flow-box" x="34" y="342" width="184" height="86" rx="8"/>
-    <text class="flow-label" x="126" y="378" text-anchor="middle">Later Option</text>
-    <text class="flow-small" x="126" y="404" text-anchor="middle">Split by regional demand</text>
-    <path class="flow-muted" d="M218 385 C300 385, 310 358, 392 358"/>
-    <path class="flow-muted" d="M218 385 C300 385, 310 414, 392 414"/>
-    <rect class="flow-future" x="392" y="328" width="198" height="62" rx="8"/>
-    <rect class="flow-future" x="392" y="398" width="198" height="62" rx="8"/>
-    <text class="flow-label" x="491" y="365" text-anchor="middle">Primary Regions</text>
-    <text class="flow-label" x="491" y="435" text-anchor="middle">Secondary Regions</text>
-    <path class="flow-muted" d="M590 359 C640 359, 652 340, 700 340"/>
-    <path class="flow-muted" d="M590 359 C640 359, 652 378, 700 378"/>
-    <path class="flow-muted" d="M590 429 C640 429, 652 410, 700 410"/>
-    <path class="flow-muted" d="M590 429 C640 429, 652 448, 700 448"/>
-    <text class="flow-small" x="716" y="344">top priority states</text>
-    <text class="flow-small" x="716" y="382">top cities or metros</text>
-    <text class="flow-small" x="716" y="414">current strongest markets</text>
-    <text class="flow-small" x="716" y="452">later regional tests</text>
+    <text class="flow-small" x="45" y="185">Future split paths only after launch evidence</text>
+    <path class="flow-muted" d="M280 190 C340 170, 380 162, 450 162"/>
+    <path class="flow-muted" d="M280 190 C340 204, 380 214, 450 214"/>
+    <rect class="flow-future" x="450" y="136" width="162" height="52" rx="8"/>
+    <rect class="flow-future" x="450" y="200" width="162" height="52" rx="8"/>
+    <text class="flow-label" x="531" y="168" text-anchor="middle">Services</text>
+    <text class="flow-label" x="531" y="232" text-anchor="middle">Regions</text>
+    <path class="flow-muted" d="M612 162 C654 162, 672 150, 720 150"/>
+    <path class="flow-muted" d="M612 162 C654 162, 672 174, 720 174"/>
+    <path class="flow-muted" d="M612 226 C654 226, 672 214, 720 214"/>
+    <path class="flow-muted" d="M612 226 C654 226, 672 238, 720 238"/>
+    <text class="flow-small" x="738" y="154">primary</text>
+    <text class="flow-small" x="738" y="178">secondary</text>
+    <text class="flow-small" x="738" y="218">primary</text>
+    <text class="flow-small" x="738" y="242">secondary</text>
   </svg>
 </div>
-<div class="flow-note-grid">
-  <div class="flow-note"><h3>One campaign now</h3><p>The first launch stays compact so the early budget is not spread too thin.</p></div>
-  <div class="flow-note"><h3>Split later by proof</h3><p>Future campaign splits should follow lead quality, conversion signals, and search demand.</p></div>
-  <div class="flow-note"><h3>No extra campaigns yet</h3><p>The service and regional splits shown here are future paths, not active launch campaigns.</p></div>
+<div class="flow-note-strip">
+  <div class="flow-note"><h3>Why start together</h3><p>The first launch keeps budget concentrated while the account learns which searches produce the best leads.</p></div>
+  <div class="flow-note"><h3>What triggers a split</h3><p>Separate campaigns should follow real lead quality, conversion volume, search demand, or approved regional priorities.</p></div>
+  <div class="flow-note"><h3>What changes after split</h3><p>Future splits can receive separate budgets, reporting views, and copy focus once the data supports that control.</p></div>
 </div>
 """
     return section(
@@ -1403,7 +1370,7 @@ def ad_groups_section(summary: CampaignSummary, rows: list[dict[str, str]]) -> s
   </div>
   <div class="insight-card">
     <h3>Keyword control</h3>
-    <p>{summary.phrase_keywords} phrase keywords and {summary.negative_phrase_keywords} negative phrase keywords are prepared. Active launch keywords use phrase match.</p>
+    <p>{summary.phrase_keywords} phrase keywords and {summary.negative_phrase_keywords} negative phrase keywords are prepared. New launch additions stay phrase-first, with existing exact match reviewed only when source-proven.</p>
   </div>
 </div>
 <div class="subsection-header">Ad groups ready for review</div>
@@ -1479,7 +1446,7 @@ def targeting_section(geo_strategy: dict) -> str:
   <div style="margin:10px 0;">{chips}</div>
   <table class="targeting-table">
     <colgroup><col class="type-col"><col class="area-col"><col class="status-col"><col></colgroup>
-    <tr><th>Area type</th><th>Area</th><th>Status</th><th>What to confirm</th></tr>
+    <tr><th>Area type</th><th>Area</th><th>Status</th><th>Review item</th></tr>
       {review_table_rows}
   </table>
   <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
@@ -1503,28 +1470,6 @@ def ad_preview_url(example: RsaExample) -> str:
     return host + ("/" + "/".join(paths) if paths else "")
 
 
-def service_logic_notes(example: RsaExample) -> str:
-    logic = example.service_logic or {}
-    if not logic:
-        return ""
-    cards = [
-        ("Who this is for", logic.get("buyer", "")),
-        ("What they are buying", logic.get("service_mechanism", "")),
-        ("Why it matters", logic.get("outcome", "")),
-        ("What to confirm", "Confirm this interpretation matches the service and buyer."),
-    ]
-    return "".join(
-        f"""
-<div class="service-logic-card">
-  <h3>{esc(title)}</h3>
-  <p>{esc(text)}</p>
-</div>
-"""
-        for title, text in cards
-        if text
-    )
-
-
 def ad_copy_section(example: RsaExample, index: int, total: int) -> str:
     headline_preview = " | ".join(example.headlines[:3])
     desc_preview = example.descriptions[0] if example.descriptions else ""
@@ -1546,7 +1491,6 @@ def ad_copy_section(example: RsaExample, index: int, total: int) -> str:
     <div class="desc">{esc(desc_preview)}</div>
   </div>
 </div>
-<div class="service-logic-grid">{service_logic_notes(example)}</div>
 <div class="subsection-header">Headline examples</div>
 <p class="audit-note">Headline quality gate: {esc(example.headline_quality_status)}. This table shows 15 complete headlines with character counts for launch review.</p>
 <table class="ad-copy-table">

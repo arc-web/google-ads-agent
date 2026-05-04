@@ -76,11 +76,13 @@ class ReportHTMLParser(HTMLParser):
         if tag == "section" and "section" in classes:
             self.current_section = {
                 "has_header": False,
+                "is_ad_copy": "ad-copy-page" in classes,
                 "section_subtitles": 0,
                 "subsection_headers": 0,
                 "ag_review_blocks": 0,
                 "cards": 0,
                 "continuation_headers": 0,
+                "service_logic_grids": 0,
             }
             self.sections.append(self.current_section)
 
@@ -95,6 +97,8 @@ class ReportHTMLParser(HTMLParser):
                 self.current_section["ag_review_blocks"] += 1
             if "continuation-header" in classes:
                 self.current_section["continuation_headers"] += 1
+            if "service-logic-grid" in classes:
+                self.current_section["service_logic_grids"] += 1
             if any(cls.endswith("-card") or cls == "card" for cls in classes):
                 self.current_section["cards"] += 1
 
@@ -216,6 +220,17 @@ def audit_html(path: Path) -> tuple[list[Finding], dict[str, int]]:
                     "presentation.dense_section",
                     "Dense sections need subsection headers, continuation labels, or a summary-first layout.",
                     f"section {index}, cards {card_count}",
+                )
+            )
+
+        service_logic_grids = int(section["service_logic_grids"])
+        if section["is_ad_copy"] and service_logic_grids:
+            findings.append(
+                Finding(
+                    "error",
+                    "presentation.ad_copy_internal_logic_cards",
+                    "Ad-copy pages cannot render internal service-logic research cards.",
+                    f"section {index}, service logic grids {service_logic_grids}",
                 )
             )
 

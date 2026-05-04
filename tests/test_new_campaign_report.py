@@ -72,10 +72,57 @@ def test_new_campaign_report_builds_client_facing_html(tmp_path: Path) -> None:
     assert "What This Review Covers" in html
     assert "How The Campaign Can Grow Over Time" in html
     assert "Services We Are Running Ads For" in html
+    assert "Why start together" in html
+    assert "What triggers a split" in html
+    assert "What changes after split" in html
     assert "Client_New_Campaign_Review" not in html
     assert summary["errors"] == 0
     assert not [finding for finding in findings if finding.severity == "error"]
     assert "Headline quality gate: pass" in html
+
+
+def test_new_campaign_report_keeps_internal_service_logic_out_of_ad_copy_pages(tmp_path: Path) -> None:
+    staging_csv = clean_staging_csv(tmp_path)
+    html = build_html(
+        client="Mindful Mental Health Counseling",
+        date_label="May 2, 2026",
+        staging_csv=staging_csv,
+        website_scan_json=BUILD_DIR / "website_scan.json",
+        service_catalog_json=BUILD_DIR / "service_catalog.json",
+        service_logic_research_json=BUILD_DIR / "service_logic_research.json",
+        geo_strategy_json=BUILD_DIR / "geo_strategy.json",
+        source_attribution_json=BUILD_DIR / "source_attribution.json",
+    )
+    ad_copy_sections = html.split('<section class="section pdf-page ad-copy-page">')[1:]
+    assert ad_copy_sections
+    blocked_labels = ("Who this is for", "What they are buying", "Why it matters", "What to confirm")
+    for section_html in ad_copy_sections:
+        section_body = section_html.split("</section>", 1)[0]
+        for label in blocked_labels:
+            assert label not in section_body
+        assert "service-logic-grid" not in section_body
+
+
+def test_report_quality_audit_blocks_service_logic_grid_inside_ad_copy_pages(tmp_path: Path) -> None:
+    html_path = tmp_path / "bad_report.html"
+    html_path.write_text(
+        """
+<html>
+<body>
+<section class="section pdf-page ad-copy-page">
+  <div class="section-header"><h1>Ad Group</h1></div>
+  <div class="service-logic-grid"><div class="service-logic-card">Internal</div></div>
+</section>
+</body>
+</html>
+""",
+        encoding="utf-8",
+    )
+
+    findings, summary = audit_html(html_path)
+
+    assert summary["errors"] >= 1
+    assert any(finding.code == "presentation.ad_copy_internal_logic_cards" for finding in findings)
 
 
 def test_new_campaign_report_renders_optional_capacity_goal_section(tmp_path: Path) -> None:
