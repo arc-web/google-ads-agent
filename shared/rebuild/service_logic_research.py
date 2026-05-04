@@ -122,7 +122,7 @@ def infer_buyer_type(service: str, evidence_text: str) -> str:
     )
     b2c_score = sum(
         1
-        for term in ("affordable", "appointments", "counseling for you", "for you", "individual", "personal", "text")
+        for term in ("affordable", "appointments", "counseling for you", "customer", "customers", "for you", "individual", "personal", "text")
         if term in lower
     )
     if b2b_score >= 2 and b2c_score >= 1:
@@ -137,12 +137,13 @@ def infer_buyer_type(service: str, evidence_text: str) -> str:
 def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> ServiceLogic:
     evidence = " ".join(page_text(page) for page in matched_pages)
     lower = normalize(f"{service} {evidence}")
+    service_lower = normalize(service)
     source_urls = [str(page.get("url", "")) for page in matched_pages if page.get("url")]
     specifics = [str(heading).strip() for page in matched_pages for heading in page.get("headings", []) or [] if str(heading).strip()]
     buyer_type = infer_buyer_type(service, evidence)
     issues: list[str] = []
 
-    if "lay counselor" in lower:
+    if "lay counselor" in service_lower:
         buyer_type = "b2b2c"
         buyer = "Organizations building mental health support capacity"
         end_user = "Community members, employees, or clients who need accessible counseling support"
@@ -150,7 +151,7 @@ def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> Serv
         problem = "Organizations need more accessible mental health support without relying only on licensed clinicians"
         outcome = "Expanded care access through trained lay counselor and care team support"
         concepts = ["academy", "access", "capacity", "care", "counseling", "counselor", "lay", "mental", "organization", "staff", "team", "training"]
-    elif "employee mental health" in lower or "flourish" in lower:
+    elif "employee mental health" in service_lower:
         buyer_type = "b2b2c" if buyer_type == "unclear" else buyer_type
         buyer = "Employers or individuals reviewing mental health support options"
         end_user = "Employees or people seeking affordable empathic counseling"
@@ -158,7 +159,7 @@ def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> Serv
         problem = "Workplaces and individuals need clearer access to mental health support"
         outcome = "Better employee wellbeing, fewer sick days, and easier counseling access"
         concepts = ["access", "counseling", "employee", "employer", "flourish", "health", "mental", "wellbeing", "workplace"]
-    elif "integrated behavioral" in lower:
+    elif "integrated behavioral" in service_lower:
         buyer_type = "b2b"
         buyer = "Healthcare organizations and clinical teams"
         end_user = "Patients and care teams using integrated behavioral health workflows"
@@ -166,7 +167,7 @@ def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> Serv
         problem = "Care teams need behavioral health workflows that fit clinical operations"
         outcome = "More coordinated behavioral health support inside care delivery"
         concepts = ["behavioral", "care", "clinical", "consulting", "health", "integrated", "team", "workflow"]
-    elif "communication" in lower:
+    elif "communication" in service_lower:
         buyer_type = "b2b"
         buyer = "Organizations and care teams"
         end_user = "Staff and the people they support"
@@ -174,7 +175,7 @@ def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> Serv
         problem = "Teams need communication skills for difficult care and support conversations"
         outcome = "More empathic, human-centered communication"
         concepts = ["care", "communication", "conversation", "empathic", "skills", "staff", "team", "training"]
-    elif "trauma" in lower:
+    elif "trauma" in service_lower:
         buyer_type = "b2b"
         buyer = "Organizations and care teams"
         end_user = "People served by trauma-informed teams"
@@ -182,7 +183,7 @@ def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> Serv
         problem = "Teams need safer support practices for people affected by trauma"
         outcome = "More trauma-informed care and support interactions"
         concepts = ["care", "informed", "safe", "staff", "support", "team", "training", "trauma"]
-    elif "learning" in lower or "development" in lower:
+    elif "learning" in service_lower or "development" in service_lower:
         buyer_type = "b2b"
         buyer = "Organizations planning staff development"
         end_user = "Staff members and the communities they support"
@@ -190,7 +191,7 @@ def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> Serv
         problem = "Organizations need practical training paths for care and support teams"
         outcome = "Stronger staff skills and clearer support practices"
         concepts = ["development", "learning", "program", "skills", "staff", "team", "training"]
-    elif "clinical" in lower:
+    elif "clinical" in service_lower:
         buyer_type = "b2b"
         buyer = "Clinical leaders and healthcare teams"
         end_user = "Patients and care teams"
@@ -198,7 +199,7 @@ def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> Serv
         problem = "Clinical teams need practical support around care delivery"
         outcome = "Clearer clinical support practices"
         concepts = ["care", "clinical", "consulting", "support", "team", "workflow"]
-    elif "human centered" in lower or "human-centered" in service.lower():
+    elif "human centered" in service_lower or "human-centered" in service.lower():
         buyer_type = "b2b"
         buyer = "Healthcare and service organizations"
         end_user = "People receiving care or support"
@@ -207,12 +208,17 @@ def logic_for_service(service: str, matched_pages: list[dict[str, Any]]) -> Serv
         outcome = "More human-centered care delivery"
         concepts = ["care", "centered", "consulting", "healthcare", "human", "organization", "people"]
     else:
-        buyer = ""
-        end_user = ""
-        mechanism = ""
-        problem = ""
-        outcome = ""
+        if buyer_type == "unclear" and matched_pages and "services" in service_lower:
+            buyer_type = "b2c"
+        buyer = "Customers reviewing service options" if buyer_type == "b2c" else ""
+        end_user = "Customers who need service support" if buyer_type == "b2c" else ""
+        mechanism = f"{service} support" if buyer_type == "b2c" else ""
+        problem = "Customers need clear service planning and next steps" if buyer_type == "b2c" else ""
+        outcome = "Clearer service options and next steps" if buyer_type == "b2c" else ""
         concepts = [token for token in tokens(service) if token not in GENERIC_CONCEPTS and len(token) > 2]
+        if buyer_type == "b2c":
+            concepts.extend([token for token in tokens(service) if len(token) > 2])
+            concepts.extend(["customer", "option", "planning", "service"])
 
     if not source_urls:
         issues.append("missing_service_source_page")
