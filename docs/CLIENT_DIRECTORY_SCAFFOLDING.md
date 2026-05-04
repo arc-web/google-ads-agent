@@ -90,6 +90,15 @@ Generated Google Ads Editor CSV files:
 - Use `{client_slug}_google_ads_editor_staging_rev1_{YYYYMMDD_HHMMSS}.csv` for approved revision staging.
 - Do not overwrite upload candidates with generic `CURRENT` filenames. Keep dated versions searchable for Google Ads Editor import review.
 
+Generated artifact policy:
+
+- Keep canonical client deliverables that are part of the review packet: editable HTML, exported PDF, `client_email_draft.md`, `human_review.md`, staged Google Ads Editor CSV or TSV, validation JSON, report audit JSON, manifests, and source attribution files.
+- Keep source inputs that allow the work to be audited or rebuilt: account exports, search term reports, location reports, onboarding files, Client HQ files, client profile files, and source research JSON.
+- Do not commit generated visual audit screenshots by default, including `revision_visual_audit/`, `new_campaign_visual_audit/`, `client_review_visual_audit/`, `fixed_visual_audit/`, or `pdf_visual_audit/page-*.png`. Keep the durable JSON audit output instead.
+- Do not commit duplicate PDFs, stale dated CSVs, intermediate processed images, temporary screenshots, or renderer scratch output unless the repo owner explicitly asks for those artifacts to be tracked.
+- If a generated artifact is removed from a PR, preserve it first through a safety branch, stash, or inventory note until the bucket is resolved.
+- Google Ads Editor CSVs and TSVs remain staging artifacts for human review. They are not evidence that changes were uploaded or launched.
+
 ## Required Intake Fields
 
 Before generating a rebuild, fill in:
