@@ -59,6 +59,7 @@ class PageScan:
     images: list[dict[str, str]]
     icons: list[dict[str, str]]
     meta_images: list[dict[str, str]]
+    embeds: list[dict[str, str]]
     json_ld: list[str]
     text_sample: str
     error: str | None = None
@@ -72,6 +73,7 @@ class LinkAndTextParser(HTMLParser):
         self.images: list[dict[str, str]] = []
         self.icons: list[dict[str, str]] = []
         self.meta_images: list[dict[str, str]] = []
+        self.embeds: list[dict[str, str]] = []
         self.json_ld: list[str] = []
         self.title_parts: list[str] = []
         self.headings: list[str] = []
@@ -113,6 +115,17 @@ class LinkAndTextParser(HTMLParser):
             prop = attr_map.get("property", attr_map.get("name", "")).lower()
             if content and prop in {"og:image", "twitter:image", "image"}:
                 self.meta_images.append({"src": content, "property": prop})
+        elif tag in {"iframe", "embed", "video", "source"}:
+            src = attr_map.get("src")
+            if src:
+                self.embeds.append(
+                    {
+                        "src": src,
+                        "tag": tag,
+                        "title": attr_map.get("title", ""),
+                        "type": attr_map.get("type", ""),
+                    }
+                )
         elif tag == "script" and attr_map.get("type", "").lower() == "application/ld+json":
             self._json_ld_depth += 1
 
@@ -196,6 +209,13 @@ def parse_page(url: str, html: str) -> PageScan:
         }
         for image in parser.meta_images
     ]
+    embeds = [
+        {
+            **embed,
+            "src": normalize_url(embed.get("src", ""), url),
+        }
+        for embed in parser.embeds
+    ]
     text = normalize_text(" ".join(parser.text_parts))
     return PageScan(
         url=url,
@@ -206,6 +226,7 @@ def parse_page(url: str, html: str) -> PageScan:
         images=[image for image in images if image["src"]],
         icons=[icon for icon in icons if icon["src"]],
         meta_images=[image for image in meta_images if image["src"]],
+        embeds=[embed for embed in embeds if embed["src"]],
         json_ld=parser.json_ld,
         text_sample=text[:4000],
     )
@@ -553,6 +574,7 @@ class WebsiteScanner:
                     images=[],
                     icons=[],
                     meta_images=[],
+                    embeds=[],
                     json_ld=[],
                     text_sample="",
                     error=str(exc),

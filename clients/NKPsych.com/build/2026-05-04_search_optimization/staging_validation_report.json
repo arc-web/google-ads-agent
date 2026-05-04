@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "source_csv": "clients/NKPsych.com/build/2026-05-04_search_optimization/nkpsych_google_ads_editor_staging_rev1_20260504_optimization.csv",
+  "encoding": "utf-16",
+  "rows": 38,
+  "headers": 43,
+  "campaigns": [
+    "ARC - Search - Chicago Therapy - V1"
+  ],
+  "ad_groups": 2,
+  "counts": {
+    "campaign_rows": 1,
+    "location_rows": 3,
+    "keyword_rows": 5,
+    "negative_keyword_rows": 25,
+    "ad_group_rows": 2,
+    "rsa_rows": 2
+  },
+  "keyword_criterion_types": {
+    "Phrase": 5,
+    "Negative Phrase": 25
+  },
+  "issue_counts": {},
+  "issues": []
+}

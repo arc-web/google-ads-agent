@@ -1,0 +1,72 @@
+{
+  "source": "https://developers.google.com/google-ads/api/data/geotargets",
+  "google_geo_targets_version": "2026-03-31",
+  "city_of_chicago_source": "https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Community-Areas-current-/cauq-8yn6/about",
+  "nkpsych_chicago_source": "https://www.nkpsych.com/location/chicago-il",
+  "targets": [
+    {
+      "name": "Chicago",
+      "location_id": "1016367",
+      "type": "City",
+      "priority": "Core",
+      "bid_modifier_review": "Keep as core city target. Review budget and CPA before increasing.",
+      "reason": "Only reported location in the attached window and the current Chicago row converted."
+    },
+    {
+      "name": "60616",
+      "location_id": "9021721",
+      "type": "Postal Code",
+      "priority": "Priority review",
+      "bid_modifier_review": "Review as a South Loop, Chinatown, and Near South focus layer.",
+      "reason": "Closest ZIP-style focus around the visible Chicago service page signal."
+    },
+    {
+      "name": "60605",
+      "location_id": "9021710",
+      "type": "Postal Code",
+      "priority": "Priority review",
+      "bid_modifier_review": "Review as a Loop and South Loop layer.",
+      "reason": "Dense central Chicago demand area near the 60616 focus."
+    },
+    {
+      "name": "60607",
+      "location_id": "9021712",
+      "type": "Postal Code",
+      "priority": "Review",
+      "bid_modifier_review": "Review as a West Loop and university-adjacent layer.",
+      "reason": "Nearby city intent layer for therapy searches."
+    },
+    {
+      "name": "60608",
+      "location_id": "9021713",
+      "type": "Postal Code",
+      "priority": "Review",
+      "bid_modifier_review": "Review as a Pilsen and Bridgeport layer.",
+      "reason": "Nearby Chicago ZIP with search-term neighborhood overlap."
+    },
+    {
+      "name": "60610",
+      "location_id": "9021715",
+      "type": "Postal Code",
+      "priority": "Review",
+      "bid_modifier_review": "Review as Near North and Old Town layer.",
+      "reason": "Useful higher-density city layer for Chicago therapy demand."
+    },
+    {
+      "name": "60614",
+      "location_id": "9021719",
+      "type": "Postal Code",
+      "priority": "Review",
+      "bid_modifier_review": "Review as Lincoln Park layer.",
+      "reason": "Chicago neighborhood layer to test city-specific copy and bidding."
+    },
+    {
+      "name": "60622",
+      "location_id": "9021727",
+      "type": "Postal Code",
+      "priority": "Review",
+      "bid_modifier_review": "Review as Wicker Park and Ukrainian Village layer.",
+      "reason": "Chicago neighborhood layer to test city-specific copy and bidding."
+    }
+  ]
+}

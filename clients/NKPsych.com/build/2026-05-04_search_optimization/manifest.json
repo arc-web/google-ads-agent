@@ -1,0 +1,33 @@
+{
+  "client": "NKPsych",
+  "build_dir": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization",
+  "source_files": {
+    "editor_export": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/campaigns/account_export.csv",
+    "search_terms": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/reports/performance_inputs/search_terms_report_2026-05-04.csv",
+    "locations": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/reports/performance_inputs/location_report_2026-05-04.csv"
+  },
+  "outputs": {
+    "decisions": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/search_term_focus_keep_exclude_review.csv",
+    "negative_review_candidates": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/negative_review_candidates.csv",
+    "focus_additions": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/paused_focus_keyword_additions.csv",
+    "regional_analysis": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/regional_targeting_analysis.csv",
+    "regional_research": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/regional_targeting_research.json",
+    "staging_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/nkpsych_google_ads_editor_staging_rev1_20260504_optimization.csv",
+    "html": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/NKPsych_Search_Terms_Regional_Targeting_Review.html",
+    "pdf": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/NKPsych_Search_Terms_Regional_Targeting_Review.pdf",
+    "human_review": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/human_review.md",
+    "static_audit": "/Users/home/ai/agents/ppc/google_ads_agent/clients/NKPsych.com/build/2026-05-04_search_optimization/report_static_audit.json"
+  },
+  "counts": {
+    "search_term_rows": 624,
+    "unique_decisions": 453,
+    "focus_candidates": 12,
+    "review_candidates": 232,
+    "exclude_recommendations": 39,
+    "keep_terms": 170,
+    "paused_focus_additions": 5,
+    "staging_rows": 38,
+    "location_rows": 6
+  },
+  "status": "staged_for_human_review"
+}
