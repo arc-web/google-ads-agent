@@ -62,13 +62,12 @@ def test_client_email_draft_groups_search_term_questions_without_obvious_terms()
         )
     )
 
-    assert "**Search Term Questions**" in draft
-    assert "**Regional Confirmations**" in draft
-    assert "**Regional keyword targeting**" in draft
+    assert "Search Term Questions" not in draft
+    assert "Regional Confirmations" in draft
+    assert "Regional keyword targeting" in draft
     assert "Focus, Keep, or Exclude keyword targeting" in draft
-    assert "- Hamilton: [Focus / Keep / Exclude]" in draft
-    assert "If any city is unclear, mark it Discuss" in draft
+    assert "Hamilton: [Focus / Keep / Exclude]" in draft
+    assert "Based on your response we plan on building out ad groups focused on these independently." in draft
     assert "emdr therapy toronto" not in draft
-    assert "not already clear from the website" in draft
     assert "No changes have been pushed live" not in draft
     assert "happy to hop on a call" in draft

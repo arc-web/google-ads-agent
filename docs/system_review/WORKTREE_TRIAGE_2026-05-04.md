@@ -23,7 +23,10 @@ Sources:
 | Bucket | Paths | Action | Reason |
 | --- | --- | --- | --- |
 | Shared report wording | `shared/presentation/build_new_campaign_report.py` | `commit_system` | Generic report language now handles regional targeting instead of implying national targeting by default. |
+| Search-term email drafting | `shared/presentation/client_email_draft.py`, `tests/test_client_email_draft.py` | `commit_system` | Search-term and regional confirmation emails now use a review-oriented format without carrying generic rebuild confirmation copy. |
 | Revision email generation | `shared/rebuild/account_pipeline.py` | `commit_system` | Replaces shared hard-coded client revision email text with notes derived from `client_feedback_classified.json`. |
+| RSA service-logic gate | `shared/rebuild/rsa_headline_quality.py` | `commit_system` | Completes service-logic-aware headline generation so the audit accepts the new optional context and tests pass. |
+| Service logic research helper | `shared/rebuild/service_logic_research.py` | `commit_system` | Generic website-backed service interpretation helper retained as shared rebuild tooling. |
 | Triage report | `docs/system_review/WORKTREE_TRIAGE_2026-05-04.md` | `commit_system` | Documents path-level disposition for the worktree cleanup. |
 | EMorrison initial build | `clients/arc/emorrison_consulting/` | `commit_client_artifact` | Correct agency/client layout with validation anchors `run_manifest.json`, `validation_report.json`, `run_csv_validation_report.json`, and `human_review.md`. |
 | NYC Mindful revision package | `clients/therappc/nyc_mindful_mental_health_counseling/build/2026-05-02_initial_search_build/` and `docs/client_hq/` | `commit_client_artifact` | Validated Rev1 package includes `client_feedback_classified.json`, `revision_decision_log.csv`, `human_review.md`, validated dated Rev1 CSV, HTML, PDF, and Client HQ artifacts. |
@@ -35,6 +38,7 @@ Sources:
 ## Validation Summary
 
 - Full suite before final cleanup: `PYTHONPATH=/Users/home/ai/agents/ppc/google_ads_agent pytest -q`, 245 passed.
+- Focused final check: `PYTHONPATH=/Users/home/ai/agents/ppc/google_ads_agent python3 -m py_compile shared/rebuild/service_logic_research.py && PYTHONPATH=/Users/home/ai/agents/ppc/google_ads_agent pytest -q tests/test_rsa_headline_quality.py tests/test_client_email_draft.py`, 12 passed.
 - EMorrison validation anchors present: `run_manifest.json`, `validation_report.json`, `run_csv_validation_report.json`, `human_review.md`.
 - NYC Mindful validation anchors present: `client_feedback_classified.json`, `revision_decision_log.csv`, `human_review.md`, `nyc_mindful_mental_health_counseling_google_ads_editor_staging_rev1_20260504_071707_validation.json`.
 - Generated cache files were removed with path-specific cleanup only.

@@ -69,6 +69,16 @@ GENERIC_WORDS = {
     "top",
     "trusted",
 }
+GENERIC_VALUE_HEADLINES = {
+    "clear implementation steps",
+    "compare support options today",
+    "plan your next service step",
+    "practical support planning",
+    "review team support needs",
+    "start with a focused review",
+    "support for better access",
+    "talk with a consulting team",
+}
 APPROVED_SHORT_TOKENS = {"ai", "api", "cfo", "dc", "em", "hr", "it", "ny", "pr", "uk", "us", "va"}
 BROKEN_ENDINGS = {
     "appoi",
@@ -195,12 +205,51 @@ def is_low_value_filler(value: str, service_label: str) -> bool:
     return False
 
 
+def service_logic_tokens(service_logic: dict[str, Any] | None) -> set[str]:
+    if not service_logic:
+        return set()
+    output: set[str] = set()
+    for token in service_logic.get("concept_tokens", []) or []:
+        cleaned = normalize_headline(str(token))
+        if cleaned:
+            output.add(cleaned)
+    for field in ("buyer", "end_user", "service_mechanism", "problem", "outcome"):
+        output.update(significant_tokens(str(service_logic.get(field, ""))))
+    return {token for token in output if token not in GENERIC_WORDS and len(token) > 2}
+
+
+def headline_matches_service_logic(headline: str, service_logic: dict[str, Any] | None) -> bool:
+    concepts = service_logic_tokens(service_logic)
+    if not concepts:
+        return True
+    return bool(set(tokenize(headline)) & concepts)
+
+
+def is_wrong_buyer_type_headline(headline: str, service_logic: dict[str, Any] | None) -> bool:
+    if not service_logic:
+        return False
+    if str(service_logic.get("buyer_type", "")) not in {"b2b", "b2b2c"}:
+        return False
+    normalized = normalize_headline(headline)
+    return any(
+        pattern in normalized
+        for pattern in (
+            "appointments",
+            "book",
+            "counseling for you",
+            "near you",
+            "therapy for you",
+        )
+    )
+
+
 def audit_rsa_headlines(
     *,
     ad_group: str,
     headlines: list[str],
     service_label: str = "",
     client_name: str = "",
+    service_logic: dict[str, Any] | None = None,
 ) -> RsaHeadlineAudit:
     issues: list[HeadlineQualityIssue] = []
     cleaned = [clean_text(headline) for headline in headlines]
@@ -214,6 +263,15 @@ def audit_rsa_headlines(
             HeadlineQualityIssue(
                 rule="headline_count",
                 message=f"RSA must include exactly {REQUIRED_HEADLINE_COUNT} headlines.",
+                headlines=cleaned,
+            )
+        )
+
+    if service_logic and service_logic.get("status") != "pass":
+        issues.append(
+            HeadlineQualityIssue(
+                rule="service_logic_insufficient_evidence",
+                message="Service logic research did not provide enough evidence for ad copy generation.",
                 headlines=cleaned,
             )
         )
@@ -260,6 +318,33 @@ def audit_rsa_headlines(
                 HeadlineQualityIssue(
                     rule="headline_low_value_filler",
                     message="Headline is a bare label or filler pattern, not usable ad copy.",
+                    slots=[index],
+                    headlines=[headline],
+                )
+            )
+        if headline and service_logic and normalize_headline(headline) in GENERIC_VALUE_HEADLINES:
+            issues.append(
+                HeadlineQualityIssue(
+                    rule="headline_generic_value",
+                    message="Headline is too generic to communicate the service value.",
+                    slots=[index],
+                    headlines=[headline],
+                )
+            )
+        if headline and service_logic and not headline_matches_service_logic(headline, service_logic):
+            issues.append(
+                HeadlineQualityIssue(
+                    rule="headline_missing_service_concept",
+                    message="Headline does not map to the researched service concept.",
+                    slots=[index],
+                    headlines=[headline],
+                )
+            )
+        if headline and is_wrong_buyer_type_headline(headline, service_logic):
+            issues.append(
+                HeadlineQualityIssue(
+                    rule="headline_wrong_buyer_type",
+                    message="Headline reads like direct consumer copy for a B2B or B2B2C service.",
                     slots=[index],
                     headlines=[headline],
                 )
@@ -342,16 +427,35 @@ def audit_rsa_headlines(
 
 SERVICE_SPECIFIC_HEADLINES = {
     "lay counselor": [
-        "Lay Counselor Training Help",
-        "Plan Lay Counselor Programs",
+        "Lay Counselor Staff Training",
+        "Train Staff In Counseling",
+        "Build Lay Counselor Teams",
+        "Mental Health Access Plan",
+        "Care Team Counseling Skills",
+        "Expand Mental Health Access",
+        "Counseling Skills For Staff",
+        "Lay Counselor Skills Course",
+        "Grow Organizational Capacity",
+        "Train Community Care Teams",
+        "Lay Counseling For Teams",
+        "Build Care Access Capacity",
+        "Staff Mental Health Training",
+        "Academy For Care Teams",
+        "Skills To Expand Access",
     ],
     "employee mental health": [
         "Employee Wellbeing Planning",
         "Employee Mental Health Plans",
+        "Workplace Mental Health Help",
+        "Employee Counseling Access",
+        "Support Employee Wellbeing",
     ],
     "integrated behavioral": [
         "Behavioral Health Consulting",
         "Integrated Care Consulting",
+        "Integrated Care Team Support",
+        "Behavioral Workflow Support",
+        "Clinical Integration Plans",
     ],
     "empathic communication": [
         "Empathic Communication Help",
@@ -420,7 +524,74 @@ def service_specific_candidates(service_label: str) -> list[str]:
     return candidates
 
 
-def generate_quality_headlines(*, client_name: str, service_label: str, ad_group: str = "") -> list[str]:
+def service_logic_headline_candidates(service_logic: dict[str, Any] | None) -> list[str]:
+    if not service_logic:
+        return []
+    buyer_type = str(service_logic.get("buyer_type", ""))
+    mechanism = str(service_logic.get("service_mechanism", ""))
+    outcome = str(service_logic.get("outcome", ""))
+    buyer = str(service_logic.get("buyer", ""))
+    candidates = [
+        mechanism,
+        outcome,
+        f"{mechanism} For Teams",
+        f"{mechanism} For Staff",
+        f"{outcome} Planning",
+        f"{buyer} Support",
+    ]
+    if buyer_type in {"b2b", "b2b2c"}:
+        candidates.extend(
+            [
+                "Training For Care Teams Now",
+                "Care Team Training Support",
+                "Skills For Support Teams Now",
+                "Build Organizational Capacity",
+                "Support Team Skill Building",
+            ]
+        )
+    return candidates
+
+
+def service_from_ad_group(ad_group: str) -> str:
+    label = ad_group.replace("Services - ", "", 1)
+    for suffix in (" - General", " - Near Me"):
+        if label.endswith(suffix):
+            label = label[: -len(suffix)]
+    parts = label.split(" - ")
+    if len(parts) > 1 and len(parts[-1]) <= 35:
+        label = " - ".join(parts[:-1])
+    return label
+
+
+def find_service_logic(service_label: str, service_logic_map: dict[str, dict[str, Any]] | None) -> dict[str, Any] | None:
+    if not service_logic_map:
+        return None
+    normalized = normalize_headline(service_label)
+    for service, logic in service_logic_map.items():
+        service_norm = normalize_headline(service)
+        if service_norm == normalized or service_norm in normalized or normalized in service_norm:
+            return logic
+    return None
+
+
+def description_has_service_logic(description: str, service_logic: dict[str, Any]) -> bool:
+    concepts = service_logic_tokens(service_logic)
+    if not concepts:
+        return False
+    description_tokens = set(tokenize(description))
+    buyer_tokens = set(significant_tokens(str(service_logic.get("buyer", ""))))
+    mechanism_tokens = set(significant_tokens(str(service_logic.get("service_mechanism", ""))))
+    outcome_tokens = set(significant_tokens(str(service_logic.get("outcome", ""))))
+    return bool(description_tokens & buyer_tokens) and bool(description_tokens & mechanism_tokens) and bool(description_tokens & outcome_tokens)
+
+
+def generate_quality_headlines(
+    *,
+    client_name: str,
+    service_label: str,
+    ad_group: str = "",
+    service_logic: dict[str, Any] | None = None,
+) -> list[str]:
     """Generate 15 complete, audit-passing RSA headlines.
 
     The generator intentionally avoids character slicing. Any candidate outside
@@ -428,6 +599,7 @@ def generate_quality_headlines(*, client_name: str, service_label: str, ad_group
     """
     candidates = [
         *service_specific_candidates(service_label),
+        *service_logic_headline_candidates(service_logic),
         *GENERAL_HEADLINE_POOL,
     ]
     if client_name:
@@ -450,6 +622,7 @@ def generate_quality_headlines(*, client_name: str, service_label: str, ad_group
             service_label=service_label,
             client_name=client_name,
             headlines=trial,
+            service_logic=service_logic,
         )
         blocking = [
             issue
@@ -475,6 +648,7 @@ def generate_quality_headlines(*, client_name: str, service_label: str, ad_group
         service_label=service_label,
         client_name=client_name,
         headlines=selected,
+        service_logic=service_logic,
     )
     if audit.status != "pass":
         issue_rules = sorted({issue.rule for issue in audit.issues})
