@@ -1,0 +1,67 @@
+{
+  "workflow": "new_client_initial_search_campaign",
+  "client": "EM Consulting",
+  "date_label": "May 4, 2026",
+  "build_dir": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build",
+  "artifacts": {
+    "staging_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/emorrison_consulting_google_ads_editor_staging_20260504_121627.csv",
+    "validation_report": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/validation_report.json",
+    "website_scan": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/website_scan.json",
+    "source_attribution": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/source_attribution.json",
+    "raw_crawl": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/raw_website_crawl.json",
+    "service_catalog": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/service_catalog.json",
+    "geo_strategy": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/geo_strategy.json",
+    "rsa_headline_quality_audit": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/rsa_headline_quality_audit.json",
+    "human_review": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/human_review.md",
+    "client_report_html": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/Client_New_Campaign_Review.html",
+    "client_report_pdf": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/Client_New_Campaign_Review.pdf",
+    "client_email_draft": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/client_email_draft.md",
+    "visual_audit_dir": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/new_campaign_visual_audit",
+    "campaign_taxonomy": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/campaign_taxonomy.csv",
+    "rsa_copy_matrix": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/rsa_copy_matrix.csv",
+    "landing_page_map": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/landing_page_map.json",
+    "ad_asset_plan": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/ad_asset_plan.json",
+    "ad_asset_matrix": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/ad_asset_matrix.csv",
+    "ad_asset_research_matrix_json": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/ad_asset_research_matrix.json",
+    "ad_asset_research_matrix_md": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/ad_asset_research_matrix.md",
+    "ad_asset_import_package": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/ad_asset_import_package",
+    "image_asset_manifest": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/image_asset_manifest.csv"
+  },
+  "validation": {
+    "status": "pass",
+    "source_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/emorrison_consulting_google_ads_editor_staging_20260504_121627.csv",
+    "encoding": "utf-16",
+    "rows": 124,
+    "headers": 64,
+    "campaigns": [
+      "ARC - Search - Mental Health Consulting - V1"
+    ],
+    "ad_groups": 8,
+    "counts": {
+      "campaign_rows": 1,
+      "location_rows": 1,
+      "ad_group_rows": 8,
+      "keyword_rows": 56,
+      "rsa_rows": 8,
+      "negative_keyword_rows": 3,
+      "sitelink_rows": 36,
+      "callout_rows": 6,
+      "structured_snippet_rows": 1,
+      "price_rows": 3,
+      "business_name_rows": 1
+    },
+    "keyword_criterion_types": {
+      "Phrase": 56,
+      "Negative Phrase": 3
+    },
+    "issue_counts": {},
+    "issues": []
+  },
+  "report_audit": {
+    "sections": 16,
+    "errors": 0,
+    "warnings": 0
+  },
+  "launch_state": "staged_for_google_ads_editor_review",
+  "live_upload": false
+}

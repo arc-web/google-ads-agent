@@ -1,0 +1,34 @@
+{
+  "status": "pass",
+  "source_csv": "clients/arc/emorrison_consulting/build/2026-05-04_initial_search_build/emorrison_consulting_google_ads_editor_staging_20260504_121627.csv",
+  "encoding": "utf-16",
+  "rows": 124,
+  "headers": 64,
+  "campaigns": [
+    "ARC - Search - Mental Health Consulting - V1"
+  ],
+  "ad_groups": 8,
+  "counts": {
+    "campaign_rows": 1,
+    "ad_group_rows": 8,
+    "keyword_rows": 56,
+    "negative_keyword_rows": 3,
+    "rsa_rows": 8,
+    "location_rows": 1,
+    "radius_rows": 0,
+    "sitelink_rows": 36,
+    "callout_rows": 6,
+    "structured_snippet_rows": 1,
+    "call_asset_rows": 0,
+    "price_rows": 3,
+    "promotion_rows": 0,
+    "business_name_rows": 1,
+    "bid_modifier_rows": 0
+  },
+  "keyword_criterion_types": {
+    "Phrase": 56,
+    "Negative Phrase": 3
+  },
+  "issue_counts": {},
+  "issues": []
+}

@@ -1,0 +1,206 @@
+{
+  "website": "https://www.emorrisonconsulting.com/",
+  "source_pages": [
+    {
+      "url": "https://www.emorrisonconsulting.com/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "",
+      "headings": []
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/services/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "Human-Centered Care Services - Elizabeth Morrison Consulting",
+      "headings": [
+        "Services",
+        "Our Consulting Services",
+        "The Lay Counselor Academy",
+        "Supporting Employee Mental Health",
+        "Learning and Development",
+        "Integrated Behavioral Health",
+        "If you don\u2019t see what you need, reach out to us,",
+        "Healthy equity is the foundation to all the work we do."
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/services/lay-counselor-training-academy/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "The Lay Counselor Academy - Elizabeth Morrison Consulting",
+      "headings": [
+        "Learn Essential Mental Health Counseling Skills!",
+        "What is a",
+        "What is The",
+        "Listen to Co-Creators Elizabeth Morrison & Ali Moreno share their story and the mission behind The Lay Counselor Academy",
+        "Benefits of Having",
+        "Invest in your team's growth and your organization's mental health capacity",
+        "Per person",
+        "Per person"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/services/supporting-employee-mental-health/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "Employee Mental Health Support - Elizabeth Morrison Consulting",
+      "headings": [
+        "Flourish Counseling Services",
+        "Empathic, Affordable Mental Health Counseling for You. Just text 209-800-7922 to get started!",
+        "Not Sure where",
+        "Want to know more about flourish?",
+        "Why Choose Flourish?",
+        "Why Mental Health Matters At Work",
+        "Support",
+        "Fewer sick days"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/about-emc/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "About EM Consulting \u2013 Empathic Healthcare for All",
+      "headings": [
+        "About Us",
+        "Transforming Mental Healthcare, Together",
+        "Our Mission",
+        "Meet the",
+        "Elizabeth Morrison",
+        "Alli Moreno",
+        "Listen to Co-Creators Elizabeth Morrison & Ali Moreno share their story and the mission behind The Lay Counselor Academy",
+        "Why"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/about-emc",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "About EM Consulting \u2013 Empathic Healthcare for All",
+      "headings": [
+        "About Us",
+        "Transforming Mental Healthcare, Together",
+        "Our Mission",
+        "Meet the",
+        "Elizabeth Morrison",
+        "Alli Moreno",
+        "Listen to Co-Creators Elizabeth Morrison & Ali Moreno share their story and the mission behind The Lay Counselor Academy",
+        "Why"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/blog",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "Blog - Elizabeth Morrison Consulting",
+      "headings": [
+        "Blog",
+        "Latest Posts",
+        "Subscribe for Updates"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/blog/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "Blog - Elizabeth Morrison Consulting",
+      "headings": [
+        "Blog",
+        "Latest Posts",
+        "Subscribe for Updates"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/contact",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "Contact - Elizabeth Morrison Consulting",
+      "headings": [
+        "Contact",
+        "How can we help you?"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/contact/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "Contact - Elizabeth Morrison Consulting",
+      "headings": [
+        "Contact",
+        "How can we help you?"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/cookie-policy-uk/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "Cookie Policy (UK) - Elizabeth Morrison Consulting",
+      "headings": [
+        "Cookie Policy (UK)",
+        "Cookie Policy (UK)",
+        "1. Introduction",
+        "2. What are cookies?",
+        "3. What are scripts?",
+        "4. What is a web beacon?",
+        "5. Cookies",
+        "6. Placed cookies"
+      ]
+    },
+    {
+      "url": "https://www.emorrisonconsulting.com/cookie-policy-us/",
+      "used_for": [
+        "website crawl",
+        "service candidate extraction",
+        "landing page review"
+      ],
+      "title": "",
+      "headings": []
+    }
+  ],
+  "requested_source_pages": [
+    "https://www.emorrisonconsulting.com/",
+    "https://www.emorrisonconsulting.com/services/",
+    "https://www.emorrisonconsulting.com/services/lay-counselor-training-academy/",
+    "https://www.emorrisonconsulting.com/services/supporting-employee-mental-health/",
+    "https://www.emorrisonconsulting.com/about-emc/"
+  ],
+  "not_available": [
+    "Google Ads account export",
+    "search terms report",
+    "location performance report",
+    "conversion action report"
+  ]
+}
