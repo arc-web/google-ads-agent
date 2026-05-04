@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report credential-like files and generated cache noise in git status output."""
+"""Report credential-like files, generated cache noise, and unresolved removals."""
 
 from __future__ import annotations
 
@@ -12,6 +12,8 @@ from pathlib import Path
 
 CREDENTIAL_PATTERNS = ("credentials", "google-ads.yaml", ".env", "refresh-token", "developer-token")
 GENERATED_PATTERNS = ("__pycache__/", ".pyc", ".DS_Store", ".pytest_cache/")
+RESOLUTION_LEDGER_GLOB = "docs/system_review/*LEDGER*.md"
+REMOVAL_STATUS_CODES = {"D", "R"}
 
 
 @dataclass
@@ -30,7 +32,20 @@ def classify_path(path: str) -> str:
     return ""
 
 
-def audit_status_lines(lines: list[str]) -> list[GitHygieneFinding]:
+def has_resolution_ledger(root: Path) -> bool:
+    return any(path.is_file() and "TEMPLATE" not in path.name.upper() for path in root.glob(RESOLUTION_LEDGER_GLOB))
+
+
+def status_requires_resolution(status: str) -> bool:
+    return any(code in status for code in REMOVAL_STATUS_CODES)
+
+
+def audit_status_lines(
+    lines: list[str],
+    *,
+    require_resolution_ledger: bool = False,
+    resolution_ledger_present: bool = False,
+) -> list[GitHygieneFinding]:
     findings: list[GitHygieneFinding] = []
     for line in lines:
         if not line.strip():
@@ -42,6 +57,8 @@ def audit_status_lines(lines: list[str]) -> list[GitHygieneFinding]:
         category = classify_path(path)
         if category:
             findings.append(GitHygieneFinding(path=path, status=status, category=category))
+        if require_resolution_ledger and status_requires_resolution(status) and not resolution_ledger_present:
+            findings.append(GitHygieneFinding(path=path, status=status, category="unresolved-removal"))
     return findings
 
 
@@ -57,13 +74,28 @@ def git_status_lines(root: Path) -> list[str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Audit git status for credentials and generated cache noise.")
+    parser = argparse.ArgumentParser(description="Audit git status for credentials, generated cache noise, and unresolved removals.")
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--require-resolution-ledger",
+        action="store_true",
+        help="Fail deletion or rename work unless docs/system_review contains a cleanup resolution ledger.",
+    )
     args = parser.parse_args()
 
-    findings = audit_status_lines(git_status_lines(args.root.resolve()))
-    payload = {"status": "fail" if findings else "pass", "findings": [asdict(finding) for finding in findings]}
+    root = args.root.resolve()
+    findings = audit_status_lines(
+        git_status_lines(root),
+        require_resolution_ledger=args.require_resolution_ledger,
+        resolution_ledger_present=has_resolution_ledger(root),
+    )
+    payload = {
+        "status": "fail" if findings else "pass",
+        "resolution_ledger_required": args.require_resolution_ledger,
+        "resolution_ledger_present": has_resolution_ledger(root),
+        "findings": [asdict(finding) for finding in findings],
+    }
     if args.json:
         print(json.dumps(payload, indent=2))
     else:

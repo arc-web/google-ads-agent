@@ -16,6 +16,14 @@ Existing client folders that predate the agency/client layout remain active unde
 
 Do not archive or purge existing client folders until the overall system has been tested, the folder has been reviewed, and the repo owner explicitly approves the archive decision.
 
+No blind purge rule:
+
+- Never purge, drop, archive, delete, or discard any file, folder, stash, branch, or artifact blindly. Every removal needs a documented logical resolution.
+- Valid resolutions are `kept`, `committed`, `moved`, `superseded`, `archived`, `generated-noise`, and `owner-approved purge`.
+- Client data, source inputs, reports, stashes, and generated artifacts must be preserved until inventoried.
+- Safety branches and stashes may be dropped only after the inventory confirms there is no unique needed content left.
+- Use `docs/system_review/CLEANUP_RESOLUTION_LEDGER_TEMPLATE.md` or a dated copy of that template for catch-up, cleanup, migration, and artifact-removal work.
+
 ## Create A New Client
 
 Use:
