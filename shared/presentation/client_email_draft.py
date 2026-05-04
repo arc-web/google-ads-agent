@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from shared.presentation.client_language_rules import audit_client_email_text
+
 
 @dataclass(frozen=True)
 class EmailQuestionGroup:
@@ -45,7 +47,7 @@ def build_client_email_draft(data: EmailDraftInput) -> str:
         "",
         f"I attached the {campaign_label} review for {data.client}.",
         "",
-        "The attached PDF summarizes the campaign build, the structure we prepared, the services and locations covered, and the items we need confirmed before launch.",
+        "It shows the campaign structure, services, locations, and decisions we need confirmed before launch.",
         "",
         "Quick summary:",
         f"- Campaign build: {primary_campaign}",
@@ -76,7 +78,7 @@ def build_client_email_draft(data: EmailDraftInput) -> str:
     ])
     lines.extend(["", data.next_step])
     if "new campaign" in campaign_label.lower():
-        lines.extend(["", "No changes have been pushed live. This is prepared for review and approval first."])
+        lines.extend(["", "This is prepared for review and approval first."])
     lines.extend(
         [
             "",
@@ -142,5 +144,11 @@ def build_search_term_email_draft(data: EmailDraftInput, campaign_label: str) ->
 
 def write_client_email_draft(path: Path, data: EmailDraftInput) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(build_client_email_draft(data), encoding="utf-8")
+    draft = build_client_email_draft(data)
+    findings = audit_client_email_text(draft)
+    errors = [finding for finding in findings if finding.severity == "error"]
+    if errors:
+        details = "; ".join(f"{finding.code}: {finding.evidence}" for finding in errors[:5])
+        raise ValueError(f"Client email language audit failed: {details}")
+    path.write_text(draft, encoding="utf-8")
     return path

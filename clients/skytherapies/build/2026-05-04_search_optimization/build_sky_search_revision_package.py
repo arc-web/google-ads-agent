@@ -17,7 +17,9 @@ ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT))
 
 from shared.presentation.build_fixed_campaign_review import fixed_css
+from shared.presentation.build_new_campaign_report import CampaignSummary
 from shared.presentation.build_review_doc import export_pdf
+from shared.presentation.client_email_draft import EmailDraftInput, EmailQuestionGroup, write_client_email_draft
 from shared.presentation.report_quality_audit import audit_html
 from shared.rebuild.search_term_review import SearchTermReview, build_search_term_review
 
@@ -730,64 +732,37 @@ def build_html(decisions: list[TermDecision], locations: list[LocationInsight], 
 
 
 def write_client_email(decisions: list[TermDecision], locations: list[LocationInsight], grouped_review: SearchTermReview) -> None:
-    lines = [
-        "Subject: Sky Therapies search terms and city focus confirmation",
-        "",
-        "Hi [Client Name],",
-        "",
-        "We reviewed the latest search terms and location performance for Sky Therapies. A few terms are clear enough to stage for review, and a few need your call before we build around them.",
-        "",
-        "The main thing we need from you is how you want to handle the cities and a small set of unclear searches below.",
-        "",
-        "Please reply inline with Focus, Keep, or Exclude where noted.",
+    groups = [
+        EmailQuestionGroup(
+            title=group.title,
+            question=group.question,
+            terms=list(group.terms),
+            regions=list(group.regions),
+            default_action=group.default_action,
+            group_type=group.group_type,
+        )
+        for group in grouped_review.question_groups
+        if group.group_type in {"service", "regional"}
     ]
-    if grouped_review.question_groups:
-        section_labels = [
-            ("service", "**Service Confirmations**"),
-            ("regional", "**Regional Confirmations**"),
-            ("exclude", "**Exclude Recommendations**"),
-        ]
-        for group_type, label in section_labels:
-            groups = [group for group in grouped_review.question_groups if group.group_type == group_type]
-            if not groups:
-                continue
-            lines.extend(["", label])
-            for group in groups:
-                lines.append("")
-                if group.group_type == "regional":
-                    lines.append(f"**{group.title}**")
-                    lines.append(group.question)
-                    lines.append("")
-                    for region in group.regions:
-                        lines.append(f"- {region}: [Focus / Keep / Exclude]")
-                    lines.append("")
-                    lines.append("If any city is unclear, mark it Discuss and we can talk through it.")
-                    continue
-                lines.append(f"**{group.title}:** {group.question} Example searches:")
-                for term in group.terms[:3]:
-                    lines.append(f"- {term}")
-                lines.append(f"Suggested default: {group.default_action}")
-    else:
-        lines.append("- No service-area questions require client input from this search-term batch.")
-    lines.extend(
-        [
-            "",
-            "Regional notes for your confirmation:",
-            "- Toronto has the most volume and 2 conversions, but CPA is higher than Markham.",
-            "- Markham has 1 conversion at lower cost and looks like the strongest city to review as a priority.",
-            "- Mississauga and North York have engagement but no conversions yet.",
-            "- Brampton, Vaughan, and Richmond Hill should stay under scrutiny before we increase focus.",
-            "",
-            "Possible regional buildout:",
-            "- City-specific ad groups and ad copy for approved Focus cities: [Approve / Discuss]",
-            "",
-            "Looking forward to your feedback on these. If you have any questions on how this process works, just reach out and we are happy to hop on a call and help.",
-            "",
-            "Thanks,",
-            "[Your Name]",
-        ]
+    write_client_email_draft(
+        BUILD_DIR / "client_email_draft.md",
+        EmailDraftInput(
+            client="Sky Therapies",
+            date_label="May 4, 2026",
+            report_type="search terms and regional focus",
+            pdf_path=BUILD_DIR / "Sky_Therapies_Search_Terms_Regional_Focus_Confirmation.pdf",
+            summary=CampaignSummary(
+                campaigns=["ARC - Search - Services"],
+                ad_groups=0,
+                phrase_keywords=0,
+                negative_phrase_keywords=0,
+                rsa_rows=0,
+                locations=[location.location for location in locations[:5]],
+                networks=["Google search"],
+            ),
+            search_term_question_groups=groups,
+        ),
     )
-    (BUILD_DIR / "client_email_draft.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def write_human_review(decisions: list[TermDecision], locations: list[LocationInsight], additions: list[dict[str, str]]) -> None:

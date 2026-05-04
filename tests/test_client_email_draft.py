@@ -4,6 +4,7 @@ from pathlib import Path
 
 from shared.presentation.build_new_campaign_report import CampaignSummary
 from shared.presentation.client_email_draft import EmailDraftInput, EmailQuestionGroup, build_client_email_draft
+from shared.presentation.client_language_rules import audit_client_email_text
 
 
 def test_client_email_draft_references_pdf_not_csv() -> None:
@@ -34,6 +35,7 @@ def test_client_email_draft_references_pdf_not_csv() -> None:
     assert "cities, neighborhoods, regions, or travel markets" in draft
     assert "CSV" not in draft
     assert "csv" not in draft
+    assert not [finding for finding in audit_client_email_text(draft) if finding.severity == "error"]
 
 
 def test_client_email_draft_groups_search_term_questions_without_obvious_terms() -> None:
@@ -74,3 +76,5 @@ def test_client_email_draft_groups_search_term_questions_without_obvious_terms()
     assert "emdr therapy toronto" not in draft
     assert "No changes have been pushed live" not in draft
     assert "happy to hop on a call" in draft
+    assert "The attached PDF summarizes" not in draft
+    assert not [finding for finding in audit_client_email_text(draft) if finding.severity == "error"]
