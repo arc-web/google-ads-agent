@@ -43,6 +43,10 @@ Then add:
 Each rebuild should produce:
 
 - `Google_Ads_Editor_Staging_CURRENT.csv`
+- `ad_asset_plan.json`
+- `ad_asset_matrix.csv`
+- `ad_asset_research_matrix.json`
+- `image_asset_manifest.csv`
 - `Client_Rebuild_Review.html`
 - `Client_Rebuild_Review.pdf`
 - `human_review.md`

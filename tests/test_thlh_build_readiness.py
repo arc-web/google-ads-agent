@@ -14,17 +14,26 @@ REV2 = THLH_BUILD / "THHL_Search_Services_Editor_Staging_REV2.csv"
 DOC = REPO_ROOT / "docs/system_review/THLH_BUILD_READINESS_2026-05-01.md"
 
 
-def test_thlh_rev1_staging_is_now_blocked_by_headline_quality() -> None:
+def test_thlh_rev1_staging_is_now_blocked_by_headline_and_description_quality() -> None:
     master = MasterValidator().validate_csv_file(str(REV1))
     search = SearchMasterValidator().validate_csv_file(str(REV1))
 
     assert master["final_status"] == "FAIL"
-    assert master["validation_report"]["total_issues"] == 443
+    assert master["validation_report"]["total_issues"] == 685
     assert search["success"] is False
-    assert search["validation_report"]["total_issues"] == 443
+    assert search["validation_report"]["total_issues"] == 685
     assert {
         issue["issue_type"] for issue in master["validation_report"]["issues"]
-    } == {"headline_minimum_value"}
+    } == {
+        "description_missing_cta",
+        "description_under_value_minimum",
+        "headline_broken_truncation",
+        "headline_low_value_filler",
+        "headline_minimum_value",
+        "headline_repeated_root",
+        "headline_semantic_duplicate",
+        "smart_bidding_data_threshold_review",
+    }
 
 
 def test_thlh_rev1_staging_shape_matches_readiness_doc() -> None:
@@ -45,15 +54,25 @@ def test_thlh_rev1_staging_shape_matches_readiness_doc() -> None:
     assert not [header for header in rows[0] if "upload" in header.lower() or "api" in header.lower()]
 
 
-def test_thlh_rev2_staging_passes_headline_quality() -> None:
+def test_thlh_rev2_staging_passes_length_rules_but_needs_copy_rebuild() -> None:
     master = MasterValidator().validate_csv_file(str(REV2))
     search = SearchMasterValidator().validate_csv_file(str(REV2))
     rows = list(csv.DictReader(REV2.read_text(encoding="utf-16").splitlines(), delimiter="\t"))
 
-    assert master["final_status"] == "PASS"
-    assert master["validation_report"]["total_issues"] == 0
-    assert search["success"] is True
-    assert search["validation_report"]["total_issues"] == 0
+    assert master["final_status"] == "FAIL"
+    assert master["validation_report"]["total_issues"] == 238
+    assert search["success"] is False
+    assert search["validation_report"]["total_issues"] == 238
+    assert {
+        issue["issue_type"] for issue in master["validation_report"]["issues"]
+    } == {
+        "description_missing_cta",
+        "description_under_value_minimum",
+        "headline_broken_truncation",
+        "headline_repeated_root",
+        "headline_semantic_duplicate",
+        "smart_bidding_data_threshold_review",
+    }
     assert {row["Networks"] for row in rows if row.get("Networks")} == {"Google search"}
     for row in rows:
         if row.get("Ad type") != "Responsive search ad":

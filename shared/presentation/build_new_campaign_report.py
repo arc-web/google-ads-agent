@@ -13,13 +13,16 @@ from pathlib import Path
 
 if __package__:
     from .build_review_doc import export_pdf
+    from .client_email_draft import EmailDraftInput, write_client_email_draft
     from .pdf_visual_audit import audit_pdf
     from .report_quality_audit import audit_html
 else:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     from shared.presentation.build_review_doc import export_pdf
+    from shared.presentation.client_email_draft import EmailDraftInput, write_client_email_draft
     from shared.presentation.pdf_visual_audit import audit_pdf
     from shared.presentation.report_quality_audit import audit_html
+from shared.rebuild.rsa_headline_quality import audit_rows
 
 
 @dataclass(frozen=True)
@@ -42,6 +45,7 @@ class RsaExample:
     path_2: str
     headlines: list[str]
     descriptions: list[str]
+    headline_quality_status: str = "pass"
 
 
 @dataclass(frozen=True)
@@ -85,11 +89,7 @@ def read_staging(path: Path) -> list[dict[str, str]]:
 
 def summarize_staging(rows: list[dict[str, str]]) -> CampaignSummary:
     campaigns = sorted({row["Campaign"] for row in rows if row.get("Campaign")})
-    ad_groups = sum(
-        1
-        for row in rows
-        if row.get("Ad Group") and not row.get("Keyword") and not row.get("Ad type")
-    )
+    ad_groups = len(ad_group_rows(rows))
     phrase_keywords = sum(1 for row in rows if row.get("Criterion Type") == "Phrase")
     negative_phrase_keywords = sum(1 for row in rows if row.get("Criterion Type") == "Negative Phrase")
     rsa_rows = sum(1 for row in rows if row.get("Ad type") == "Responsive search ad")
@@ -108,9 +108,14 @@ def summarize_staging(rows: list[dict[str, str]]) -> CampaignSummary:
 
 def select_rsa_examples(rows: list[dict[str, str]], limit: int | None = None) -> list[RsaExample]:
     examples: list[RsaExample] = []
+    audit_by_ad_group = {
+        audit.get("ad_group", ""): audit
+        for audit in audit_rows(rows).get("audits", [])
+    }
     for row in rows:
         if row.get("Ad type") != "Responsive search ad":
             continue
+        headline_audit = audit_by_ad_group.get(row.get("Ad Group", ""), {})
         examples.append(
             RsaExample(
                 campaign=row.get("Campaign", ""),
@@ -120,6 +125,7 @@ def select_rsa_examples(rows: list[dict[str, str]], limit: int | None = None) ->
                 path_2=row.get("Path 2", ""),
                 headlines=[row.get(f"Headline {index}", "") for index in range(1, 16)],
                 descriptions=[row.get(f"Description {index}", "") for index in range(1, 5)],
+                headline_quality_status=str(headline_audit.get("status", "unknown")),
             )
         )
         if limit is not None and len(examples) == limit:
@@ -397,6 +403,12 @@ body {
 .ad-copy-page .subsection-header + .ad-copy-table {
   margin-bottom: 10px;
 }
+.audit-note {
+  margin: 0 0 6px;
+  font-size: 10px;
+  color: #6b5c4b;
+  font-weight: 700;
+}
 .ad-copy-page table {
   font-size: 9.5px;
 }
@@ -580,48 +592,158 @@ ul {
   font-size: 11px;
   line-height: 1.35;
 }
-.approval-grid.clean {
+.goal-grid {
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 12px;
+  margin: 18px 0;
 }
-.approval-check-card {
+.goal-card {
   background: #fffaf1;
   border: 1px solid #dfd2bf;
-  padding: 16px 12px;
-  min-height: 152px;
+  padding: 14px;
 }
-.approval-check-head {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 10px;
+.goal-card .label {
+  color: #756657;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
-.approval-check-head input {
-  width: 18px;
-  height: 18px;
-  accent-color: #185c62;
-}
-.approval-check-head h3 {
-  margin: 0;
-  font-size: 19px;
-  line-height: 1.08;
-}
-.approval-check-card p {
-  margin: 0;
+.goal-card strong {
+  display: block;
   color: #185c62;
-  font-weight: 800;
-  font-size: 13px;
-  line-height: 1.3;
+  font-size: 24px;
+  margin-top: 6px;
 }
-.approval-note {
-  margin-top: 18px;
-  padding: 14px 16px;
-  background: #ebe2d3;
-  border-left: 5px solid #c8753f;
+.goal-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: #4d4238;
+  line-height: 1.45;
   font-size: 13px;
-  line-height: 1.4;
-  color: #3d342b;
+}
+.launch-brief {
+  border: 1px solid #dfd2bf;
+  background: #fffaf1;
+  padding: 28px;
+}
+.launch-brief-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 0.9fr;
+  gap: 28px;
+  align-items: center;
+}
+.launch-kicker {
+  color: #185c62;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.launch-brief h2 {
+  margin: 0;
+  font-size: 42px;
+  line-height: 0.98;
+  letter-spacing: 0;
+  color: #241f1b;
+}
+.launch-brief p {
+  margin: 18px 0 0;
+  color: #62584f;
+  font-size: 16px;
+  line-height: 1.45;
+}
+.launch-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+.launch-pill {
+  display: inline-block;
+  padding: 11px 18px;
+  border-radius: 22px;
+  color: #fffaf1;
+  font-size: 12px;
+  font-weight: 900;
+}
+.launch-pill.primary { background: #0f7779; }
+.launch-pill.secondary { background: #d9783d; }
+.launch-stat-list {
+  display: grid;
+  gap: 10px;
+}
+.launch-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #efe6da;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-weight: 900;
+  color: #25211d;
+}
+.launch-stat span:first-child {
+  font-size: 14px;
+}
+.launch-stat span:last-child {
+  font-size: 16px;
+}
+.approval-list {
+  margin-top: 20px;
+  border: 1px solid #dfd2bf;
+  background: #fffaf1;
+}
+.approval-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 94px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #dfd2bf;
+}
+.approval-row:last-child {
+  border-bottom: 0;
+}
+.approval-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: #0f7779;
+  color: #fffaf1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+}
+.approval-icon.warn {
+  background: #d9783d;
+}
+.approval-copy h3 {
+  margin: 0 0 3px;
+  font-size: 17px;
+  line-height: 1.1;
+  color: #241f1b;
+}
+.approval-copy p {
+  margin: 0;
+  color: #6a5f55;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.approval-button {
+  justify-self: end;
+  border-radius: 20px;
+  padding: 9px 15px;
+  color: #fffaf1;
+  background: #0f7779;
+  font-size: 12px;
+  font-weight: 900;
+}
+.approval-button.warn {
+  background: #d9783d;
 }
 .state-chip {
   display: inline-block;
@@ -767,7 +889,14 @@ def ad_group_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
     return [
         row
         for row in rows
-        if row.get("Ad Group") and not row.get("Keyword") and not row.get("Ad type")
+        if row.get("Ad Group")
+        and not row.get("Keyword")
+        and not row.get("Ad type")
+        and not row.get("Link text")
+        and not row.get("Callout text")
+        and not row.get("Structured snippet header")
+        and not row.get("Phone number")
+        and not row.get("Business name")
     ]
 
 
@@ -787,11 +916,11 @@ def overview_section(summary: CampaignSummary) -> str:
         ),
         (
             "Ad groups",
-            "Which services are staged to run ads and which priorities should be confirmed first.",
+            "Which services are ready to run ads and which priorities should be confirmed first.",
         ),
         (
             "Ads and regions",
-            "Representative ad copy examples, current regional targeting, and any New York City or ZIP changes needed.",
+            "Representative ad copy examples, proposed national targeting, and the priority market questions to confirm before launch.",
         ),
         (
             "Budget and confirmation",
@@ -821,7 +950,7 @@ def overview_section(summary: CampaignSummary) -> str:
     return section(
         "Overview",
         "What This Review Covers",
-        "This report walks through the campaign structure, service ad groups, ads, regional targeting, budget pacing, and final confirmation items before launch.",
+        "This report walks through the campaign structure, service ad groups, ads, proposed targeting, budget pacing, and final confirmation items before launch.",
         body,
     )
 
@@ -993,7 +1122,7 @@ def budget_learning_section(budget: BudgetPlan) -> str:
   <div class="budget-tile"><h3>We pace the full month</h3><p>Daily spend and clicks will move. The aim is healthy pacing through day 30.</p></div>
   <div class="budget-tile"><h3>Starting lighter protects budget</h3><p>Early limits leave room to learn before we push winning areas.</p></div>
   <div class="budget-tile"><h3>CPC changes click volume</h3><p>The same dollars buy more or fewer clicks as auctions shift.</p></div>
-  <div class="budget-tile"><h3>Later spend is intentional</h3><p>Increases follow clearer performance, not random day-to-day noise.</p></div>
+  <div class="budget-tile"><h3>Later spend is intentional</h3><p>Increases follow clearer performance, not reactive day-to-day changes.</p></div>
 </div>
 <div class="confirm-strip">
   <h3>Please confirm</h3>
@@ -1004,6 +1133,41 @@ def budget_learning_section(budget: BudgetPlan) -> str:
         "Budget",
         "Why Spend Increases As Performance Gets Clearer",
         "This page explains the operating logic behind the pacing curve. We do not spend more because the campaign is guessing. We spend more when the evidence is cleaner.",
+        body,
+    )
+
+
+def capacity_goal_section(goal_facts: dict | None) -> str:
+    if not goal_facts:
+        return ""
+    title = esc(goal_facts.get("section_title") or "Capacity And Lead Goal")
+    target_clients = goal_facts.get("initial_new_client_goal", 2)
+    close_rate = float(goal_facts.get("planning_close_rate", 0.5) or 0.5)
+    minimum_leads = goal_facts.get("minimum_qualified_leads", 4)
+    lead_range = goal_facts.get("planning_qualified_lead_range", "4 to 8")
+    notes = list(goal_facts.get("capacity_notes", []))
+    pacing = goal_facts.get("pacing_recommendation")
+    assumption = goal_facts.get("assumption_note")
+    if pacing:
+        notes.append(str(pacing))
+    if assumption:
+        notes.append(str(assumption))
+    note_items = "".join(f"<li>{esc(note)}</li>" for note in notes)
+    body = f"""
+<div class="goal-grid">
+  <div class="goal-card"><div class="label">Initial new client goal</div><strong>{esc(target_clients)}</strong></div>
+  <div class="goal-card"><div class="label">Planning close rate</div><strong>{int(close_rate * 100)}%</strong></div>
+  <div class="goal-card"><div class="label">Minimum leads needed</div><strong>{esc(minimum_leads)}</strong></div>
+  <div class="goal-card"><div class="label">Planning lead range</div><strong>{esc(lead_range)}</strong></div>
+</div>
+<div class="subsection-header">How we use this goal</div>
+<p>The campaign should create enough qualified conversations to support the client goal without forcing spend before capacity and lead quality are clear.</p>
+<ul class="goal-list">{note_items}</ul>
+"""
+    return section(
+        "Goals",
+        title,
+        "This section appears only when the client gives capacity, lead, or growth goals that should guide campaign pacing.",
         body,
     )
 
@@ -1022,7 +1186,7 @@ def strategy_section(
 <div class="card-grid">
   <div class="insight-card">
     <h3>Search-first launch</h3>
-    <p>The campaign is built for people already searching for therapy support, not broad awareness. All keywords use phrase match for cleaner early data.</p>
+    <p>The campaign is built for people already searching for the client's services, not broad awareness. All keywords use phrase match for cleaner early data.</p>
   </div>
   <div class="insight-card">
     <h3>Website-backed services</h3>
@@ -1052,31 +1216,88 @@ def strategy_section(
     return section(
         "Strategy",
         "A Controlled New Search Campaign",
-        "This is the first version of the campaign plan. It keeps the launch focused on people already looking for therapy support, then gives you a clear way to approve services, priorities, copy, and regions before spend begins.",
+        "This is the first version of the campaign plan. It keeps the launch focused on people already looking for the prepared services, then gives you a clear way to approve services, priorities, copy, and regions before spend begins.",
+        body,
+    )
+
+
+def department_operations_section(build_dir: Path) -> str:
+    paths = {
+        "conversion": build_dir / "conversion_tracking_audit.json",
+        "evidence": build_dir / "evidence_quality_report.json",
+        "cadence": build_dir / "optimization_cadence_plan.json",
+        "bid": build_dir / "bid_strategy_recommendation.json",
+        "audience": build_dir / "audience_mode_audit.json",
+        "policy": build_dir / "policy_disapproval_audit.json",
+    }
+    if not any(path.exists() for path in paths.values()):
+        return ""
+    data = {key: read_json(path) if path.exists() else {} for key, path in paths.items()}
+    conversion = data["conversion"]
+    evidence = data["evidence"]
+    bid = data["bid"]
+    audience = data["audience"]
+    policy = data["policy"]
+    cadence = data["cadence"].get("cadence", {})
+    cadence_items = "".join(
+        f"<li><strong>{esc(name.title())}:</strong> {esc(', '.join(items[:4]))}</li>"
+        for name, items in cadence.items()
+    )
+    body = f"""
+<div class="card-grid">
+  <div class="insight-card">
+    <h3>Conversion readiness</h3>
+    <p>Status: {esc(conversion.get('status', 'review_required'))}. Recording actions: {esc(conversion.get('summary', {}).get('recording_actions', 0))}.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Evidence quality</h3>
+    <p>Status: {esc(evidence.get('status', 'review_required'))}. Weak or untested evidence stays in human review instead of driving automatic cuts.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Bidding path</h3>
+    <p>Recommended phase: {esc(bid.get('recommended_phase', 'data_collection'))}. Recommended strategy: {esc(bid.get('recommended_strategy', 'manual_cpc'))}.</p>
+  </div>
+  <div class="insight-card">
+    <h3>Launch controls</h3>
+    <p>Audience audit: {esc(audience.get('status', 'review_required'))}. Policy audit: {esc(policy.get('status', 'review_required'))}.</p>
+  </div>
+</div>
+<div class="subsection-header">Optimization cadence after launch</div>
+<ul class="goal-list">{cadence_items}</ul>
+<div class="confirm-strip">
+  <h3>Please confirm</h3>
+  <p>Measurement: confirm conversion tracking and policy status before any staged campaign moves from paused review to active launch.</p>
+</div>
+"""
+    return section(
+        "Operations",
+        "Department Standards Added To The Build",
+        "This review now includes the department training checks that affect launch readiness and post-launch management.",
         body,
     )
 
 
 def campaign_structure_section(summary: CampaignSummary) -> str:
+    campaign_label = "campaign" if len(summary.campaigns) == 1 else "campaigns"
     body = f"""
 <div class="two-col">
   <div class="insight-card">
     <h3>Launch shape</h3>
-    <p>The current launch uses {len(summary.campaigns)} controlled Search campaign with {summary.ad_groups} service-based ad groups. This keeps early learning clean and easier to review.</p>
+    <p>The current launch uses {len(summary.campaigns)} controlled Search {campaign_label} with {summary.ad_groups} service and geo intent ad groups. This keeps early learning clean and easier to review.</p>
   </div>
   <div class="insight-card">
     <h3>Expansion rule</h3>
-    <p>More campaigns should come later only when performance data shows a service or region needs its own budget, copy, and reporting focus.</p>
+    <p>City ad groups should be added only when approved city priorities are supplied or performance data shows a region needs its own copy and reporting focus.</p>
   </div>
 </div>
 <div class="structure-flow" aria-label="Current campaign structure and future expansion path">
   <svg viewBox="0 0 900 470" role="img" aria-label="One current Search campaign can later split by services or regions when performance supports it">
     <rect class="flow-current" x="34" y="52" width="184" height="86" rx="8"/>
     <text class="flow-label" x="126" y="88" text-anchor="middle">Current</text>
-    <text class="flow-small" x="126" y="114" text-anchor="middle">1 Search Campaign</text>
+    <text class="flow-small" x="126" y="114" text-anchor="middle">{len(summary.campaigns)} Search {campaign_label.title()}</text>
     <path class="flow-line" d="M218 95 C270 95, 288 95, 334 95"/>
     <rect class="flow-current" x="334" y="52" width="202" height="86" rx="8"/>
-    <text class="flow-label" x="435" y="88" text-anchor="middle">{summary.ad_groups} Service Ad Groups</text>
+    <text class="flow-label" x="435" y="88" text-anchor="middle">{summary.ad_groups} Geo Intent Ad Groups</text>
     <text class="flow-small" x="435" y="114" text-anchor="middle">actual launch structure</text>
     <path class="flow-line" d="M536 95 C610 95, 620 64, 692 64"/>
     <path class="flow-line" d="M536 95 C610 95, 620 126, 692 126"/>
@@ -1114,9 +1335,9 @@ def campaign_structure_section(summary: CampaignSummary) -> str:
     <path class="flow-muted" d="M590 359 C640 359, 652 378, 700 378"/>
     <path class="flow-muted" d="M590 429 C640 429, 652 410, 700 410"/>
     <path class="flow-muted" d="M590 429 C640 429, 652 448, 700 448"/>
-    <text class="flow-small" x="716" y="344">New York City groups</text>
-    <text class="flow-small" x="716" y="382">ZIP or neighborhood focus</text>
-    <text class="flow-small" x="716" y="414">secondary local groups</text>
+    <text class="flow-small" x="716" y="344">top priority states</text>
+    <text class="flow-small" x="716" y="382">top cities or metros</text>
+    <text class="flow-small" x="716" y="414">current strongest markets</text>
     <text class="flow-small" x="716" y="452">later regional tests</text>
   </svg>
 </div>
@@ -1144,15 +1365,15 @@ def ad_groups_section(summary: CampaignSummary, rows: list[dict[str, str]]) -> s
     body = f"""
 <div class="two-col">
   <div class="insight-card">
-    <h3>Services staged for ads</h3>
-    <p>{summary.ad_groups} ad groups organize therapy service intent, modality intent, and social anxiety demand for the first launch.</p>
+    <h3>Services ready for ads</h3>
+    <p>{summary.ad_groups} ad groups organize general, near-me, state, and approved city intent for the first launch.</p>
   </div>
   <div class="insight-card">
     <h3>Keyword control</h3>
-    <p>{summary.phrase_keywords} phrase keywords and {summary.negative_phrase_keywords} negative phrase keywords are staged. Active launch keywords use phrase match.</p>
+    <p>{summary.phrase_keywords} phrase keywords and {summary.negative_phrase_keywords} negative phrase keywords are prepared. Active launch keywords use phrase match.</p>
   </div>
 </div>
-<div class="subsection-header">Ad groups staged for review</div>
+<div class="subsection-header">Ad groups ready for review</div>
 <table>
   <tr><th>Ad group</th><th>Phrase keywords</th><th>Status</th></tr>
   {table_rows}
@@ -1166,7 +1387,7 @@ def ad_groups_section(summary: CampaignSummary, rows: list[dict[str, str]]) -> s
     return section(
         "Ad Groups",
         "Services We Are Running Ads For",
-        "These are the service areas currently staged in the Google Ads Editor file. Confirm the list is complete and identify which services should receive the most traffic first.",
+        "These are the service areas currently prepared in the Google Ads Editor file. Confirm the list is complete and identify which services should receive the most traffic first.",
         body,
     )
 
@@ -1175,48 +1396,43 @@ def targeting_section(geo_strategy: dict) -> str:
     targeting = geo_strategy.get("targeting", [])
     location_names = [item.get("location", "") for item in targeting]
     chips = "".join(f'<span class="state-chip">{esc(name)}</span>' for name in location_names)
+    location_label = ", ".join(location_names) if location_names else "No location rows prepared"
     review_rows = [
         (
-            "State",
-            "New York, United States",
-            "Staged",
-            "Staged across approved New York service areas unless a tighter city or ZIP focus is approved.",
+            "Country",
+            location_label,
+            "Ready for review",
+            "Confirm these staged locations are the correct launch markets.",
         ),
         (
-            "State",
-            "New Jersey, United States",
-            "Staged",
-            "Staged across approved New Jersey service areas unless a tighter city or ZIP focus is approved.",
-        ),
-        (
-            "City",
-            "New York City, NY",
-            "Review item",
-            "Confirm whether NYC should stay as ad group language only or become a separate location focus.",
+            "Top states",
+            "Top 5 states",
+            "Needed",
+            "List only if state priorities differ from the current staged locations.",
         ),
         (
             "City",
-            "New Jersey cities",
-            "Not supplied yet",
-            "Provide exact New Jersey cities only if spend should concentrate beyond statewide targeting.",
+            "Top 5 cities or metros",
+            "Needed",
+            "List the cities or metro areas where spend should concentrate first.",
         ),
         (
-            "ZIP",
-            "New York ZIPs",
-            "Not supplied yet",
-            "Provide ZIPs only if specific New York neighborhoods, boroughs, offices, or service pockets should receive focus.",
+            "Current work",
+            "Largest current markets",
+            "Needed",
+            "Tell us where most current clients or organizational relationships are located.",
         ),
         (
-            "ZIP",
-            "New Jersey ZIPs",
-            "Not supplied yet",
-            "Provide ZIPs only if specific New Jersey towns, neighborhoods, offices, or service pockets should receive focus.",
+            "Fastest wins",
+            "Priority growth markets",
+            "Needed",
+            "Tell us whether there are focus areas where stronger referrals, recognition, or capacity can produce faster wins.",
         ),
         (
-            "Exclusion",
-            "NY/NJ exclusions",
-            "None staged",
-            "Identify any city, ZIP, borough, county, or service area that should not receive traffic.",
+            "Exclusions",
+            "States, cities, or ZIPs",
+            "Needed",
+            "Identify anywhere inside the staged markets where the campaign should not spend.",
         ),
     ]
     review_table_rows = "".join(
@@ -1226,7 +1442,7 @@ def targeting_section(geo_strategy: dict) -> str:
     body = f"""
 <div class="targeting-panel compact">
   <div class="subsection-header" style="margin-top:0;">Current targeting and review items</div>
-  <p>The current staging file targets the approved service states. City and ZIP rows are review items, not separate launch targets unless they are approved.</p>
+  <p>The current build targets {esc(location_label)}. Treat this as a launch review item until the final market scope is approved.</p>
   <div style="margin:10px 0;">{chips}</div>
   <table class="targeting-table">
     <colgroup><col class="type-col"><col class="area-col"><col class="status-col"><col></colgroup>
@@ -1236,14 +1452,14 @@ def targeting_section(geo_strategy: dict) -> str:
   <p style="margin-top:10px;font-size:11px;color:#6b5c4b;">Location targeting can use countries, areas within a country, radius targets, or location groups. Source: <a href="https://support.google.com/google-ads/answer/1722043">Google Ads location targeting</a>.</p>
   <div class="confirm-strip">
     <h3>Please confirm</h3>
-    <p>Regional targeting: confirm the staged states and provide any city, ZIP, or exclusion changes before launch.</p>
+    <p>Regional targeting: confirm the staged markets, any city priorities, current strongest markets, fastest-win focus areas, and exclusions.</p>
   </div>
 </div>
 """
     return section(
         "Regional Targeting",
         "Where The Campaign Is Set To Reach",
-        "The current plan stays table-based so the launch geography is easy to review. Confirm the current state scope or add city, ZIP, or exclusion priorities before launch.",
+        "The current plan stays table-based so launch geography is easy to review. Confirm the staged markets or provide city priorities before launch.",
         body,
     )
 
@@ -1276,6 +1492,7 @@ def ad_copy_section(example: RsaExample, index: int, total: int) -> str:
   </div>
 </div>
 <div class="subsection-header">Headline examples</div>
+<p class="audit-note">Headline quality gate: {esc(example.headline_quality_status)}. This table shows 15 complete headlines with character counts for launch review.</p>
 <table class="ad-copy-table">
   <colgroup><col class="slot-col"><col><col class="char-col"></colgroup>
   <tr><th>#</th><th>Headline</th><th>Chars</th></tr>{headline_rows}
@@ -1313,46 +1530,75 @@ def approval_section(
     geo_strategy: dict,
     budget: BudgetPlan,
 ) -> str:
-    del rows, geo_strategy
-    approval_items = [
+    del rows
+    targeting = geo_strategy.get("targeting", [])
+    location_names = [item.get("location", "") for item in targeting if item.get("location")]
+    location_label = ", ".join(location_names) if location_names else "the approved service area"
+    checklist_items = [
         (
-            "Ad groups",
-            f"{summary.ad_groups} service ad groups",
+            "Approve ad group structure",
+            f"{summary.ad_groups} service-specific ad groups are ready.",
+            "Approve",
+            False,
         ),
         (
-            "Ads",
-            f"{summary.rsa_rows} responsive search ads",
+            "Approve responsive search ads",
+            f"{summary.rsa_rows} ads are written around the service categories.",
+            "Approve",
+            False,
         ),
         (
-            "Regional targeting",
-            "Locations shown in this report",
+            "Confirm regional targeting",
+            f"{location_label} is the current reach. Confirm all 50 states or send priority markets.",
+            "Confirm",
+            True,
         ),
         (
-            "Budget",
-            f"{money(budget.monthly_budget)} monthly budget",
+            "Approve monthly budget",
+            f"Proposed launch budget is {money(budget.monthly_budget)}/month.",
+            "Approve",
+            False,
         ),
     ]
-    approvals = "".join(
+    checklist = "".join(
         f"""
-<div class="approval-check-card">
-  <label class="approval-check-head">
-    <input type="checkbox" checked>
+<div class="approval-row">
+  <div class="approval-icon{' warn' if warn else ''}">{'!' if warn else '&#10003;'}</div>
+  <div class="approval-copy">
     <h3>{esc(title)}</h3>
-  </label>
-  <p>{esc(text)}</p>
+    <p>{esc(text)}</p>
+  </div>
+  <div class="approval-button{' warn' if warn else ''}">{esc(action)}</div>
 </div>
 """
-        for title, text in approval_items
+        for title, text, action, warn in checklist_items
     )
     body = f"""
-<div class="subsection-header">Approval summary</div>
-<div class="approval-grid clean">{approvals}</div>
-<div class="approval-note">Please confirm the items above after reviewing the detailed pages in this report.</div>
+<div class="launch-brief">
+  <div class="launch-brief-grid">
+    <div>
+      <div class="launch-kicker">Launch brief</div>
+      <h2>Campaign setup is ready. Confirm targeting.</h2>
+      <p>The campaign is prepared with service-based structure, responsive search ads, and a proposed monthly budget. One regional coverage decision remains before launch.</p>
+      <div class="launch-actions">
+        <span class="launch-pill primary">Approve Core Setup</span>
+        <span class="launch-pill secondary">Confirm Regions</span>
+      </div>
+    </div>
+    <div class="launch-stat-list">
+      <div class="launch-stat"><span>Ad Groups</span><span>{summary.ad_groups}</span></div>
+      <div class="launch-stat"><span>Ads</span><span>{summary.rsa_rows}</span></div>
+      <div class="launch-stat"><span>Regions</span><span>{len(location_names) or 1}</span></div>
+      <div class="launch-stat"><span>Budget</span><span>{money(budget.monthly_budget)}</span></div>
+    </div>
+  </div>
+</div>
+<div class="approval-list">{checklist}</div>
 """
     return section(
         "Approval",
-        "What Needs Confirmation",
-        "The campaign is valid as a staging file. This review should focus on services, ad copy, regional targeting, and budget.",
+        "Ready for Approval",
+        "The core campaign build is ready. Confirm service priority, ad copy, regional targeting, and budget so the launch can move forward.",
         body,
     )
 
@@ -1367,8 +1613,17 @@ def build_html(
     geo_strategy_json: Path,
     source_attribution_json: Path,
     budget: BudgetPlan | None = None,
+    goal_facts: dict | None = None,
 ) -> str:
     rows = read_staging(staging_csv)
+    headline_audit = audit_rows(rows)
+    if headline_audit["status"] != "pass":
+        failing = [
+            issue["rule"]
+            for audit in headline_audit["audits"]
+            for issue in audit.get("issues", [])
+        ]
+        raise ValueError(f"RSA headline quality audit failed before report export: {sorted(set(failing))}")
     summary = summarize_staging(rows)
     website_scan = read_json(website_scan_json)
     service_catalog = read_json(service_catalog_json)
@@ -1386,10 +1641,12 @@ def build_html(
 <body>
   {cover(client, date_label, summary)}
   {overview_section(summary)}
+  {department_operations_section(staging_csv.parent)}
   {campaign_structure_section(summary)}
   {ad_groups_section(summary, rows)}
   {ads_sections(examples)}
   {targeting_section(geo_strategy)}
+  {capacity_goal_section(goal_facts)}
   {budget_pacing_section(budget)}
   {budget_learning_section(budget)}
   {approval_section(summary, rows, geo_strategy, budget)}
@@ -1409,6 +1666,7 @@ def write_report(
     source_attribution_json: Path,
     output_html: Path,
     budget: BudgetPlan | None = None,
+    goal_facts: dict | None = None,
 ) -> Path:
     html_text = build_html(
         client=client,
@@ -1419,6 +1677,7 @@ def write_report(
         geo_strategy_json=geo_strategy_json,
         source_attribution_json=source_attribution_json,
         budget=budget,
+        goal_facts=goal_facts,
     )
     output_html.parent.mkdir(parents=True, exist_ok=True)
     output_html.write_text(html_text, encoding="utf-8")
@@ -1427,33 +1686,75 @@ def write_report(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build a new-campaign review report.")
-    parser.add_argument("--client", required=True)
-    parser.add_argument("--date", required=True)
-    parser.add_argument("--staging-csv", required=True, type=Path)
-    parser.add_argument("--website-scan-json", required=True, type=Path)
-    parser.add_argument("--service-catalog-json", required=True, type=Path)
-    parser.add_argument("--geo-strategy-json", required=True, type=Path)
-    parser.add_argument("--source-attribution-json", required=True, type=Path)
+    parser.add_argument("--manifest-json", type=Path, help="Optional one-shot run manifest.")
+    parser.add_argument("--client")
+    parser.add_argument("--date")
+    parser.add_argument("--staging-csv", type=Path)
+    parser.add_argument("--website-scan-json", type=Path)
+    parser.add_argument("--service-catalog-json", type=Path)
+    parser.add_argument("--geo-strategy-json", type=Path)
+    parser.add_argument("--source-attribution-json", type=Path)
     parser.add_argument("--monthly-budget", type=float, default=3000)
     parser.add_argument("--cpc-low", type=float)
     parser.add_argument("--cpc-high", type=float)
-    parser.add_argument("--output-html", required=True, type=Path)
+    parser.add_argument("--goal-facts-json", type=Path)
+    parser.add_argument("--output-html", type=Path)
+    parser.add_argument("--output-email", type=Path)
     parser.add_argument("--output-pdf", type=Path)
     parser.add_argument("--visual-audit-dir", type=Path)
     args = parser.parse_args()
-    budget = BudgetPlan(args.monthly_budget, args.cpc_low, args.cpc_high)
 
-    html_path = write_report(
-        client=args.client,
-        date_label=args.date,
-        staging_csv=args.staging_csv,
-        website_scan_json=args.website_scan_json,
-        service_catalog_json=args.service_catalog_json,
-        geo_strategy_json=args.geo_strategy_json,
-        source_attribution_json=args.source_attribution_json,
-        output_html=args.output_html,
-        budget=budget,
-    )
+    if args.manifest_json:
+        manifest = read_json(args.manifest_json)
+        artifacts = manifest.get("artifacts", {})
+        args.client = args.client or manifest.get("client")
+        args.date = args.date or manifest.get("date_label")
+        args.staging_csv = args.staging_csv or Path(artifacts.get("staging_csv", ""))
+        args.website_scan_json = args.website_scan_json or Path(artifacts.get("website_scan", ""))
+        args.service_catalog_json = args.service_catalog_json or Path(artifacts.get("service_catalog", ""))
+        args.geo_strategy_json = args.geo_strategy_json or Path(artifacts.get("geo_strategy", ""))
+        args.source_attribution_json = args.source_attribution_json or Path(artifacts.get("source_attribution", ""))
+        args.output_html = args.output_html or Path(artifacts.get("client_report_html", ""))
+        args.output_pdf = args.output_pdf or Path(artifacts.get("client_report_pdf", ""))
+        args.output_email = args.output_email or Path(artifacts.get("client_email_draft", ""))
+        if not args.goal_facts_json and artifacts.get("goal_facts"):
+            args.goal_facts_json = Path(artifacts["goal_facts"])
+        visual_dir = artifacts.get("visual_audit_dir")
+        args.visual_audit_dir = args.visual_audit_dir or (Path(visual_dir) if visual_dir else None)
+
+    required = {
+        "--client": args.client,
+        "--date": args.date,
+        "--staging-csv": args.staging_csv,
+        "--website-scan-json": args.website_scan_json,
+        "--service-catalog-json": args.service_catalog_json,
+        "--geo-strategy-json": args.geo_strategy_json,
+        "--source-attribution-json": args.source_attribution_json,
+        "--output-html": args.output_html,
+    }
+    missing = [name for name, value in required.items() if not value]
+    if missing:
+        parser.error(f"missing required arguments: {', '.join(missing)}")
+
+    budget = BudgetPlan(args.monthly_budget, args.cpc_low, args.cpc_high)
+    goal_facts = read_json(args.goal_facts_json) if args.goal_facts_json else None
+
+    try:
+        html_path = write_report(
+            client=args.client,
+            date_label=args.date,
+            staging_csv=args.staging_csv,
+            website_scan_json=args.website_scan_json,
+            service_catalog_json=args.service_catalog_json,
+            geo_strategy_json=args.geo_strategy_json,
+            source_attribution_json=args.source_attribution_json,
+            output_html=args.output_html,
+            budget=budget,
+            goal_facts=goal_facts,
+        )
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
 
     findings, summary = audit_html(html_path)
     errors = [finding for finding in findings if finding.severity == "error"]
@@ -1474,6 +1775,17 @@ def main() -> int:
         print(f"wrote {pdf_path}")
     else:
         print(f"wrote {html_path}")
+    email_path = args.output_email or html_path.with_name("client_email_draft.md")
+    write_client_email_draft(
+        email_path,
+        EmailDraftInput(
+            client=args.client,
+            date_label=args.date,
+            report_type="new campaign build",
+            pdf_path=args.output_pdf or html_path.with_suffix(".pdf"),
+            summary=summarize_staging(read_staging(args.staging_csv)),
+        ),
+    )
     print(f"static_audit sections={summary['sections']} errors={summary['errors']} warnings={summary['warnings']}")
     return 0
 

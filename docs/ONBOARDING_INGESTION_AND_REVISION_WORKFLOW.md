@@ -136,6 +136,12 @@ Required outputs:
 - `geo_performance_analysis.csv`
 - `conversion_tracking_audit.json`
 - `evidence_quality_report.json`
+- `optimization_cadence_plan.json`
+- `bid_strategy_recommendation.json`
+- `audience_mode_audit.json`
+- `recommendations_triage.csv`
+- `policy_disapproval_audit.json`
+- `launch_readiness_checklist.md`
 
 The evidence quality report must label each conclusion:
 
@@ -145,6 +151,10 @@ The evidence quality report must label each conclusion:
 - `not_tested`
 
 This prevents old bad structure from creating false negatives.
+
+Department training standards are loaded from `shared/config/department_standards.yaml`.
+Rules must keep a scope of `global`, `search_rebuild`, `optimization`, `launch_readiness`, `automotive`, or `manual_sop`.
+Automotive rules stay in the automotive profile and must not become global shared logic.
 
 ### Stage 3: Strategy Synthesis
 

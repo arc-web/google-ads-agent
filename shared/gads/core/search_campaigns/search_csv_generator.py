@@ -26,6 +26,28 @@ OPTIONAL_HEADERS = [
     "Ad Group status",
     "Keyword status",
     "Ad status",
+    "Asset type",
+    "Asset level",
+    "Link text",
+    "Description line 1",
+    "Description line 2",
+    "Callout text",
+    "Structured snippet header",
+    "Structured snippet values",
+    "Phone number",
+    "Country code",
+    "Price type",
+    "Price qualifier",
+    "Currency",
+    "Price header",
+    "Price description",
+    "Price amount",
+    "Price unit",
+    "Promotion target",
+    "Percent off",
+    "Money amount off",
+    "Promotion code",
+    "Business name",
     "Path 1",
     "Path 2",
     "Location",
@@ -232,6 +254,206 @@ class SearchCSVGenerator:
                 "Location ID": location_id,
                 "Radius": radius,
                 "Bid Modifier": bid_modifier,
+            }
+        )
+        self.rows.append(row)
+        return row
+
+    def add_sitelink(
+        self,
+        campaign: str,
+        link_text: str,
+        final_url: str,
+        *,
+        ad_group: str = "",
+        description_1: str = "",
+        description_2: str = "",
+        level: str = "campaign",
+        status: str = "Paused",
+    ) -> dict[str, str]:
+        """Add a staged sitelink asset association."""
+        row = self._blank_row()
+        row.update(
+            {
+                "Campaign": campaign,
+                "Ad Group": ad_group,
+                "Asset type": "Sitelink",
+                "Asset level": level,
+                "Link text": link_text,
+                "Final URL": final_url,
+                "Description line 1": description_1,
+                "Description line 2": description_2,
+                "Status": status,
+            }
+        )
+        self.rows.append(row)
+        return row
+
+    def add_callout(
+        self,
+        campaign: str,
+        callout_text: str,
+        *,
+        ad_group: str = "",
+        level: str = "campaign",
+        status: str = "Paused",
+    ) -> dict[str, str]:
+        """Add a staged callout asset association."""
+        row = self._blank_row()
+        row.update(
+            {
+                "Campaign": campaign,
+                "Ad Group": ad_group,
+                "Asset type": "Callout",
+                "Asset level": level,
+                "Callout text": callout_text,
+                "Status": status,
+            }
+        )
+        self.rows.append(row)
+        return row
+
+    def add_structured_snippet(
+        self,
+        campaign: str,
+        header: str,
+        values: list[str],
+        *,
+        ad_group: str = "",
+        level: str = "campaign",
+        status: str = "Paused",
+    ) -> dict[str, str]:
+        """Add a staged structured snippet asset association."""
+        row = self._blank_row()
+        row.update(
+            {
+                "Campaign": campaign,
+                "Ad Group": ad_group,
+                "Asset type": "Structured snippet",
+                "Asset level": level,
+                "Structured snippet header": header,
+                "Structured snippet values": ";".join(values),
+                "Status": status,
+            }
+        )
+        self.rows.append(row)
+        return row
+
+    def add_call(
+        self,
+        campaign: str,
+        phone_number: str,
+        *,
+        country_code: str = "US",
+        ad_group: str = "",
+        level: str = "campaign",
+        status: str = "Paused",
+    ) -> dict[str, str]:
+        """Add a staged call asset association when a phone number is confirmed."""
+        row = self._blank_row()
+        row.update(
+            {
+                "Campaign": campaign,
+                "Ad Group": ad_group,
+                "Asset type": "Call",
+                "Asset level": level,
+                "Phone number": phone_number,
+                "Country code": country_code,
+                "Status": status,
+            }
+        )
+        self.rows.append(row)
+        return row
+
+    def add_price(
+        self,
+        campaign: str,
+        header: str,
+        description: str,
+        price: str,
+        final_url: str,
+        *,
+        currency: str = "USD",
+        price_type: str = "Services",
+        price_qualifier: str = "From",
+        unit: str = "None",
+        ad_group: str = "",
+        level: str = "campaign",
+        status: str = "Paused",
+    ) -> dict[str, str]:
+        """Add a staged price asset item when explicit website pricing exists."""
+        row = self._blank_row()
+        row.update(
+            {
+                "Campaign": campaign,
+                "Ad Group": ad_group,
+                "Asset type": "Price",
+                "Asset level": level,
+                "Price type": price_type,
+                "Price qualifier": price_qualifier,
+                "Currency": currency,
+                "Price header": header,
+                "Price description": description,
+                "Price amount": price,
+                "Price unit": unit,
+                "Final URL": final_url,
+                "Status": status,
+            }
+        )
+        self.rows.append(row)
+        return row
+
+    def add_promotion(
+        self,
+        campaign: str,
+        promotion_target: str,
+        final_url: str,
+        *,
+        percent_off: str = "",
+        money_amount_off: str = "",
+        promotion_code: str = "",
+        ad_group: str = "",
+        level: str = "campaign",
+        status: str = "Paused",
+    ) -> dict[str, str]:
+        """Add a staged promotion asset when explicit promotion evidence exists."""
+        row = self._blank_row()
+        row.update(
+            {
+                "Campaign": campaign,
+                "Ad Group": ad_group,
+                "Asset type": "Promotion",
+                "Asset level": level,
+                "Promotion target": promotion_target,
+                "Percent off": percent_off,
+                "Money amount off": money_amount_off,
+                "Promotion code": promotion_code,
+                "Final URL": final_url,
+                "Status": status,
+            }
+        )
+        self.rows.append(row)
+        return row
+
+    def add_business_name(
+        self,
+        campaign: str,
+        business_name: str,
+        *,
+        ad_group: str = "",
+        level: str = "campaign",
+        status: str = "Paused",
+    ) -> dict[str, str]:
+        """Add a staged business name asset for human verification review."""
+        row = self._blank_row()
+        row.update(
+            {
+                "Campaign": campaign,
+                "Ad Group": ad_group,
+                "Asset type": "Business name",
+                "Asset level": level,
+                "Business name": business_name,
+                "Status": status,
             }
         )
         self.rows.append(row)

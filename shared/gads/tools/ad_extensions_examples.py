@@ -35,8 +35,8 @@ def demonstrate_basic_extension_creation():
 
     # Business information
     business_info = {
-        "name": "My Expert Resume",
-        "website": "https://myexpertresume.com",
+        "name": "Example Services Company",
+        "website": "https://example.com",
         "phone": "+1-555-123-4567",
         "country_code": "US",
         "type": "professional_services",
@@ -199,11 +199,11 @@ def demonstrate_campaign_integration():
 
     # Sample campaign configuration
     campaign_config = {
-        "name": "MyExpertResume Professional Services",
+        "name": "Example Services Professional Services",
         "type": "SEARCH",
         "objective": "conversions",
-        "brand_business_name": "My Expert Resume",
-        "website": "https://myexpertresume.com",
+        "brand_business_name": "Example Services Company",
+        "website": "https://example.com",
         "phone": "+1-555-123-4567",
         "business_type": "professional_services",
         "years_experience": 15,

@@ -10,6 +10,24 @@ from shared.validators.csv_stage_manager import CSVStageManager
 from shared.validators.master_validator import MasterValidator
 from shared.validators.targeting_validator import TargetingValidator
 
+VALID_HEADLINES = [
+    "Practical Support Planning",
+    "Training For Care Teams Now",
+    "Support For Better Access",
+    "Build Human Centered Care",
+    "Clear Implementation Steps",
+    "Review Team Support Needs",
+    "Improve Care Team Readiness",
+    "Plan Your Next Service Step",
+    "Consulting For Care Teams",
+    "Skills For Support Teams Now",
+    "Focused Training Review Today",
+    "Request Program Details Now",
+    "Compare Support Options Today",
+    "Talk With A Consulting Team",
+    "Start With A Focused Review",
+]
+
 
 def staging_headers() -> list[str]:
     headers = list(REQUIRED_HEADERS)
@@ -78,9 +96,9 @@ def rsa_row(**overrides: str) -> dict[str, str]:
         },
     )
     for index in range(1, 16):
-        data[f"Headline {index}"] = f"Focused Testing Support {index}"
+        data[f"Headline {index}"] = VALID_HEADLINES[index - 1]
     for index in range(1, 5):
-        data[f"Description {index}"] = f"Schedule testing support with a focused care team {index}."
+        data[f"Description {index}"] = f"Review testing support options with a focused local care team {index}. Schedule Today."
     data.update(overrides)
     return data
 

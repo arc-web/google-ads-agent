@@ -12,6 +12,25 @@ from shared.comprehensive_csv_validator import AutoFixDisabled, ComprehensiveCSV
 from shared.rebuild.staging_validator import REQUIRED_HEADERS, REQUIRED_RSA_DESCRIPTIONS, REQUIRED_RSA_HEADLINES
 
 
+GOOD_HEADLINES = [
+    "Licensed Therapy Near You",
+    "Private Care That Fits You",
+    "Book Your Private Consult",
+    "Anxiety Skills With CBT Help",
+    "Talk With Licensed Counselors",
+    "Online Visits For NY Adults",
+    "Clear Pricing Before Visits",
+    "Get Matched To The Right Fit",
+    "Evening Appointment Options",
+    "Therapy Plans Built For You",
+    "Practical Tools For Stress",
+    "Insurance Guidance Upfront",
+    "Meet A Therapist This Week",
+    "Care For Teens And Adults",
+    "Compassionate Clinical Care",
+]
+
+
 def _base_row() -> dict[str, str]:
     headers = REQUIRED_HEADERS + REQUIRED_RSA_HEADLINES + REQUIRED_RSA_DESCRIPTIONS + ["Path 1", "Path 2", "Radius"]
     return {header: "" for header in headers}
@@ -70,10 +89,10 @@ def _write_staging_csv(path: Path, criterion_type: str = "Phrase") -> None:
             "Status": "Enabled",
         }
     )
-    for index, headline in enumerate(REQUIRED_RSA_HEADLINES, start=1):
-        rsa[headline] = f"Focused Therapy Support {index}"
+    for headline, value in zip(REQUIRED_RSA_HEADLINES, GOOD_HEADLINES, strict=True):
+        rsa[headline] = value
     for index, description in enumerate(REQUIRED_RSA_DESCRIPTIONS, start=1):
-        rsa[description] = f"Schedule therapy care with a local team today. Option {index}"
+        rsa[description] = f"Review therapy support options with a focused local care team {index}. Schedule Today."
     rows.append(rsa)
 
     location = _base_row()

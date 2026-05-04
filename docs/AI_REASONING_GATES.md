@@ -17,6 +17,7 @@ Use AI reasoning for:
 - Generating first-pass ad copy candidates.
 - Producing qualitative copy-grade notes when structured grader output is missing.
 - Explaining tradeoffs for human review.
+- Interpreting whether department training rules need a client-specific or industry-specific override.
 
 ## Deterministic Script Required
 
@@ -32,6 +33,10 @@ Do not use AI reasoning for:
 - Checking for old provider tokens.
 - Checking campaign naming patterns.
 - Checking Google Ads Editor CSV schema.
+- Loading department standards from `shared/config/department_standards.yaml`.
+- Parsing conversion, audience, recommendation, and disapproval reports.
+- Producing `conversion_tracking_audit.json`, `bid_strategy_recommendation.json`, `audience_mode_audit.json`, `recommendations_triage.csv`, and `policy_disapproval_audit.json`.
+- Adding the department operations section to the existing HTML/PDF report pipeline.
 
 These steps must be repeatable through scripts.
 

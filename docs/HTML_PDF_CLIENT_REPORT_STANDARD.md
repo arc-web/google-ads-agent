@@ -23,16 +23,19 @@ For a first review:
 
 - `Client_Rebuild_Review.html`
 - `Client_Rebuild_Review.pdf`
+- `client_email_draft.md`
 
 For a revision review:
 
 - `Client_Rebuild_Review_R1.html`
 - `Client_Rebuild_Review_R1.pdf`
+- `client_email_draft.md`
 
 For a new campaign review with no inherited ad account:
 
 - `Client_New_Campaign_Review.html`
 - `Client_New_Campaign_Review.pdf`
+- `client_email_draft.md`
 
 The revision review should replace the prior review for client approval. It should keep clear lineage:
 
@@ -74,10 +77,25 @@ The builder wraps the Chrome headless export flags that produced the accepted re
 For a new campaign report, use:
 
 ```bash
+python3 presentations/tools/build_initial_search_campaign.py \
+  --agency agency_slug \
+  --client client_slug \
+  --display-name "Client Name" \
+  --website https://example.com/ \
+  --build-date YYYY-MM-DD \
+  --csv-timestamp YYYYMMDD_HHMMSS \
+  --location "United States|2840" \
+  --service "Core Services" \
+  --monthly-budget 3000
+```
+
+The one-shot builder creates the staging CSV, source artifacts, report HTML/PDF, `client_email_draft.md`, visual audit folder, and `run_manifest.json`. Generated CSV names use `{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv` so operators can find the correct dated version in Google Ads Editor. Client emails reference the attached PDF and the campaign build, not the raw CSV. To rebuild only the report from existing artifacts, use:
+
+```bash
 python3 presentations/tools/build_new_campaign_report.py \
   --client "Client Name" \
   --date "Month D, YYYY" \
-  --staging-csv clients/{agency}/{client}/build/{date}_initial_search_build/Google_Ads_Editor_Staging_CURRENT.csv \
+  --staging-csv clients/{agency}/{client}/build/{date}_initial_search_build/{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv \
   --website-scan-json clients/{agency}/{client}/build/{date}_initial_search_build/website_scan.json \
   --service-catalog-json clients/{agency}/{client}/build/{date}_initial_search_build/service_catalog.json \
   --geo-strategy-json clients/{agency}/{client}/build/{date}_initial_search_build/geo_strategy.json \
@@ -86,6 +104,13 @@ python3 presentations/tools/build_new_campaign_report.py \
   --output-html clients/{agency}/{client}/build/{date}_initial_search_build/Client_New_Campaign_Review.html \
   --output-pdf clients/{agency}/{client}/build/{date}_initial_search_build/Client_New_Campaign_Review.pdf \
   --visual-audit-dir clients/{agency}/{client}/build/{date}_initial_search_build/new_campaign_visual_audit
+```
+
+The report builder can also read a one-shot manifest:
+
+```bash
+python3 presentations/tools/build_new_campaign_report.py \
+  --manifest-json clients/{agency}/{client}/build/{date}_initial_search_build/run_manifest.json
 ```
 
 If there is an approved cost-per-click planning range, include:

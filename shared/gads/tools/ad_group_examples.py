@@ -166,13 +166,13 @@ def demonstrate_campaign_integration():
 
     # Sample campaign configuration
     campaign_config = {
-        "name": "MyExpertResume Executive Campaign",
+        "name": "Example Services Campaign",
         "type": "SEARCH",
         "objective": "conversions",
         "budget_micros": 50000000,  # $50 daily
         "bid_strategy_type": "Target CPA",
         "target_audience": "executive_professionals",
-        "brand_business_name": "My Expert Resume",
+        "brand_business_name": "Example Services Company",
         "asset_groups": [
             {"name": "Executive Core Services"},
             {"name": "Career Advancement"}

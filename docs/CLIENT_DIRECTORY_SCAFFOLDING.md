@@ -46,6 +46,7 @@ clients/{agency}/{client}/
   config/
     client_profile.yaml
   docs/
+    client_hq/
     intake.md
   reports/
     performance_inputs/
@@ -67,6 +68,9 @@ Performance reports:
 
 Client notes:
 
+- `docs/client_hq/`
+- `docs/client_hq/client_hq.md`
+- `docs/client_hq/client_hq.json`
 - `docs/intake.md`
 - `docs/client_onboarding_questionnaire.md`
 - `docs/client_revision_feedback_template.md`
@@ -79,12 +83,20 @@ Dated rebuilds:
 
 - `build/{date}_account_rebuild/`
 
+Generated Google Ads Editor CSV files:
+
+- Must include the client slug and date/time in the filename.
+- Use `{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv` for initial/current staging.
+- Use `{client_slug}_google_ads_editor_staging_rev1_{YYYYMMDD_HHMMSS}.csv` for approved revision staging.
+- Do not overwrite upload candidates with generic `CURRENT` filenames. Keep dated versions searchable for Google Ads Editor import review.
+
 ## Required Intake Fields
 
 Before generating a rebuild, fill in:
 
 - Client display name.
 - Website URL.
+- Durable Client HQ facts in `docs/client_hq/` when available.
 - Agency slug.
 - Client slug.
 - Primary market.

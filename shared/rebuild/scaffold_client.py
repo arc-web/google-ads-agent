@@ -79,9 +79,10 @@ def main() -> int:
     parser.add_argument("--client", required=True, help="Client slug")
     parser.add_argument("--display-name", help="Human-readable client name")
     parser.add_argument("--website", help="Client website URL")
+    parser.add_argument("--clients-dir", type=Path, default=CLIENTS_DIR, help="Root clients directory")
     args = parser.parse_args()
 
-    target = scaffold_client(args.agency, args.client, args.display_name, args.website)
+    target = scaffold_client(args.agency, args.client, args.display_name, args.website, clients_dir=args.clients_dir)
     print(f"Created client scaffold: {target}")
     print("Next: add account export to campaigns/account_export.csv")
     return 0

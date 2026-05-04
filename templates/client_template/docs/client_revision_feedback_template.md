@@ -22,6 +22,14 @@ Use one or more:
 - `legal_or_verification`
 - `client_preference`
 - `expert_override_needed`
+- `capacity_ramp`
+- `audience_constraint`
+- `geo_architecture`
+- `budget_strategy`
+- `service_pause`
+- `future_service_launch`
+- `client_growth_goal`
+- `billing_question`
 
 ## Decision Log
 

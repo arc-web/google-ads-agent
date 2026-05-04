@@ -41,6 +41,11 @@ Recommended:
 - RSA asset report.
 - Landing page performance report.
 - Conversion action report.
+- Quality Score report.
+- Auction Insights report.
+- Recommendations report.
+- Disapproval or policy status report.
+- Audience report when audience segments are attached to Search campaigns.
 - Client notes about priority services, exclusions, offers, licensing, capacity, and claims.
 - Client onboarding questionnaire.
 - Client revision feedback after the first review document.
@@ -76,6 +81,12 @@ After scaffolding, place exports and reports here:
 - `reports/performance_inputs/location_report.csv`
 - `reports/performance_inputs/rsa_asset_report.csv`
 - `reports/performance_inputs/landing_page_report.csv`
+- `reports/performance_inputs/conversion_action_report.csv`
+- `reports/performance_inputs/quality_score_report.csv`
+- `reports/performance_inputs/auction_insights_report.csv`
+- `reports/performance_inputs/recommendations_report.csv`
+- `reports/performance_inputs/disapproval_report.csv`
+- `reports/performance_inputs/audience_report.csv`
 
 ## Output Contract
 
@@ -96,16 +107,39 @@ With:
 - `keyword_expansion_candidates.csv`
 - `negative_review_candidates.csv`
 - `campaign_taxonomy.csv`
+- `copy_candidates.json`
 - `rsa_copy_matrix.csv`
 - `targeting_spec.json`
+- `conversion_tracking_audit.json`
+- `evidence_quality_report.json`
+- `optimization_cadence_plan.json`
+- `bid_strategy_recommendation.json`
+- `audience_mode_audit.json`
+- `recommendations_triage.csv`
+- `policy_disapproval_audit.json`
+- `launch_readiness_checklist.md`
 - `human_review.md`
 - `Client_Rebuild_Review.html`
 - `Client_Rebuild_Review.pdf`
+- `client_email_draft.md`
 - `validation_report.json`
 - `Google_Ads_Editor_Staging_CURRENT.csv`
+- `run_manifest.json`
 - `client_feedback_classified.json`
 - `revision_decision_log.csv`
 - `Google_Ads_Editor_Staging_REV1.csv` when revisions are approved.
+
+`client_email_draft.md` is required for every client-facing report package. It should summarize the report for the client, reference the PDF as the attachment, and describe the staging file only as the campaign build, revised campaign, or staged build. Do not expose raw CSV filenames to the client.
+
+Canonical shared runner:
+
+```bash
+python3 -m shared.rebuild.account_pipeline \
+  --agency AGENCY_SLUG \
+  --client CLIENT_SLUG \
+  --build-date YYYY-MM-DD \
+  --mode ingest|plan|build|revise
+```
 
 Provider-token validation helper:
 
@@ -192,7 +226,10 @@ Search terms:
 - Classify intent layer: General, Local, City, State.
 - Mark converting terms for phrase keyword expansion.
 - Mark high-impression non-converters for review.
-- Mark competitor, provider name, coaching, out-of-market, and irrelevant terms for negative review.
+- Match known competitor brand objects from `config/client_profile.yaml` `competitor_pruning.negative_phrase_terms`.
+- Write obvious competitor matches to `negative_review_candidates.csv` as campaign-level `Negative Phrase` candidates using the pruned brand object in `action_term`.
+- Do not place obvious competitor terms in client-facing search term question groups unless the repo owner approves a conquesting strategy.
+- Mark provider name, coaching, out-of-market, and irrelevant terms for negative review.
 
 Location reports:
 
@@ -360,6 +397,55 @@ Required fields:
 - `Keyword`: plain keyword text, not quotes or brackets.
 - `Location ID`: present where available.
 
+### 8a. Stage Search Ad Assets
+
+Generate Search ad assets as reviewable Google Ads Editor rows, not live API uploads.
+
+Default asset levels:
+
+- Ad group sitelinks when an ad group has a non-homepage final URL and enough distinct source URLs.
+- Campaign callouts when the claim applies across the campaign.
+- Campaign structured snippets from the service catalog when 3 to 10 values are available.
+- Campaign call assets only when a phone number is confirmed from client facts or website evidence.
+- Price assets only when at least 3 explicit prices are visible on the website.
+- Promotion assets only when the website shows an explicit sale, discount, coupon, or promotion.
+- Business name assets only when the inferred name fits Google requirements and is flagged for advertiser-verification review.
+- Image and logo assets only as a local import package and manifest until Editor import/export behavior is verified.
+- Location assets only after Google Business Profile linking is confirmed.
+
+Do not invent unsupported assets. If pricing, offer terms, phone numbers, logos, images, business-profile linking, or business-name verification cannot be confirmed from source evidence, log a skipped decision instead of creating a row.
+
+Generated asset artifacts:
+
+- `ad_asset_plan.json`
+- `ad_asset_matrix.csv`
+- `ad_asset_research_matrix.json`
+- `ad_asset_research_matrix.md`
+- `image_asset_manifest.csv`
+- `ad_asset_import_package/`
+
+Manual Editor dry-run checklist:
+
+1. Import the staged TSV into Google Ads Editor.
+2. Inspect sitelink, callout, structured snippet, call, price, promotion, and business name rows.
+3. Review `image_asset_manifest.csv` and import only files from `ad_asset_import_package/` that Google Ads Editor accepts.
+4. Confirm Google Business Profile is linked before adding location assets.
+5. Export the account from Editor after import and compare exported asset columns with `ad_asset_matrix.csv`.
+6. Keep all asset rows paused until platform warnings and human review are complete.
+
+Validation sources:
+
+- Google Ads Editor imports one item per row and supports account, campaign, and ad group asset associations: https://support.google.com/google-ads/editor/answer/56368?hl=en
+- Google Ads Editor sitelink import requires campaign, link text, and final URL, with ad group required for ad group-level sitelinks: https://support.google.com/google-ads/editor/answer/56366?hl=en-GB
+- Sitelinks can attach at account, campaign, asset group, or ad group level: https://support.google.com/google-ads/answer/2375416?hl=en
+- Callouts can attach at account, campaign, or ad group level and are limited to 25 characters in most languages: https://support.google.com/google-ads/answer/6079510?hl=en
+- Structured snippets require a predefined header and 3 to 10 values: https://support.google.com/google-ads/answer/6280012
+- Price assets require language, type, currency, price qualifier, and at least 3 items with header, price, description, and final URL: https://support.google.com/google-ads/answer/7065415?hl=en
+- Promotion assets require explicit promotion details and can be added at account, campaign, or ad group level: https://support.google.com/google-ads/answer/7367521?hl=en
+- Image assets must meet Search image asset requirements and should be relevant to keywords, ads, and landing pages: https://support.google.com/google-ads/answer/9566341?hl=en
+- Business name and logo assets depend on business information requirements and advertiser verification: https://support.google.com/adspolicy/answer/12499303?hl=en
+- Location assets require linking the correct location data source, such as Google Business Profile for directly owned locations: https://support.google.com/google-ads/answer/2404182?hl=en
+
 ### 9. Generate Client-Facing Campaign Review PDF
 
 After the staging CSV is final, generate a branded HTML review document and export it to PDF with Chrome headless. The PDF is the client-facing deliverable. The HTML is the editable source of truth for revisions. Internal validation runs in stage 10.
@@ -518,7 +604,7 @@ Required outputs:
 - `revision_decision_log.csv`
 - `engine_rule_updates.md`
 - `client_questions_for_call.md`
-- `Google_Ads_Editor_Staging_REV1.csv` when approved revisions are regenerated.
+- `{client_slug}_google_ads_editor_staging_rev1_{YYYYMMDD_HHMMSS}.csv` when approved revisions are regenerated.
 
 ## Agent Architecture
 
