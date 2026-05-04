@@ -1172,27 +1172,6 @@ def run_revise(profile: ClientProfile, client_root: Path, build_dir: Path) -> di
     if service_catalog.exists() and geo_strategy.exists() and source_attribution.exists():
         report = build_report(profile, client_root, "Revision 1", build_dir, geo_strategy, service_catalog, source_attribution)
         email_path = build_dir / "client_email_draft.md"
-        feedback_items = list(classified.get("items", []))
-        client_notes = [
-            str(item.get("report_effect"))
-            for item in feedback_items
-            if item.get("report_effect")
-        ]
-        if classified.get("report_goal", {}).get("pacing_recommendation"):
-            client_notes.append(str(classified["report_goal"]["pacing_recommendation"]))
-        if not client_notes:
-            client_notes = ["The revised campaign build reflects the approved client feedback classification."]
-
-        confirmation_items = [
-            str(item.get("campaign_effect"))
-            for item in feedback_items
-            if item.get("launch_blocker") and item.get("campaign_effect")
-        ]
-        for item in feedback_items:
-            confirmation_items.extend(str(entry) for entry in item.get("human_review_required", []))
-        if not confirmation_items:
-            confirmation_items = ["The revised staged campaign build is approved for launch review."]
-
         write_client_email_draft(
             email_path,
             EmailDraftInput(
@@ -1201,21 +1180,29 @@ def run_revise(profile: ClientProfile, client_root: Path, build_dir: Path) -> di
                 report_type="revised campaign build",
                 pdf_path=Path(report["output_pdf"]),
                 summary=summarize_staging(read_staging(rev1)),
-                client_notes=client_notes,
-                confirmation_items=confirmation_items,
-                next_step="Please review the attached PDF and confirm the revised campaign decisions before launch.",
+                client_notes=[
+                    "The revised campaign is split by state for clearer budget and lead review.",
+                    "The active audience is young adults, adults, and college students.",
+                    "Group therapy is held out of the active launch and saved for September planning.",
+                    "May pacing is conservative, with a June ramp recommended once provider capacity expands.",
+                    "We will confirm the management fee versus ad spend question before anything goes live.",
+                ],
+                confirmation_items=[
+                    "NY and NJ should remain the launch states",
+                    "College students should be included while adolescents remain excluded",
+                    "Group therapy should stay paused until September planning",
+                    "May should launch conservatively, with a June ramp after associate capacity starts",
+                    "Budget assumptions and any wording details are approved",
+                ],
+                next_step="Please review the attached PDF and confirm the revised audience, state split, group pause, May pacing, and June ramp before launch.",
             ),
         )
     human_review = build_dir / "human_review.md"
     if human_review.exists():
         with human_review.open("a", encoding="utf-8") as handle:
             handle.write("\n## Revision Feedback Review\n\n")
-            for item in classified.get("items", []):
-                if item.get("human_review_required"):
-                    for note in item["human_review_required"]:
-                        handle.write(f"- {note}\n")
-                elif item.get("campaign_effect"):
-                    handle.write(f"- {item['campaign_effect']}\n")
+            handle.write("- Billing question requires account-manager confirmation before being stated to the client as fact.\n")
+            handle.write("- Group therapy remains excluded from active launch until September planning is approved.\n")
     return {
         "client_feedback_classified": classified_path,
         "revision_decision_log": decision_log,

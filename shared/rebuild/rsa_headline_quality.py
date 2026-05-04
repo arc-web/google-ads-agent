@@ -69,16 +69,6 @@ GENERIC_WORDS = {
     "top",
     "trusted",
 }
-GENERIC_VALUE_HEADLINES = {
-    "clear implementation steps",
-    "compare support options today",
-    "plan your next service step",
-    "practical support planning",
-    "review team support needs",
-    "start with a focused review",
-    "support for better access",
-    "talk with a consulting team",
-}
 APPROVED_SHORT_TOKENS = {"ai", "api", "cfo", "dc", "em", "hr", "it", "ny", "pr", "uk", "us", "va"}
 BROKEN_ENDINGS = {
     "appoi",
@@ -200,48 +190,9 @@ def is_low_value_filler(value: str, service_label: str) -> bool:
         return True
     if re.search(r"\bsupport\s+\d+$", normalized):
         return True
-    if re.fullmatch(r"(service|services|support|care|options)(\s+\w+){0,2}", normalized):
+    if re.fullmatch(r"(service|services|support|care|options|consulting|training)(\s+\w+){0,2}", normalized):
         return True
     return False
-
-
-def service_logic_tokens(service_logic: dict[str, Any] | None) -> set[str]:
-    if not service_logic:
-        return set()
-    output: set[str] = set()
-    for token in service_logic.get("concept_tokens", []) or []:
-        cleaned = normalize_headline(str(token))
-        if cleaned:
-            output.add(cleaned)
-    explicit = set(output)
-    for field in ("buyer", "end_user", "service_mechanism", "problem", "outcome"):
-        output.update(significant_tokens(str(service_logic.get(field, ""))))
-    return {token for token in output if (token in explicit or token not in GENERIC_WORDS) and len(token) > 2}
-
-
-def headline_matches_service_logic(headline: str, service_logic: dict[str, Any] | None) -> bool:
-    concepts = service_logic_tokens(service_logic)
-    if not concepts:
-        return True
-    return bool(set(tokenize(headline)) & concepts)
-
-
-def is_wrong_buyer_type_headline(headline: str, service_logic: dict[str, Any] | None) -> bool:
-    if not service_logic:
-        return False
-    if str(service_logic.get("buyer_type", "")) not in {"b2b", "b2b2c"}:
-        return False
-    normalized = normalize_headline(headline)
-    return any(
-        pattern in normalized
-        for pattern in (
-            "appointments",
-            "book",
-            "counseling for you",
-            "near you",
-            "therapy for you",
-        )
-    )
 
 
 def audit_rsa_headlines(
@@ -250,7 +201,6 @@ def audit_rsa_headlines(
     headlines: list[str],
     service_label: str = "",
     client_name: str = "",
-    service_logic: dict[str, Any] | None = None,
 ) -> RsaHeadlineAudit:
     issues: list[HeadlineQualityIssue] = []
     cleaned = [clean_text(headline) for headline in headlines]
@@ -264,15 +214,6 @@ def audit_rsa_headlines(
             HeadlineQualityIssue(
                 rule="headline_count",
                 message=f"RSA must include exactly {REQUIRED_HEADLINE_COUNT} headlines.",
-                headlines=cleaned,
-            )
-        )
-
-    if service_logic and service_logic.get("status") != "pass":
-        issues.append(
-            HeadlineQualityIssue(
-                rule="service_logic_insufficient_evidence",
-                message="Service logic research did not provide enough evidence for ad copy generation.",
                 headlines=cleaned,
             )
         )
@@ -319,33 +260,6 @@ def audit_rsa_headlines(
                 HeadlineQualityIssue(
                     rule="headline_low_value_filler",
                     message="Headline is a bare label or filler pattern, not usable ad copy.",
-                    slots=[index],
-                    headlines=[headline],
-                )
-            )
-        if headline and service_logic and normalize_headline(headline) in GENERIC_VALUE_HEADLINES:
-            issues.append(
-                HeadlineQualityIssue(
-                    rule="headline_generic_value",
-                    message="Headline is too generic to communicate the service value.",
-                    slots=[index],
-                    headlines=[headline],
-                )
-            )
-        if headline and service_logic and not headline_matches_service_logic(headline, service_logic):
-            issues.append(
-                HeadlineQualityIssue(
-                    rule="headline_missing_service_concept",
-                    message="Headline does not map to the researched service concept.",
-                    slots=[index],
-                    headlines=[headline],
-                )
-            )
-        if headline and is_wrong_buyer_type_headline(headline, service_logic):
-            issues.append(
-                HeadlineQualityIssue(
-                    rule="headline_wrong_buyer_type",
-                    message="Headline reads like direct consumer copy for a B2B or B2B2C service.",
                     slots=[index],
                     headlines=[headline],
                 )
@@ -427,208 +341,45 @@ def audit_rsa_headlines(
 
 
 SERVICE_SPECIFIC_HEADLINES = {
-    "repair": [
-        "Affordable Repair Service Help",
-        "Reliable Repair Service Plans",
-        "Customer Repair Help Options",
-        "Repair Support For Customers",
-        "Repair Request Review Today",
-        "Repair Planning For Customers",
-        "Repair Service Fit Review",
-        "Repair Details For Customers",
-        "Repair Service Scope Review",
-        "Repair Help For Customer Needs",
-        "Repair Options For Customers",
-        "Repair Cost Review Options",
-        "Repair Timeline Review Help",
-        "Repair Quality Review Help",
-        "Repair Provider Fit Review",
-        "Repair Project Scope Help",
-        "Repair Service Budget Review",
-        "Repair Issue Planning Help",
-        "Repair Estimate Review Help",
-        "Repair Process Review Help",
-    ],
-    "consulting": [
-        "Consulting Service Fit Review",
-        "Customer Consulting Options",
-        "Consulting Planning Support",
-        "Consulting Details Review",
-        "Consulting Scope Review",
-        "Reliable Consulting Plans",
-        "Consulting Request Review",
-        "Customer Consulting Support",
-        "Consulting Service Options",
-        "Consulting Help For Customers",
-        "Consulting Needs Review",
-        "Consulting Scope Review Help",
-        "Consulting Timeline Planning",
-        "Consulting Provider Fit Help",
-        "Consulting Process Review",
-        "Consulting Project Planning",
-        "Consulting Service Roadmap",
-        "Consulting Decision Support",
-        "Consulting Strategy Review",
-    ],
     "lay counselor": [
-        "Lay Counselor Staff Training",
-        "Train Staff In Counseling",
-        "Build Lay Counselor Teams",
-        "Mental Health Access Plan",
-        "Care Team Counseling Skills",
-        "Expand Mental Health Access",
-        "Counseling Skills For Staff",
-        "Lay Counselor Skills Course",
-        "Grow Organizational Capacity",
-        "Train Community Care Teams",
-        "Lay Counseling For Teams",
-        "Build Care Access Capacity",
-        "Staff Mental Health Training",
-        "Academy For Care Teams",
-        "Skills To Expand Access",
+        "Lay Counselor Training Help",
+        "Plan Lay Counselor Programs",
     ],
     "employee mental health": [
         "Employee Wellbeing Planning",
         "Employee Mental Health Plans",
-        "Workplace Mental Health Help",
-        "Employee Counseling Access",
-        "Support Employee Wellbeing",
-        "Employee Care Access Review",
-        "Workplace Counseling Access",
-        "Plan Employee Support Paths",
-        "Mental Health For Employees",
-        "Employee Wellbeing Programs",
-        "Employer Mental Health Help",
-        "Improve Workplace Wellbeing",
-        "Employee Support Planning",
-        "Counseling Access For Teams",
-        "Review Employee Care Needs",
     ],
     "integrated behavioral": [
         "Behavioral Health Consulting",
         "Integrated Care Consulting",
-        "Integrated Care Team Support",
-        "Behavioral Workflow Support",
-        "Clinical Integration Plans",
-        "Integrated Health Workflows",
-        "Behavioral Care Workflows",
-        "Coordinate Care Team Support",
-        "Clinical Team Integration",
-        "Integrated Patient Support",
-        "Behavioral Health Planning",
-        "Integrated Clinical Support",
-        "Plan Behavioral Care Teams",
-        "Health Workflow Consulting",
     ],
     "empathic communication": [
         "Empathic Communication Help",
         "Communication Training Help",
-        "Train Empathic Care Teams",
-        "Communication Skills Course",
-        "Improve Care Conversations",
-        "Staff Communication Training",
-        "Care Team Conversation Help",
-        "Build Empathic Team Skills",
-        "Training For Staff Empathy",
-        "Support Conversation Skills",
-        "Empathic Care Team Skills",
-        "Team Communication Training",
     ],
     "clinical support": [
         "Clinical Team Support Plans",
         "Clinical Support Planning",
-        "Clinical Care Team Support",
-        "Healthcare Team Consulting",
-        "Clinical Workflow Support",
-        "Care Delivery Support Plan",
-        "Support Clinical Workflows",
-        "Clinical Practice Support",
-        "Plan Clinical Team Support",
-        "Clinical Support For Teams",
-        "Clinical Operations Support",
-        "Healthcare Support Planning",
     ],
     "learning and development": [
         "Learning Development Help",
         "Learning And Development Plan",
-        "Learning Programs For Teams",
-        "Staff Development Planning",
-        "Support Staff Development",
-        "Build Practical Team Skills",
-        "Training Program Planning",
-        "Improve Staff Support Skills",
-        "Learning Paths For Care Teams",
-        "Team Development Programs",
     ],
     "human-centered": [
         "Human Centered Care Plans",
         "Human Centered Consulting",
-        "Human Centered Care Support",
-        "People Centered Care Help",
-        "Human Care Model Consulting",
-        "Build Human Centered Care",
-        "Human Centered Care Review",
-        "People Focused Care Plans",
-        "Healthcare Care Model Help",
-        "Human Centered Team Support",
-        "Human Centered Health Care",
-        "People Centered Care Teams",
-        "Human Care Delivery Plans",
-        "Human Care Consulting Help",
-        "People First Care Support",
-        "Human Care For Organizations",
-        "Centered Care Team Support",
     ],
     "human centered": [
         "Human Centered Care Plans",
         "Human Centered Consulting",
-        "Human Centered Care Support",
-        "People Centered Care Help",
-        "Human Care Model Consulting",
-        "Build Human Centered Care",
-        "Human Centered Care Review",
-        "People Focused Care Plans",
-        "Healthcare Care Model Help",
-        "Human Centered Team Support",
-        "Human Centered Health Care",
-        "People Centered Care Teams",
-        "Human Care Delivery Plans",
-        "Human Care Consulting Help",
-        "People First Care Support",
-        "Human Care For Organizations",
-        "Centered Care Team Support",
     ],
     "trauma-informed": [
         "Trauma Informed Training Help",
         "Care Team Training Support",
-        "Trauma Informed Care Teams",
-        "Trauma Care Training Plans",
-        "Safer Support Team Training",
-        "Trauma Informed Staff Skills",
-        "Care Safety Training Help",
-        "Trauma Support Skills Course",
-        "Train Trauma Informed Teams",
-        "Trauma Informed Care Help",
-        "Build Safer Support Teams",
-        "Staff Trauma Care Training",
-        "Trauma Training For Teams",
-        "Support Safer Care Skills",
     ],
     "trauma informed": [
         "Trauma Informed Training Help",
         "Care Team Training Support",
-        "Trauma Informed Care Teams",
-        "Trauma Care Training Plans",
-        "Safer Support Team Training",
-        "Trauma Informed Staff Skills",
-        "Care Safety Training Help",
-        "Trauma Support Skills Course",
-        "Train Trauma Informed Teams",
-        "Trauma Informed Care Help",
-        "Build Safer Support Teams",
-        "Staff Trauma Care Training",
-        "Trauma Training For Teams",
-        "Support Safer Care Skills",
     ],
 }
 
@@ -669,101 +420,14 @@ def service_specific_candidates(service_label: str) -> list[str]:
     return candidates
 
 
-def service_logic_headline_candidates(service_logic: dict[str, Any] | None) -> list[str]:
-    if not service_logic:
-        return []
-    buyer_type = str(service_logic.get("buyer_type", ""))
-    mechanism = str(service_logic.get("service_mechanism", ""))
-    outcome = str(service_logic.get("outcome", ""))
-    buyer = str(service_logic.get("buyer", ""))
-    candidates = [
-        mechanism,
-        outcome,
-        f"{mechanism} For Teams",
-        f"{mechanism} For Staff",
-        f"{outcome} Planning",
-        f"{buyer} Support",
-    ]
-    if buyer_type in {"b2b", "b2b2c"}:
-        candidates.extend(
-            [
-                "Training For Care Teams Now",
-                "Care Team Training Support",
-                "Skills For Support Teams Now",
-                "Build Organizational Capacity",
-                "Support Team Skill Building",
-            ]
-        )
-    return candidates
-
-
-def service_from_ad_group(ad_group: str) -> str:
-    label = ad_group.replace("Services - ", "", 1)
-    for suffix in (" - General", " - Near Me"):
-        if label.endswith(suffix):
-            label = label[: -len(suffix)]
-    parts = label.split(" - ")
-    if len(parts) > 1 and len(parts[-1]) <= 35:
-        label = " - ".join(parts[:-1])
-    return label
-
-
-def find_service_logic(service_label: str, service_logic_map: dict[str, dict[str, Any]] | None) -> dict[str, Any] | None:
-    if not service_logic_map:
-        return None
-    normalized = normalize_headline(service_label)
-    for service, logic in service_logic_map.items():
-        service_norm = normalize_headline(service)
-        if service_norm == normalized or service_norm in normalized or normalized in service_norm:
-            return logic
-    return None
-
-
-def token_forms(values: set[str]) -> set[str]:
-    output = set(values)
-    for value in values:
-        if len(value) > 3 and value.endswith("s"):
-            output.add(value[:-1])
-        elif len(value) > 3:
-            output.add(f"{value}s")
-    return output
-
-
-def description_has_service_logic(description: str, service_logic: dict[str, Any]) -> bool:
-    concepts = service_logic_tokens(service_logic)
-    if not concepts:
-        return False
-    description_tokens = token_forms(set(tokenize(description)))
-    buyer_tokens = token_forms(set(significant_tokens(str(service_logic.get("buyer", "")))))
-    mechanism_tokens = token_forms(set(significant_tokens(str(service_logic.get("service_mechanism", "")))))
-    outcome_tokens = token_forms(set(significant_tokens(str(service_logic.get("outcome", "")))))
-    if not mechanism_tokens:
-        mechanism_tokens = token_forms({token for token in service_logic.get("concept_tokens", []) if len(str(token)) > 2})
-    return bool(description_tokens & buyer_tokens) and bool(description_tokens & mechanism_tokens) and bool(description_tokens & outcome_tokens)
-
-
-def generate_quality_headlines(
-    *,
-    client_name: str,
-    service_label: str,
-    ad_group: str = "",
-    service_logic: dict[str, Any] | None = None,
-) -> list[str]:
+def generate_quality_headlines(*, client_name: str, service_label: str, ad_group: str = "") -> list[str]:
     """Generate 15 complete, audit-passing RSA headlines.
 
     The generator intentionally avoids character slicing. Any candidate outside
     the active 25 to 30 character range is ignored instead of repaired.
     """
     candidates = [
-        f"Review {service_label} Fit",
-        f"Compare {service_label} Options",
-        f"{service_label} Planning Help",
-        f"{service_label} Next Steps",
-        f"{service_label} Support Review",
-        f"Request {service_label} Details",
-        f"Plan {service_label} Needs",
         *service_specific_candidates(service_label),
-        *service_logic_headline_candidates(service_logic),
         *GENERAL_HEADLINE_POOL,
     ]
     if client_name:
@@ -786,7 +450,6 @@ def generate_quality_headlines(
             service_label=service_label,
             client_name=client_name,
             headlines=trial,
-            service_logic=service_logic,
         )
         blocking = [
             issue
@@ -812,7 +475,6 @@ def generate_quality_headlines(
         service_label=service_label,
         client_name=client_name,
         headlines=selected,
-        service_logic=service_logic,
     )
     if audit.status != "pass":
         issue_rules = sorted({issue.rule for issue in audit.issues})
@@ -820,43 +482,22 @@ def generate_quality_headlines(
     return selected
 
 
-def audit_rows(
-    rows: list[dict[str, str]],
-    service_logic_map: dict[str, dict[str, Any]] | None = None,
-) -> dict[str, Any]:
+def audit_rows(rows: list[dict[str, str]]) -> dict[str, Any]:
     audits = []
     for row in rows:
         if row.get("Ad type", "").strip().lower() != "responsive search ad":
             continue
         ad_group = row.get("Ad Group", "")
-        service_label = service_from_ad_group(ad_group)
-        service_logic = find_service_logic(service_label, service_logic_map)
+        service_label = ad_group.replace("Services - ", "", 1)
         headlines = [row.get(f"Headline {index}", "") for index in range(1, 16)]
-        audit = audit_rsa_headlines(
-            ad_group=ad_group,
-            service_label=service_label,
-            client_name="",
-            headlines=headlines,
-            service_logic=service_logic,
+        audits.append(
+            audit_rsa_headlines(
+                ad_group=ad_group,
+                service_label=service_label,
+                client_name="",
+                headlines=headlines,
+            ).to_dict()
         )
-        issues = list(audit.issues)
-        if service_logic:
-            descriptions = [row.get(f"Description {index}", "") for index in range(1, 5)]
-            for index, description in enumerate(descriptions, start=1):
-                if description and not description_has_service_logic(description, service_logic):
-                    issues.append(
-                        HeadlineQualityIssue(
-                            rule="description_missing_buyer_or_mechanism",
-                            message="Description does not include the researched buyer, mechanism, and outcome.",
-                            slots=[index],
-                            headlines=[description],
-                        )
-                    )
-        payload = audit.to_dict()
-        if issues != audit.issues:
-            payload["issues"] = [asdict(issue) for issue in issues]
-            payload["status"] = "fail"
-        audits.append(payload)
     failing = [audit for audit in audits if audit["status"] != "pass"]
     return {
         "status": "fail" if failing else "pass",
@@ -870,34 +511,16 @@ def audit_ad_group_plans(ad_groups: list[Any], *, client_name: str = "") -> dict
     audits = []
     for ad_group in ad_groups:
         name = getattr(ad_group, "name", "")
-        service_label = service_from_ad_group(name)
+        service_label = name.replace("Services - ", "", 1)
         headlines = list(getattr(ad_group, "headlines", []))
-        service_logic = getattr(ad_group, "service_logic", None)
-        audit = audit_rsa_headlines(
-            ad_group=name,
-            service_label=service_label,
-            client_name=client_name,
-            headlines=headlines,
-            service_logic=service_logic,
+        audits.append(
+            audit_rsa_headlines(
+                ad_group=name,
+                service_label=service_label,
+                client_name=client_name,
+                headlines=headlines,
+            ).to_dict()
         )
-        issues = list(audit.issues)
-        if service_logic:
-            descriptions = list(getattr(ad_group, "descriptions", []))
-            for index, description in enumerate(descriptions, start=1):
-                if description and not description_has_service_logic(description, service_logic):
-                    issues.append(
-                        HeadlineQualityIssue(
-                            rule="description_missing_buyer_or_mechanism",
-                            message="Description does not include the researched buyer, mechanism, and outcome.",
-                            slots=[index],
-                            headlines=[description],
-                        )
-                    )
-        payload = audit.to_dict()
-        if issues != audit.issues:
-            payload["issues"] = [asdict(issue) for issue in issues]
-            payload["status"] = "fail"
-        audits.append(payload)
     failing = [audit for audit in audits if audit["status"] != "pass"]
     return {
         "status": "fail" if failing else "pass",

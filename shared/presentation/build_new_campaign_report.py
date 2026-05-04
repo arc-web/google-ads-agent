@@ -22,8 +22,7 @@ else:
     from shared.presentation.client_email_draft import EmailDraftInput, write_client_email_draft
     from shared.presentation.pdf_visual_audit import audit_pdf
     from shared.presentation.report_quality_audit import audit_html
-from shared.rebuild.rsa_headline_quality import audit_rows, find_service_logic, service_from_ad_group
-from shared.rebuild.service_logic_research import service_logic_by_name
+from shared.rebuild.rsa_headline_quality import audit_rows
 
 
 @dataclass(frozen=True)
@@ -47,7 +46,6 @@ class RsaExample:
     headlines: list[str]
     descriptions: list[str]
     headline_quality_status: str = "pass"
-    service_logic: dict | None = None
 
 
 @dataclass(frozen=True)
@@ -108,20 +106,15 @@ def summarize_staging(rows: list[dict[str, str]]) -> CampaignSummary:
     )
 
 
-def select_rsa_examples(
-    rows: list[dict[str, str]],
-    limit: int | None = None,
-    service_logic_map: dict[str, dict] | None = None,
-) -> list[RsaExample]:
+def select_rsa_examples(rows: list[dict[str, str]], limit: int | None = None) -> list[RsaExample]:
     examples: list[RsaExample] = []
     audit_by_ad_group = {
         audit.get("ad_group", ""): audit
-        for audit in audit_rows(rows, service_logic_map).get("audits", [])
+        for audit in audit_rows(rows).get("audits", [])
     }
     for row in rows:
         if row.get("Ad type") != "Responsive search ad":
             continue
-        service_label = service_from_ad_group(row.get("Ad Group", ""))
         headline_audit = audit_by_ad_group.get(row.get("Ad Group", ""), {})
         examples.append(
             RsaExample(
@@ -133,7 +126,6 @@ def select_rsa_examples(
                 headlines=[row.get(f"Headline {index}", "") for index in range(1, 16)],
                 descriptions=[row.get(f"Description {index}", "") for index in range(1, 5)],
                 headline_quality_status=str(headline_audit.get("status", "unknown")),
-                service_logic=find_service_logic(service_label, service_logic_map),
             )
         )
         if limit is not None and len(examples) == limit:
@@ -416,31 +408,6 @@ body {
   font-size: 10px;
   color: #6b5c4b;
   font-weight: 700;
-}
-.service-logic-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin: 8px 0 10px;
-}
-.service-logic-card {
-  border: 1px solid #dfd2bf;
-  background: #fffaf1;
-  padding: 8px 10px;
-  min-height: 58px;
-}
-.service-logic-card h3 {
-  margin: 0 0 4px;
-  color: #185c62;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.service-logic-card p {
-  margin: 0;
-  font-size: 10.5px;
-  line-height: 1.32;
-  color: #4c4238;
 }
 .ad-copy-page table {
   font-size: 9.5px;
@@ -953,7 +920,7 @@ def overview_section(summary: CampaignSummary) -> str:
         ),
         (
             "Ads and regions",
-            "Representative ad copy examples, proposed regional targeting, and the priority market questions to confirm before launch.",
+            "Representative ad copy examples, proposed national targeting, and the priority market questions to confirm before launch.",
         ),
         (
             "Budget and confirmation",
@@ -1231,7 +1198,7 @@ def strategy_section(
   </div>
   <div class="insight-card">
     <h3>Launch review status</h3>
-    <p>The campaign build validates cleanly, but remains paused until budget, service priority, and your approval decisions are confirmed.</p>
+    <p>The CSV validates cleanly, but remains paused until budget, service priority, and your approval decisions are confirmed.</p>
   </div>
 </div>
 <div class="subsection-header">Audience and service area</div>
@@ -1503,28 +1470,6 @@ def ad_preview_url(example: RsaExample) -> str:
     return host + ("/" + "/".join(paths) if paths else "")
 
 
-def service_logic_notes(example: RsaExample) -> str:
-    logic = example.service_logic or {}
-    if not logic:
-        return ""
-    cards = [
-        ("Who this is for", logic.get("buyer", "")),
-        ("What they are buying", logic.get("service_mechanism", "")),
-        ("Why it matters", logic.get("outcome", "")),
-        ("What to confirm", "Confirm this interpretation matches the service and buyer."),
-    ]
-    return "".join(
-        f"""
-<div class="service-logic-card">
-  <h3>{esc(title)}</h3>
-  <p>{esc(text)}</p>
-</div>
-"""
-        for title, text in cards
-        if text
-    )
-
-
 def ad_copy_section(example: RsaExample, index: int, total: int) -> str:
     headline_preview = " | ".join(example.headlines[:3])
     desc_preview = example.descriptions[0] if example.descriptions else ""
@@ -1546,7 +1491,6 @@ def ad_copy_section(example: RsaExample, index: int, total: int) -> str:
     <div class="desc">{esc(desc_preview)}</div>
   </div>
 </div>
-<div class="service-logic-grid">{service_logic_notes(example)}</div>
 <div class="subsection-header">Headline examples</div>
 <p class="audit-note">Headline quality gate: {esc(example.headline_quality_status)}. This table shows 15 complete headlines with character counts for launch review.</p>
 <table class="ad-copy-table">
@@ -1605,7 +1549,7 @@ def approval_section(
         ),
         (
             "Confirm regional targeting",
-            f"{location_label} is the current reach. Confirm this state split or send priority market changes.",
+            f"{location_label} is the current reach. Confirm all 50 states or send priority markets.",
             "Confirm",
             True,
         ),
@@ -1668,13 +1612,11 @@ def build_html(
     service_catalog_json: Path,
     geo_strategy_json: Path,
     source_attribution_json: Path,
-    service_logic_research_json: Path | None = None,
     budget: BudgetPlan | None = None,
     goal_facts: dict | None = None,
 ) -> str:
     rows = read_staging(staging_csv)
-    service_logic_map = service_logic_by_name(read_json(service_logic_research_json)) if service_logic_research_json and service_logic_research_json.exists() else None
-    headline_audit = audit_rows(rows, service_logic_map)
+    headline_audit = audit_rows(rows)
     if headline_audit["status"] != "pass":
         failing = [
             issue["rule"]
@@ -1687,7 +1629,7 @@ def build_html(
     service_catalog = read_json(service_catalog_json)
     geo_strategy = read_json(geo_strategy_json)
     source_attribution = read_json(source_attribution_json)
-    examples = select_rsa_examples(rows, service_logic_map=service_logic_map)
+    examples = select_rsa_examples(rows)
     budget = budget or BudgetPlan(monthly_budget=3000)
     return f"""<!doctype html>
 <html lang="en">
@@ -1723,7 +1665,6 @@ def write_report(
     geo_strategy_json: Path,
     source_attribution_json: Path,
     output_html: Path,
-    service_logic_research_json: Path | None = None,
     budget: BudgetPlan | None = None,
     goal_facts: dict | None = None,
 ) -> Path:
@@ -1735,7 +1676,6 @@ def write_report(
         service_catalog_json=service_catalog_json,
         geo_strategy_json=geo_strategy_json,
         source_attribution_json=source_attribution_json,
-        service_logic_research_json=service_logic_research_json,
         budget=budget,
         goal_facts=goal_facts,
     )
@@ -1752,7 +1692,6 @@ def main() -> int:
     parser.add_argument("--staging-csv", type=Path)
     parser.add_argument("--website-scan-json", type=Path)
     parser.add_argument("--service-catalog-json", type=Path)
-    parser.add_argument("--service-logic-research-json", type=Path)
     parser.add_argument("--geo-strategy-json", type=Path)
     parser.add_argument("--source-attribution-json", type=Path)
     parser.add_argument("--monthly-budget", type=float, default=3000)
@@ -1773,8 +1712,6 @@ def main() -> int:
         args.staging_csv = args.staging_csv or Path(artifacts.get("staging_csv", ""))
         args.website_scan_json = args.website_scan_json or Path(artifacts.get("website_scan", ""))
         args.service_catalog_json = args.service_catalog_json or Path(artifacts.get("service_catalog", ""))
-        if not args.service_logic_research_json and artifacts.get("service_logic_research"):
-            args.service_logic_research_json = Path(artifacts["service_logic_research"])
         args.geo_strategy_json = args.geo_strategy_json or Path(artifacts.get("geo_strategy", ""))
         args.source_attribution_json = args.source_attribution_json or Path(artifacts.get("source_attribution", ""))
         args.output_html = args.output_html or Path(artifacts.get("client_report_html", ""))
@@ -1811,7 +1748,6 @@ def main() -> int:
             service_catalog_json=args.service_catalog_json,
             geo_strategy_json=args.geo_strategy_json,
             source_attribution_json=args.source_attribution_json,
-            service_logic_research_json=args.service_logic_research_json,
             output_html=args.output_html,
             budget=budget,
             goal_facts=goal_facts,
