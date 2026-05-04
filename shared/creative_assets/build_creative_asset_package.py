@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a client approval package for Google Ads image creative."""
+"""Build a client approval package for Google Ads image and video creative."""
 
 from __future__ import annotations
 
@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from shared.rebuild.client_hq import update_client_hq_media_inventory
 from shared.rebuild.scaffold_client import scaffold_client, slug
 from shared.tools.website.website_scanner import WebsiteScanner
 
@@ -161,6 +162,202 @@ def canonical_image_key(url: str) -> str:
     query = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
     filtered = [(key, value) for key, value in query if key.lower() not in {"format", "width", "height"}]
     return urllib.parse.urlunparse(parsed._replace(query=urllib.parse.urlencode(filtered), fragment="")).lower()
+
+
+def parse_youtube_video_id(value: str) -> str:
+    if not value:
+        return ""
+    parsed = urllib.parse.urlparse(value.strip())
+    host = (parsed.hostname or "").lower().removeprefix("www.")
+    parts = [part for part in parsed.path.split("/") if part]
+    if host == "youtu.be" and parts:
+        return valid_youtube_video_id(parts[0])
+    if host.endswith("youtube.com"):
+        query_id = urllib.parse.parse_qs(parsed.query).get("v", [""])[0]
+        if query_id:
+            return valid_youtube_video_id(query_id)
+        if len(parts) >= 2 and parts[0] in {"embed", "shorts", "live", "v"}:
+            return valid_youtube_video_id(parts[1])
+    match = re.search(r"(?:youtube\.com/(?:embed|shorts|live|v)/|youtu\.be/)([A-Za-z0-9_-]{11})", value)
+    return valid_youtube_video_id(match.group(1)) if match else ""
+
+
+def valid_youtube_video_id(value: str) -> str:
+    return value if re.fullmatch(r"[A-Za-z0-9_-]{11}", value.strip()) else ""
+
+
+def canonical_youtube_url(video_id: str) -> str:
+    return f"https://www.youtube.com/watch?v={video_id}"
+
+
+def parse_youtube_channel_url(value: str) -> str:
+    if not value:
+        return ""
+    parsed = urllib.parse.urlparse(value.strip())
+    host = (parsed.hostname or "").lower().removeprefix("www.")
+    parts = [part for part in parsed.path.split("/") if part]
+    if not host.endswith("youtube.com") or not parts:
+        return ""
+    if parts[0].startswith("@"):
+        return f"https://www.youtube.com/{parts[0]}"
+    if len(parts) >= 2 and parts[0] in {"channel", "c", "user"}:
+        identifier = re.sub(r"[^A-Za-z0-9_.@-]", "", parts[1])
+        return f"https://www.youtube.com/{parts[0]}/{identifier}" if identifier else ""
+    return ""
+
+
+def find_youtube_urls(text: str) -> list[str]:
+    pattern = re.compile(r"https?://(?:www\.)?(?:youtube\.com|youtu\.be)/[^\s\"'<>]+", re.IGNORECASE)
+    return [match.group(0).rstrip(").,;") for match in pattern.finditer(text or "")]
+
+
+def find_youtube_channel_urls(text: str) -> list[str]:
+    urls = [channel for url in find_youtube_urls(text) if (channel := parse_youtube_channel_url(url))]
+    seen = set()
+    out = []
+    for url in urls:
+        if url not in seen:
+            seen.add(url)
+            out.append(url)
+    return out
+
+
+def add_youtube_video(rows: list[dict[str, Any]], url: str, source_page: str, source_type: str, title: str) -> None:
+    video_id = parse_youtube_video_id(url)
+    if not video_id:
+        return
+    rows.append({"video_id": video_id, "title": title, "source_url": canonical_youtube_url(video_id), "source_page": source_page, "source_type": source_type, "proposed_google_use": "Google Ads YouTube video asset", "approval_status": "needs client approval", "sync_status": "needs Google Ads and YouTube link confirmation", "rights_status": "needs client rights confirmation", "campaign_ready": False, "notes": [], "risk_flags": []})
+
+
+def extract_jsonld_youtube_videos(value: str, source_page: str) -> list[dict[str, Any]]:
+    try:
+        payload = json.loads(value)
+    except json.JSONDecodeError:
+        return []
+    rows: list[dict[str, Any]] = []
+    def walk(node: Any, title: str = "") -> None:
+        if isinstance(node, dict):
+            next_title = str(node.get("name") or node.get("headline") or title)
+            node_type = node.get("@type", "")
+            types = node_type if isinstance(node_type, list) else [node_type]
+            if any(str(item).lower() == "videoobject" for item in types):
+                for key in ("url", "embedUrl", "contentUrl"):
+                    if isinstance(node.get(key), str):
+                        add_youtube_video(rows, node[key], source_page, "json_ld_video", next_title)
+            for child in node.values():
+                walk(child, next_title)
+        elif isinstance(node, list):
+            for child in node:
+                walk(child, title)
+    walk(payload)
+    return rows
+
+
+def collect_youtube_videos(raw_crawl: dict[str, Any], explicit_video_urls: list[str], channel_url: str, sync_status_path: Path | None) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for url in explicit_video_urls:
+        add_youtube_video(rows, url, "operator supplied video URL", "operator_supplied_video", "")
+    for page in raw_crawl.get("pages", []):
+        page_url = page.get("url", "")
+        page_title = page.get("title", "")
+        for link in page.get("links", []):
+            add_youtube_video(rows, link, page_url, "website_link", page_title)
+        for embed in page.get("embeds", []):
+            add_youtube_video(rows, embed.get("src", ""), page_url, "website_embed", embed.get("title", page_title))
+        for url in find_youtube_urls(" ".join([page.get("text_sample", ""), json.dumps(page.get("links", []))])):
+            add_youtube_video(rows, url, page_url, "website_text", page_title)
+        for json_ld in page.get("json_ld", []):
+            rows.extend(extract_jsonld_youtube_videos(json_ld, page_url))
+    seen = set()
+    out = []
+    for row in rows:
+        if row["video_id"] in seen:
+            continue
+        seen.add(row["video_id"])
+        row["youtube_channel_url"] = channel_url
+        row["thumbnail_url"] = f"https://i.ytimg.com/vi/{row['video_id']}/hqdefault.jpg"
+        row["sync_evidence_path"] = str(sync_status_path) if sync_status_path else ""
+        row["sync_evidence_status"] = "missing" if not sync_status_path else "provided"
+        if not channel_url:
+            row["risk_flags"].append("youtube_channel_url_not_provided")
+        if row["sync_evidence_status"] == "missing":
+            row["risk_flags"].append("youtube_sync_not_confirmed")
+        out.append(row)
+    return out
+
+
+def add_youtube_account(rows: list[dict[str, Any]], url: str, source_page: str, source_type: str, title: str, confidence: str) -> None:
+    channel_url = parse_youtube_channel_url(url)
+    if not channel_url:
+        return
+    rows.append({"channel_url": channel_url, "title": title, "source_url": url, "source_page": source_page, "source_type": source_type, "confidence": confidence, "approval_status": "needs client approval", "google_ads_link_status": "not_checked", "rights_status": "needs client rights confirmation", "campaign_ready": False, "notes": [], "risk_flags": []})
+
+
+def collect_youtube_accounts(raw_crawl: dict[str, Any], website_url: str, explicit_channel_urls: list[str], google_ads_evidence_path: Path | None, brand_aliases: list[str], known_social_profiles: list[str], enable_public_youtube_search: bool) -> list[dict[str, Any]]:
+    del website_url, brand_aliases, google_ads_evidence_path, enable_public_youtube_search
+    rows: list[dict[str, Any]] = []
+    for url in explicit_channel_urls + known_social_profiles:
+        add_youtube_account(rows, url, "operator supplied channel URL", "operator_supplied_channel", "", "needs_confirmation")
+    for page in raw_crawl.get("pages", []):
+        page_url = page.get("url", "")
+        page_title = page.get("title", "")
+        for link in page.get("links", []):
+            add_youtube_account(rows, link, page_url, "website_link", page_title, "confirmed_from_client_site")
+        for url in find_youtube_channel_urls(" ".join([page.get("text_sample", ""), json.dumps(page.get("links", []))])):
+            add_youtube_account(rows, url, page_url, "website_text", page_title, "confirmed_from_client_site")
+    seen = set()
+    out = []
+    for row in rows:
+        if row["channel_url"] in seen:
+            continue
+        seen.add(row["channel_url"])
+        if row["confidence"] == "needs_confirmation":
+            row["risk_flags"].append("ownership_not_confirmed")
+        if row["google_ads_link_status"] != "linked_confirmed":
+            row["risk_flags"].append("youtube_link_not_confirmed")
+        if row["rights_status"] != "rights_confirmed":
+            row["risk_flags"].append("rights_not_confirmed")
+        out.append(row)
+    return out
+
+
+def youtube_video_required(campaign_intents: list[str], require_video_assets: bool) -> bool:
+    intents = {str(value).strip().lower().replace("-", "_") for value in campaign_intents}
+    return require_video_assets or bool(intents & {"pmax", "performance_max", "demand_gen", "youtube", "youtube_video", "video"})
+
+
+def youtube_readiness_status(video_rows: list[dict[str, Any]], account_rows: list[dict[str, Any]], required: bool) -> str:
+    if not required:
+        return "not_required"
+    if video_rows:
+        return "youtube_ready_for_approval"
+    if account_rows:
+        return "youtube_access_needed"
+    return "youtube_not_located"
+
+
+def validate_youtube(video_rows: list[dict[str, Any]], account_rows: list[dict[str, Any]], required: bool) -> dict[str, Any]:
+    issues: list[dict[str, str]] = []
+    campaign_ready = sum(1 for row in video_rows if row.get("campaign_ready"))
+    status = youtube_readiness_status(video_rows, account_rows, required)
+    if required and campaign_ready == 0:
+        issues.append({"issue_type": "blocked_pending_client_video", "status": status})
+    return {"status": status, "readiness_status": status, "issues": issues, "campaign_ready_videos": campaign_ready, "video_count": len(video_rows), "account_candidate_count": len(account_rows), "campaign_ready_accounts": 0, "video_required": required}
+
+
+def write_youtube_csv(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None:
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: "; ".join(row.get(field, [])) if isinstance(row.get(field), list) else row.get(field, "") for field in fields})
+
+
+def write_account_discovery_md(path: Path, account_rows: list[dict[str, Any]], required: bool, status: str) -> None:
+    lines = ["# YouTube Account Discovery", "", f"Video asset readiness status: `{status}`", f"Video required for this package: {'yes' if required else 'no'}", "", "## Candidate Channels", ""]
+    lines.extend([f"- {row.get('channel_url')} | {row.get('confidence')} | {row.get('google_ads_link_status')} | {row.get('rights_status')}" for row in account_rows] or ["- No reliable YouTube channel candidates were found."])
+    lines.extend(["", "## Client Follow-Up", "", "- Confirm the official YouTube channel URL.", "- Confirm who owns or can approve the channel.", "- Confirm Google Ads may link the channel or specific videos.", "- Confirm the client has rights to use each selected video in ads.", "- Confirm priority videos before Performance Max, Demand Gen, or YouTube campaigns use video assets."])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def extract_jsonld_images(value: str) -> list[str]:
@@ -403,16 +600,28 @@ def score_candidate(candidate: Candidate, image: Image.Image, service_theme: str
     score = 0
     flags: list[str] = []
     notes: list[str] = []
-    if width >= 1200 and height >= 628:
-        score += 30
-    elif width >= 600 and height >= 314:
-        score += 22
-    elif width >= 300 and height >= 300:
-        score += 12
+    if candidate.is_logo:
+        if width >= 1200 and height >= 1200:
+            score += 30
+        elif width >= 1200 and height >= 300:
+            score += 28
+        elif width >= 512 and height >= 128:
+            score += 22
+        elif width >= 128 and height >= 128:
+            score += 16
+        else:
+            flags.append("too_small_for_logo_assets")
     else:
-        flags.append("too_small_for_primary_google_assets")
+        if width >= 1200 and height >= 628:
+            score += 30
+        elif width >= 600 and height >= 314:
+            score += 22
+        elif width >= 300 and height >= 300:
+            score += 12
+        else:
+            flags.append("too_small_for_primary_google_assets")
     ratio = width / height if height else 0
-    if 0.85 <= ratio <= 1.25 or 1.75 <= ratio <= 2.05 or 0.5 <= ratio <= 0.65:
+    if 0.85 <= ratio <= 1.25 or 1.75 <= ratio <= 2.05 or 0.5 <= ratio <= 0.65 or (candidate.is_logo and 3.5 <= ratio <= 4.5):
         score += 18
     else:
         notes.append("aspect ratio needs crop or padding")
@@ -422,6 +631,9 @@ def score_candidate(candidate: Candidate, image: Image.Image, service_theme: str
     elif clarity >= 10:
         score += 8
         notes.append("moderate clarity")
+    elif candidate.is_logo:
+        score += 4
+        notes.append("logo clarity needs manual review")
     else:
         flags.append("low_visual_clarity")
     score += relevance_score(candidate, service_theme, landing_pages)
@@ -436,7 +648,7 @@ def score_candidate(candidate: Candidate, image: Image.Image, service_theme: str
     candidate.score = min(100, score)
     candidate.risk_flags = flags
     candidate.notes = notes
-    if "too_small_for_primary_google_assets" in flags or "low_visual_clarity" in flags:
+    if "too_small_for_primary_google_assets" in flags or "too_small_for_logo_assets" in flags or "low_visual_clarity" in flags:
         candidate.status = "rejected"
     elif flags:
         candidate.status = "needs legal or client confirmation"
@@ -696,11 +908,19 @@ def write_review_csv(path: Path, manifest_rows: list[dict[str, Any]]) -> None:
                 )
 
 
+def write_youtube_sync_checklist(path: Path, video_rows: list[dict[str, Any]], channel_url: str, account_rows: list[dict[str, Any]]) -> None:
+    lines = ["# YouTube And Google Ads Sync Checklist", "", f"YouTube channel URL: {channel_url or 'Needs confirmation'}", "", "## Required Before Campaign Use", "", "- Confirm the Google Ads account has administrative access before requesting a YouTube channel or video link.", "- Confirm the YouTube channel owner has approved the channel or video link request.", "- Confirm the client has sufficient rights to use each video in ads.", "- Record the link status and rights status in `youtube_video_review.csv` before any video is staged for campaigns.", "", "## Account Review", ""]
+    lines.extend([f"- {row.get('channel_url')} | {row.get('confidence')} | {row.get('google_ads_link_status')} | {row.get('rights_status')}" for row in account_rows] or ["- No YouTube channel candidates were confirmed."])
+    lines.extend(["", "## Video Review", ""])
+    lines.extend([f"- `{row.get('video_id')}` | {row.get('title') or 'Untitled video'} | {row.get('approval_status')} | {row.get('sync_status')} | {row.get('rights_status')}" for row in video_rows] or ["- No YouTube video candidates were found."])
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def relative_asset_path(asset_file: str, html_path: Path) -> str:
     return Path(os.path.relpath(Path(asset_file).resolve(), html_path.parent.resolve())).as_posix()
 
 
-def write_html_gallery(path: Path, manifest_rows: list[dict[str, Any]], client: str, service_theme: str) -> None:
+def write_html_gallery(path: Path, manifest_rows: list[dict[str, Any]], client: str, service_theme: str, youtube_rows: list[dict[str, Any]] | None = None, youtube_account_rows: list[dict[str, Any]] | None = None, youtube_status: str = "not_required") -> None:
     cards: list[str] = []
     for row in manifest_rows:
         for variant in row.get("variants", []):
@@ -726,6 +946,8 @@ def write_html_gallery(path: Path, manifest_rows: list[dict[str, Any]], client: 
       </article>"""
             )
     body = "\n".join(cards) or "<p>No usable image candidates were generated.</p>"
+    account_cards = "".join(f"<article class=\"asset-card\"><div class=\"asset-meta\"><h2>YouTube channel candidate</h2><p><strong>Channel:</strong> {html.escape(row.get('channel_url', ''))}</p><p><strong>Package status:</strong> {html.escape(youtube_status)}</p><label><input type=\"checkbox\"> Confirmed for campaign use</label><label>Notes <textarea></textarea></label></div></article>" for row in (youtube_account_rows or [])) or f"<p>YouTube account status: {html.escape(youtube_status)}. No reliable channel candidates were found.</p>"
+    video_cards = "".join(f"<article class=\"asset-card\"><iframe src=\"https://www.youtube.com/embed/{html.escape(row.get('video_id', ''))}\" title=\"YouTube video candidate\" loading=\"lazy\"></iframe><div class=\"asset-meta\"><h2>YouTube video candidate</h2><p><strong>Video ID:</strong> {html.escape(row.get('video_id', ''))}</p><p><strong>Source:</strong> {html.escape(row.get('source_url', ''))}</p><label><input type=\"checkbox\"> Approved for campaign use</label><label>Notes <textarea></textarea></label></div></article>" for row in (youtube_rows or [])) or "<p>No YouTube video candidates were found.</p>"
     path.write_text(
         f"""<!doctype html>
 <html lang="en">
@@ -739,6 +961,7 @@ def write_html_gallery(path: Path, manifest_rows: list[dict[str, Any]], client: 
     .asset-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 18px; }}
     .asset-card {{ background: white; border: 1px solid #d8dfdc; border-radius: 8px; overflow: hidden; }}
     .asset-card img {{ width: 100%; aspect-ratio: 1.91 / 1; object-fit: contain; background: #eef2f0; display: block; }}
+    .asset-card iframe {{ width: 100%; aspect-ratio: 16 / 9; border: 0; background: #eef2f0; display: block; }}
     .asset-meta {{ padding: 16px; }}
     h1 {{ margin: 0 0 8px; font-size: 30px; }}
     h2 {{ margin: 0 0 12px; font-size: 18px; }}
@@ -754,8 +977,17 @@ def write_html_gallery(path: Path, manifest_rows: list[dict[str, Any]], client: 
     <p>{html.escape(client)} | {html.escape(service_theme)} | Approval required before campaign use</p>
   </header>
   <main>
+    <h2>Image Creative</h2>
     <section class="asset-grid">
 {body}
+    </section>
+    <h2>YouTube Account And Video Readiness</h2>
+    <section class="asset-grid">
+{account_cards}
+    </section>
+    <h2>YouTube Videos</h2>
+    <section class="asset-grid">
+{video_cards}
     </section>
   </main>
 </body>
@@ -765,7 +997,10 @@ def write_html_gallery(path: Path, manifest_rows: list[dict[str, Any]], client: 
     )
 
 
-def write_email(path: Path, client: str, service_theme: str, html_path: Path, csv_path: Path) -> None:
+def write_email(path: Path, client: str, service_theme: str, html_path: Path, csv_path: Path, youtube_status: str = "not_required", video_required: bool = False) -> None:
+    youtube_lines = []
+    if video_required and youtube_status != "youtube_ready_for_approval":
+        youtube_lines = ["", "For the video portion of this package, we still need YouTube confirmation before videos can be used in Performance Max, Demand Gen, or YouTube campaigns.", "Please send the official YouTube channel URL, the person who can approve channel or video linking, confirmation that videos may be used in ads, and any priority videos you want reviewed first."]
     path.write_text(
         "\n".join(
             [
@@ -773,8 +1008,9 @@ def write_email(path: Path, client: str, service_theme: str, html_path: Path, cs
                 "",
                 f"Hi {client},",
                 "",
-                f"We prepared image creative candidates for the {service_theme} campaign theme.",
+                f"We prepared image and YouTube creative candidates for the {service_theme} campaign theme.",
                 "Please review the approval gallery and mark each asset as approved, revise, rejected, or needs legal or client confirmation.",
+                *youtube_lines,
                 "",
                 "Nothing in this package will be used in campaigns until approval is returned.",
                 "",
@@ -879,8 +1115,23 @@ def build_creative_asset_package(args: argparse.Namespace) -> dict[str, Path]:
         minimum_approved_source_images=args.minimum_source_images,
     )
 
+    video_is_required = youtube_video_required(getattr(args, "campaign_intent", []), getattr(args, "require_video_assets", False))
+    channel_urls = [url for url in [getattr(args, "youtube_channel_url", "")] if url]
+    channel_urls.extend(getattr(args, "youtube_channel_urls", []) or [])
+    account_rows = collect_youtube_accounts(raw_crawl, args.website, channel_urls, getattr(args, "google_ads_evidence", None), getattr(args, "brand_alias", []), getattr(args, "known_social_profile", []), getattr(args, "enable_public_youtube_search", False))
+    primary_channel = channel_urls[0] if channel_urls else next((row.get("channel_url", "") for row in account_rows), "")
+    youtube_rows = collect_youtube_videos(raw_crawl, getattr(args, "youtube_video_url", []), primary_channel, getattr(args, "youtube_sync_status", None))
+    youtube_validation = validate_youtube(youtube_rows, account_rows, video_is_required)
+    youtube_status = youtube_readiness_status(youtube_rows, account_rows, video_is_required)
+
     manifest_path = build_dir / "creative_asset_manifest.json"
     review_csv = build_dir / "creative_asset_review.csv"
+    youtube_manifest_path = build_dir / "youtube_video_manifest.json"
+    youtube_review_csv = build_dir / "youtube_video_review.csv"
+    youtube_account_manifest = build_dir / "youtube_account_discovery.json"
+    youtube_account_review_csv = build_dir / "youtube_account_review.csv"
+    youtube_account_discovery_md = build_dir / "youtube_account_discovery.md"
+    youtube_sync_checklist = build_dir / "youtube_sync_checklist.md"
     html_path = build_dir / "Client_Creative_Approval.html"
     email_path = build_dir / "client_email_draft.md"
     attribution_path = build_dir / "creative_source_attribution.json"
@@ -888,16 +1139,40 @@ def build_creative_asset_package(args: argparse.Namespace) -> dict[str, Path]:
 
     write_json(manifest_path, {"approval_required": True, "campaign_ready": False, "assets": manifest_rows})
     write_review_csv(review_csv, manifest_rows)
-    write_html_gallery(html_path, manifest_rows, args.display_name or args.client, args.service_theme)
-    write_email(email_path, args.display_name or args.client, args.service_theme, html_path, review_csv)
+    write_json(youtube_manifest_path, {"approval_required": True, "campaign_ready": False, "youtube_channel_url": primary_channel, "videos": youtube_rows})
+    write_youtube_csv(youtube_review_csv, youtube_rows, ["video_id", "title", "source_url", "source_page", "proposed_google_use", "approval_status", "sync_status", "rights_status", "campaign_ready", "notes", "risk_flags"])
+    write_json(youtube_account_manifest, {"approval_required": True, "campaign_ready": False, "video_required": video_is_required, "readiness_status": youtube_status, "accounts": account_rows})
+    write_youtube_csv(youtube_account_review_csv, account_rows, ["channel_url", "title", "source_url", "source_page", "source_type", "confidence", "approval_status", "google_ads_link_status", "rights_status", "campaign_ready", "notes", "risk_flags"])
+    write_account_discovery_md(youtube_account_discovery_md, account_rows, video_is_required, youtube_status)
+    write_youtube_sync_checklist(youtube_sync_checklist, youtube_rows, primary_channel, account_rows)
+    write_html_gallery(html_path, manifest_rows, args.display_name or args.client, args.service_theme, youtube_rows, account_rows, youtube_status)
+    write_email(email_path, args.display_name or args.client, args.service_theme, html_path, review_csv, youtube_status, video_is_required)
     write_json(attribution_path, {"website": args.website, "assets": attribution_rows})
-    write_json(validation_path, validate_package(manifest_rows))
+    image_validation = validate_package(manifest_rows)
+    issues = [*image_validation["issues"], *youtube_validation["issues"]]
+    validation_report = {"status": "blocked_pending_client_video" if video_is_required and youtube_validation["campaign_ready_videos"] == 0 else image_validation["status"], "issues": issues, "image_assets": image_validation, "youtube_videos": youtube_validation, "approved_assets": image_validation["approved_assets"], "campaign_ready_assets": image_validation["campaign_ready_assets"], "asset_count": image_validation["asset_count"]}
+    write_json(validation_path, validation_report)
+    client_hq_media_inventory = update_client_hq_media_inventory(
+        client_dir,
+        media_package_dir=build_dir,
+        creative_manifest={"approval_required": True, "campaign_ready": False, "assets": manifest_rows},
+        youtube_manifest={"approval_required": True, "campaign_ready": False, "youtube_channel_url": primary_channel, "videos": youtube_rows},
+        youtube_account_discovery={"approval_required": True, "campaign_ready": False, "video_required": video_is_required, "readiness_status": youtube_status, "accounts": account_rows},
+        validation_report=validation_report,
+    )
 
     return {
         "source_image_folder": source_dir,
         "processed_image_folder": processed_dir,
         "creative_asset_manifest": manifest_path,
         "creative_asset_review": review_csv,
+        "youtube_video_manifest": youtube_manifest_path,
+        "youtube_video_review": youtube_review_csv,
+        "youtube_account_discovery": youtube_account_manifest,
+        "youtube_account_review": youtube_account_review_csv,
+        "youtube_account_discovery_md": youtube_account_discovery_md,
+        "youtube_sync_checklist": youtube_sync_checklist,
+        "client_hq_media_inventory": client_hq_media_inventory,
         "client_creative_approval_html": html_path,
         "client_email_draft": email_path,
         "creative_source_attribution": attribution_path,
@@ -917,6 +1192,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--landing-page", action="append", default=[])
     parser.add_argument("--brand-rules", default="")
     parser.add_argument("--logo-file", action="append", default=[])
+    parser.add_argument("--youtube-channel-url", default="")
+    parser.add_argument("--youtube-channel-urls", action="append", default=[])
+    parser.add_argument("--youtube-video-url", action="append", default=[])
+    parser.add_argument("--youtube-sync-status", type=Path)
+    parser.add_argument("--google-ads-evidence", type=Path)
+    parser.add_argument("--brand-alias", action="append", default=[])
+    parser.add_argument("--known-social-profile", action="append", default=[])
+    parser.add_argument("--campaign-intent", action="append", default=[])
+    parser.add_argument("--require-video-assets", action="store_true")
+    parser.add_argument("--enable-public-youtube-search", action="store_true")
     parser.add_argument("--output-build-path", type=Path)
     parser.add_argument("--client-dir", type=Path, help="Existing client folder to use instead of scaffolding clients/{agency}/{client}.")
     parser.add_argument("--clients-dir", type=Path, default=ROOT / "clients")

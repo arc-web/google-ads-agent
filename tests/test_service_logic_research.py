@@ -41,3 +41,35 @@ def test_service_logic_supports_high_end_restaurant_services() -> None:
     assert payload["failing_services"] == 0
     assert {record["buyer_type"] for record in payload["services"]} == {"b2c"}
     assert all("restaurant" in record["concept_tokens"] for record in payload["services"])
+
+
+def test_service_logic_enriches_source_pages_from_website_scan() -> None:
+    source_attribution = {
+        "source_pages": [
+            {
+                "url": "https://www.emorrisonconsulting.com/services/",
+                "used_for": ["website crawl", "service candidate extraction"],
+            }
+        ]
+    }
+    website_scan = {
+        "page_evidence": {
+            "https://www.emorrisonconsulting.com/services/": {
+                "url": "https://www.emorrisonconsulting.com/services/",
+                "title": "Services",
+                "headings": ["Learning and Development"],
+                "text_sample": "learning, development and support for your staff to be confident and competent counselors",
+            }
+        }
+    }
+
+    payload = build_service_logic_research(
+        services=["Learning and Development"],
+        website_scan=website_scan,
+        source_attribution=source_attribution,
+    )
+
+    record = payload["services"][0]
+    assert payload["status"] == "pass"
+    assert record["status"] == "pass"
+    assert record["source_urls"] == ["https://www.emorrisonconsulting.com/services/"]

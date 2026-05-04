@@ -76,7 +76,26 @@ ALLOWED_KEYWORD_TYPES = {"Phrase", "Negative Phrase"}
 DISALLOWED_KEYWORD_TYPES = {"Broad", "Exact"}
 SEARCH_NETWORK_VALUE = "Google search"
 OFF_VALUES = {"Off", "Disabled", "No", "False", "0"}
-DEFAULT_DESCRIPTION_CTAS = {"call today", "book today", "request details", "apply today", "schedule today"}
+DEFAULT_DESCRIPTION_CTAS = {
+    "apply today",
+    "book a consultation",
+    "book a tasting menu",
+    "book today",
+    "book your reservation",
+    "call today",
+    "call us today",
+    "check availability",
+    "compare options",
+    "confirm fit",
+    "plan next steps",
+    "request a quote",
+    "request details",
+    "reserve your table",
+    "review program fit",
+    "schedule a review",
+    "schedule service",
+    "schedule today",
+}
 DESCRIPTION_VALUE_TERMS = {
     "available",
     "availability",
@@ -102,6 +121,13 @@ DESCRIPTION_VALUE_TERMS = {
     "schedule",
     "support",
     "team",
+}
+GENERIC_DESCRIPTION_PHRASES = {
+    "account import",
+    "campaign approval",
+    "implementation needs",
+    "launch readiness",
+    "service fit",
 }
 SMART_BIDDING_STRATEGIES = {
     "Maximize conversions",
@@ -593,6 +619,16 @@ def validate_rsa_row(row: dict[str, str], row_number: int, issues: list[Validati
                 value=value,
                 rule="description_missing_value_prop",
             )
+        elif has_generic_description_phrase(value):
+            add_issue(
+                issues,
+                "error",
+                f"{description} uses internal workflow language instead of client-facing service copy.",
+                row=row_number,
+                column=description,
+                value=value,
+                rule="description_generic_workflow_language",
+            )
 
     for path_field in ("Path 1", "Path 2"):
         value = row.get(path_field, "").strip()
@@ -608,6 +644,11 @@ def has_description_cta(value: str) -> bool:
 def has_description_value_prop(value: str) -> bool:
     tokens = {token for token in re_split(value.lower()) if token}
     return bool(tokens & DESCRIPTION_VALUE_TERMS)
+
+
+def has_generic_description_phrase(value: str) -> bool:
+    lower = value.lower()
+    return any(phrase in lower for phrase in GENERIC_DESCRIPTION_PHRASES)
 
 
 def re_split(value: str) -> list[str]:

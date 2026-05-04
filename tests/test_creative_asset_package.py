@@ -6,7 +6,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-from shared.creative_assets.build_creative_asset_package import build_creative_asset_package
+from shared.creative_assets.build_creative_asset_package import build_creative_asset_package, parse_youtube_channel_url, parse_youtube_video_id
 from shared.tools.website.website_scanner import WebsiteScanner
 
 
@@ -105,6 +105,17 @@ def test_creative_asset_package_outputs_approval_artifacts(tmp_path: Path) -> No
     assert manifest["approval_required"] is True
     assert manifest["campaign_ready"] is False
     assert any(asset["variants"] for asset in manifest["assets"])
+    logo_variants = [
+        variant
+        for asset in manifest["assets"]
+        if asset["is_logo"]
+        for variant in asset["variants"]
+    ]
+    assert {(variant["width"], variant["height"]) for variant in logo_variants} >= {
+        (1200, 1200),
+        (1200, 300),
+    }
+    assert all(variant["file_size"] <= 5 * 1024 * 1024 for variant in logo_variants)
     assert all(asset["approval_status"] == "needs client approval" for asset in manifest["assets"])
     assert attribution["assets"]
     assert all("source_url" in asset for asset in attribution["assets"])
@@ -150,3 +161,75 @@ def test_creative_asset_package_generates_labeled_drafts_when_sources_are_missin
     assert generated
     assert all("generated_draft" in asset["risk_flags"] for asset in generated)
     assert all(asset["campaign_ready"] is False for asset in generated)
+
+
+def test_youtube_url_parsers_handle_common_formats() -> None:
+    assert parse_youtube_video_id("https://www.youtube.com/watch?v=abc123DEF_0") == "abc123DEF_0"
+    assert parse_youtube_video_id("https://youtu.be/abc123DEF_0") == "abc123DEF_0"
+    assert parse_youtube_video_id("https://www.youtube.com/embed/abc123DEF_0") == "abc123DEF_0"
+    assert parse_youtube_video_id("https://www.youtube.com/shorts/abc123DEF_0") == "abc123DEF_0"
+    assert parse_youtube_channel_url("https://www.youtube.com/@examplebrand/videos") == "https://www.youtube.com/@examplebrand"
+    assert parse_youtube_channel_url("https://youtube.com/channel/UCabc123DEF_456") == "https://www.youtube.com/channel/UCabc123DEF_456"
+
+
+def test_youtube_discovery_outputs_video_required_escalation(tmp_path: Path) -> None:
+    site = tmp_path / "site"
+    site.mkdir()
+    write_fixture_image(site / "hero.jpg", (1200, 628), (44, 93, 104))
+    index = site / "index.html"
+    index.write_text(
+        """<!doctype html>
+<html>
+<head>
+  <title>Video Creative Site</title>
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"VideoObject","name":"Therapy overview","embedUrl":"https://www.youtube.com/embed/def456GHI_1"}
+  </script>
+</head>
+<body>
+  <h1>Therapy Services</h1>
+  <a href="https://www.youtube.com/@examplebrand">YouTube</a>
+  <iframe src="https://www.youtube.com/embed/abc123DEF_0" title="Therapy intro"></iframe>
+  <img src="hero.jpg" alt="therapy services office">
+</body>
+</html>
+""",
+        encoding="utf-8",
+    )
+
+    artifacts = build_creative_asset_package(
+        Namespace(
+            agency="agency",
+            client="client",
+            display_name="Video Creative Site",
+            website=index.as_uri(),
+            website_scan_json=None,
+            raw_crawl_json=None,
+            service_theme="Therapy Services",
+            landing_page=[],
+            brand_rules="calm practical care",
+            logo_file=[],
+            youtube_video_url=[],
+            campaign_intent=["pmax"],
+            output_build_path=tmp_path / "build",
+            client_dir=None,
+            clients_dir=tmp_path / "clients",
+            build_date="2026-05-04",
+            max_pages=3,
+            max_candidates=80,
+            minimum_source_images=1,
+            first_party_cdn_domain=[],
+        )
+    )
+
+    youtube_manifest = json.loads(artifacts["youtube_video_manifest"].read_text(encoding="utf-8"))
+    account_discovery = json.loads(artifacts["youtube_account_discovery"].read_text(encoding="utf-8"))
+    validation = json.loads(artifacts["validation_report"].read_text(encoding="utf-8"))
+    html_text = artifacts["client_creative_approval_html"].read_text(encoding="utf-8")
+
+    assert {video["video_id"] for video in youtube_manifest["videos"]} == {"abc123DEF_0", "def456GHI_1"}
+    assert account_discovery["readiness_status"] == "youtube_ready_for_approval"
+    assert validation["status"] == "blocked_pending_client_video"
+    assert validation["youtube_videos"]["campaign_ready_videos"] == 0
+    assert "YouTube Account And Video Readiness" in html_text
+    assert "youtube.com/embed/abc123DEF_0" in html_text

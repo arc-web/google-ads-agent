@@ -120,10 +120,19 @@ def page_text(page: dict[str, Any]) -> str:
 
 def source_pages(source_attribution: dict[str, Any], website_scan: dict[str, Any]) -> list[dict[str, Any]]:
     pages = list(source_attribution.get("source_pages", []) or [])
+    evidence_by_url = website_scan.get("page_evidence", {})
     if pages:
-        return pages
-    evidence = website_scan.get("page_evidence", {})
-    return [page for page in evidence.values() if isinstance(page, dict)]
+        enriched_pages = []
+        for page in pages:
+            url = str(page.get("url", ""))
+            evidence = evidence_by_url.get(url, {}) if isinstance(evidence_by_url, dict) else {}
+            enriched = dict(evidence) if isinstance(evidence, dict) else {}
+            enriched.update({key: value for key, value in page.items() if value})
+            enriched_pages.append(enriched)
+        return enriched_pages
+    if isinstance(evidence_by_url, dict):
+        return [page for page in evidence_by_url.values() if isinstance(page, dict)]
+    return []
 
 
 def service_match_score(service: str, page: dict[str, Any]) -> int:

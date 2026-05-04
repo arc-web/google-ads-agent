@@ -102,3 +102,34 @@ def test_client_hq_parser_extracts_physical_locations_and_do_not_target(tmp_path
     assert facts.telehealth_regions == ["Virginia statewide"]
     assert "Psychiatry" in facts.primary_services
     assert "Child therapy: waitlist is full" in facts.do_not_target
+
+
+
+def test_client_hq_media_inventory_summary_updates_json(tmp_path: Path) -> None:
+    from json import loads
+    from shared.rebuild.client_hq import update_client_hq_media_inventory
+
+    client_root = tmp_path / "clients" / "agency" / "client"
+    hq_dir = client_root / "docs" / "client_hq"
+    hq_dir.mkdir(parents=True)
+    (hq_dir / "client_hq.json").write_text('{"client_name":"Fixture"}\n', encoding="utf-8")
+
+    output = update_client_hq_media_inventory(
+        client_root,
+        media_package_dir=client_root / "media" / "run",
+        creative_manifest={"approval_required": True, "assets": [{"source_type": "img", "approval_status": "needs client approval", "campaign_ready": False, "variants": [{"asset_id": "one"}]}, {"source_type": "generated_draft", "variants": []}]},
+        youtube_manifest={"approval_required": True, "youtube_channel_url": "https://www.youtube.com/@fixture", "videos": [{"campaign_ready": False}]},
+        youtube_account_discovery={"video_required": True, "readiness_status": "youtube_access_needed", "accounts": [{"campaign_ready": False}]},
+        validation_report={"status": "blocked_pending_client_video", "issues": [{"issue_type": "blocked_pending_client_video"}]},
+    )
+
+    payload = loads(output.read_text(encoding="utf-8"))
+    media = payload["media_inventory"]
+    assert media["latest_media_package"] == "media/run"
+    assert media["image_assets"]["source_count"] == 2
+    assert media["image_assets"]["variant_count"] == 1
+    assert media["image_assets"]["generated_draft_count"] == 1
+    assert media["youtube"]["video_count"] == 1
+    assert media["youtube"]["account_candidate_count"] == 1
+    assert media["youtube"]["readiness_status"] == "youtube_access_needed"
+    assert media["validation"]["blockers"][0]["issue_type"] == "blocked_pending_client_video"

@@ -411,6 +411,7 @@ Default asset levels:
 - Promotion assets only when the website shows an explicit sale, discount, coupon, or promotion.
 - Business name assets only when the inferred name fits Google requirements and is flagged for advertiser-verification review.
 - Image and logo assets only as a local import package and manifest until Editor import/export behavior is verified.
+- Business logo files must be processed into local JPG or PNG variants before Editor import. Website image URLs are source evidence, not the import target.
 - Location assets only after Google Business Profile linking is confirmed.
 
 Do not invent unsupported assets. If pricing, offer terms, phone numbers, logos, images, business-profile linking, or business-name verification cannot be confirmed from source evidence, log a skipped decision instead of creating a row.
@@ -428,10 +429,11 @@ Manual Editor dry-run checklist:
 
 1. Import the staged TSV into Google Ads Editor.
 2. Inspect sitelink, callout, structured snippet, call, price, promotion, and business name rows.
-3. Review `image_asset_manifest.csv` and import only files from `ad_asset_import_package/` that Google Ads Editor accepts.
+3. Review `image_asset_manifest.csv` and import only processed local files from `ad_asset_import_package/processed/` that Google Ads Editor accepts.
 4. Confirm Google Business Profile is linked before adding location assets.
-5. Export the account from Editor after import and compare exported asset columns with `ad_asset_matrix.csv`.
-6. Keep all asset rows paused until platform warnings and human review are complete.
+5. Confirm business logo advertiser verification, business name match, and usage rights before launch.
+6. Export the account from Editor after import and compare exported asset columns with `ad_asset_matrix.csv`.
+7. Keep all asset rows paused until platform warnings and human review are complete.
 
 Validation sources:
 
@@ -443,6 +445,7 @@ Validation sources:
 - Price assets require language, type, currency, price qualifier, and at least 3 items with header, price, description, and final URL: https://support.google.com/google-ads/answer/7065415?hl=en
 - Promotion assets require explicit promotion details and can be added at account, campaign, or ad group level: https://support.google.com/google-ads/answer/7367521?hl=en
 - Image assets must meet Search image asset requirements and should be relevant to keywords, ads, and landing pages: https://support.google.com/google-ads/answer/9566341?hl=en
+- Google Ads Editor imports image assets from local files: https://support.google.com/google-ads/editor/answer/13372857?hl=en
 - Business name and logo assets depend on business information requirements and advertiser verification: https://support.google.com/adspolicy/answer/12499303?hl=en
 - Location assets require linking the correct location data source, such as Google Business Profile for directly owned locations: https://support.google.com/google-ads/answer/2404182?hl=en
 

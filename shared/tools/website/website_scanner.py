@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import re
 import urllib.error
@@ -59,6 +60,7 @@ class PageScan:
     images: list[dict[str, str]]
     icons: list[dict[str, str]]
     meta_images: list[dict[str, str]]
+    embeds: list[dict[str, str]]
     json_ld: list[str]
     text_sample: str
     error: str | None = None
@@ -72,6 +74,7 @@ class LinkAndTextParser(HTMLParser):
         self.images: list[dict[str, str]] = []
         self.icons: list[dict[str, str]] = []
         self.meta_images: list[dict[str, str]] = []
+        self.embeds: list[dict[str, str]] = []
         self.json_ld: list[str] = []
         self.title_parts: list[str] = []
         self.headings: list[str] = []
@@ -113,6 +116,10 @@ class LinkAndTextParser(HTMLParser):
             prop = attr_map.get("property", attr_map.get("name", "")).lower()
             if content and prop in {"og:image", "twitter:image", "image"}:
                 self.meta_images.append({"src": content, "property": prop})
+        elif tag in {"iframe", "embed", "video", "source"}:
+            src = attr_map.get("src")
+            if src:
+                self.embeds.append({"src": src, "tag": tag, "title": attr_map.get("title", ""), "type": attr_map.get("type", "")})
         elif tag == "script" and attr_map.get("type", "").lower() == "application/ld+json":
             self._json_ld_depth += 1
 
@@ -165,7 +172,10 @@ def read_url(url: str, timeout: int = 12) -> str:
     request = urllib.request.Request(url, headers={"User-Agent": "Google_Ads_Agent website scanner"})
     with urllib.request.urlopen(request, timeout=timeout) as response:
         charset = response.headers.get_content_charset() or "utf-8"
-        return response.read().decode(charset, errors="replace")
+        body = response.read()
+        if response.headers.get("Content-Encoding", "").lower() == "gzip" or body.startswith(b"\x1f\x8b"):
+            body = gzip.decompress(body)
+        return body.decode(charset, errors="replace")
 
 
 def parse_page(url: str, html: str) -> PageScan:
@@ -196,6 +206,7 @@ def parse_page(url: str, html: str) -> PageScan:
         }
         for image in parser.meta_images
     ]
+    embeds = [{**embed, "src": normalize_url(embed.get("src", ""), url)} for embed in parser.embeds]
     text = normalize_text(" ".join(parser.text_parts))
     return PageScan(
         url=url,
@@ -206,6 +217,7 @@ def parse_page(url: str, html: str) -> PageScan:
         images=[image for image in images if image["src"]],
         icons=[icon for icon in icons if icon["src"]],
         meta_images=[image for image in meta_images if image["src"]],
+        embeds=[embed for embed in embeds if embed["src"]],
         json_ld=parser.json_ld,
         text_sample=text[:4000],
     )
@@ -355,6 +367,65 @@ def clean_phone(value: str) -> str:
     return digits
 
 
+def extract_json_ld_logo_urls(value: str) -> list[str]:
+    urls: list[str] = []
+    try:
+        payload = json.loads(value)
+    except json.JSONDecodeError:
+        return urls
+
+    def collect_logo(node: object) -> None:
+        if isinstance(node, str):
+            urls.append(node)
+        elif isinstance(node, dict):
+            for key in ("url", "contentUrl", "@id"):
+                child = node.get(key)
+                if isinstance(child, str):
+                    urls.append(child)
+            for child in node.values():
+                if isinstance(child, (dict, list)):
+                    collect_logo(child)
+        elif isinstance(node, list):
+            for child in node:
+                collect_logo(child)
+
+    def walk(node: object) -> None:
+        if isinstance(node, dict):
+            for key, child in node.items():
+                if key.lower() == "logo":
+                    collect_logo(child)
+                else:
+                    walk(child)
+        elif isinstance(node, list):
+            for child in node:
+                walk(child)
+
+    walk(payload)
+    return urls
+
+
+def extract_json_ld_names(value: str) -> list[str]:
+    names: list[str] = []
+    try:
+        payload = json.loads(value)
+    except json.JSONDecodeError:
+        return names
+
+    def walk(node: object) -> None:
+        if isinstance(node, dict):
+            for key, child in node.items():
+                if key.lower() in {"name", "legalname"} and isinstance(child, str):
+                    names.append(child)
+                elif isinstance(child, (dict, list)):
+                    walk(child)
+        elif isinstance(node, list):
+            for child in node:
+                walk(child)
+
+    walk(payload)
+    return names
+
+
 def extract_asset_evidence(pages: list[PageScan], title: str) -> dict[str, list[dict[str, str]]]:
     phones: list[dict[str, str]] = []
     prices: list[dict[str, str]] = []
@@ -383,6 +454,22 @@ def extract_asset_evidence(pages: list[PageScan], title: str) -> dict[str, list[
             addresses.append({"value": str(address), "source": page.url, "evidence": page.text_sample[:240]})
         if "google.com/maps" in page.text_sample.lower() or "business profile" in page.text_sample.lower():
             gbp_mentions.append({"value": "possible_google_business_profile", "source": page.url})
+        for json_ld in page.json_ld:
+            for name in extract_json_ld_names(json_ld):
+                business_names.append({"value": name, "source": page.url, "evidence": "json_ld_name"})
+            for logo_url in extract_json_ld_logo_urls(json_ld):
+                normalized = normalize_url(logo_url, page.url)
+                if normalized:
+                    logos.append(
+                        {
+                            "url": normalized,
+                            "source": page.url,
+                            "alt": "schema logo",
+                            "width": "",
+                            "height": "",
+                            "evidence_type": "json_ld_logo",
+                        }
+                    )
         for image in [*page.images, *page.meta_images]:
             candidate = {
                 "url": image.get("src", ""),
@@ -553,6 +640,7 @@ class WebsiteScanner:
                     images=[],
                     icons=[],
                     meta_images=[],
+                    embeds=[],
                     json_ld=[],
                     text_sample="",
                     error=str(exc),
