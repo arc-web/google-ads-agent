@@ -7,11 +7,17 @@ import sys
 from pathlib import Path
 
 from shared.presentation.report_quality_audit import audit_html
+from shared.new_campaign.build_initial_search_campaign import clean_words
 from shared.rebuild.staging_validator import validate_file
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_DIR = Path(__file__).resolve().parent / "fixtures" / "new_campaign_site"
+
+
+def test_clean_words_removes_possessive_artifacts() -> None:
+    assert clean_words("Chef's Table Guatemala City") == "Chef Table Guatemala City"
+    assert clean_words("Chef’s Table Guatemala City") == "Chef Table Guatemala City"
 
 
 def test_one_shot_initial_search_build_with_temp_client(tmp_path: Path) -> None:

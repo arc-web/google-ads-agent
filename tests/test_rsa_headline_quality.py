@@ -112,3 +112,67 @@ def test_generator_handles_long_service_names_without_truncation(service_label: 
     assert len(headlines) == 15
     assert audit.status == "pass"
     assert all(25 <= len(headline) <= 30 for headline in headlines)
+    assert all("Chef S" not in headline for headline in headlines)
+
+
+@pytest.mark.parametrize(
+    "service_label",
+    [
+        "12 Course Mayan Tasting Menu",
+        "Chef's Table Guatemala City",
+        "Fine Dining Reservations",
+        "Contemporary Guatemalan Food",
+        "Wine Pairing Dinner",
+    ],
+)
+def test_generator_handles_high_end_restaurant_services(service_label: str) -> None:
+    service_logic = {
+        "status": "pass",
+        "buyer_type": "b2c",
+        "buyer": "Guests choosing a restaurant or tasting menu reservation",
+        "end_user": "Guests planning a fine dining meal in Guatemala City",
+        "service_mechanism": "Restaurant reservation for a tasting menu experience",
+        "problem": "Guests need to choose and reserve a distinctive high-end restaurant experience",
+        "outcome": "Reserved contemporary Guatemalan dining experience in Guatemala City",
+        "concept_tokens": [
+            "chef",
+            "contemporary",
+            "culture",
+            "dining",
+            "dinner",
+            "fine",
+            "food",
+            "guest",
+            "guatemala",
+            "guatemalan",
+            "mayan",
+            "menu",
+            "pairing",
+            "popol",
+            "reservation",
+            "restaurant",
+            "seat",
+            "story",
+            "table",
+            "tasting",
+            "vuh",
+            "wine",
+        ],
+    }
+    headlines = generate_quality_headlines(
+        client_name="Flor de Lis Xibalba",
+        service_label=service_label,
+        ad_group=f"Services - {service_label}",
+        service_logic=service_logic,
+    )
+    audit = audit_rsa_headlines(
+        ad_group=f"Services - {service_label}",
+        service_label=service_label,
+        client_name="Flor de Lis Xibalba",
+        headlines=headlines,
+        service_logic=service_logic,
+    )
+
+    assert len(headlines) == 15
+    assert audit.status == "pass"
+    assert all(25 <= len(headline) <= 30 for headline in headlines)
