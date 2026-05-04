@@ -1,0 +1,16 @@
+{
+  "html": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/Sky_Therapies_Search_Terms_Regional_Focus_Confirmation.html",
+  "counts": {
+    "sections": 5,
+    "errors": 0,
+    "warnings": 1
+  },
+  "findings": [
+    {
+      "severity": "warning",
+      "code": "presentation.no_continuation_header_pattern",
+      "message": "No .continuation-header pattern was found. Multi-page modules need repeated context.",
+      "evidence": ""
+    }
+  ]
+}

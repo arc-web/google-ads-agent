@@ -1,0 +1,32 @@
+{
+  "client": "skytherapies",
+  "build_dir": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization",
+  "source_files": {
+    "editor_export": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/Skytherapies.ca++2_Campaigns+14_Ad groups+2026-05-04.csv",
+    "search_terms": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/reports/performance_inputs/search_terms_report_2026-05-04.csv",
+    "locations": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/reports/performance_inputs/location_report_2026-05-04.csv"
+  },
+  "outputs": {
+    "decisions": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/search_term_focus_keep_exclude_review.csv",
+    "focus_additions": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/paused_focus_keyword_additions.csv",
+    "regional_analysis": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/regional_targeting_analysis.csv",
+    "search_term_client_question_groups": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/search_term_client_question_groups.csv",
+    "regional_opportunities": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/regional_ad_group_opportunities.json",
+    "staging_csv": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/skytherapies_google_ads_editor_staging_rev1_20260504_optimization.tsv",
+    "html": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/Sky_Therapies_Search_Terms_Regional_Focus_Confirmation.html",
+    "pdf": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/Sky_Therapies_Search_Terms_Regional_Focus_Confirmation.pdf",
+    "email": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/client_email_draft.md",
+    "human_review": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/human_review.md",
+    "static_audit": "/Users/home/ai/agents/ppc/google_ads_agent/clients/skytherapies/build/2026-05-04_search_optimization/report_static_audit.json"
+  },
+  "counts": {
+    "search_term_rows": 437,
+    "unique_decisions": 366,
+    "focus_candidates": 3,
+    "review_candidates": 31,
+    "exclude_recommendations": 85,
+    "keep_terms": 247,
+    "paused_focus_additions": 2,
+    "revised_staging_rows": 967
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "pdf": "clients/skytherapies/build/2026-05-04_search_optimization/Sky_Therapies_Search_Terms_Regional_Focus_Confirmation.pdf",
+  "pages_dir": "clients/skytherapies/build/2026-05-04_search_optimization/revision_visual_audit",
+  "pages": 5,
+  "failures": 0,
+  "min_content_ratio": 0.032,
+  "audits": [
+    {
+      "page": 1,
+      "width": 612,
+      "height": 792,
+      "content_ratio": 0.996181174489998,
+      "vertical_span_ratio": 1.0,
+      "max_content_y_ratio": 0.9987373737373737,
+      "status": "pass",
+      "image": "clients/skytherapies/build/2026-05-04_search_optimization/revision_visual_audit/page-1.png"
+    },
+    {
+      "page": 2,
+      "width": 612,
+      "height": 792,
+      "content_ratio": 0.14062190532778768,
+      "vertical_span_ratio": 0.9747474747474747,
+      "max_content_y_ratio": 0.9987373737373737,
+      "status": "pass",
+      "image": "clients/skytherapies/build/2026-05-04_search_optimization/revision_visual_audit/page-2.png"
+    },
+    {
+      "page": 3,
+      "width": 612,
+      "height": 792,
+      "content_ratio": 0.08752970885323827,
+      "vertical_span_ratio": 0.9494949494949495,
+      "max_content_y_ratio": 0.9734848484848485,
+      "status": "pass",
+      "image": "clients/skytherapies/build/2026-05-04_search_optimization/revision_visual_audit/page-3.png"
+    },
+    {
+      "page": 4,
+      "width": 612,
+      "height": 792,
+      "content_ratio": 0.2836225820294448,
+      "vertical_span_ratio": 0.9747474747474747,
+      "max_content_y_ratio": 0.9987373737373737,
+      "status": "pass",
+      "image": "clients/skytherapies/build/2026-05-04_search_optimization/revision_visual_audit/page-4.png"
+    },
+    {
+      "page": 5,
+      "width": 612,
+      "height": 792,
+      "content_ratio": 0.07881304878853898,
+      "vertical_span_ratio": 0.9494949494949495,
+      "max_content_y_ratio": 0.9734848484848485,
+      "status": "pass",
+      "image": "clients/skytherapies/build/2026-05-04_search_optimization/revision_visual_audit/page-5.png"
+    }
+  ]
+}

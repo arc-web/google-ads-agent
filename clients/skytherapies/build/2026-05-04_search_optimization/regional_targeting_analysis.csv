@@ -1,0 +1,28 @@
+location,campaign,impressions,interactions,cost,conversions,recommendation,bid_adjustment_review,rationale
+"Ontario, Canada",Search - Skytherapies,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Newfoundland and Labrador, Canada",Search - Skytherapies,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Ontario, Canada",EMDR therapy for teens,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Ontario, Canada",Call - Performance,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Newfoundland and Labrador, Canada",Call - Performance,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Mississauga, Ontario, Canada",ARC - Regional - Search,4.0,0.0,0.0,0.0,Hold for review,No positive modifier yet.,"Some interaction volume, but no conversion evidence in this window."
+"Brampton, Ontario, Canada",ARC - Regional - Search,3.0,0.0,0.0,0.0,Scrutinize,No positive modifier. Consider reduction if weak trend continues.,Low interaction quality and no conversions.
+"Markham, Ontario, Canada",ARC - Regional - Search,2.0,0.0,0.0,0.0,Observe,None,Insufficient evidence for a targeting change.
+"Richmond Hill, Ontario, Canada",ARC - Regional - Search,5.0,0.0,0.0,0.0,Scrutinize,No positive modifier. Consider reduction if weak trend continues.,Low interaction quality and no conversions.
+"20.0|mi|(43.761538,-79.411079)",ARC - Regional - Search,1.0,0.0,0.0,0.0,Observe,None,Insufficient evidence for a targeting change.
+"Vaughan, Ontario, Canada",ARC - Regional - Search,3.0,0.0,0.0,0.0,Scrutinize,No positive modifier. Consider reduction if weak trend continues.,Low interaction quality and no conversions.
+"Toronto, Ontario, Canada",ARC - Regional - Search,90.0,7.0,95.67,0.0,Observe,None,Insufficient evidence for a targeting change.
+"Toronto, Ontario, Canada",ARC - Search - Services,1413.0,93.0,486.89,2.0,Core focus,Review modest positive modifier only after budget and CPA tolerance are confirmed.,"Highest volume and 2 conversions, but CPA is materially higher than Markham."
+"Vaughan, Ontario, Canada",ARC - Search - Services,105.0,2.0,5.28,0.0,Scrutinize,No positive modifier. Consider reduction if weak trend continues.,Low interaction quality and no conversions.
+"Mississauga, Ontario, Canada",ARC - Search - Services,176.0,6.0,10.26,0.0,Hold for review,No positive modifier yet.,"Some interaction volume, but no conversion evidence in this window."
+"20.0|mi|North York, ON",ARC - Search - Services,106.0,5.0,25.32,0.0,Hold for review,No positive modifier yet.,"Some interaction volume, but no conversion evidence in this window."
+"Richmond Hill, Ontario, Canada",ARC - Search - Services,61.0,2.0,5.5,0.0,Scrutinize,No positive modifier. Consider reduction if weak trend continues.,Low interaction quality and no conversions.
+"Markham, Ontario, Canada",ARC - Search - Services,98.0,7.0,40.87,1.0,Priority review,Review positive modifier or dedicated Markham service coverage.,1 conversion on lower spend makes Markham the strongest efficiency signal.
+"Brampton, Ontario, Canada",ARC - Search - Services,162.0,2.0,11.11,0.0,Scrutinize,No positive modifier. Consider reduction if weak trend continues.,Low interaction quality and no conversions.
+"Vaughan, Ontario, Canada",MF - Search - 15 Feb 2026,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Toronto, Ontario, Canada",MF - Search - 15 Feb 2026,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Richmond Hill, Ontario, Canada",MF - Search - 15 Feb 2026,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Markham, Ontario, Canada",MF - Search - 15 Feb 2026,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Brampton, Ontario, Canada",MF - Search - 15 Feb 2026,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Mississauga, Ontario, Canada",MF - Search - 15 Feb 2026,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"20.0|mi|North York, ON",MF - Search - 15 Feb 2026,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.
+"Ontario, Canada",Psychotherapy for chronic pain,0.0,0.0,0.0,0.0,No action,None,No current activity in this report window.

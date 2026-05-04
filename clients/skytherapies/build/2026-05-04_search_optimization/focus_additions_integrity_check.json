@@ -1,0 +1,60 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "name": "added_rows_present",
+      "passed": true,
+      "detail": "2 added rows"
+    },
+    {
+      "name": "added_keywords_phrase_only",
+      "passed": true,
+      "detail": [
+        "Phrase"
+      ]
+    },
+    {
+      "name": "added_keywords_plain_text",
+      "passed": true,
+      "detail": [
+        "emdr therapy markham",
+        "chronic pain psychologist near me"
+      ]
+    },
+    {
+      "name": "no_broad_or_exact_additions",
+      "passed": true,
+      "detail": [
+        "Phrase"
+      ]
+    },
+    {
+      "name": "no_search_partners_enabled_on_added_rows",
+      "passed": true,
+      "detail": [
+        "",
+        ""
+      ]
+    },
+    {
+      "name": "location_id_header_present",
+      "passed": true,
+      "detail": "Location ID header checked"
+    },
+    {
+      "name": "html_has_platform_sources",
+      "passed": true,
+      "detail": "Google source links checked"
+    },
+    {
+      "name": "html_has_no_em_dash",
+      "passed": true,
+      "detail": "em dash scan"
+    }
+  ],
+  "notes": [
+    "Shared validator cannot fully validate the additions delta because it requires complete campaign, RSA, and location context.",
+    "Full source-derived review export still contains 7 pre-existing Exact keyword rows and 48 pre-existing Negative Exact keyword rows from the Sky export.",
+    "Those pre-existing source issues were not rewritten in this optimization pass."
+  ]
+}
