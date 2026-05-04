@@ -462,6 +462,9 @@ def youtube_video_rows(
 def discover_youtube_channel_video_urls(channel_url: str, limit: int = 24) -> list[str]:
     if not channel_url:
         return []
+    direct_video_id = parse_youtube_video_id(channel_url)
+    if direct_video_id:
+        return [canonical_youtube_url(direct_video_id)]
     parsed = urllib.parse.urlparse(channel_url)
     host = (parsed.hostname or "").lower().removeprefix("www.")
     if not host.endswith("youtube.com"):
