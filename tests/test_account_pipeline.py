@@ -63,6 +63,17 @@ def test_copy_gate_requires_long_description_cta_and_value_prop() -> None:
         "This message has enough characters to pass length but says almost nothing. Call Today.",
         constraints,
     )
+    assert "description_generic_workflow_language" in candidate_issues(
+        "description",
+        "Request details to confirm service fit audience needs timing and budget before launch.",
+        constraints,
+    )
+    assert "description_missing_service_specificity" in candidate_issues(
+        "description",
+        "Review support options with practical local guidance and a focused team. Call Today.",
+        constraints,
+        {"service_terms": ["lay", "counselor", "academy"]},
+    )
 
 
 def test_copy_gate_blocks_unverified_delivery_and_hard_superlatives() -> None:
@@ -108,6 +119,36 @@ def test_build_rsa_copy_uses_verified_delivery_mode_only() -> None:
     assert all(75 <= len(description) <= 90 for description in bundle.descriptions)
     assert any("online and in-person" in description.lower() for description in bundle.descriptions)
     assert not [candidate for candidate in bundle.candidates if candidate.status == "fail"]
+
+
+def test_build_rsa_copy_uses_lay_counselor_service_logic_in_descriptions() -> None:
+    bundle = build_rsa_copy(
+        campaign="ARC - Search - Mental Health Consulting - V1",
+        ad_group="Services - Lay Counselor Academy",
+        service="Lay Counselor Academy",
+        client_name="EM Consulting",
+        geo=["California, United States|21137"],
+        keywords=["lay counselor academy"],
+        constraints=CopyConstraints(),
+        source_evidence={
+            "service_terms": ["lay", "counselor", "academy"],
+            "matched_terms": ["lay", "counselor", "academy"],
+            "landing_page_claims": ["staff training for lay counseling skills and mental health access"],
+            "copy_allowed_claims": ["staff training for lay counseling skills and mental health access"],
+            "service_logic": {
+                "service_mechanism": "Training staff in lay counseling skills",
+                "outcome": "Expanded mental health access through trained lay counselor teams",
+                "concept_tokens": ["academy", "access", "counseling", "counselor", "lay", "mental", "staff", "training"],
+            },
+        },
+    )
+
+    text = " ".join(bundle.descriptions).lower()
+    tokens = set(token for token in text.replace(".", " ").replace(",", " ").split() if token)
+    assert len(bundle.descriptions) == 4
+    assert not any(phrase in text for phrase in ("campaign approval", "account import", "launch readiness"))
+    assert {"lay", "staff", "training"} <= tokens
+    assert {"counselor", "counseling"} & tokens
 
 
 def test_account_pipeline_build_creates_search_rebuild_contract(tmp_path: Path) -> None:

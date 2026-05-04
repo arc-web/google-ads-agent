@@ -482,6 +482,46 @@ def test_rsa_description_without_cta_fails(tmp_path: Path) -> None:
     assert "description_missing_cta" in issue_rules(report)
 
 
+@pytest.mark.parametrize(
+    "cta",
+    [
+        "Book Your Reservation",
+        "Reserve Your Table",
+        "Check Availability",
+        "Book A Tasting Menu",
+        "Book A Consultation",
+        "Confirm Fit",
+        "Call Us Today",
+        "Request A Quote",
+        "Schedule Service",
+        "Compare Options",
+        "Review Program Fit",
+        "Plan Next Steps",
+        "Schedule A Review",
+    ],
+)
+def test_contextual_rsa_description_ctas_pass(tmp_path: Path, cta: str) -> None:
+    csv_path = tmp_path / "staging.csv"
+    write_tsv(
+        csv_path,
+        [
+            campaign_row(),
+            keyword_row(),
+            rsa_row(
+                **{
+                    "Description 1": f"Review local support options with clear process and care team. {cta}."
+                }
+            ),
+            location_row(),
+        ],
+    )
+
+    report = validate_file(csv_path)
+
+    assert report["status"] == "pass"
+    assert "description_missing_cta" not in issue_rules(report)
+
+
 def test_rsa_description_without_value_prop_fails(tmp_path: Path) -> None:
     csv_path = tmp_path / "staging.csv"
     write_tsv(
@@ -498,6 +538,30 @@ def test_rsa_description_without_value_prop_fails(tmp_path: Path) -> None:
 
     assert report["status"] == "fail"
     assert "description_missing_value_prop" in issue_rules(report)
+
+
+def test_rsa_description_with_internal_workflow_language_fails(tmp_path: Path) -> None:
+    csv_path = tmp_path / "staging.csv"
+    write_tsv(
+        csv_path,
+        [
+            campaign_row(),
+            keyword_row(),
+            rsa_row(
+                **{
+                    "Description 1": (
+                        "Schedule today to compare support options before campaign approval and account import"
+                    )
+                }
+            ),
+            location_row(),
+        ],
+    )
+
+    report = validate_file(csv_path)
+
+    assert report["status"] == "fail"
+    assert "description_generic_workflow_language" in issue_rules(report)
 
 
 def test_missing_location_id_is_warning_not_failure(tmp_path: Path) -> None:

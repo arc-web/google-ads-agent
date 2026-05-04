@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import csv
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -58,7 +59,14 @@ def test_asset_generator_uses_evidence_and_blocks_guesswork(tmp_path: Path) -> N
     assert "gbp_linking_required" in {decision.reason for decision in plan.skipped_assets}
     assert Path(artifacts["ad_asset_research_matrix_json"]).exists()
     assert Path(artifacts["image_asset_manifest"]).exists()
-    assert any(candidate.status == "ready_for_import_package" for candidate in plan.candidate_assets)
+    manifest_rows = list(csv.DictReader(Path(artifacts["image_asset_manifest"]).open(encoding="utf-8", newline="")))
+    logo_rows = [row for row in manifest_rows if row["asset_type"] == "business_logo"]
+    assert logo_rows
+    assert any(row["variant_label"] == "Logo square" for row in logo_rows)
+    assert any(row["variant_label"] == "Logo landscape" for row in logo_rows)
+    assert all(row["local_path"].endswith(".jpg") for row in logo_rows if row["status"] == "ready_for_import_package")
+    assert any(row["business_name_match_status"] == "matched_to_website_business_name_evidence" for row in logo_rows)
+    assert any(candidate.status == "ready_for_import_package" and candidate.asset_type == "business_logo" for candidate in plan.candidate_assets)
 
 
 def test_asset_generator_skips_prices_promotions_and_calls_without_evidence(tmp_path: Path) -> None:

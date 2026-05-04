@@ -388,3 +388,92 @@ def unique(values: list[str]) -> list[str]:
             output.append(text)
             seen.add(key)
     return output
+
+
+
+def update_client_hq_media_inventory(
+    client_root: Path,
+    *,
+    media_package_dir: Path,
+    creative_manifest: dict[str, object],
+    youtube_manifest: dict[str, object],
+    youtube_account_discovery: dict[str, object],
+    validation_report: dict[str, object],
+) -> Path:
+    """Merge the latest creative media package summary into Client HQ."""
+    hq_dir = client_root / "docs" / "client_hq"
+    hq_dir.mkdir(parents=True, exist_ok=True)
+    json_path = hq_dir / "client_hq.json"
+    payload: dict[str, object] = {}
+    if json_path.exists():
+        try:
+            payload = json.loads(json_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            payload = {"client_hq_parse_warning": "Existing client_hq.json was unreadable before media inventory update."}
+    inventory = build_media_inventory_summary(
+        client_root=client_root,
+        media_package_dir=media_package_dir,
+        creative_manifest=creative_manifest,
+        youtube_manifest=youtube_manifest,
+        youtube_account_discovery=youtube_account_discovery,
+        validation_report=validation_report,
+    )
+    payload["media_inventory"] = inventory
+    history = payload.get("media_inventory_history", [])
+    if not isinstance(history, list):
+        history = []
+    history = [inventory, *history]
+    payload["media_inventory_history"] = history[:10]
+    json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return json_path
+
+
+def build_media_inventory_summary(
+    *,
+    client_root: Path,
+    media_package_dir: Path,
+    creative_manifest: dict[str, object],
+    youtube_manifest: dict[str, object],
+    youtube_account_discovery: dict[str, object],
+    validation_report: dict[str, object],
+) -> dict[str, object]:
+    assets = creative_manifest.get("assets", [])
+    assets = assets if isinstance(assets, list) else []
+    videos = youtube_manifest.get("videos", [])
+    videos = videos if isinstance(videos, list) else []
+    accounts = youtube_account_discovery.get("accounts", [])
+    accounts = accounts if isinstance(accounts, list) else []
+    issues = validation_report.get("issues", [])
+    issues = issues if isinstance(issues, list) else []
+    return {
+        "latest_media_package": relative_to_client(client_root, media_package_dir),
+        "image_assets": {
+            "source_count": len(assets),
+            "variant_count": sum(len(asset.get("variants", [])) for asset in assets if isinstance(asset, dict)),
+            "generated_draft_count": sum(1 for asset in assets if isinstance(asset, dict) and asset.get("source_type") == "generated_draft"),
+            "approved_count": sum(1 for asset in assets if isinstance(asset, dict) and asset.get("approval_status") == "approved"),
+            "campaign_ready_count": sum(1 for asset in assets if isinstance(asset, dict) and asset.get("campaign_ready")),
+            "approval_required": bool(creative_manifest.get("approval_required", True)),
+        },
+        "youtube": {
+            "channel_url": youtube_manifest.get("youtube_channel_url", ""),
+            "video_count": len(videos),
+            "account_candidate_count": len(accounts),
+            "readiness_status": youtube_account_discovery.get("readiness_status", "not_required"),
+            "video_required": bool(youtube_account_discovery.get("video_required", False)),
+            "campaign_ready_video_count": sum(1 for video in videos if isinstance(video, dict) and video.get("campaign_ready")),
+            "campaign_ready_account_count": sum(1 for account in accounts if isinstance(account, dict) and account.get("campaign_ready")),
+            "approval_required": bool(youtube_manifest.get("approval_required", True)),
+        },
+        "validation": {
+            "status": validation_report.get("status", "unknown"),
+            "blockers": [issue for issue in issues if isinstance(issue, dict) and issue.get("issue_type") in {"blocked_pending_client_video", "youtube_campaign_ready_without_approval", "youtube_campaign_ready_without_sync_confirmation", "youtube_campaign_ready_without_rights_confirmation", "unapproved_campaign_ready_asset"}],
+        },
+    }
+
+
+def relative_to_client(client_root: Path, path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(client_root.resolve()))
+    except ValueError:
+        return path.name

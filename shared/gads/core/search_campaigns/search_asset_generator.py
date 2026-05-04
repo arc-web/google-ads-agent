@@ -5,12 +5,16 @@ from __future__ import annotations
 import csv
 import json
 import re
-import shutil
 import urllib.parse
 import urllib.request
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Protocol
+
+from shared.creative_assets.build_creative_asset_package import (
+    Candidate as CreativeCandidate,
+    process_assets,
+)
 
 
 SITELINK_TEXT_LIMIT = 25
@@ -29,6 +33,9 @@ IMAGE_MIN_WIDTH = 300
 IMAGE_MIN_HEIGHT = 300
 LOGO_MIN_WIDTH = 128
 LOGO_MIN_HEIGHT = 128
+LOGO_LANDSCAPE_MIN_WIDTH = 512
+LOGO_LANDSCAPE_MIN_HEIGHT = 128
+MEDIA_IMPORT_VERIFICATION_STATUS = "needs_advertiser_verification_business_name_match_and_rights_review"
 
 GENERIC_SITELINK_LABELS = {
     "about",
@@ -181,6 +188,14 @@ class AssetCandidate:
     status: str
     reason: str
     local_path: str = ""
+    variant_label: str = ""
+    width: int = 0
+    height: int = 0
+    file_size: int = 0
+    file_format: str = ""
+    alt_text: str = ""
+    business_name_match_status: str = "needs_review"
+    verification_status: str = MEDIA_IMPORT_VERIFICATION_STATUS
 
 
 @dataclass
@@ -294,9 +309,16 @@ def build_asset_research_matrix() -> list[dict[str, object]]:
         {
             "asset_type": "business_logo",
             "official_source": GOOGLE_SOURCE_URLS["business_information_requirements"],
-            "limits": {"minimum_local_manifest_check": "128x128 with logo evidence"},
+            "limits": {
+                "square_minimum": "128x128",
+                "square_recommended": "1200x1200",
+                "landscape_minimum": "512x128",
+                "landscape_recommended": "1200x300",
+                "file_size_kb": 5120,
+                "output_formats": ["JPG", "PNG"],
+            },
             "editor_fields": ["manifest only until Editor import/export is verified"],
-            "generation_rule": "Require website logo evidence and flag approval depends on advertiser verification.",
+            "generation_rule": "Require first-party logo evidence, local import files, and human verification of advertiser status, rights, and business name match.",
         },
         {
             "asset_type": "business_name",
@@ -387,6 +409,31 @@ def is_allowed_media_file(path: Path) -> bool:
     return path.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"}
 
 
+def token_set(value: str) -> set[str]:
+    return {token for token in re.split(r"[^a-z0-9]+", value.lower()) if len(token) >= 3}
+
+
+def candidate_business_name_match(candidate: AssetCandidate, plan: SearchAssetPlan) -> str:
+    names = []
+    for item in plan.evidence.get("business_names", []):
+        if isinstance(item, dict):
+            names.append(str(item.get("value", "")))
+    if not names:
+        return "brand_verification_required"
+    candidate_tokens = token_set(" ".join([candidate.alt_text, candidate.value, candidate.source_url]))
+    name_tokens = set().union(*(token_set(name) for name in names))
+    if name_tokens and len(candidate_tokens & name_tokens) >= min(2, len(name_tokens)):
+        return "matched_to_website_business_name_evidence"
+    return "brand_verification_required"
+
+
+def plan_website_url(plan: SearchAssetPlan, fallback: str = "") -> str:
+    websites = plan.evidence.get("website", [])
+    if isinstance(websites, list) and websites and isinstance(websites[0], dict):
+        return str(websites[0].get("value", "")) or fallback
+    return fallback
+
+
 def user_intent_sitelink_text(url: str, fallback: str) -> str:
     parsed = urllib.parse.urlparse(url)
     slug = parsed.path.rstrip("/").split("/")[-1]
@@ -422,6 +469,7 @@ class SearchAssetGenerator:
     ) -> SearchAssetPlan:
         plan = SearchAssetPlan(official_rules={"sources": GOOGLE_SOURCE_URLS, "matrix": build_asset_research_matrix()})
         evidence = asset_evidence(website_scan)
+        evidence["website"] = [{"value": website, "source": website}]
         plan.evidence = evidence
         source_urls = self._candidate_urls(source_pages, ad_groups, website)
 
@@ -637,14 +685,48 @@ class SearchAssetGenerator:
             for candidate in candidates:
                 width, height = image_dimensions(candidate)
                 path = local_file_from_url(candidate.get("url", ""))
-                if not path or not path.exists() or not is_allowed_media_file(path):
-                    plan.candidate_assets.append(AssetCandidate(asset_type, candidate.get("url", ""), candidate.get("source", ""), candidate.get("evidence_type", asset_type), "needs_review", "remote_or_missing_file"))
+                if path and path.exists() and not is_allowed_media_file(path):
+                    plan.candidate_assets.append(
+                        AssetCandidate(
+                            asset_type,
+                            candidate.get("url", ""),
+                            candidate.get("source", ""),
+                            candidate.get("evidence_type", asset_type),
+                            "rejected",
+                            "unsupported_file_type",
+                            alt_text=candidate.get("alt", ""),
+                        )
+                    )
                     continue
-                if path.suffix.lower() != ".svg" and (width < min_width or height < min_height):
-                    plan.candidate_assets.append(AssetCandidate(asset_type, candidate.get("url", ""), candidate.get("source", ""), candidate.get("evidence_type", asset_type), "rejected", "missing_or_small_dimensions"))
+                if path and path.exists() and path.suffix.lower() != ".svg" and width and height and (width < min_width or height < min_height):
+                    plan.candidate_assets.append(
+                        AssetCandidate(
+                            asset_type,
+                            candidate.get("url", ""),
+                            candidate.get("source", ""),
+                            candidate.get("evidence_type", asset_type),
+                            "rejected",
+                            "missing_or_small_dimensions",
+                            alt_text=candidate.get("alt", ""),
+                        )
+                    )
                     continue
-                plan.candidate_assets.append(AssetCandidate(asset_type, candidate.get("url", ""), candidate.get("source", ""), candidate.get("evidence_type", asset_type), "ready_for_import_package", "passed_local_manifest_checks"))
+                plan.candidate_assets.append(
+                    AssetCandidate(
+                        asset_type,
+                        candidate.get("url", ""),
+                        candidate.get("source", ""),
+                        candidate.get("evidence_type", asset_type),
+                        "candidate_pending_local_import_processing",
+                        "requires_download_resize_and_editor_import_review",
+                        alt_text=candidate.get("alt", ""),
+                    )
+                )
         plan.human_review_required.append("image_and_logo_assets_require_google_ads_editor_import_export_verification")
+        if evidence.get("logo_candidates"):
+            plan.human_review_required.append(MEDIA_IMPORT_VERIFICATION_STATUS)
+        else:
+            plan.human_review_required.append("no_business_logo_candidate_found")
 
     def _plan_location_review(self, plan: SearchAssetPlan, campaign: str, evidence: dict[str, list[dict[str, str]]]) -> None:
         if evidence.get("gbp_mentions"):
@@ -679,30 +761,168 @@ def write_asset_research_artifacts(build_dir: Path) -> dict[str, Path]:
 
 def write_media_import_package(build_dir: Path, plan: SearchAssetPlan) -> dict[str, Path]:
     package_dir = build_dir / "ad_asset_import_package"
+    source_dir = package_dir / "source"
+    processed_dir = package_dir / "processed"
     package_dir.mkdir(parents=True, exist_ok=True)
     manifest_path = build_dir / "image_asset_manifest.csv"
+    original_candidates = list(plan.candidate_assets)
+    processable = [
+        candidate
+        for candidate in original_candidates
+        if candidate.status == "candidate_pending_local_import_processing"
+    ]
+    creative_candidates = [
+        CreativeCandidate(
+            source_url=candidate.value,
+            page_url=candidate.source_url,
+            source_type=candidate.evidence_type,
+            alt=candidate.alt_text,
+            is_logo=candidate.asset_type == "business_logo",
+        )
+        for candidate in processable
+    ]
+    manifest_rows = []
+    if creative_candidates:
+        manifest_rows, _ = process_assets(
+            candidates=creative_candidates,
+            source_dir=source_dir,
+            processed_dir=processed_dir,
+            website_url=plan_website_url(plan, processable[0].source_url),
+            service_theme="",
+            landing_pages=[],
+            brand_rules="",
+            allowed_domains=[],
+            minimum_approved_source_images=0,
+        )
+
+    by_source = {candidate.value: candidate for candidate in processable}
+    normalized_candidates: list[AssetCandidate] = [
+        candidate
+        for candidate in original_candidates
+        if candidate.status != "candidate_pending_local_import_processing"
+    ]
+    fieldnames = [
+        "asset_type",
+        "variant_label",
+        "local_path",
+        "source_url",
+        "source_page",
+        "width",
+        "height",
+        "file_size",
+        "format",
+        "business_name_match_status",
+        "verification_status",
+        "status",
+        "reason",
+    ]
     with manifest_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["asset_type", "source_url", "local_path", "status", "reason", "evidence_type"])
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
-        for candidate in plan.candidate_assets:
-            local_path = ""
-            if candidate.status == "ready_for_import_package":
-                source_path = local_file_from_url(candidate.value)
-                if source_path:
-                    target = package_dir / f"{candidate.asset_type}_{source_path.name}"
-                    shutil.copy2(source_path, target)
-                    local_path = str(target)
-                    candidate.local_path = local_path
+        for row in manifest_rows:
+            source_url = str(row.get("source_url", ""))
+            original = by_source.get(source_url)
+            asset_type = "business_logo" if row.get("is_logo") else "image"
+            variants = row.get("variants", [])
+            source_status = str(row.get("status", "needs_review"))
+            source_reason = "; ".join(row.get("risk_flags", []) or row.get("notes", []) or [source_status])
+            if not variants:
+                candidate = AssetCandidate(
+                    asset_type=asset_type,
+                    value=source_url,
+                    source_url=str(row.get("page_url", "")),
+                    evidence_type=str(row.get("source_type", asset_type)),
+                    status="rejected" if source_status == "rejected" else "needs_review",
+                    reason=source_reason or "no_importable_variant_created",
+                    alt_text=str(row.get("alt", "")),
+                    width=int(row.get("original_width", 0) or 0),
+                    height=int(row.get("original_height", 0) or 0),
+                    file_size=int(row.get("original_bytes", 0) or 0),
+                    business_name_match_status=candidate_business_name_match(original or AssetCandidate(asset_type, source_url, str(row.get("page_url", "")), str(row.get("source_type", asset_type)), "", "", alt_text=str(row.get("alt", ""))), plan)
+                    if asset_type == "business_logo"
+                    else "not_applicable",
+                )
+                normalized_candidates.append(candidate)
+                writer.writerow(
+                    {
+                        "asset_type": candidate.asset_type,
+                        "variant_label": candidate.variant_label,
+                        "local_path": candidate.local_path,
+                        "source_url": candidate.value,
+                        "source_page": candidate.source_url,
+                        "width": candidate.width,
+                        "height": candidate.height,
+                        "file_size": candidate.file_size,
+                        "format": candidate.file_format,
+                        "business_name_match_status": candidate.business_name_match_status,
+                        "verification_status": candidate.verification_status,
+                        "status": candidate.status,
+                        "reason": candidate.reason,
+                    }
+                )
+                continue
+            for variant in variants:
+                candidate = AssetCandidate(
+                    asset_type=asset_type,
+                    value=source_url,
+                    source_url=str(row.get("page_url", "")),
+                    evidence_type=str(row.get("source_type", asset_type)),
+                    status="ready_for_import_package",
+                    reason="processed_local_file_created_requires_editor_and_verification_review",
+                    local_path=str(variant.get("file", "")),
+                    variant_label=str(variant.get("variant_label", "")),
+                    width=int(variant.get("width", 0) or 0),
+                    height=int(variant.get("height", 0) or 0),
+                    file_size=int(variant.get("file_size", 0) or 0),
+                    file_format="JPG",
+                    alt_text=str(row.get("alt", "")),
+                    business_name_match_status=candidate_business_name_match(original or AssetCandidate(asset_type, source_url, str(row.get("page_url", "")), str(row.get("source_type", asset_type)), "", "", alt_text=str(row.get("alt", ""))), plan)
+                    if asset_type == "business_logo"
+                    else "not_applicable",
+                )
+                if asset_type == "business_logo" and candidate.business_name_match_status == "brand_verification_required":
+                    candidate.verification_status = "brand_verification_required"
+                normalized_candidates.append(candidate)
+                writer.writerow(
+                    {
+                        "asset_type": candidate.asset_type,
+                        "variant_label": candidate.variant_label,
+                        "local_path": candidate.local_path,
+                        "source_url": candidate.value,
+                        "source_page": candidate.source_url,
+                        "width": candidate.width,
+                        "height": candidate.height,
+                        "file_size": candidate.file_size,
+                        "format": candidate.file_format,
+                        "business_name_match_status": candidate.business_name_match_status,
+                        "verification_status": candidate.verification_status,
+                        "status": candidate.status,
+                        "reason": candidate.reason,
+                    }
+                )
+        for candidate in normalized_candidates:
+            if candidate.value in by_source:
+                continue
+            if candidate.local_path or candidate.status == "ready_for_import_package":
+                continue
             writer.writerow(
                 {
                     "asset_type": candidate.asset_type,
                     "source_url": candidate.value,
-                    "local_path": local_path,
+                    "source_page": candidate.source_url,
+                    "local_path": candidate.local_path,
+                    "variant_label": candidate.variant_label,
+                    "width": candidate.width,
+                    "height": candidate.height,
+                    "file_size": candidate.file_size,
+                    "format": candidate.file_format,
+                    "business_name_match_status": candidate.business_name_match_status,
+                    "verification_status": candidate.verification_status,
                     "status": candidate.status,
                     "reason": candidate.reason,
-                    "evidence_type": candidate.evidence_type,
                 }
             )
+    plan.candidate_assets = normalized_candidates
     return {"ad_asset_import_package": package_dir, "image_asset_manifest": manifest_path}
 
 

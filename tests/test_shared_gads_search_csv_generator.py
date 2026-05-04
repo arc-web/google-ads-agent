@@ -30,7 +30,7 @@ def _headlines() -> list[str]:
 def _descriptions() -> list[str]:
     return [
         "Review service support options with clear local guidance and a focused team. Call Today.",
-        "Compare availability, budget, and service fit before choosing next steps. Book Today.",
+        "Compare availability, budget, and service options before choosing next steps. Book Today.",
         "Schedule practical service guidance with an experienced team. Schedule Today.",
         "Request service details, timing, and support options before review. Request Details.",
     ]
