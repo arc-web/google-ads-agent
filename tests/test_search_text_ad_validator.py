@@ -20,7 +20,7 @@ def rsa_row(**overrides):
     for index in range(1, 16):
         row[f"Headline {index}"] = f"Focused Testing Support {index}"
     for index in range(1, 5):
-        row[f"Description {index}"] = f"Schedule focused testing support with a care team {index}."
+        row[f"Description {index}"] = f"Review testing support options with a focused local care team {index}. Schedule Today."
     row.update(overrides)
     return row
 

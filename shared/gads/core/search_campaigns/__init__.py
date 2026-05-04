@@ -5,6 +5,7 @@ The active Search staging contract currently lives in
 compatibility material until individual generators are rewritten and tested.
 """
 
+from .search_asset_generator import SearchAssetGenerator, SearchAssetPlan
 from .search_csv_generator import SearchCSVGenerator
 
-__all__ = ["SearchCSVGenerator"]
+__all__ = ["SearchAssetGenerator", "SearchAssetPlan", "SearchCSVGenerator"]

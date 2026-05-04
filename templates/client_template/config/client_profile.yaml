@@ -51,6 +51,7 @@ copy_defaults:
   rsa_headlines: 15
   rsa_descriptions: 4
   headline_max_chars: 30
+  description_min_chars: 75
   description_max_chars: 90
   path_max_chars: 15
   one_word_headlines_allowed: false
@@ -63,3 +64,11 @@ reports:
   rsa_asset_report: "reports/performance_inputs/rsa_asset_report.csv"
   landing_page_report: "reports/performance_inputs/landing_page_report.csv"
   conversion_action_report: "reports/performance_inputs/conversion_action_report.csv"
+  quality_score_report: "reports/performance_inputs/quality_score_report.csv"
+  auction_insights_report: "reports/performance_inputs/auction_insights_report.csv"
+  recommendations_report: "reports/performance_inputs/recommendations_report.csv"
+  disapproval_report: "reports/performance_inputs/disapproval_report.csv"
+  audience_report: "reports/performance_inputs/audience_report.csv"
+
+competitor_pruning:
+  negative_phrase_terms: []

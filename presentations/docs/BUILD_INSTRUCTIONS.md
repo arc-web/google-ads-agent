@@ -87,7 +87,7 @@ python3 presentations/tools/build_initial_search_campaign.py \
   --monthly-budget 3000
 ```
 
-The one-shot command scans the site, writes reviewed source artifacts, builds a paused Google Ads Editor staging CSV, validates it, exports the HTML/PDF report, runs audits, and writes `run_manifest.json`. The generated CSV filename includes the client slug and date/time, for example `client_slug_google_ads_editor_staging_20260504_153045.csv`.
+The one-shot command scans the site, writes reviewed source artifacts, builds a paused Google Ads Editor staging CSV, validates it, exports the HTML/PDF report, writes `client_email_draft.md`, runs audits, and writes `run_manifest.json`. The generated CSV filename includes the client slug and date/time, for example `client_slug_google_ads_editor_staging_20260504_153045.csv`. Client emails should mention the attached PDF and campaign build, not the raw CSV.
 
 Build only the client-facing new campaign review from existing artifacts:
 

@@ -46,6 +46,7 @@ clients/{agency}/{client}/
   config/
     client_profile.yaml
   docs/
+    client_hq/
     intake.md
   reports/
     performance_inputs/
@@ -67,6 +68,9 @@ Performance reports:
 
 Client notes:
 
+- `docs/client_hq/`
+- `docs/client_hq/client_hq.md`
+- `docs/client_hq/client_hq.json`
 - `docs/intake.md`
 - `docs/client_onboarding_questionnaire.md`
 - `docs/client_revision_feedback_template.md`
@@ -92,6 +96,7 @@ Before generating a rebuild, fill in:
 
 - Client display name.
 - Website URL.
+- Durable Client HQ facts in `docs/client_hq/` when available.
 - Agency slug.
 - Client slug.
 - Primary market.

@@ -23,16 +23,19 @@ For a first review:
 
 - `Client_Rebuild_Review.html`
 - `Client_Rebuild_Review.pdf`
+- `client_email_draft.md`
 
 For a revision review:
 
 - `Client_Rebuild_Review_R1.html`
 - `Client_Rebuild_Review_R1.pdf`
+- `client_email_draft.md`
 
 For a new campaign review with no inherited ad account:
 
 - `Client_New_Campaign_Review.html`
 - `Client_New_Campaign_Review.pdf`
+- `client_email_draft.md`
 
 The revision review should replace the prior review for client approval. It should keep clear lineage:
 
@@ -86,7 +89,7 @@ python3 presentations/tools/build_initial_search_campaign.py \
   --monthly-budget 3000
 ```
 
-The one-shot builder creates the staging CSV, source artifacts, report HTML/PDF, visual audit folder, and `run_manifest.json`. Generated CSV names use `{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv` so operators can find the correct dated version in Google Ads Editor. To rebuild only the report from existing artifacts, use:
+The one-shot builder creates the staging CSV, source artifacts, report HTML/PDF, `client_email_draft.md`, visual audit folder, and `run_manifest.json`. Generated CSV names use `{client_slug}_google_ads_editor_staging_{YYYYMMDD_HHMMSS}.csv` so operators can find the correct dated version in Google Ads Editor. Client emails reference the attached PDF and the campaign build, not the raw CSV. To rebuild only the report from existing artifacts, use:
 
 ```bash
 python3 presentations/tools/build_new_campaign_report.py \

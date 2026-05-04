@@ -33,6 +33,11 @@ from copy_engine.search.descriptions import DescriptionGenerator
 from copy_engine.search.extensions import ExtensionGenerator
 from copy_engine.search.headlines import HeadlineGenerator
 
+try:
+    from shared.copy_engine.search.copy_matrix import CopyConstraints, build_rsa_copy
+except ModuleNotFoundError:  # pragma: no cover - supports PYTHONPATH=shared execution.
+    from copy_engine.search.copy_matrix import CopyConstraints, build_rsa_copy
+
 
 # ---------------------------------------------------------------------------
 # CSV column names for Google Ads Editor TSV exports
@@ -217,6 +222,57 @@ class CopyEngineOrchestrator:
         print(f"\n[generate] Report written to:\n  {report_path}")
         print("  TODO: wire google_ads_editor_exporter\n")
         return report_path
+
+    def generate_search_exportable(
+        self,
+        campaign_name: str = "ARC - Search - Services - V1",
+        constraints: CopyConstraints | None = None,
+    ) -> dict[str, object]:
+        """
+        Generate Search RSA copy in the shared export contract.
+
+        This is the bridge used by account rebuild runners. It returns passed
+        copy bundles plus the full candidate list so CSV export can consume
+        `rsa_copy_matrix.csv` instead of regenerating copy inline.
+        """
+        client_ctx = self._load_client_context_from_yaml()
+        constraints = constraints or CopyConstraints()
+        ad_groups = self._build_ad_group_contexts(client_ctx)
+        bundles: dict[str, dict[str, list[str]]] = {}
+        candidate_rows: list[dict[str, object]] = []
+
+        for ag_ctx in ad_groups:
+            bundle = build_rsa_copy(
+                campaign=campaign_name,
+                ad_group=ag_ctx.name,
+                service=ag_ctx.service,
+                client_name=client_ctx.practice_name or client_ctx.client,
+                geo=client_ctx.geo,
+                keywords=ag_ctx.top_keywords or [ag_ctx.service],
+                constraints=constraints,
+            )
+            bundles[ag_ctx.name] = {
+                "headlines": bundle.headlines,
+                "descriptions": bundle.descriptions,
+            }
+            for candidate in bundle.candidates:
+                candidate_rows.append(
+                    {
+                        "campaign": candidate.campaign,
+                        "ad_group": candidate.ad_group,
+                        "asset_type": candidate.asset_type,
+                        "slot": candidate.slot,
+                        "text": candidate.text,
+                        "chars": candidate.chars,
+                        "role": candidate.role,
+                        "source": candidate.source,
+                        "grade": candidate.grade,
+                        "status": candidate.status,
+                        "issues": candidate.issues,
+                    }
+                )
+
+        return {"campaign": campaign_name, "bundles": bundles, "copy_candidates": candidate_rows}
 
     # ------------------------------------------------------------------
     # CSV parsing

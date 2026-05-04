@@ -34,6 +34,25 @@ SearchMasterValidator = import_module("shared.validators.search_master_validator
 from shared.rebuild.staging_validator import REQUIRED_HEADERS, REQUIRED_RSA_DESCRIPTIONS, REQUIRED_RSA_HEADLINES
 
 
+GOOD_HEADLINES = [
+    "Licensed Therapy Near You",
+    "Private Care That Fits You",
+    "Book Your Private Consult",
+    "Anxiety Skills With CBT Help",
+    "Talk With Licensed Counselors",
+    "Online Visits For NY Adults",
+    "Clear Pricing Before Visits",
+    "Get Matched To The Right Fit",
+    "Evening Appointment Options",
+    "Therapy Plans Built For You",
+    "Practical Tools For Stress",
+    "Insurance Guidance Upfront",
+    "Meet A Therapist This Week",
+    "Care For Teens And Adults",
+    "Compassionate Clinical Care",
+]
+
+
 def headers() -> list[str]:
     output = list(REQUIRED_HEADERS)
     for header in REQUIRED_RSA_HEADLINES + REQUIRED_RSA_DESCRIPTIONS + ["Path 1", "Path 2"]:
@@ -97,10 +116,10 @@ def rsa_row(**overrides: str) -> dict[str, str]:
             "Status": "Enabled",
         },
     )
-    for index in range(1, 16):
-        row[f"Headline {index}"] = f"Focused Example Support {index}"
+    for index, headline in enumerate(GOOD_HEADLINES, start=1):
+        row[f"Headline {index}"] = headline
     for index in range(1, 5):
-        row[f"Description {index}"] = f"Schedule example support with a focused service team {index}."
+        row[f"Description {index}"] = f"Review example support options with a focused local service team {index}. Schedule Today."
     row.update(overrides)
     return row
 

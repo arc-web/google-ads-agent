@@ -29,10 +29,10 @@ def _headlines() -> list[str]:
 
 def _descriptions() -> list[str]:
     return [
-        "Get clear next steps from a local team focused on useful service support.",
-        "Review service options, availability, and fit before you decide.",
-        "Schedule a consultation and get answers from an experienced team.",
-        "Plan the right service path with practical guidance and transparent details.",
+        "Review service support options with clear local guidance and a focused team. Call Today.",
+        "Compare availability, budget, and service fit before choosing next steps. Book Today.",
+        "Schedule practical service guidance with an experienced team. Schedule Today.",
+        "Request service details, timing, and support options before review. Request Details.",
     ]
 
 
@@ -60,6 +60,36 @@ def test_search_csv_generator_writes_active_utf16_tsv_that_validates(tmp_path):
         "United States",
         location_id="2840",
     )
+    generator.add_sitelink(
+        "ARC - Search - Services - V1",
+        "Service Details",
+        "https://example.com/services/details",
+        ad_group="Core Services",
+        description_1="Review service details",
+        description_2="Confirm fit before launch",
+        level="ad_group",
+    )
+    generator.add_callout("ARC - Search - Services - V1", "Google Search Only")
+    generator.add_structured_snippet(
+        "ARC - Search - Services - V1",
+        "Services",
+        ["Consulting", "Repair", "Support"],
+    )
+    for header, price in (("Plan One", "$125"), ("Plan Two", "$225"), ("Plan Three", "$325")):
+        generator.add_price(
+            "ARC - Search - Services - V1",
+            header,
+            "Website listed price",
+            price,
+            "https://example.com/pricing",
+        )
+    generator.add_promotion(
+        "ARC - Search - Services - V1",
+        "Spring Offer",
+        "https://example.com/promo",
+        percent_off="10%",
+    )
+    generator.add_business_name("ARC - Search - Services - V1", "Example Services")
 
     output_path = tmp_path / "Google_Ads_Editor_Staging_CURRENT.csv"
     report = generator.write_and_validate(output_path)
@@ -70,6 +100,12 @@ def test_search_csv_generator_writes_active_utf16_tsv_that_validates(tmp_path):
     assert report["counts"]["keyword_rows"] == 1
     assert report["counts"]["rsa_rows"] == 1
     assert report["counts"]["location_rows"] == 1
+    assert report["counts"]["sitelink_rows"] == 1
+    assert report["counts"]["callout_rows"] == 1
+    assert report["counts"]["structured_snippet_rows"] == 1
+    assert report["counts"]["price_rows"] == 3
+    assert report["counts"]["promotion_rows"] == 1
+    assert report["counts"]["business_name_rows"] == 1
 
     with output_path.open("r", encoding="utf-16", newline="") as handle:
         rows = list(csv.DictReader(handle, delimiter="\t"))
@@ -79,7 +115,14 @@ def test_search_csv_generator_writes_active_utf16_tsv_that_validates(tmp_path):
     assert rows[2]["Keyword"] == "service consultation"
     assert rows[3]["Ad type"] == "Responsive search ad"
     assert rows[3]["Headline 15"] == "Start With A Service Call"
-    assert rows[3]["Description 4"].startswith("Plan the right service")
+    assert rows[3]["Description 4"].startswith("Request service details")
+    assert rows[5]["Asset type"] == "Sitelink"
+    assert rows[5]["Link text"] == "Service Details"
+    assert rows[6]["Callout text"] == "Google Search Only"
+    assert rows[7]["Structured snippet values"] == "Consulting;Repair;Support"
+    assert rows[8]["Price header"] == "Plan One"
+    assert rows[11]["Promotion target"] == "Spring Offer"
+    assert rows[12]["Business name"] == "Example Services"
 
 
 def test_search_csv_generator_rejects_search_partners():

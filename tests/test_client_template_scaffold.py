@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import subprocess
+import sys
 from pathlib import Path
 
 from shared.rebuild.scaffold_client import scaffold_client
@@ -20,6 +22,7 @@ def test_client_scaffold_materializes_active_template_filenames(tmp_path: Path) 
     assert not (target / "campaigns/account_export_template.csv").exists()
     assert (target / "reports/performance_inputs/search_terms_report.csv").exists()
     assert (target / "reports/performance_inputs/location_report.csv").exists()
+    assert (target / "docs/client_hq").is_dir()
 
 
 def test_client_scaffold_account_export_template_matches_active_staging_contract(tmp_path: Path) -> None:
@@ -74,3 +77,29 @@ def test_scaffold_does_not_overwrite_existing_client(tmp_path: Path) -> None:
         assert "Client directory already exists" in str(exc)
     else:
         raise AssertionError("Expected existing scaffold to be protected.")
+
+
+def test_scaffold_cli_accepts_custom_clients_dir(tmp_path: Path) -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            "shared/rebuild/scaffold_client.py",
+            "--agency",
+            "Example Agency",
+            "--client",
+            "Example Client",
+            "--display-name",
+            "Example Client",
+            "--website",
+            "https://example.com/",
+            "--clients-dir",
+            str(tmp_path),
+        ],
+        cwd=Path(__file__).resolve().parents[1],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "Created client scaffold" in result.stdout
+    assert (tmp_path / "example_agency" / "example_client" / "config" / "client_profile.yaml").exists()

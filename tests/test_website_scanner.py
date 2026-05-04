@@ -28,3 +28,37 @@ def test_website_scanner_writes_generic_review_artifacts(tmp_path: Path) -> None
     combined = json.dumps(raw_crawl).lower()
     assert "myexpertresume" not in combined
     assert "thinkhappylivehealthy" not in combined
+
+
+def test_website_scanner_extracts_copy_signals(tmp_path: Path) -> None:
+    site = tmp_path / "site"
+    site.mkdir()
+    index = site / "index.html"
+    index.write_text(
+        """<!doctype html>
+<html>
+<head><title>Signal Company</title></head>
+<body>
+  <h1>Repair Services</h1>
+  <p>Book online and in-person repair appointments with experienced local support.</p>
+  <p>Our answering service is available 24/7 for urgent service questions.</p>
+  <a href="repair-services.html">Repair Services</a>
+</body>
+</html>
+""",
+        encoding="utf-8",
+    )
+    (site / "repair-services.html").write_text(
+        "<html><body><h1>Repair Services</h1><p>Schedule repair support with practical options.</p></body></html>",
+        encoding="utf-8",
+    )
+
+    paths = WebsiteScanner().write_artifacts(start_url=index.as_uri(), output_dir=tmp_path / "out", max_pages=5)
+    website_scan = json.loads(paths["website_scan"].read_text(encoding="utf-8"))
+
+    facts = website_scan["extracted_facts"]
+    assert "virtual" in facts["delivery_modes"]
+    assert "in_person" in facts["delivery_modes"]
+    assert "24_7" in facts["availability_signals"]
+    assert "Book Today" in facts["cta_signals"]
+    assert website_scan["page_evidence"][index.as_uri()]["status"] == "readable"

@@ -1,0 +1,93 @@
+version: "2026-05-04"
+source_document: "ARC_Google_Ads_Training_Master_v14.docx"
+source_document_role: "department_training_standard"
+rules:
+  - id: negative_pruning_four_step
+    scope: optimization
+    title: Negative keyword pruning requires single-word risk review
+    action: "Review each component of a multi-word negative before staging the phrase."
+  - id: conversion_tracking_before_launch
+    scope: launch_readiness
+    title: Conversion tracking must be verified before launch
+    action: "Confirm each primary conversion is recording, named clearly, counted correctly, and has a value when bidding needs one."
+  - id: bidding_graduation
+    scope: optimization
+    title: Smart Bidding follows conversion volume
+    action: "Use manual or clicks-oriented collection before Target CPA or Target ROAS when conversion data is thin."
+  - id: quality_score_diagnostics
+    scope: optimization
+    title: Quality Score review uses keyword, ad, and landing page fit
+    action: "Inspect expected CTR, ad relevance, and landing page experience before treating bids as the only issue."
+  - id: audience_observation_default
+    scope: launch_readiness
+    title: Audiences start in Observation mode
+    action: "Use Targeting mode only for an explicitly restricted campaign such as remarketing."
+  - id: recommendations_triage
+    scope: manual_sop
+    title: Recommendations are reviewed, not accepted blindly
+    action: "Accept only recommendations supported by account data and dismiss auto-apply, broad match, and Display expansion by default."
+  - id: disapproval_response
+    scope: manual_sop
+    title: Fix policy issues before appeal when possible
+    action: "Correct capitalization, punctuation, misleading claims, trademark use, and URL mismatch before submitting appeals."
+  - id: automotive_profile_only
+    scope: automotive
+    title: Automotive rules are industry-scoped
+    action: "Apply model-year buffers, VLA handling, incentive-cycle checks, and MSRP warning handling only to automotive profiles."
+cadence:
+  daily:
+    - "Spend pacing"
+    - "Conversion tracking status"
+    - "Disapprovals"
+    - "Sudden conversion drop"
+  weekly:
+    - "Search terms review"
+    - "Negative keyword additions"
+  biweekly:
+    - "Ad copy performance"
+    - "Asset performance"
+  monthly:
+    - "Full account audit"
+    - "Quality Score review"
+    - "Landing page check"
+    - "Auction Insights"
+    - "Impression share"
+  quarterly:
+    - "Bid strategy review"
+    - "Campaign structure review"
+    - "Audience signal refresh"
+bid_strategy_thresholds:
+  manual_cpc:
+    min_conversions_30d: 0
+    recommendation: "Use for controlled data collection when conversion tracking is new or weak."
+  maximize_clicks:
+    min_conversions_30d: 0
+    recommendation: "Use only when traffic collection is the near-term goal and conversion optimization is not ready."
+  maximize_conversions:
+    min_conversions_30d: 15
+    recommendation: "Use after conversion tracking is recording and weekly conversion volume is consistent."
+  target_cpa:
+    min_conversions_30d: 30
+    recommendation: "Use after stable conversion volume, with target CPA set near recent actual CPA."
+  target_roas:
+    min_conversions_30d: 50
+    recommendation: "Use only when conversion value tracking is reliable."
+recommendation_policy:
+  accept_review:
+    - "Add missing conversion actions"
+    - "Add missing assets"
+    - "Review significant RSA improvements"
+  evaluate_critically:
+    - "Increase budget"
+    - "Add new keywords"
+    - "Switch to Smart Bidding"
+  dismiss_by_default:
+    - "Enable auto-applied recommendations"
+    - "Use broad match"
+    - "Add Display expansion to Search campaigns"
+    - "Raise CPA target without independent performance support"
+automotive_profile:
+  sacred_year_window: "current year, prior year, next year"
+  incentive_review_frequency: "monthly"
+  pmax_video_ground_truth: true
+  vla_new_vehicle_only: true
