@@ -49,6 +49,8 @@ class ReportContract:
     section_ids: list[str]
     approval_items: list[ApprovalItem]
     quality_gates: list[QualityGateResult]
+    report_html: str
+    report_pdf: str
     visual_audit_dir: str
     staging_csv: str
     validation_report: str
@@ -60,6 +62,8 @@ class ReportContract:
             "report_type": self.report_type.value,
             "report_title": self.report_title,
             "source_artifacts": dict(self.source_artifacts),
+            "report_html": self.report_html,
+            "report_pdf": self.report_pdf,
             "report_sections": list(self.section_ids),
             "approval_items": [asdict(item) for item in self.approval_items],
             "quality_gate_results": [asdict(gate) for gate in self.quality_gates],
@@ -124,6 +128,8 @@ def build_report_contract(
     report_type: ReportType | str,
     report_title: str,
     source_artifacts: dict[str, str | Path],
+    report_html: str | Path,
+    report_pdf: str | Path,
     visual_audit_dir: str | Path,
     staging_csv: str | Path,
     validation_report: str | Path,
@@ -141,6 +147,8 @@ def build_report_contract(
         section_ids=section_ids or list(REQUIRED_SECTIONS[parsed_type]),
         approval_items=approval_items or list(DEFAULT_APPROVAL_ITEMS),
         quality_gates=quality_gates or list(DEFAULT_QUALITY_GATES),
+        report_html=str(report_html),
+        report_pdf=str(report_pdf),
         visual_audit_dir=str(visual_audit_dir),
         staging_csv=str(staging_csv),
         validation_report=str(validation_report),
@@ -160,6 +168,10 @@ def validate_report_contract(contract: ReportContract) -> None:
 
     if not contract.report_title.strip():
         raise ValueError("Report title is required.")
+    if not contract.report_html.strip():
+        raise ValueError("Report HTML path is required.")
+    if not contract.report_pdf.strip():
+        raise ValueError("Report PDF path is required.")
     if not contract.staging_csv.strip():
         raise ValueError("Staging CSV path is required.")
     if not contract.validation_report.strip():
